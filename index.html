@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Island Car Finder</title>
+  <link rel="preload" as="image" href="/images/hero.png">
+
+
+  <style>
+    :root {
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.72);
+      --muted2: rgba(255, 255, 255, 0.55);
+
+      /* ONE accent colour */
+      --accent: #ff8c00;
+      --accentBorder: rgba(255, 140, 0, 0.32);
+      --glass: rgba(18, 20, 24, 0.58);
+      --glass2: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.14);
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: #0b0c0f;
+    }
+
+    .hero {
+      min-height: 100vh;
+      background-image: url("images/hero.png");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* overlay */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(900px 520px at 50% 40%, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.68)),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.45));
+    }
+
+    .wrap {
+      position: relative;
+      width: min(980px, 92vw);
+      text-align: center;
+      padding: 48px 0 38px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      font-size: 0.92rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      margin: 18px 0 10px;
+      font-size: clamp(2.2rem, 4.8vw, 3.35rem);
+      letter-spacing: 0.3px;
+      line-height: 1.08;
+      text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Keep the underline but make it calmer */
+    .brand::after {
+      content: "";
+      display: block;
+      width: 70px;
+      height: 3px;
+      margin: 12px auto 0;
+      border-radius: 999px;
+      background: rgba(255, 140, 0, 0.65);
+      box-shadow: 0 10px 30px rgba(255, 140, 0, 0.12);
+    }
+
+    .headline {
+      margin: 0 auto;
+      max-width: 52ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.6vw, 1.08rem);
+      line-height: 1.55;
+    }
+
+    /* Cards: remove “big bar feel” by giving them their own glow instead */
+    .panel {
+      margin: 28px auto 0;
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cardlink {
+      text-decoration: none;
+      color: var(--text);
+      display: block;
+    }
+
+    .card {
+      width: 178px;
+      height: 122px;
+      border-radius: 18px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      user-select: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.65);
+      border-color: rgba(255, 255, 255, 0.20);
+    }
+
+    /* Primary: use accent ONLY once here (not also on button) */
+    .card.primary {
+      border-color: var(--accentBorder);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.70), 0 0 0 1px rgba(255, 140, 0, 0.10);
+    }
+
+    .card.primary:hover {
+      border-color: rgba(255, 140, 0, 0.55);
+      box-shadow:
+        0 26px 70px rgba(0, 0, 0, 0.75),
+        0 0 0 2px rgba(255, 140, 0, 0.12),
+        0 0 18px rgba(255, 140, 0, 0.35);
+    }
+
+    .card.disabled {
+      opacity: 0.62;
+      cursor: default;
+    }
+
+    .card.disabled:hover {
+      transform: none;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      border-color: var(--border);
+    }
+
+    .icon {
+      font-size: 2.05rem;
+      margin-bottom: 6px;
+    }
+
+    .label {
+      margin: 0;
+      font-weight: 750;
+      font-size: 1.03rem;
+    }
+
+    .hint {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--muted2);
+    }
+
+    /* ticks: slimmer, less chunky */
+    .trustline {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tick {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* “For garages” button: neutral glass with a tiny accent edge */
+    .garage-mini {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .garage-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(18, 20, 24, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 750;
+      letter-spacing: 0.2px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.18s ease, border-color 0.18s ease;
+      position: relative;
+    }
+
+    /* tiny accent strip so it feels branded but not loud */
+    .garage-pill::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 140, 0, 0.75);
+      box-shadow: 0 8px 22px rgba(255, 140, 0, 0.16);
+    }
+
+    .garage-pill span {
+      margin-left: 10px;
+      /* leaves room for dot */
+    }
+
+    .garage-pill:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    /* MOBILE */
+    @media (max-width: 560px) {
+      .wrap {
+        padding: 34px 0 28px;
+      }
+
+      .panel {
+        gap: 12px;
+      }
+
+      .card {
+        width: min(100%, 380px);
+        height: 92px;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 0 16px;
+        text-align: left;
+      }
+
+      .icon {
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .cardtext {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hint {
+        margin-top: 4px;
+      }
+
+      .tick {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="wrap">
+
+      <div class="kicker">Isle of Wight • Used cars • Local garages</div>
+
+      <h1 class="brand">Island Car Finder</h1>
+
+      <p class="headline">
+        See what cars are available at Isle of Wight garages right now.
+        Browse listings and contact garages directly.
+      </p>
+
+      <div class="panel">
+        <a class="cardlink" href="/cars-page" aria-label="Browse Cars">
+          <div class="card primary">
+            <div class="icon">🚗</div>
+            <div class="cardtext">
+              <p class="label">Browse Cars</p>
+              <p class="hint">Recently added</p>
+            </div>
+          </div>
+        </a>
+
+        <a class="cardlink" href="#" onclick="return false;" aria-label="Local Garages coming soon">
+          <div class="card disabled">
+            <div class="icon">🏠</div>
+            <div class="cardtext">
+              <p class="label">Local Garages</p>
+              <p class="hint">Coming soon</p>
+            </div>
+          </div>
+        </a>
+
+        <a class="cardlink" href="#" onclick="return false;" aria-label="Featured coming soon">
+          <div class="card disabled">
+            <div class="icon">⭐</div>
+            <div class="cardtext">
+              <p class="label">Featured</p>
+              <p class="hint">Coming soon</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="trustline">
+        <span class="tick">✔ Isle of Wight garages only</span>
+        <span class="tick">✔ No payments taken</span>
+        <span class="tick">✔ Contact garages directly</span>
+      </div>
+
+      <div class="garage-mini">
+        <a class="garage-pill" href="/for-garages"><span>For garages: get listed →</span></a>
+      </div>
+
+    </div>
+  </section>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Volkswagen Golf GTI",
+    "year": 2018,
+    "price": 12995,
+    "garageId": "demo-garage",
+
+    "photos": [
+      "https://res.cloudinary.com/dlqbz6l5k/image/upload/v1769969303/5935fed5b29e466f9cf0111c703487b5_xyvvb5.jpg"
+    ],
+
+    "photo": "https://res.cloudinary.com/dlqbz6l5k/image/upload/v1769969303/5935fed5b29e466f9cf0111c703487b5_xyvvb5.jpg",
+
+    "mileage": 42000,
+    "engine": "2.0L TSI",
+    "fuel": "Petrol",
+    "transmission": "Manual",
+    "colour": "White",
+    "owners": 2,
+    "serviceHistory": "Full service history",
+    "motUntil": "2027-01",
+    "description": "Clean example. Drives perfectly. Recently serviced. No issues.",
+
+    "updatedAt": "2026-02-01T12:00:00.000Z"
+  }
+]

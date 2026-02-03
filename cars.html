@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cars | Island Car Finder</title>
+
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#f5f5f5; color:#333; }
+
+    header { background:#2c3e50; color:#fff; padding:16px 20px; }
+    header .top { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+    header a { color:#fff; text-decoration:none; font-weight:bold; }
+
+    main { max-width:1100px; margin:0 auto; padding:24px 20px; }
+    h1 { margin:0; font-size:1.4rem; }
+    .sub { margin-top:6px; opacity:0.85; }
+
+    .toolbar{
+      margin-top:18px;
+      padding:14px;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.08);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:space-between;
+    }
+    .pill{ background:#eef2f6; border-radius:999px; padding:8px 12px; font-size:0.9rem; }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .card{
+      background:#fff;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 2px 8px rgba(0,0,0,0.10);
+      cursor:pointer;
+      transition:transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 22px rgba(0,0,0,0.12);
+    }
+
+    .thumb{
+      width:100%;
+      height:180px;
+      object-fit:contain;
+      background:#f2f2f2;
+      display:block;
+    }
+
+    .content{ padding:14px; }
+    .title{ margin:0 0 6px; font-size:1.05rem; color:#2c3e50; }
+    .meta{ margin:0; font-size:0.92rem; color:#566; }
+    .price{ margin-top:10px; font-weight:bold; font-size:1.05rem; }
+    .updated{ margin-top:8px; font-size:0.85rem; color:#6b7280; }
+
+    .empty{
+      background:#fff;
+      padding:18px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.08);
+      margin-top:16px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <a href="/">Island Car Finder</a>
+      <nav><a href="/cars-page">Cars</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <h1>Cars</h1>
+    <div class="sub">Recently added listings from trusted local garages.</div>
+
+    <div class="toolbar">
+      <div class="pill">Sort: Recently Added</div>
+      <div class="pill">Filters coming soon: Make • Garage • Price</div>
+      <div class="pill">Tip: Click a card for details</div>
+    </div>
+
+    <div id="status" class="empty">Loading cars…</div>
+    <div id="carsGrid" class="cards" style="display:none;"></div>
+  </main>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+
+      function money(n) {
+        try { return "£" + Number(n).toLocaleString("en-GB"); }
+        catch { return "£" + n; }
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return "";
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return "";
+        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+      }
+
+      function escapeHtml(t) {
+        return String(t ?? "").replace(/[&<>"']/g, ch => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        }[ch]));
+      }
+
+      function getCover(car) {
+        if (car && Array.isArray(car.photos) && car.photos.length && car.photos[0]) return car.photos[0];
+        if (car && car.photo) return car.photo;
+        return "/images/hero.jpg";
+      }
+
+      const status = document.getElementById("status");
+      const grid = document.getElementById("carsGrid");
+
+      fetch("/cars")
+        .then(res => res.json())
+        .then(cars => {
+          if (!Array.isArray(cars) || cars.length === 0) {
+            status.textContent = "No cars yet.";
+            return;
+          }
+
+          // newest first by updatedAt
+          cars.sort((a, b) => {
+            const ta = new Date(a.updatedAt || 0).getTime() || 0;
+            const tb = new Date(b.updatedAt || 0).getTime() || 0;
+            return tb - ta;
+          });
+
+          status.style.display = "none";
+          grid.style.display = "grid";
+          grid.innerHTML = "";
+
+          cars.forEach(car => {
+            const cover = getCover(car);
+
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const updated = formatDate(car.updatedAt);
+
+            card.innerHTML = `
+              <img class="thumb" src="${escapeHtml(cover)}" alt="Car photo" onerror="this.src='/images/hero.jpg'">
+              <div class="content">
+                <h3 class="title">${escapeHtml(car.name)}</h3>
+                <p class="meta">Year: ${escapeHtml(car.year)}</p>
+                <p class="price">${money(car.price)}</p>
+                <p class="meta">Garage: ${escapeHtml(car.garageId || "Local garage")}</p>
+                ${updated ? `<p class="updated">Updated: ${escapeHtml(updated)}</p>` : ``}
+              </div>
+            `;
+
+            card.addEventListener("click", () => {
+              window.location.href = "/car?name=" + encodeURIComponent(car.name || "");
+            });
+
+            grid.appendChild(card);
+          });
+        })
+        .catch(err => {
+          console.log("FETCH ERROR:", err);
+          status.textContent = "Could not load cars. Is Node running?";
+        });
+
+    });
+  </script>
+</body>
+</html>

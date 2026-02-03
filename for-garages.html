@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Garages | IOW Car Finder</title>
+
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --brand: #e67e22;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      --r: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 14px 16px;
+    }
+
+    header .top {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 22px 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(44, 62, 80, 0.08));
+      border: 1px solid var(--line);
+    }
+
+    .steps {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .contactBox {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .contactRow {
+      margin: 8px 0;
+      font-size: 0.95rem;
+    }
+
+    .contactRow strong {
+      display: inline-block;
+      width: 80px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--brand);
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 14px 30px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="top">
+      <a href="/">IOW Car Finder</a>
+      <nav>
+        <a href="/cars-page">Cars</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="card hero">
+      <h1>For Garages</h1>
+
+      <p class="muted">
+        Get your cars in front of people searching on the Isle of Wight.
+        <br><br>
+        We don’t take payments and we don’t take commission.
+        Customers contact you directly.
+      </p>
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+    <section class="card">
+      <h2>How it works</h2>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1) Send us your stock</strong><br>
+          Photos, price, and basic details.
+        </div>
+
+        <div class="step">
+          <strong>2) We list your cars</strong><br>
+          They appear on IOW Car Finder.
+        </div>
+
+        <div class="step">
+          <strong>3) Customers contact you</strong><br>
+          Phone and email shown on your listings.
+        </div>
+      </div>
+    </section>
+
+
+    <!-- WHAT TO SEND -->
+    <section class="card">
+      <h2>What to send us</h2>
+
+      <p class="muted">
+        To get started, we need:
+      </p>
+
+      <ul class="muted">
+        <li>Car name, year, and price</li>
+        <li>1–5 photo links</li>
+        <li>Mileage, fuel, MOT (optional)</li>
+        <li>Your garage name and phone number</li>
+      </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="card">
+      <h2>Enquire about listing your cars</h2>
+
+      <p class="muted">
+        Fill in the form below and we’ll get back to you.
+      </p>
+
+      <form id="enquiryForm">
+
+        <label>Garage name</label>
+        <input type="text" id="gname" required />
+
+        <label>Your name</label>
+        <input type="text" id="cname" required />
+
+        <label>Phone number</label>
+        <input type="tel" id="phone" required />
+
+        <label>Email</label>
+        <input type="email" id="email" />
+
+        <label>Message</label>
+        <textarea id="message" placeholder="Tell us about your stock…" required></textarea>
+
+        <button type="submit" class="btn">Send enquiry</button>
+
+        <div id="formMsg" class="small"></div>
+
+      </form>
+    </section>
+
+  </main>
+
+  <footer>
+    © <span id="year"></span> IOW Car Finder. No payments taken.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+  <script>
+    const form = document.getElementById("enquiryForm");
+    const msg = document.getElementById("formMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      msg.textContent = "Sending…";
+
+      const data = {
+        garage: document.getElementById("gname").value.trim(),
+        name: document.getElementById("cname").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        message: document.getElementById("message").value.trim()
+      };
+
+      try {
+        const res = await fetch("/enquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const out = await res.json();
+
+        if (!out.success) throw new Error();
+
+        msg.textContent = "✅ Thanks! We’ll be in touch soon.";
+        form.reset();
+
+      } catch {
+        msg.textContent = "❌ Could not send. Please try again later.";
+      }
+    });
+  </script>
+
+</body>
+
+</html>
