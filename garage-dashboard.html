@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -531,3 +532,538 @@
 </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Garage Dashboard | IOW Car Finder</title>
+
+  <style>
+    :root{
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --brand:#e67e22;
+      --danger:#c0392b;
+      --shadow:0 2px 10px rgba(0,0,0,0.08);
+      --r:14px;
+    }
+    *{ box-sizing:border-box; }
+    body{ margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
+
+    header{ background:#2c3e50; color:#fff; padding:14px 16px; }
+    header .top{
+      max-width:1100px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    header a{ color:#fff; text-decoration:none; font-weight:bold; }
+
+    main{ max-width:1100px; margin:0 auto; padding:18px 14px; }
+
+    h1{ margin:0; font-size:1.35rem; }
+    h2{ margin:0 0 10px; font-size:1.05rem; }
+
+    .hint{ color:var(--muted); font-size:0.92rem; line-height:1.45; margin-top:6px; }
+
+    .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:14px; }
+    @media(min-width:900px){ .grid{ grid-template-columns: 1fr 1.2fr; } }
+
+    .card{ background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:16px; }
+
+    label{ display:block; font-weight:bold; font-size:0.9rem; margin:12px 0 6px; }
+    input, textarea, select{
+      width:100%;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      outline:none;
+      background:#fff;
+      font-size:16px; /* ✅ prevents iPhone zoom */
+    }
+    textarea{ min-height:110px; resize:vertical; line-height:1.45; }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media(max-width:700px){ .row{ grid-template-columns:1fr; } }
+
+    details{
+      margin-top:12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+    }
+    summary{ cursor:pointer; font-weight:bold; }
+
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .btn{
+      border:none; border-radius:12px;
+      padding:12px 14px; font-weight:bold; cursor:pointer;
+      font-size:16px;
+    }
+    .btn.primary{ background:var(--brand); color:#fff; }
+    .btn.ghost{ background:#fff; border:1px solid var(--line); color:#111827; }
+    .btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+    @media(max-width:520px){
+      .btnRow{ flex-direction:column; }
+      .btn{ width:100%; }
+    }
+
+    .msg{
+      margin-top:12px; padding:10px 12px; border-radius:12px;
+      display:none; border:1px solid transparent; font-size:0.95rem;
+    }
+    .msg.success{ display:block; background:#eaf7ee; border-color:#bfe5c8; color:#1f6b2a; }
+    .msg.error{ display:block; background:#fdecec; border-color:#f2b8b8; color:#8a1f1f; }
+
+    .cars{ margin-top:10px; }
+    .carRow{
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:12px 0; border-bottom:1px solid var(--line);
+    }
+    .carRow:last-child{ border-bottom:none; }
+    .left{ display:flex; gap:12px; align-items:center; min-width:0; }
+    .preview{
+      width:86px; height:62px; object-fit:cover;
+      border-radius:12px; border:1px solid var(--line); background:#f3f4f6;
+      flex:0 0 auto;
+    }
+    .name{
+      font-weight:bold;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width: 520px;
+    }
+    .meta{ color:var(--muted); font-size:0.9rem; margin-top:4px; }
+
+    .danger{
+      background:#fff;
+      border:1px solid #f2b8b8;
+      color:#8a1f1f;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:bold;
+      font-size:15px;
+      white-space:nowrap;
+    }
+    .danger:disabled{ opacity:0.6; cursor:not-allowed; }
+
+    .twoColMot{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media(max-width:520px){ .twoColMot{ grid-template-columns:1fr; } }
+
+    .small{ font-size:0.86rem; color:var(--muted); margin-top:6px; }
+    code{ background:#f3f4f6; padding:2px 6px; border-radius:8px; }
+
+    .divider{ height:1px; background:var(--line); margin:12px 0; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="top">
+    <a href="/">IOW Car Finder</a>
+    <nav style="display:flex; gap:14px; align-items:center;">
+      <a href="/cars-page">Cars</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Garage Dashboard</h1>
+  <div class="hint">
+    Paste photo links (Cloudinary). Optional details only show on the car page if you fill them in.
+  </div>
+
+  <div class="grid">
+    <!-- FORM -->
+    <div class="card">
+      <h2>Add new car</h2>
+
+      <label for="garageId">Garage ID</label>
+      <input id="garageId" type="text" value="demo-garage" />
+      <div class="small">Example: <code>demo-garage</code> or <code>sandown-motors</code></div>
+
+      <label for="secret">Admin key</label>
+      <input id="secret" type="password" placeholder="Enter your key" inputmode="text" />
+
+      <div class="row">
+        <div>
+          <label for="name">Car name</label>
+          <input id="name" type="text" placeholder="Volkswagen Golf GTI" />
+        </div>
+        <div>
+          <label for="year">Year</label>
+          <input id="year" type="number" placeholder="2018" />
+        </div>
+      </div>
+
+      <label for="price">Price (£)</label>
+      <input id="price" type="number" placeholder="12995" />
+
+      <label for="photos">Photo links (comma separated)</label>
+      <textarea id="photos" placeholder="https://.../a.jpg, https://.../b.jpg"></textarea>
+      <div class="small">First URL becomes the cover image.</div>
+
+      <details>
+        <summary>More optional details</summary>
+
+        <div class="divider"></div>
+
+        <div class="row">
+          <div>
+            <label for="mileage">Mileage (miles)</label>
+            <input id="mileage" type="number" placeholder="42000" />
+          </div>
+          <div>
+            <label for="owners">Owners</label>
+            <input id="owners" type="number" placeholder="2" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="fuel">Fuel</label>
+            <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
+          </div>
+          <div>
+            <label for="transmission">Transmission</label>
+            <input id="transmission" type="text" placeholder="Manual / Automatic" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="engine">Engine</label>
+            <input id="engine" type="text" placeholder="2.0L TSI" />
+          </div>
+          <div>
+            <label for="colour">Colour</label>
+            <input id="colour" type="text" placeholder="White" />
+          </div>
+        </div>
+
+        <label for="serviceHistory">Service history</label>
+        <input id="serviceHistory" type="text" placeholder="Full service history" />
+
+        <label>MOT until (UK)</label>
+        <div class="twoColMot">
+          <select id="motMonth">
+            <option value="">Month</option>
+            <option value="Jan">Jan</option><option value="Feb">Feb</option><option value="Mar">Mar</option>
+            <option value="Apr">Apr</option><option value="May">May</option><option value="Jun">Jun</option>
+            <option value="Jul">Jul</option><option value="Aug">Aug</option><option value="Sep">Sep</option>
+            <option value="Oct">Oct</option><option value="Nov">Nov</option><option value="Dec">Dec</option>
+          </select>
+          <select id="motYear">
+            <option value="">Year</option>
+          </select>
+        </div>
+      </details>
+
+      <label for="description">Description (optional)</label>
+      <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
+      <div class="small">✅ Write as many lines as you want — it will expand.</div>
+
+      <div class="btnRow">
+        <button id="addBtn" class="btn primary" type="button">Add car</button>
+        <button id="refreshBtn" class="btn ghost" type="button">Refresh list</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+    </div>
+
+    <!-- LIST -->
+    <div class="card">
+      <h2>Your cars</h2>
+      <div class="hint">Cars are filtered by the Garage ID above.</div>
+      <div id="cars" class="cars">Loading…</div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const carsBox = document.getElementById("cars");
+  const msgBox = document.getElementById("msg");
+  const addBtn = document.getElementById("addBtn");
+  const refreshBtn = document.getElementById("refreshBtn");
+
+  const garageIdInput = document.getElementById("garageId");
+  const secretInput = document.getElementById("secret");
+
+  const nameInput = document.getElementById("name");
+  const yearInput = document.getElementById("year");
+  const priceInput = document.getElementById("price");
+  const photosInput = document.getElementById("photos");
+  const descriptionInput = document.getElementById("description");
+
+  const mileageInput = document.getElementById("mileage");
+  const ownersInput = document.getElementById("owners");
+  const fuelInput = document.getElementById("fuel");
+  const transmissionInput = document.getElementById("transmission");
+  const engineInput = document.getElementById("engine");
+  const colourInput = document.getElementById("colour");
+  const serviceHistoryInput = document.getElementById("serviceHistory");
+  const motMonth = document.getElementById("motMonth");
+  const motYear = document.getElementById("motYear");
+
+  function showMsg(type, text) {
+    msgBox.className = "msg " + type;
+    msgBox.textContent = text;
+    msgBox.style.display = "block";
+  }
+  function clearMsg() {
+    msgBox.className = "msg";
+    msgBox.textContent = "";
+    msgBox.style.display = "none";
+  }
+
+  function money(n) {
+    try { return "£" + Number(n).toLocaleString("en-GB"); }
+    catch { return "£" + n; }
+  }
+
+  function escapeText(t) {
+    return String(t || "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[ch]));
+  }
+
+  function getGarageId() { return String(garageIdInput.value || "").trim(); }
+
+  function parsePhotos(raw) {
+    return String(raw || "")
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  function safeUrl(u) {
+    const s = String(u || "").trim();
+    if (s.startsWith("https://") || s.startsWith("http://") || s.startsWith("/images/")) return s;
+    return "";
+  }
+
+  function optText(val) {
+    const s = String(val || "").trim();
+    return s ? s : "";
+  }
+
+  function optNumber(val) {
+    const n = Number(val);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  // ✅ Auto-grow textareas
+  function autoGrow(el){
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = (el.scrollHeight + 2) + "px";
+  }
+  [photosInput, descriptionInput].forEach(el => {
+    el.addEventListener("input", () => autoGrow(el));
+    autoGrow(el);
+  });
+
+  // Fill MOT year dropdown (this year to +6)
+  (function fillYears(){
+    const now = new Date().getFullYear();
+    for (let y = now; y <= now + 6; y++) {
+      const opt = document.createElement("option");
+      opt.value = String(y);
+      opt.textContent = String(y);
+      motYear.appendChild(opt);
+    }
+  })();
+
+  async function renderCars() {
+    clearMsg();
+    carsBox.textContent = "Loading…";
+
+    const garageId = getGarageId();
+    if (!garageId) {
+      carsBox.textContent = "Enter a Garage ID to view cars.";
+      return;
+    }
+
+    try {
+      const res = await fetch("/cars");
+      const allCars = await res.json();
+
+      const cars = (Array.isArray(allCars) ? allCars : [])
+        .filter(c => (c.garageId || "demo-garage") === garageId)
+        .sort((a,b) => (new Date(b.updatedAt||0).getTime()||0) - (new Date(a.updatedAt||0).getTime()||0));
+
+      carsBox.innerHTML = "";
+
+      if (!cars.length) {
+        carsBox.textContent = "No cars yet for this garage.";
+        return;
+      }
+
+      cars.forEach(car => {
+        const cover =
+          (Array.isArray(car.photos) && car.photos[0]) ? car.photos[0] :
+          (car.photo || "/images/hero.jpg");
+
+        const row = document.createElement("div");
+        row.className = "carRow";
+
+        row.innerHTML = `
+          <div class="left">
+            <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.jpg'">
+            <div style="min-width:0;">
+              <div class="name">${escapeText(car.name || "Untitled")}</div>
+              <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
+            </div>
+          </div>
+          <button type="button" class="danger">Delete</button>
+        `;
+
+        const delBtn = row.querySelector(".danger");
+        delBtn.addEventListener("click", async () => {
+          if (!confirm(`Delete "${car.name}"?`)) return;
+
+          delBtn.disabled = true;
+          delBtn.textContent = "Deleting…";
+
+          try {
+            const resp = await fetch("/cars?name=" + encodeURIComponent(car.name || ""), {
+              method: "DELETE",
+              headers: { "X-Garage-Key": secretInput.value.trim() }
+            });
+            const result = await resp.json().catch(() => null);
+
+            if (!resp.ok || !result || !result.success) {
+              showMsg("error", (result && result.message) ? result.message : "Delete failed.");
+              delBtn.disabled = false;
+              delBtn.textContent = "Delete";
+              return;
+            }
+
+            showMsg("success", "Car deleted.");
+            renderCars();
+          } catch {
+            showMsg("error", "Delete failed (network error).");
+            delBtn.disabled = false;
+            delBtn.textContent = "Delete";
+          }
+        });
+
+        carsBox.appendChild(row);
+      });
+    } catch {
+      carsBox.textContent = "Could not load cars. Open from Node: http://localhost:3000/garage-dashboard";
+    }
+  }
+
+  garageIdInput.addEventListener("input", renderCars);
+  refreshBtn.addEventListener("click", renderCars);
+
+  addBtn.addEventListener("click", async () => {
+    clearMsg();
+
+    const garageId = getGarageId();
+    const key = String(secretInput.value || "").trim();
+
+    const name = optText(nameInput.value);
+    const year = optNumber(yearInput.value);
+    const price = optNumber(priceInput.value);
+
+    const photos = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+    const description = optText(descriptionInput.value);
+
+    if (!garageId) return showMsg("error", "Garage ID required.");
+    if (!key) return showMsg("error", "Admin key required.");
+    if (!name) return showMsg("error", "Car name required.");
+    if (!Number.isFinite(year)) return showMsg("error", "Year must be a number.");
+    if (!Number.isFinite(price) || price <= 0) return showMsg("error", "Price must be > 0.");
+    if (!photos.length) return showMsg("error", "Paste at least 1 photo URL.");
+
+    const payload = {
+      name,
+      year: Math.trunc(year),
+      price: Number(price),
+      garageId,
+      photos,
+      photo: photos[0]
+    };
+
+    const mileage = optNumber(mileageInput.value);
+    if (Number.isFinite(mileage) && mileage > 0) payload.mileage = Math.trunc(mileage);
+
+    const owners = optNumber(ownersInput.value);
+    if (Number.isFinite(owners) && owners > 0) payload.owners = Math.trunc(owners);
+
+    const fuel = optText(fuelInput.value); if (fuel) payload.fuel = fuel;
+    const transmission = optText(transmissionInput.value); if (transmission) payload.transmission = transmission;
+    const engine = optText(engineInput.value); if (engine) payload.engine = engine;
+    const colour = optText(colourInput.value); if (colour) payload.colour = colour;
+
+    const serviceHistory = optText(serviceHistoryInput.value);
+    if (serviceHistory) payload.serviceHistory = serviceHistory;
+
+    const mm = optText(motMonth.value);
+    const yy = optText(motYear.value);
+    if (mm && yy) payload.motUntil = `${mm} ${yy}`;
+
+    if (description) payload.description = description;
+
+    addBtn.disabled = true;
+    addBtn.textContent = "Saving…";
+
+    try {
+      const res = await fetch("/cars", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Garage-Key": key },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data || !data.success) {
+        showMsg("error", (data && data.message) ? data.message : "Save failed.");
+        addBtn.disabled = false;
+        addBtn.textContent = "Add car";
+        return;
+      }
+
+      showMsg("success", "Car added!");
+
+      nameInput.value = "";
+      yearInput.value = "";
+      priceInput.value = "";
+      photosInput.value = "";
+      descriptionInput.value = "";
+
+      mileageInput.value = "";
+      ownersInput.value = "";
+      fuelInput.value = "";
+      transmissionInput.value = "";
+      engineInput.value = "";
+      colourInput.value = "";
+      serviceHistoryInput.value = "";
+      motMonth.value = "";
+      motYear.value = "";
+
+      autoGrow(photosInput);
+      autoGrow(descriptionInput);
+
+      addBtn.disabled = false;
+      addBtn.textContent = "Add car";
+
+      renderCars();
+    } catch {
+      showMsg("error", "Save failed (network error). Open from Node: http://localhost:3000/garage-dashboard");
+      addBtn.disabled = false;
+      addBtn.textContent = "Add car";
+    }
+  });
+
+  renderCars();
+</script>
+</body>
+</html>
+>>>>>>> 94a6e9c (Fix server and package for Render)
