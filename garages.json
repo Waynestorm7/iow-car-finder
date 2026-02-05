@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [
   {
     "id": "demo-garage",
@@ -8,14 +7,3 @@
     "town": "Newport"
   }
 ]
-=======
-[
-  {
-    "id": "demo-garage",
-    "name": "Demo Motors",
-    "phone": "01983 123456",
-    "email": "demo@example.com",
-    "town": "Newport"
-  }
-]
->>>>>>> 94a6e9c (Fix server and package for Render)
