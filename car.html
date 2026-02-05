@@ -332,7 +332,7 @@
       <!-- Gallery -->
       <div class="card">
         <div class="gallery">
-          <img id="mainImg" class="main-img" src="" alt="Car photo" onerror="this.src='/images/hero.jpg'">
+          <img id="mainImg" class="main-img" src="" alt="Car photo" onerror="this.src='/images/hero.png'">
           <div id="thumbs" class="thumbs"></div>
         </div>
       </div>
@@ -532,7 +532,7 @@
             t.src = src;
             t.className = "thumb" + (i === 0 ? " active" : "");
             t.alt = "Car photo thumbnail";
-            t.onerror = () => { t.src = "/images/hero.jpg"; };
+            t.onerror = () => { t.src = "/images/hero.png"; };
             t.addEventListener("click", () => setMain(i));
             thumbs.appendChild(t);
           });
