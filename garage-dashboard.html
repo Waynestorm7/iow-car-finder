@@ -372,14 +372,14 @@
       cars.forEach(car => {
         const cover =
           (Array.isArray(car.photos) && car.photos[0]) ? car.photos[0] :
-          (car.photo || "/images/hero.jpg");
+          (car.photo || "/images/hero.png");
 
         const row = document.createElement("div");
         row.className = "carRow";
 
         row.innerHTML = `
           <div class="left">
-            <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.jpg'">
+            <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.png'">
             <div style="min-width:0;">
               <div class="name">${escapeText(car.name || "Untitled")}</div>
               <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
