@@ -6,69 +6,166 @@
   <title>Cars | Island Car Finder</title>
 
   <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#f5f5f5; color:#333; }
+    :root{
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --brand:#2c3e50;
+      --shadow:0 2px 10px rgba(0,0,0,.10);
+      --shadowHover:0 10px 26px rgba(0,0,0,.14);
+      --radius:14px;
+    }
 
-    header { background:#2c3e50; color:#fff; padding:16px 20px; }
-    header .top { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
-    header a { color:#fff; text-decoration:none; font-weight:bold; }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-    main { max-width:1100px; margin:0 auto; padding:24px 20px; }
-    h1 { margin:0; font-size:1.4rem; }
-    .sub { margin-top:6px; opacity:0.85; }
+    header{
+      background:var(--brand);
+      color:#fff;
+      padding:16px 20px;
+    }
+    header .top{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    header a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
+
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:22px 20px;
+    }
+    h1{margin:0;font-size:1.4rem}
+    .sub{margin-top:6px;color:rgba(0,0,0,.65)}
 
     .toolbar{
-      margin-top:18px;
-      padding:14px;
-      background:#fff;
+      margin-top:16px;
+      padding:12px;
+      background:var(--card);
       border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,0.08);
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
       display:flex;
       flex-wrap:wrap;
       gap:10px;
       justify-content:space-between;
     }
-    .pill{ background:#eef2f6; border-radius:999px; padding:8px 12px; font-size:0.9rem; }
+    .pill{
+      background:#eef2f6;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.9rem;
+      color:#334155;
+      white-space:nowrap;
+    }
 
-    .cards{
+    /* GRID of cards */
+    .cars-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
       gap:16px;
       margin-top:16px;
     }
 
-    .card{
-      background:#fff;
-      border-radius:14px;
+    /* Card */
+    .car-card{
+      background:var(--card);
+      border-radius:var(--radius);
       overflow:hidden;
-      box-shadow:0 2px 8px rgba(0,0,0,0.10);
+      box-shadow:var(--shadow);
       cursor:pointer;
-      transition:transform 0.15s ease, box-shadow 0.15s ease;
+      transition:transform .15s ease, box-shadow .15s ease;
+      display:flex;
+      flex-direction:column;
     }
-    .card:hover{
+    .car-card:hover{
       transform:translateY(-2px);
-      box-shadow:0 8px 22px rgba(0,0,0,0.12);
+      box-shadow:var(--shadowHover);
     }
 
-    .thumb{
+    .car-thumb{
       width:100%;
-      height:180px;
-      object-fit:contain;
-      background:#f2f2f2;
+      height:190px;
+      object-fit:cover;          /* looks more premium than contain */
+      background:#e5e7eb;
       display:block;
     }
 
-    .content{ padding:14px; }
-    .title{ margin:0 0 6px; font-size:1.05rem; color:#2c3e50; }
-    .meta{ margin:0; font-size:0.92rem; color:#566; }
-    .price{ margin-top:10px; font-weight:bold; font-size:1.05rem; }
-    .updated{ margin-top:8px; font-size:0.85rem; color:#6b7280; }
+    .car-body{
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .car-title{
+      margin:0;
+      font-size:1.05rem;
+      color:#111827;
+      line-height:1.2;
+    }
+
+    .car-price{
+      font-weight:800;
+      font-size:1.15rem;
+      color:#0f172a;
+      margin-top:-2px;
+    }
+
+    /* 2x2 info grid inside card */
+    .car-meta{
+      display:grid;
+      grid-template-columns: 1fr 1fr; /* 2 columns */
+      gap:8px 10px;
+      margin-top:2px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+    .car-meta div{
+      background:#f8fafc;
+      border:1px solid #eef2f6;
+      border-radius:10px;
+      padding:8px 10px;
+      line-height:1.2;
+    }
+    .car-meta strong{
+      color:#334155;
+      font-weight:700;
+    }
+
+    .car-updated{
+      margin-top:2px;
+      font-size:.85rem;
+      color:var(--muted);
+    }
 
     .empty{
-      background:#fff;
-      padding:18px;
+      background:var(--card);
+      padding:16px;
       border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,0.08);
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
       margin-top:16px;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px){
+      .toolbar{justify-content:flex-start}
+      .pill{font-size:.86rem}
+      .car-thumb{height:170px}
+      .car-meta{grid-template-columns:1fr 1fr} /* stays 2 columns */
     }
   </style>
 </head>
@@ -88,19 +185,18 @@
     <div class="toolbar">
       <div class="pill">Sort: Recently Added</div>
       <div class="pill">Filters coming soon: Make • Garage • Price</div>
-      <div class="pill">Tip: Click a card for details</div>
+      <div class="pill">Tip: Tap a car for details</div>
     </div>
 
     <div id="status" class="empty">Loading cars…</div>
-    <div id="carsGrid" class="cards" style="display:none;"></div>
+    <div id="carsGrid" class="cars-grid" style="display:none;"></div>
   </main>
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-
       function money(n) {
         try { return "£" + Number(n).toLocaleString("en-GB"); }
-        catch { return "£" + n; }
+        catch { return "£" + (n ?? ""); }
       }
 
       function formatDate(dateStr) {
@@ -133,7 +229,7 @@
             return;
           }
 
-          // newest first by updatedAt
+          // newest first by updatedAt (fallback to 0)
           cars.sort((a, b) => {
             const ta = new Date(a.updatedAt || 0).getTime() || 0;
             const tb = new Date(b.updatedAt || 0).getTime() || 0;
@@ -146,20 +242,28 @@
 
           cars.forEach(car => {
             const cover = getCover(car);
-
-            const card = document.createElement("div");
-            card.className = "card";
-
             const updated = formatDate(car.updatedAt);
 
+            const card = document.createElement("div");
+            card.className = "car-card";
+
             card.innerHTML = `
-              <img class="thumb" src="${escapeHtml(cover)}" alt="Car photo" onerror="this.src='/images/hero.png'">
-              <div class="content">
-                <h3 class="title">${escapeHtml(car.name)}</h3>
-                <p class="meta">Year: ${escapeHtml(car.year)}</p>
-                <p class="price">${money(car.price)}</p>
-                <p class="meta">Garage: ${escapeHtml(car.garageId || "Local garage")}</p>
-                ${updated ? `<p class="updated">Updated: ${escapeHtml(updated)}</p>` : ``}
+              <img class="car-thumb" src="${escapeHtml(cover)}" alt="Car photo"
+                   onerror="this.src='/images/hero.png'">
+
+              <div class="car-body">
+                <h3 class="car-title">${escapeHtml(car.name || "Car")}</h3>
+
+                <div class="car-price">${money(car.price)}</div>
+
+                <div class="car-meta">
+                  <div><strong>Year</strong><br>${escapeHtml(String(car.year || ""))}</div>
+                  <div><strong>Miles</strong><br>${escapeHtml(String(car.mileage || ""))}</div>
+                  <div><strong>Fuel</strong><br>${escapeHtml(String(car.fuel || ""))}</div>
+                  <div><strong>Gear</strong><br>${escapeHtml(String(car.transmission || ""))}</div>
+                </div>
+
+                ${updated ? `<div class="car-updated">Updated: ${escapeHtml(updated)}</div>` : ``}
               </div>
             `;
 
@@ -174,7 +278,6 @@
           console.log("FETCH ERROR:", err);
           status.textContent = "Could not load cars. Is Node running?";
         });
-
     });
   </script>
 </body>
