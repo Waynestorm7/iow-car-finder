@@ -1,595 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | Island Car Finder</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
+    :root{
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#111827;
+      --muted:#6b7280;
+      --brand:#2c3e50;
+      --accent:#e67e22;
+      --shadow:0 2px 10px rgba(0,0,0,.10);
+      --radius:14px;
     }
 
-    header {
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(6px);
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
-    header .top {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    header{
+      background:rgba(0,0,0,.75);
+      color:#fff;
+      padding:16px 20px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(6px);
+    }
+    header .top{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    header a{color:#fff;text-decoration:none;font-weight:bold}
+
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 20px;
     }
 
-    header a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
+    .backRow{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+    .backLink{
+      display:inline-block;
+      padding:8px 12px;
+      background:#fff;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--brand);
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      font-weight:bold;
     }
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 20px;
+    .layout{
+      display:grid;
+      grid-template-columns:1.6fr 1fr;
+      gap:16px;
+    }
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
     }
 
-    .backRow {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 12px;
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .backLink {
-      display: inline-block;
-      padding: 8px 12px;
-      background: #fff;
-      border-radius: 10px;
-      text-decoration: none;
-      color: #2c3e50;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-      font-weight: bold;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 16px;
-    }
-
-    @media(max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-      overflow: hidden;
-    }
-
-    .status {
-      background: #fff;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    .status{
+      background:var(--card);
+      padding:16px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
     }
 
     /* Gallery */
-    .gallery {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      padding: 14px;
+    .gallery{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      padding:14px;
     }
-
-    .main-img {
-      width: 100%;
-      height: 360px;
-      object-fit: contain;
-      background: #f1f1f1;
-      border-radius: 12px;
-      cursor: zoom-in;
+    .main-img{
+      width:100%;
+      height:360px;
+      object-fit:contain;
+      background:#f1f1f1;
+      border-radius:12px;
+      cursor:zoom-in;
     }
-
-    .thumbs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .thumbs{display:flex;gap:10px;flex-wrap:wrap}
+    .thumb{
+      width:90px;
+      height:65px;
+      object-fit:contain;
+      border-radius:10px;
+      cursor:pointer;
+      border:2px solid transparent;
+      background:#eee;
+      padding:4px;
     }
-
-    .thumb {
-      width: 90px;
-      height: 65px;
-      object-fit: contain;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      background: #eee;
-      padding: 4px;
-      box-sizing: border-box;
-    }
-
-    .thumb.active {
-      border-color: #e67e22;
-    }
+    .thumb.active{border-color:var(--accent)}
 
     /* Right column */
-    .info {
-      padding: 16px;
+    .info{padding:16px}
+    h1{margin:0 0 6px;font-size:1.5rem;color:var(--brand)}
+    .price{
+      font-size:1.25rem;
+      font-weight:800;
+      margin:8px 0 14px;
+      color:#0f172a;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 1.5rem;
-      color: #2c3e50;
+    .sectionTitle{margin:14px 0 10px;font-size:1.05rem;color:var(--brand)}
+
+    /* Specs grid */
+    .specGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr; /* desktop stays 2 columns */
+      gap:10px;
+      margin-top:8px;
+    }
+    .specItem{
+      padding:8px 10px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+    }
+    .specLabel{font-size:.75rem;color:var(--muted);margin-bottom:2px}
+    .specValue{font-size:.92rem;font-weight:700;color:#111827}
+
+    .descBox{
+      background:#eef2f6;
+      border-radius:12px;
+      padding:12px;
+      line-height:1.6;
+      color:#111827;
+      white-space:pre-line;
     }
 
-    .price {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin: 10px 0 14px;
+    .contact{padding:16px}
+    .contact h2{margin:0 0 10px;font-size:1.1rem;color:var(--brand)}
+    .contact .box{
+      background:#eef2f6;
+      border-radius:12px;
+      padding:12px;
+      line-height:1.6;
     }
 
-    .sectionTitle {
-      margin: 14px 0 10px;
-      font-size: 1.05rem;
-      color: #2c3e50;
+    .btn{
+      display:inline-block;
+      margin-top:12px;
+      background:var(--accent);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:bold;
     }
+    .btn.disabled{opacity:.6;pointer-events:none}
 
-    .specGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
+    .trust{
+      margin-top:16px;
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      border-left:6px solid var(--brand);
+      line-height:1.6;
     }
+    .trust a{color:var(--brand);font-weight:bold;text-decoration:none}
+    .small{color:#666;font-size:.9rem;margin-top:8px}
 
-    @media(max-width: 900px) {
-      .specGrid {
-        grid-template-columns: 1fr;
+    /* ✅ MOBILE: keep specs 2-per-row so page is shorter */
+    @media (max-width:600px){
+      main{padding:16px 14px}
+      .main-img{height:300px}
+      .thumb{width:78px;height:58px}
+
+      .specGrid{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:10px;
       }
     }
 
-.specItem {
-  padding: 6px 8px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-}
-
-    .specLabel {
-      font-size: 0.75rem;
-      margin-bottom: 2px;
-    }
-
-    .specValue {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .descBox {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
-      line-height: 1.6;
-      color: #333;
-      white-space: pre-line;
-      /* keeps newlines */
-    }
-
-    .contact {
-      padding: 16px;
-    }
-
-    .contact h2 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-      color: #2c3e50;
-    }
-
-    .contact .box {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
-      line-height: 1.6;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 12px;
-      background: #e67e22;
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .btn.disabled {
-      opacity: 0.6;
-      pointer-events: none;
-    }
-
-    .trust {
-      margin-top: 16px;
-      background: #fff;
-      padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-      border-left: 6px solid #2c3e50;
-      line-height: 1.6;
-    }
-
-    .trust a {
-      color: #2c3e50;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .small {
-      color: #666;
-      font-size: 0.9rem;
-      margin-top: 8px;
+    /* super small phones: don’t squash */
+    @media (max-width:360px){
+      .specGrid{grid-template-columns:1fr}
     }
 
     /* Lightbox */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
     }
-
-    .lightbox.open {
-      display: flex;
+    .lightbox.open{display:flex}
+    .lbImg{
+      max-width:95vw;
+      max-height:85vh;
+      object-fit:contain;
+      border-radius:12px;
+      background:#111;
     }
-
-    .lbImg {
-      max-width: 95vw;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 12px;
-      background: #111;
+    .lbClose{
+      position:absolute;
+      top:16px;right:16px;
+      font-size:22px;
+      border:none;
+      border-radius:10px;
+      padding:8px 12px;
+      cursor:pointer;
     }
-
-    .lbClose {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 22px;
-      border: none;
-      border-radius: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
+    .lbNav{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:40px;
+      border:none;
+      border-radius:12px;
+      padding:6px 14px;
+      cursor:pointer;
     }
-
-    .lbNav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 40px;
-      border: none;
-      border-radius: 12px;
-      padding: 6px 14px;
-      cursor: pointer;
-    }
-
-    .lbPrev {
-      left: 16px;
-    }
-
-    .lbNext {
-      right: 16px;
-    }
-
-    .lbCount {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #fff;
-      font-size: 14px;
-      opacity: 0.9;
+    .lbPrev{left:16px}
+    .lbNext{right:16px}
+    .lbCount{
+      position:absolute;
+      bottom:16px;
+      left:50%;
+      transform:translateX(-50%);
+      color:#fff;
+      font-size:14px;
+      opacity:.9;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="top">
-      <a href="/">Island Car Finder</a>
-      <nav style="display:flex; gap:14px; align-items:center;">
-        <a href="/cars-page">Cars</a>
-      </nav>
-    </div>
-  </header>
+<header>
+  <div class="top">
+    <a href="/">Island Car Finder</a>
+    <nav style="display:flex; gap:14px; align-items:center;">
+      <a href="/cars-page">Cars</a>
+    </nav>
+  </div>
+</header>
 
-  <main>
-    <div class="backRow">
-      <a class="backLink" href="/cars-page">← Back to cars</a>
-    </div>
-
-    <div id="loading" class="status">Loading car…</div>
-
-    <div id="content" class="layout" style="display:none;">
-      <!-- Gallery -->
-      <div class="card">
-        <div class="gallery">
-          <img id="mainImg" class="main-img" src="" alt="Car photo" onerror="this.src='/images/hero.png'">
-          <div id="thumbs" class="thumbs"></div>
-        </div>
-      </div>
-
-      <!-- Details + Contact -->
-      <div>
-        <div class="card info">
-          <h1 id="carTitle"></h1>
-          <div class="price" id="carPrice"></div>
-
-          <div id="specsWrap" style="display:none;">
-            <div class="sectionTitle">Key specs</div>
-            <div id="specGrid" class="specGrid"></div>
-          </div>
-
-          <div id="descWrap" style="display:none;">
-            <div class="sectionTitle">Description</div>
-            <div id="descBox" class="descBox"></div>
-          </div>
-        </div>
-
-        <div class="card contact" style="margin-top:16px;">
-          <h2>Contact garage</h2>
-          <div class="box" id="garageBox"></div>
-          <a id="callBtn" class="btn" href="#">Call garage</a>
-          <div class="small" id="callNote"></div>
-        </div>
-
-        <div class="trust">
-          <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
-          To enquire, contact the garage directly.
-          <div class="small">
-            See something wrong? <a id="reportLink" href="#">Report this listing</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <button id="lbClose" class="lbClose" aria-label="Close">✕</button>
-    <button id="lbPrev" class="lbNav lbPrev" aria-label="Previous">‹</button>
-    <img id="lbImg" class="lbImg" src="" alt="Car photo fullscreen" />
-    <button id="lbNext" class="lbNav lbNext" aria-label="Next">›</button>
-    <div id="lbCount" class="lbCount"></div>
+<main>
+  <div class="backRow">
+    <a class="backLink" href="/cars-page">← Back to cars</a>
   </div>
 
-  <script>
-    function money(n) {
-      try { return "£" + Number(n).toLocaleString("en-GB"); }
-      catch { return "£" + n; }
-    }
+  <div id="loading" class="status">Loading car…</div>
 
-    function escapeText(t) {
-      return String(t || "").replace(/[&<>"']/g, (ch) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      }[ch]));
-    }
+  <div id="content" class="layout" style="display:none;">
+    <!-- Gallery -->
+    <div class="card">
+      <div class="gallery">
+        <img id="mainImg" class="main-img" src="" alt="Car photo" onerror="this.src='/images/hero.png'">
+        <div id="thumbs" class="thumbs"></div>
+      </div>
+    </div>
 
-    function miles(n) {
-      if (!Number.isFinite(Number(n))) return "";
-      return Number(n).toLocaleString("en-GB") + " miles";
-    }
+    <!-- Details + Contact -->
+    <div>
+      <div class="card info">
+        <h1 id="carTitle"></h1>
+        <div class="price" id="carPrice"></div>
 
-    function addSpec(specGrid, label, value) {
-      const v = String(value || "").trim();
-      if (!v) return;
-      const div = document.createElement("div");
-      div.className = "specItem";
-      div.innerHTML = `
-        <div class="specLabel">${escapeText(label)}</div>
-        <div class="specValue">${escapeText(v)}</div>
+        <div id="specsWrap" style="display:none;">
+          <div class="sectionTitle">Key specs</div>
+          <div id="specGrid" class="specGrid"></div>
+        </div>
+
+        <div id="descWrap" style="display:none;">
+          <div class="sectionTitle">Description</div>
+          <div id="descBox" class="descBox"></div>
+        </div>
+      </div>
+
+      <div class="card contact" style="margin-top:16px;">
+        <h2>Contact garage</h2>
+        <div class="box" id="garageBox"></div>
+        <a id="callBtn" class="btn" href="#">Call garage</a>
+        <div class="small" id="callNote"></div>
+      </div>
+
+      <div class="trust">
+        <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
+        To enquire, contact the garage directly.
+        <div class="small">
+          See something wrong? <a id="reportLink" href="#">Report this listing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <button id="lbClose" class="lbClose" aria-label="Close">✕</button>
+  <button id="lbPrev" class="lbNav lbPrev" aria-label="Previous">‹</button>
+  <img id="lbImg" class="lbImg" src="" alt="Car photo fullscreen" />
+  <button id="lbNext" class="lbNav lbNext" aria-label="Next">›</button>
+  <div id="lbCount" class="lbCount"></div>
+</div>
+
+<script>
+  function money(n){
+    try { return "£" + Number(n).toLocaleString("en-GB"); }
+    catch { return "£" + (n ?? ""); }
+  }
+
+  function escapeText(t){
+    return String(t || "").replace(/[&<>"']/g, (ch) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[ch]));
+  }
+
+  function miles(n){
+    if (!Number.isFinite(Number(n))) return "";
+    return Number(n).toLocaleString("en-GB") + " miles";
+  }
+
+  function addSpec(specGrid, label, value){
+    const v = String(value || "").trim();
+    if (!v) return;
+    const div = document.createElement("div");
+    div.className = "specItem";
+    div.innerHTML = `
+      <div class="specLabel">${escapeText(label)}</div>
+      <div class="specValue">${escapeText(v)}</div>
+    `;
+    specGrid.appendChild(div);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const carName = params.get("name");
+
+  const loading = document.getElementById("loading");
+  const content = document.getElementById("content");
+
+  if (!carName){
+    loading.innerHTML = "No car selected. <a href='/cars-page'>Go back to cars</a>.";
+  } else {
+    Promise.all([
+      fetch("/car-data?name=" + encodeURIComponent(carName)).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch("/garages-data").then(r => r.ok ? r.json() : []).catch(() => [])
+    ]).then(([car, garages]) => {
+      if (!car || car.success === false){
+        loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
+        return;
+      }
+
+      if (!Array.isArray(garages)) garages = [];
+
+      loading.style.display = "none";
+      content.style.display = "grid";
+
+      document.getElementById("carTitle").textContent = car.name || "Car";
+      document.getElementById("carPrice").textContent = money(car.price);
+
+      // Garage/contact
+      const garageId = car.garageId || "";
+      const garage = garages.find(g => g.id === garageId) || null;
+
+      const garageName = (garage && garage.name) ? garage.name : (garageId || "Local garage");
+      const phone = (garage && garage.phone) ? garage.phone : "";
+      const email = (garage && garage.email) ? garage.email : "";
+      const town = (garage && garage.town) ? garage.town : "Isle of Wight";
+
+      document.getElementById("garageBox").innerHTML = `
+        <div><strong>${escapeText(garageName)}</strong></div>
+        <div>${escapeText(town)}</div>
+        <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
+        ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
       `;
-      specGrid.appendChild(div);
-    }
 
-    const params = new URLSearchParams(window.location.search);
-    const carName = params.get("name");
+      const callBtn = document.getElementById("callBtn");
+      const callNote = document.getElementById("callNote");
 
-    const loading = document.getElementById("loading");
-    const content = document.getElementById("content");
+      if (phone){
+        callBtn.href = "tel:" + phone.replace(/\s/g, "");
+        callBtn.classList.remove("disabled");
+        callNote.textContent = "Call the garage directly about this car.";
+      } else {
+        callBtn.href = "#";
+        callBtn.classList.add("disabled");
+        callNote.textContent = "Phone number not provided yet.";
+      }
 
-    if (!carName) {
-      loading.innerHTML = "No car selected. <a href='/cars-page'>Go back to cars</a>.";
-    } else {
-      Promise.all([
-        fetch("/car-data?name=" + encodeURIComponent(carName))
-          .then(r => r.ok ? r.json() : null)
-          .catch(() => null),
+      // Report mailto
+      const report = document.getElementById("reportLink");
+      const subject = encodeURIComponent("Report listing: " + (car.name || "Car"));
+      const body = encodeURIComponent(
+        "Hi Island Car Finder,\n\nI want to report an issue with this listing:\n\n" +
+        "Car: " + (car.name || "") + "\n" +
+        "Garage: " + garageName + "\n" +
+        "Page: " + window.location.href + "\n\n" +
+        "Issue:\n"
+      );
+      report.href = "mailto:you@example.com?subject=" + subject + "&body=" + body;
 
-        fetch("/garages-data")
-          .then(r => r.ok ? r.json() : [])
-          .catch(() => [])
-      ])
-        .then(([car, garages]) => {
-          if (!car || car.success === false) {
-            loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
-            return;
-          }
+      // Specs
+      const specGrid = document.getElementById("specGrid");
+      const specsWrap = document.getElementById("specsWrap");
 
-          if (!Array.isArray(garages)) garages = [];
+      addSpec(specGrid, "Year", car.year);
+      addSpec(specGrid, "Mileage", miles(car.mileage));
+      addSpec(specGrid, "Engine", car.engine);
+      addSpec(specGrid, "Fuel", car.fuel);
+      addSpec(specGrid, "Transmission", car.transmission);
+      addSpec(specGrid, "Colour", car.colour);
+      addSpec(specGrid, "Owners", (Number.isFinite(Number(car.owners)) ? String(car.owners) : ""));
+      addSpec(specGrid, "Service history", car.serviceHistory);
+      addSpec(specGrid, "MOT until", car.motUntil);
 
-          loading.style.display = "none";
-          content.style.display = "grid";
+      if (specGrid.children.length > 0) specsWrap.style.display = "block";
 
-          document.getElementById("carTitle").textContent = car.name || "Car";
-          document.getElementById("carPrice").textContent = money(car.price);
+      // Description
+      const descWrap = document.getElementById("descWrap");
+      const descBox = document.getElementById("descBox");
+      if (car.description && String(car.description).trim()){
+        descBox.textContent = String(car.description);
+        descWrap.style.display = "block";
+      }
 
-          // Contact / garage
-          const garageId = car.garageId || "";
-          const garage = garages.find(g => g.id === garageId) || null;
+      // Photos
+      const mainImg = document.getElementById("mainImg");
+      const thumbs = document.getElementById("thumbs");
 
-          const garageName = (garage && garage.name) ? garage.name : (garageId || "Local garage");
-          const phone = (garage && garage.phone) ? garage.phone : "";
-          const email = (garage && garage.email) ? garage.email : "";
-          const town = (garage && garage.town) ? garage.town : "Isle of Wight";
+      const photos = (Array.isArray(car.photos) && car.photos.length)
+        ? car.photos
+        : [(car.photo || "/images/hero.png")];
 
-          document.getElementById("garageBox").innerHTML = `
-          <div><strong>${escapeText(garageName)}</strong></div>
-          <div>${escapeText(town)}</div>
-          <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
-          ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
-        `;
+      let currentIndex = 0;
 
-          const callBtn = document.getElementById("callBtn");
-          const callNote = document.getElementById("callNote");
+      function setMain(index){
+        currentIndex = index;
+        mainImg.src = photos[index];
+        [...thumbs.querySelectorAll("img")].forEach((el, i) => el.classList.toggle("active", i === index));
+      }
 
-          if (phone) {
-            callBtn.href = "tel:" + phone.replace(/\s/g, "");
-            callBtn.classList.remove("disabled");
-            callNote.textContent = "Call the garage directly about this car.";
-          } else {
-            callBtn.href = "#";
-            callBtn.classList.add("disabled");
-            callNote.textContent = "Phone number not provided yet.";
-          }
+      thumbs.innerHTML = "";
+      photos.forEach((src, i) => {
+        const t = document.createElement("img");
+        t.src = src;
+        t.className = "thumb" + (i === 0 ? " active" : "");
+        t.alt = "Car photo thumbnail";
+        t.onerror = () => { t.src = "/images/hero.png"; };
+        t.addEventListener("click", () => setMain(i));
+        thumbs.appendChild(t);
+      });
+      setMain(0);
 
-          // Report mailto
-          const report = document.getElementById("reportLink");
-          const subject = encodeURIComponent("Report listing: " + (car.name || "Car"));
-          const body = encodeURIComponent(
-            "Hi Island Car Finder,\n\nI want to report an issue with this listing:\n\n" +
-            "Car: " + (car.name || "") + "\n" +
-            "Garage: " + garageName + "\n" +
-            "Page: " + window.location.href + "\n\n" +
-            "Issue:\n"
-          );
-          report.href = "mailto:you@example.com?subject=" + subject + "&body=" + body;
+      // Lightbox
+      const lightbox = document.getElementById("lightbox");
+      const lbImg = document.getElementById("lbImg");
+      const lbClose = document.getElementById("lbClose");
+      const lbPrev = document.getElementById("lbPrev");
+      const lbNext = document.getElementById("lbNext");
+      const lbCount = document.getElementById("lbCount");
 
-          // Specs (only show what exists)
-          const specGrid = document.getElementById("specGrid");
-          const specsWrap = document.getElementById("specsWrap");
+      function openLightbox(index){
+        currentIndex = index;
+        lbImg.src = photos[currentIndex];
+        lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+        lightbox.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      function closeLightbox(){
+        lightbox.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+      function showPrev(){
+        currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+        lbImg.src = photos[currentIndex];
+        lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+      }
+      function showNext(){
+        currentIndex = (currentIndex + 1) % photos.length;
+        lbImg.src = photos[currentIndex];
+        lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+      }
 
-          addSpec(specGrid, "Year", car.year);
-          addSpec(specGrid, "Mileage", miles(car.mileage));
-          addSpec(specGrid, "Engine", car.engine);
-          addSpec(specGrid, "Fuel", car.fuel);
-          addSpec(specGrid, "Transmission", car.transmission);
-          addSpec(specGrid, "Colour", car.colour);
-          addSpec(specGrid, "Owners", (Number.isFinite(Number(car.owners)) ? String(car.owners) : ""));
-          addSpec(specGrid, "Service history", car.serviceHistory);
-          addSpec(specGrid, "MOT until", car.motUntil);
+      mainImg.addEventListener("click", () => openLightbox(currentIndex));
+      lbClose.addEventListener("click", closeLightbox);
+      lbPrev.addEventListener("click", showPrev);
+      lbNext.addEventListener("click", showNext);
 
-          if (specGrid.children.length > 0) specsWrap.style.display = "block";
+      lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
 
-          // Description (optional)
-          const descWrap = document.getElementById("descWrap");
-          const descBox = document.getElementById("descBox");
-
-          if (car.description && String(car.description).trim()) {
-            descBox.textContent = String(car.description);
-            descWrap.style.display = "block";
-          }
-
-          // Photos (photos[] first, then photo, then hero)
-          const mainImg = document.getElementById("mainImg");
-          const thumbs = document.getElementById("thumbs");
-
-          const photos = (Array.isArray(car.photos) && car.photos.length)
-            ? car.photos
-            : [(car.photo || "/images/hero.png")];
-
-          let currentIndex = 0;
-
-          function setMain(index) {
-            currentIndex = index;
-            mainImg.src = photos[index];
-            [...thumbs.querySelectorAll("img")].forEach((el, i) => {
-              el.classList.toggle("active", i === index);
-            });
-          }
-
-          thumbs.innerHTML = "";
-          photos.forEach((src, i) => {
-            const t = document.createElement("img");
-            t.src = src;
-            t.className = "thumb" + (i === 0 ? " active" : "");
-            t.alt = "Car photo thumbnail";
-            t.onerror = () => { t.src = "/images/hero.png"; };
-            t.addEventListener("click", () => setMain(i));
-            thumbs.appendChild(t);
-          });
-
-          setMain(0);
-
-          // Lightbox
-          const lightbox = document.getElementById("lightbox");
-          const lbImg = document.getElementById("lbImg");
-          const lbClose = document.getElementById("lbClose");
-          const lbPrev = document.getElementById("lbPrev");
-          const lbNext = document.getElementById("lbNext");
-          const lbCount = document.getElementById("lbCount");
-
-          function openLightbox(index) {
-            currentIndex = index;
-            lbImg.src = photos[currentIndex];
-            lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
-            lightbox.classList.add("open");
-            document.body.style.overflow = "hidden";
-          }
-          function closeLightbox() {
-            lightbox.classList.remove("open");
-            document.body.style.overflow = "";
-          }
-          function showPrev() {
-            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-            lbImg.src = photos[currentIndex];
-            lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
-          }
-          function showNext() {
-            currentIndex = (currentIndex + 1) % photos.length;
-            lbImg.src = photos[currentIndex];
-            lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
-          }
-
-          mainImg.addEventListener("click", () => openLightbox(currentIndex));
-          lbClose.addEventListener("click", closeLightbox);
-          lbPrev.addEventListener("click", showPrev);
-          lbNext.addEventListener("click", showNext);
-
-          lightbox.addEventListener("click", (e) => {
-            if (e.target === lightbox) closeLightbox();
-          });
-
-          document.addEventListener("keydown", (e) => {
-            if (!lightbox.classList.contains("open")) return;
-            if (e.key === "Escape") closeLightbox();
-            if (e.key === "ArrowLeft") showPrev();
-            if (e.key === "ArrowRight") showNext();
-          });
-        })
-        .catch((err) => {
-          loading.textContent = "Could not load car. Is Node running?";
-          console.log(err);
-        });
-    }
-  </script>
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("open")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") showPrev();
+        if (e.key === "ArrowRight") showNext();
+      });
+    }).catch((err) => {
+      loading.textContent = "Could not load car. Is Node running?";
+      console.log(err);
+    });
+  }
+</script>
 </body>
 </html>

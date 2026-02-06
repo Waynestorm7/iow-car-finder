@@ -16,11 +16,10 @@
       --shadowHover:0 10px 26px rgba(0,0,0,.14);
       --radius:14px;
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: Arial, sans-serif;
+      font-family:Arial,sans-serif;
       background:var(--bg);
       color:var(--text);
     }
@@ -38,11 +37,7 @@
       justify-content:space-between;
       gap:12px;
     }
-    header a{
-      color:#fff;
-      text-decoration:none;
-      font-weight:bold;
-    }
+    header a{color:#fff;text-decoration:none;font-weight:bold}
 
     main{
       max-width:1100px;
@@ -72,15 +67,13 @@
       white-space:nowrap;
     }
 
-    /* GRID of cards */
     .cars-grid{
       display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
       gap:16px;
       margin-top:16px;
     }
 
-    /* Card */
     .car-card{
       background:var(--card);
       border-radius:var(--radius);
@@ -99,7 +92,7 @@
     .car-thumb{
       width:100%;
       height:190px;
-      object-fit:cover;          /* looks more premium than contain */
+      object-fit:cover;
       background:#e5e7eb;
       display:block;
     }
@@ -110,14 +103,12 @@
       flex-direction:column;
       gap:10px;
     }
-
     .car-title{
       margin:0;
       font-size:1.05rem;
       color:#111827;
       line-height:1.2;
     }
-
     .car-price{
       font-weight:800;
       font-size:1.15rem;
@@ -125,10 +116,9 @@
       margin-top:-2px;
     }
 
-    /* 2x2 info grid inside card */
     .car-meta{
       display:grid;
-      grid-template-columns: 1fr 1fr; /* 2 columns */
+      grid-template-columns:1fr 1fr;
       gap:8px 10px;
       margin-top:2px;
       color:var(--muted);
@@ -160,125 +150,125 @@
       margin-top:16px;
     }
 
-    /* Mobile tweaks */
-    @media (max-width: 480px){
-      .toolbar{justify-content:flex-start}
-      .pill{font-size:.86rem}
-      .car-thumb{height:170px}
-      .car-meta{grid-template-columns:1fr 1fr} /* stays 2 columns */
+    @media (max-width:480px){
+      main{padding:16px 14px}
+
+      .toolbar{padding:10px;gap:8px}
+      .pill{font-size:.82rem;padding:6px 10px}
+      .toolbar .pill:last-child{display:none}
+
+      .car-thumb{height:155px}
+      .car-body{padding:12px;gap:8px}
+      .car-title{font-size:1rem}
+      .car-price{font-size:1.1rem}
+
+      .car-meta{gap:6px 8px}
+      .car-meta div{padding:7px 9px;border-radius:9px;font-size:.86rem}
+      .car-updated{font-size:.82rem}
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="top">
-      <a href="/">Island Car Finder</a>
-      <nav><a href="/cars-page">Cars</a></nav>
-    </div>
-  </header>
+<header>
+  <div class="top">
+    <a href="/">Island Car Finder</a>
+    <nav><a href="/cars-page">Cars</a></nav>
+  </div>
+</header>
 
-  <main>
-    <h1>Cars</h1>
-    <div class="sub">Recently added listings from trusted local garages.</div>
+<main>
+  <h1>Cars</h1>
+  <div class="sub">Recently added listings from trusted local garages.</div>
 
-    <div class="toolbar">
-      <div class="pill">Sort: Recently Added</div>
-      <div class="pill">Filters coming soon: Make • Garage • Price</div>
-      <div class="pill">Tip: Tap a car for details</div>
-    </div>
+  <div class="toolbar">
+    <div class="pill">Sort: Recently Added</div>
+    <div class="pill">Filters coming soon: Make • Garage • Price</div>
+    <div class="pill">Tip: Tap a car for details</div>
+  </div>
 
-    <div id="status" class="empty">Loading cars…</div>
-    <div id="carsGrid" class="cars-grid" style="display:none;"></div>
-  </main>
+  <div id="status" class="empty">Loading cars…</div>
+  <div id="carsGrid" class="cars-grid" style="display:none;"></div>
+</main>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      function money(n) {
-        try { return "£" + Number(n).toLocaleString("en-GB"); }
-        catch { return "£" + (n ?? ""); }
-      }
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const status = document.getElementById("status");
+    const grid = document.getElementById("carsGrid");
 
-      function formatDate(dateStr) {
-        if (!dateStr) return "";
-        const d = new Date(dateStr);
-        if (isNaN(d.getTime())) return "";
-        return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-      }
+    const money = (n) => {
+      try { return "£" + Number(n).toLocaleString("en-GB"); }
+      catch { return "£" + (n ?? ""); }
+    };
 
-      function escapeHtml(t) {
-        return String(t ?? "").replace(/[&<>"']/g, ch => ({
-          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-        }[ch]));
-      }
+    const formatDate = (dateStr) => {
+      if (!dateStr) return "";
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return "";
+      return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    };
 
-      function getCover(car) {
-        if (car && Array.isArray(car.photos) && car.photos.length && car.photos[0]) return car.photos[0];
-        if (car && car.photo) return car.photo;
-        return "/images/hero.png";
-      }
+    const escapeHtml = (t) =>
+      String(t ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[ch]));
 
-      const status = document.getElementById("status");
-      const grid = document.getElementById("carsGrid");
+    const getCover = (car) => {
+      if (car && Array.isArray(car.photos) && car.photos[0]) return car.photos[0];
+      if (car && car.photo) return car.photo;
+      return "/images/hero.png";
+    };
 
-      fetch("/cars")
-        .then(res => res.json())
-        .then(cars => {
-          if (!Array.isArray(cars) || cars.length === 0) {
-            status.textContent = "No cars yet.";
-            return;
-          }
+    fetch("/cars")
+      .then(res => res.json())
+      .then(cars => {
+        if (!Array.isArray(cars) || cars.length === 0) {
+          status.textContent = "No cars yet.";
+          return;
+        }
 
-          // newest first by updatedAt (fallback to 0)
-          cars.sort((a, b) => {
-            const ta = new Date(a.updatedAt || 0).getTime() || 0;
-            const tb = new Date(b.updatedAt || 0).getTime() || 0;
-            return tb - ta;
-          });
+        cars.sort((a,b) => (new Date(b.updatedAt||0).getTime()||0) - (new Date(a.updatedAt||0).getTime()||0));
 
-          status.style.display = "none";
-          grid.style.display = "grid";
-          grid.innerHTML = "";
+        status.style.display = "none";
+        grid.style.display = "grid";
+        grid.innerHTML = "";
 
-          cars.forEach(car => {
-            const cover = getCover(car);
-            const updated = formatDate(car.updatedAt);
+        cars.forEach(car => {
+          const cover = getCover(car);
+          const updated = formatDate(car.updatedAt);
 
-            const card = document.createElement("div");
-            card.className = "car-card";
+          const card = document.createElement("div");
+          card.className = "car-card";
 
-            card.innerHTML = `
-              <img class="car-thumb" src="${escapeHtml(cover)}" alt="Car photo"
-                   onerror="this.src='/images/hero.png'">
+          card.innerHTML = `
+            <img class="car-thumb" src="${escapeHtml(cover)}" alt="Car photo" onerror="this.src='/images/hero.png'">
+            <div class="car-body">
+              <h3 class="car-title">${escapeHtml(car.name || "Car")}</h3>
+              <div class="car-price">${money(car.price)}</div>
 
-              <div class="car-body">
-                <h3 class="car-title">${escapeHtml(car.name || "Car")}</h3>
-
-                <div class="car-price">${money(car.price)}</div>
-
-                <div class="car-meta">
-                  <div><strong>Year</strong><br>${escapeHtml(String(car.year || ""))}</div>
-                  <div><strong>Miles</strong><br>${escapeHtml(String(car.mileage || ""))}</div>
-                  <div><strong>Fuel</strong><br>${escapeHtml(String(car.fuel || ""))}</div>
-                  <div><strong>Gear</strong><br>${escapeHtml(String(car.transmission || ""))}</div>
-                </div>
-
-                ${updated ? `<div class="car-updated">Updated: ${escapeHtml(updated)}</div>` : ``}
+              <div class="car-meta">
+                <div><strong>Year</strong><br>${escapeHtml(String(car.year || ""))}</div>
+                <div><strong>Miles</strong><br>${escapeHtml(String(car.mileage || ""))}</div>
+                <div><strong>Fuel</strong><br>${escapeHtml(String(car.fuel || ""))}</div>
+                <div><strong>Gear</strong><br>${escapeHtml(String(car.transmission || ""))}</div>
               </div>
-            `;
 
-            card.addEventListener("click", () => {
-              window.location.href = "/car?name=" + encodeURIComponent(car.name || "");
-            });
+              ${updated ? `<div class="car-updated">Updated: ${escapeHtml(updated)}</div>` : ``}
+            </div>
+          `;
 
-            grid.appendChild(card);
+          card.addEventListener("click", () => {
+            window.location.href = "/car?name=" + encodeURIComponent(car.name || "");
           });
-        })
-        .catch(err => {
-          console.log("FETCH ERROR:", err);
-          status.textContent = "Could not load cars. Is Node running?";
+
+          grid.appendChild(card);
         });
-    });
-  </script>
+      })
+      .catch(err => {
+        console.log("FETCH ERROR:", err);
+        status.textContent = "Could not load cars. Is Node running?";
+      });
+  });
+</script>
 </body>
 </html>
