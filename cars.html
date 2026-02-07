@@ -6,17 +6,18 @@
   <title>Cars | Island Car Finder</title>
 
   <style>
-    :root{
+    :root {
       --bg:#f5f5f5;
       --card:#fff;
       --text:#1f2937;
       --muted:#6b7280;
       --brand:#2c3e50;
-      --shadow:0 2px 10px rgba(0,0,0,.10);
-      --shadowHover:0 10px 26px rgba(0,0,0,.14);
+      --shadow:0 2px 10px rgba(0,0,0,.1);
       --radius:14px;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family:Arial,sans-serif;
@@ -29,43 +30,28 @@
       color:#fff;
       padding:16px 20px;
     }
+
     header .top{
       max-width:1100px;
       margin:0 auto;
       display:flex;
-      align-items:center;
       justify-content:space-between;
-      gap:12px;
+      align-items:center;
     }
-    header a{color:#fff;text-decoration:none;font-weight:bold}
+
+    header a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
 
     main{
       max-width:1100px;
       margin:0 auto;
-      padding:22px 20px;
+      padding:20px;
     }
-    h1{margin:0;font-size:1.4rem}
-    .sub{margin-top:6px;color:rgba(0,0,0,.65)}
 
-    .toolbar{
-      margin-top:16px;
-      padding:12px;
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      justify-content:space-between;
-    }
-    .pill{
-      background:#eef2f6;
-      border-radius:999px;
-      padding:8px 12px;
-      font-size:.9rem;
-      color:#334155;
-      white-space:nowrap;
-    }
+    h1{margin:0;font-size:1.4rem}
 
     .cars-grid{
       display:grid;
@@ -77,68 +63,84 @@
     .car-card{
       background:var(--card);
       border-radius:var(--radius);
-      overflow:hidden;
       box-shadow:var(--shadow);
+      overflow:hidden;
       cursor:pointer;
-      transition:transform .15s ease, box-shadow .15s ease;
       display:flex;
       flex-direction:column;
+      transition:.15s;
     }
+
     .car-card:hover{
       transform:translateY(-2px);
-      box-shadow:var(--shadowHover);
+    }
+
+    /* IMAGE */
+    .thumbWrap{
+      position:relative;
     }
 
     .car-thumb{
       width:100%;
-      height:220px;
+      height:200px;
       object-fit:cover;
       background:#e5e7eb;
-      display:block;
+    }
+
+    /* SOLD BADGE */
+    .sold-badge{
+      position:absolute;
+      top:10px;
+      left:10px;
+      background:#c0392b;
+      color:#fff;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:10px;
+      font-size:.85rem;
+      box-shadow:0 2px 6px rgba(0,0,0,.25);
     }
 
     .car-body{
-      padding:10px;
+      padding:12px;
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:8px;
     }
+
     .car-title{
       margin:0;
       font-size:1.05rem;
-      color:#111827;
-      line-height:1.2;
-    }
-    .car-price{
-      font-weight:800;
-      font-size:1.15rem;
-      color:#0f172a;
-      margin-top:-2px;
     }
 
+    .car-price{
+      font-size:1.15rem;
+      font-weight:800;
+    }
+
+    /* 2x2 GRID */
     .car-meta{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:8px 10px;
-      margin-top:2px;
-      color:var(--muted);
+      gap:8px;
       font-size:.9rem;
+      color:var(--muted);
     }
+
     .car-meta div{
       background:#f8fafc;
       border:1px solid #eef2f6;
       border-radius:10px;
-      padding:6px 8px;
+      padding:6px;
       line-height:1.2;
     }
+
     .car-meta strong{
       color:#334155;
-      font-weight:700;
     }
 
     .car-updated{
-      margin-top:2px;
-      font-size:.85rem;
+      font-size:.8rem;
       color:var(--muted);
     }
 
@@ -146,129 +148,117 @@
       background:var(--card);
       padding:16px;
       border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      box-shadow:var(--shadow);
       margin-top:16px;
     }
 
-    @media (max-width:480px){
-      main{padding:16px 14px}
-
-      .toolbar{padding:10px;gap:8px}
-      .pill{font-size:.82rem;padding:6px 10px}
-      .toolbar .pill:last-child{display:none}
-
-      .car-thumb{height:155px}
-      .car-body{padding:12px;gap:8px}
-      .car-title{font-size:1rem}
-      .car-price{font-size:1.1rem}
-
-      .car-meta{gap:6px 8px}
-      .car-meta div{padding:7px 9px;border-radius:9px;font-size:.86rem}
-      .car-updated{font-size:.82rem}
+    @media(max-width:480px){
+      .car-thumb{height:150px}
     }
   </style>
 </head>
 
 <body>
+
 <header>
   <div class="top">
     <a href="/">Island Car Finder</a>
-    <nav><a href="/cars-page">Cars</a></nav>
+    <a href="/cars-page">Cars</a>
   </div>
 </header>
 
 <main>
-  <h1>Cars</h1>
-  <div class="sub">Recently added listings from trusted local garages.</div>
 
-  <div class="toolbar">
-    <div class="pill">Sort: Recently Added</div>
-    <div class="pill">Filters coming soon: Make • Garage • Price</div>
-    <div class="pill">Tip: Tap a car for details</div>
-  </div>
+  <h1>Cars</h1>
 
   <div id="status" class="empty">Loading cars…</div>
-  <div id="carsGrid" class="cars-grid" style="display:none;"></div>
+  <div id="carsGrid" class="cars-grid" style="display:none"></div>
+
 </main>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const status = document.getElementById("status");
-    const grid = document.getElementById("carsGrid");
+document.addEventListener("DOMContentLoaded", ()=>{
 
-    const money = (n) => {
-      try { return "£" + Number(n).toLocaleString("en-GB"); }
-      catch { return "£" + (n ?? ""); }
-    };
+  const status = document.getElementById("status");
+  const grid = document.getElementById("carsGrid");
 
-    const formatDate = (dateStr) => {
-      if (!dateStr) return "";
-      const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-    };
+  const money = n=>{
+    try{return "£"+Number(n).toLocaleString("en-GB")}
+    catch{return "£"+n}
+  };
 
-    const escapeHtml = (t) =>
-      String(t ?? "").replace(/[&<>"']/g, ch => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[ch]));
+  const escape = t =>
+    String(t||"").replace(/[&<>"']/g,m=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",
+      '"':"&quot;","'":"&#39;"
+    }[m]));
 
-    const getCover = (car) => {
-      if (car && Array.isArray(car.photos) && car.photos[0]) return car.photos[0];
-      if (car && car.photo) return car.photo;
-      return "/images/hero.png";
-    };
+  const cover = car=>{
+    if(car.photos && car.photos[0]) return car.photos[0];
+    if(car.photo) return car.photo;
+    return "/images/hero.png";
+  };
 
-    fetch("/cars")
-      .then(res => res.json())
-      .then(cars => {
-        if (!Array.isArray(cars) || cars.length === 0) {
-          status.textContent = "No cars yet.";
-          return;
-        }
+  fetch("/cars")
+  .then(r=>r.json())
+  .then(cars=>{
 
-        cars.sort((a,b) => (new Date(b.updatedAt||0).getTime()||0) - (new Date(a.updatedAt||0).getTime()||0));
+    if(!Array.isArray(cars) || !cars.length){
+      status.textContent="No cars yet.";
+      return;
+    }
 
-        status.style.display = "none";
-        grid.style.display = "grid";
-        grid.innerHTML = "";
+    status.style.display="none";
+    grid.style.display="grid";
+    grid.innerHTML="";
 
-        cars.forEach(car => {
-          const cover = getCover(car);
-          const updated = formatDate(car.updatedAt);
+    cars.forEach(car=>{
 
-          const card = document.createElement("div");
-          card.className = "car-card";
+      const card=document.createElement("div");
+      card.className="car-card";
 
-          card.innerHTML = `
-            <img class="car-thumb" src="${escapeHtml(cover)}" alt="Car photo" onerror="this.src='/images/hero.png'">
-            <div class="car-body">
-              <h3 class="car-title">${escapeHtml(car.name || "Car")}</h3>
-              <div class="car-price">${money(car.price)}</div>
+      card.innerHTML=`
+        <div class="thumbWrap">
 
-              <div class="car-meta">
-                <div><strong>Year</strong><br>${escapeHtml(String(car.year || ""))}</div>
-                <div><strong>Miles</strong><br>${escapeHtml(String(car.mileage || ""))}</div>
-                <div><strong>Fuel</strong><br>${escapeHtml(String(car.fuel || ""))}</div>
-                <div><strong>Gear</strong><br>${escapeHtml(String(car.transmission || ""))}</div>
-              </div>
+          <img class="car-thumb"
+            src="${escape(cover(car))}"
+            onerror="this.src='/images/hero.png'">
 
-              ${updated ? `<div class="car-updated">Updated: ${escapeHtml(updated)}</div>` : ``}
-            </div>
-          `;
+          ${car.sold ? `<div class="sold-badge">SOLD</div>` : ``}
 
-          card.addEventListener("click", () => {
-            window.location.href = "/car?name=" + encodeURIComponent(car.name || "");
-          });
+        </div>
 
-          grid.appendChild(card);
-        });
-      })
-      .catch(err => {
-        console.log("FETCH ERROR:", err);
-        status.textContent = "Could not load cars. Is Node running?";
-      });
+        <div class="car-body">
+
+          <h3 class="car-title">${escape(car.name)}</h3>
+
+          <div class="car-price">${money(car.price)}</div>
+
+          <div class="car-meta">
+            <div><strong>Year</strong><br>${escape(car.year)}</div>
+            <div><strong>Miles</strong><br>${escape(car.mileage||"")}</div>
+            <div><strong>Fuel</strong><br>${escape(car.fuel||"")}</div>
+            <div><strong>Gear</strong><br>${escape(car.transmission||"")}</div>
+          </div>
+
+        </div>
+      `;
+
+      card.onclick=()=>{
+        location.href="/car?name="+encodeURIComponent(car.name);
+      };
+
+      grid.appendChild(card);
+
+    });
+
+  })
+  .catch(()=>{
+    status.textContent="Could not load cars.";
   });
+
+});
 </script>
+
 </body>
 </html>

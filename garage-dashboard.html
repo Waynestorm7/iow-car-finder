@@ -6,124 +6,250 @@
   <title>Garage Dashboard | IOW Car Finder</title>
 
   <style>
-    :root{
-      --bg:#f5f5f5;
-      --card:#fff;
-      --text:#111827;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --brand:#e67e22;
-      --danger:#c0392b;
-      --shadow:0 2px 10px rgba(0,0,0,0.08);
-      --r:14px;
-    }
-    *{ box-sizing:border-box; }
-    body{ margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--text); }
-
-    header{ background:#2c3e50; color:#fff; padding:14px 16px; }
-    header .top{
-      max-width:1100px; margin:0 auto;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-    }
-    header a{ color:#fff; text-decoration:none; font-weight:bold; }
-
-    main{ max-width:1100px; margin:0 auto; padding:18px 14px; }
-
-    h1{ margin:0; font-size:1.35rem; }
-    h2{ margin:0 0 10px; font-size:1.05rem; }
-
-    .hint{ color:var(--muted); font-size:0.92rem; line-height:1.45; margin-top:6px; }
-
-    .grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:14px; }
-    @media(min-width:900px){ .grid{ grid-template-columns: 1fr 1.2fr; } }
-
-    .card{ background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:16px; }
-
-    label{ display:block; font-weight:bold; font-size:0.9rem; margin:12px 0 6px; }
-    input, textarea, select{
-      width:100%;
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      outline:none;
-      background:#fff;
-      font-size:16px; /* ✅ prevents iPhone zoom */
-    }
-    textarea{ min-height:110px; resize:vertical; line-height:1.45; }
-
-    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media(max-width:700px){ .row{ grid-template-columns:1fr; } }
-
-    details{
-      margin-top:12px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      background:#fff;
-    }
-    summary{ cursor:pointer; font-weight:bold; }
-
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
-    .btn{
-      border:none; border-radius:12px;
-      padding:12px 14px; font-weight:bold; cursor:pointer;
-      font-size:16px;
-    }
-    .btn.primary{ background:var(--brand); color:#fff; }
-    .btn.ghost{ background:#fff; border:1px solid var(--line); color:#111827; }
-    .btn:disabled{ opacity:0.6; cursor:not-allowed; }
-
-    @media(max-width:520px){
-      .btnRow{ flex-direction:column; }
-      .btn{ width:100%; }
+    :root {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --brand: #e67e22;
+      --danger: #c0392b;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      --r: 14px;
     }
 
-    .msg{
-      margin-top:12px; padding:10px 12px; border-radius:12px;
-      display:none; border:1px solid transparent; font-size:0.95rem;
-    }
-    .msg.success{ display:block; background:#eaf7ee; border-color:#bfe5c8; color:#1f6b2a; }
-    .msg.error{ display:block; background:#fdecec; border-color:#f2b8b8; color:#8a1f1f; }
+    * { box-sizing: border-box; }
 
-    .cars{ margin-top:10px; }
-    .carRow{
-      display:flex; justify-content:space-between; align-items:center; gap:12px;
-      padding:12px 0; border-bottom:1px solid var(--line);
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-    .carRow:last-child{ border-bottom:none; }
-    .left{ display:flex; gap:12px; align-items:center; min-width:0; }
-    .preview{
-      width:86px; height:62px; object-fit:cover;
-      border-radius:12px; border:1px solid var(--line); background:#f3f4f6;
-      flex:0 0 auto;
+
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 14px 16px;
     }
-    .name{
-      font-weight:bold;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+
+    header .top {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 14px;
+    }
+
+    h1 { margin: 0; font-size: 1.35rem; }
+    h2 { margin: 0 0 10px; font-size: 1.05rem; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+      margin-top: 6px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1fr 1.2fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin: 12px 0 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      background: #fff;
+      font-size: 16px; /* prevents iPhone zoom */
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .row { grid-template-columns: 1fr; }
+    }
+
+    details {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    summary { cursor: pointer; font-weight: bold; }
+
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn.primary { background: var(--brand); color: #fff; }
+    .btn.ghost { background: #fff; border: 1px solid var(--line); color: #111827; }
+
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    @media (max-width: 520px) {
+      .btnRow { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+
+    .msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      display: none;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+    }
+
+    .msg.success {
+      display: block;
+      background: #eaf7ee;
+      border-color: #bfe5c8;
+      color: #1f6b2a;
+    }
+
+    .msg.error {
+      display: block;
+      background: #fdecec;
+      border-color: #f2b8b8;
+      color: #8a1f1f;
+    }
+
+    .cars { margin-top: 10px; }
+
+    .carRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .carRow:last-child { border-bottom: none; }
+
+    .left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .preview {
+      width: 86px;
+      height: 62px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #f3f4f6;
+      flex: 0 0 auto;
+    }
+
+    .name {
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       max-width: 520px;
     }
-    .meta{ color:var(--muted); font-size:0.9rem; margin-top:4px; }
 
-    .danger{
-      background:#fff;
-      border:1px solid #f2b8b8;
-      color:#8a1f1f;
-      border-radius:12px;
-      padding:10px 12px;
-      cursor:pointer;
-      font-weight:bold;
-      font-size:15px;
-      white-space:nowrap;
+    .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
     }
-    .danger:disabled{ opacity:0.6; cursor:not-allowed; }
 
-    .twoColMot{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    @media(max-width:520px){ .twoColMot{ grid-template-columns:1fr; } }
+    .danger {
+      background: #fff;
+      border: 1px solid #f2b8b8;
+      color: #8a1f1f;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .danger:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .small{ font-size:0.86rem; color:var(--muted); margin-top:6px; }
-    code{ background:#f3f4f6; padding:2px 6px; border-radius:8px; }
+    .btnSold {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #111827;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .btnSold:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .divider{ height:1px; background:var(--line); margin:12px 0; }
+    .twoColMot { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px) { .twoColMot { grid-template-columns: 1fr; } }
+
+    .small { font-size: 0.86rem; color: var(--muted); margin-top: 6px; }
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 8px; }
+
+    .divider { height: 1px; background: var(--line); margin: 12px 0; }
   </style>
 </head>
 
@@ -139,9 +265,7 @@
 
 <main>
   <h1>Garage Dashboard</h1>
-  <div class="hint">
-    Paste photo links (Cloudinary). Optional details only show on the car page if you fill them in.
-  </div>
+  <div class="hint">Paste photo links (Cloudinary). Optional details only show on the car page if you fill them in.</div>
 
   <div class="grid">
     <!-- FORM -->
@@ -175,7 +299,6 @@
 
       <details>
         <summary>More optional details</summary>
-
         <div class="divider"></div>
 
         <div class="row">
@@ -293,17 +416,14 @@
 
   function escapeText(t) {
     return String(t || "").replace(/[&<>"']/g, ch => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[ch]));
   }
 
   function getGarageId() { return String(garageIdInput.value || "").trim(); }
 
   function parsePhotos(raw) {
-    return String(raw || "")
-      .split(",")
-      .map(s => s.trim())
-      .filter(Boolean);
+    return String(raw || "").split(",").map(s => s.trim()).filter(Boolean);
   }
 
   function safeUrl(u) {
@@ -322,8 +442,8 @@
     return Number.isFinite(n) ? n : null;
   }
 
-  // ✅ Auto-grow textareas
-  function autoGrow(el){
+  // Auto-grow textareas
+  function autoGrow(el) {
     if (!el) return;
     el.style.height = "auto";
     el.style.height = (el.scrollHeight + 2) + "px";
@@ -334,7 +454,7 @@
   });
 
   // Fill MOT year dropdown (this year to +6)
-  (function fillYears(){
+  (function fillYears() {
     const now = new Date().getFullYear();
     for (let y = now; y <= now + 6; y++) {
       const opt = document.createElement("option");
@@ -355,12 +475,17 @@
     }
 
     try {
-      const res = await fetch("/cars");
+      const res = await fetch("/cars-admin"); // ✅ show ALL cars in dashboard
       const allCars = await res.json();
 
-      const cars = (Array.isArray(allCars) ? allCars : [])
+      if (!Array.isArray(allCars)) {
+        carsBox.textContent = "Could not load cars (bad response).";
+        return;
+      }
+
+      const cars = allCars
         .filter(c => (c.garageId || "demo-garage") === garageId)
-        .sort((a,b) => (new Date(b.updatedAt||0).getTime()||0) - (new Date(a.updatedAt||0).getTime()||0));
+        .sort((a, b) => (new Date(b.updatedAt || 0).getTime() || 0) - (new Date(a.updatedAt || 0).getTime() || 0));
 
       carsBox.innerHTML = "";
 
@@ -381,13 +506,53 @@
           <div class="left">
             <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.png'">
             <div style="min-width:0;">
-              <div class="name">${escapeText(car.name || "Untitled")}</div>
+              <div class="name">${escapeText(car.name || "Untitled")}${car.sold ? " ✅ SOLD" : ""}</div>
               <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
+              ${car.soldDate ? `<div class="meta">Sold date: ${escapeText(car.soldDate)}</div>` : ``}
             </div>
           </div>
-          <button type="button" class="danger">Delete</button>
+
+          <div style="display:flex; gap:10px; align-items:center;">
+            ${car.sold ? "" : `<button type="button" class="btnSold">Mark Sold</button>`}
+            <button type="button" class="danger">Delete</button>
+          </div>
         `;
 
+        // ✅ MARK SOLD handler (separate, correct place)
+        const soldBtn = row.querySelector(".btnSold");
+        if (soldBtn) {
+          soldBtn.addEventListener("click", async () => {
+            if (!confirm(`Mark "${car.name}" as SOLD?`)) return;
+
+            soldBtn.disabled = true;
+            soldBtn.textContent = "Saving…";
+
+            try {
+              const resp = await fetch("/cars-sold?name=" + encodeURIComponent(car.name || ""), {
+                method: "POST",
+                headers: { "X-Garage-Key": secretInput.value.trim() }
+              });
+
+              const result = await resp.json().catch(() => null);
+
+              if (!resp.ok || !result || !result.success) {
+                showMsg("error", (result && result.message) ? result.message : "Could not mark sold.");
+                soldBtn.disabled = false;
+                soldBtn.textContent = "Mark Sold";
+                return;
+              }
+
+              showMsg("success", `Marked SOLD (${result.soldDate || "today"}).`);
+              renderCars();
+            } catch {
+              showMsg("error", "Network error.");
+              soldBtn.disabled = false;
+              soldBtn.textContent = "Mark Sold";
+            }
+          });
+        }
+
+        // ✅ DELETE handler
         const delBtn = row.querySelector(".danger");
         delBtn.addEventListener("click", async () => {
           if (!confirm(`Delete "${car.name}"?`)) return;
@@ -400,6 +565,7 @@
               method: "DELETE",
               headers: { "X-Garage-Key": secretInput.value.trim() }
             });
+
             const result = await resp.json().catch(() => null);
 
             if (!resp.ok || !result || !result.success) {
@@ -420,8 +586,9 @@
 
         carsBox.appendChild(row);
       });
+
     } catch {
-      carsBox.textContent = "Could not load cars. Open from Node: http://localhost:3000/garage-dashboard";
+      carsBox.textContent = "Could not load cars. Is Node running?";
     }
   }
 
@@ -521,7 +688,7 @@
 
       renderCars();
     } catch {
-      showMsg("error", "Save failed (network error). Open from Node: http://localhost:3000/garage-dashboard");
+      showMsg("error", "Save failed (network error).");
       addBtn.disabled = false;
       addBtn.textContent = "Add car";
     }
