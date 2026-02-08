@@ -245,6 +245,7 @@
       VERSION: CARS-PAGE v1
     </div>
 
+
     <!-- remove this later -->
     <div class="version">VERSION: CARS-PAGE v1</div>
 
@@ -259,10 +260,10 @@
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
     }
+
     function miles(n) {
-      const x = Number(n);
-      if (!Number.isFinite(x)) return "";
-      return x.toLocaleString("en-GB");
+      if (!Number.isFinite(Number(n))) return "";
+      return Number(n).toLocaleString("en-GB") + " miles";
     }
 
     function pickPhoto(car) {
