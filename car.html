@@ -1,453 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | Island Car Finder</title>
 
   <style>
-    :root {
-      --bg: #f5f5f5;
-      --card: #fff;
-      --text: #111827;
-      --muted: #6b7280;
-      --brand: #2c3e50;
-      --accent: #e67e22;
-      --shadow: 0 2px 10px rgba(0, 0, 0, .10);
-      --radius: 14px;
+    :root{
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#111827;
+      --muted:#6b7280;
+      --brand:#2c3e50;
+      --accent:#e67e22;
+      --shadow:0 2px 10px rgba(0,0,0,.10);
+      --radius:14px;
     }
 
-    * {
-      box-sizing: border-box
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    header{
+      background:rgba(0,0,0,.75);
+      color:#fff;
+      padding:16px 20px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(6px);
     }
 
-    header {
-      background: rgba(0, 0, 0, .75);
-      color: #fff;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(6px);
+    header .top{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
 
-    header .top {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    header a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
     }
 
-    header a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 20px;
     }
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 20px;
+    /* DEBUG MARKER (remove later) */
+    .debugVersion{
+      padding:6px 10px;
+      background:#fffbcc;
+      border:1px solid #f2e6a3;
+      border-radius:10px;
+      margin-bottom:10px;
+      font-weight:700;
+      font-size:.9rem;
+      color:#3b3b3b;
     }
 
-    .backRow {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 12px
+    .backRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:12px;
     }
 
-    .backLink {
-      display: inline-block;
-      padding: 8px 12px;
-      background: #fff;
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--brand);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      font-weight: bold;
+    .backLink{
+      display:inline-block;
+      padding:8px 12px;
+      background:#fff;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--brand);
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      font-weight:800;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 16px;
+    .layout{
+      display:grid;
+      grid-template-columns:1.6fr 1fr;
+      gap:16px;
     }
 
-    @media(max-width:900px) {
-      .layout {
-        grid-template-columns: 1fr
-      }
+    @media (max-width:900px){
+      .layout{ grid-template-columns:1fr; }
     }
 
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .status {
-      background: var(--card);
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
+    .status{
+      background:var(--card);
+      padding:16px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
     }
 
     /* Gallery */
-    .gallery {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      padding: 14px;
+    .gallery{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      padding:14px;
     }
 
-    .main-img {
-      width: 100%;
-      height: 360px;
-      object-fit: contain;
-      background: #f1f1f1;
-      border-radius: 12px;
-      cursor: zoom-in;
+    .main-img{
+      width:100%;
+      height:360px;
+      object-fit:contain;
+      background:#f1f1f1;
+      border-radius:12px;
+      cursor:zoom-in;
     }
 
-    .thumbs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap
+    .thumbs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .thumb {
-      width: 90px;
-      height: 65px;
-      object-fit: contain;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      background: #eee;
-      padding: 4px;
+    .thumb{
+      width:90px;
+      height:65px;
+      object-fit:contain;
+      border-radius:10px;
+      cursor:pointer;
+      border:2px solid transparent;
+      background:#eee;
+      padding:4px;
     }
 
-    .thumb.active {
-      border-color: var(--accent)
+    .thumb.active{
+      border-color:var(--accent);
     }
 
     /* Right column */
-    .info {
-      padding: 16px
+    .info{ padding:16px; }
+
+    h1{
+      margin:0 0 6px;
+      font-size:1.5rem;
+      color:var(--brand);
     }
 
-    h1 {
-      margin: 0 0 6px;
-      font-size: 1.5rem;
-      color: var(--brand)
+    .price{
+      font-size:1.25rem;
+      font-weight:900;
+      margin:8px 0 14px;
+      color:#0f172a;
     }
 
-    .price {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin: 8px 0 14px;
-      color: #0f172a;
-    }
-
-    .sectionTitle {
-      margin: 14px 0 10px;
-      font-size: 1.05rem;
-      color: var(--brand)
+    .sectionTitle{
+      margin:14px 0 10px;
+      font-size:1.05rem;
+      color:var(--brand);
+      font-weight:800;
     }
 
     /* Specs grid */
-    .specGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      /* desktop stays 2 columns */
-      gap: 10px;
-      margin-top: 8px;
+    .specGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr; /* 2 columns by default */
+      gap:10px;
+      margin-top:8px;
     }
 
-    .specItem {
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
+    .specItem{
+      padding:8px 10px;
+      border-radius:10px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      min-width:0;
     }
 
-    .specLabel {
-      font-size: .75rem;
-      color: var(--muted);
-      margin-bottom: 2px
+    .specLabel{
+      font-size:.75rem;
+      color:var(--muted);
+      margin-bottom:2px;
     }
 
-    .specValue {
-      font-size: .92rem;
-      font-weight: 700;
-      color: #111827
+    .specValue{
+      font-size:.92rem;
+      font-weight:800;
+      color:#111827;
+      word-break:break-word;
     }
 
-    .descBox {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
-      line-height: 1.6;
-      color: #111827;
-      white-space: pre-line;
+    .descBox{
+      background:#eef2f6;
+      border-radius:12px;
+      padding:12px;
+      line-height:1.6;
+      color:#111827;
+      white-space:pre-line;
     }
 
-    .contact {
-      padding: 16px
+    .contact{ padding:16px; }
+
+    .contact h2{
+      margin:0 0 10px;
+      font-size:1.1rem;
+      color:var(--brand);
+      font-weight:900;
     }
 
-    .contact h2 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-      color: var(--brand)
+    .contact .box{
+      background:#eef2f6;
+      border-radius:12px;
+      padding:12px;
+      line-height:1.6;
     }
 
-    .contact .box {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
-      line-height: 1.6;
+    .btn{
+      display:inline-block;
+      margin-top:12px;
+      background:var(--accent);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:900;
     }
 
-    .btn {
-      display: inline-block;
-      margin-top: 12px;
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
+    .btn.disabled{
+      opacity:.6;
+      pointer-events:none;
     }
 
-    .btn.disabled {
-      opacity: .6;
-      pointer-events: none
+    .trust{
+      margin-top:16px;
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      border-left:6px solid var(--brand);
+      line-height:1.6;
     }
 
-    .trust {
-      margin-top: 16px;
-      background: #fff;
-      padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      border-left: 6px solid var(--brand);
-      line-height: 1.6;
+    .trust a{
+      color:var(--brand);
+      font-weight:900;
+      text-decoration:none;
     }
 
-    .trust a {
-      color: var(--brand);
-      font-weight: bold;
-      text-decoration: none
+    .small{
+      color:#666;
+      font-size:.9rem;
+      margin-top:8px;
     }
 
-    .small {
-      color: #666;
-      font-size: .9rem;
-      margin-top: 8px
-    }
+    /* ===== MOBILE TIGHTENING (single block, no duplicates) ===== */
+    @media (max-width:600px){
+      main{ padding:14px 12px; }
 
-    /* ✅ MOBILE: keep specs 2-per-row so page is shorter */
-    @media (max-width:600px) {
-      main {
-        padding: 16px 14px
+      .backRow{ margin-bottom:10px; }
+
+      .gallery{
+        padding:12px;
+        gap:8px;
       }
 
-      .main-img {
-        height: 300px
+      .main-img{
+        height:260px;
       }
 
-      .thumb {
-        width: 78px;
-        height: 58px
+      .thumbs{ gap:8px; }
+      .thumb{
+        width:72px;
+        height:54px;
+        padding:3px;
       }
 
-      .specGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+      .info{ padding:14px; }
+      .contact{ padding:14px; }
+      .trust{
+        padding:12px;
+        margin-top:12px;
+      }
+
+      h1{
+        font-size:1.35rem;
+        margin:0 0 4px;
+      }
+
+      .price{
+        font-size:1.25rem;
+        margin:6px 0 10px;
+      }
+
+      .sectionTitle{
+        margin:12px 0 8px;
+      }
+
+      /* IMPORTANT: FORCE 2 columns on mobile */
+      .specGrid{
+        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+        gap:8px !important;
+      }
+
+      .specItem{
+        padding:8px 10px;
+      }
+
+      .descBox{
+        padding:10px;
+        line-height:1.5;
+      }
+
+      .btn{
+        margin-top:10px;
+        padding:10px 14px;
       }
     }
 
-    /* super small phones: don’t squash */
-    @media (max-width:360px) {
-      .specGrid {
-        grid-template-columns: 1fr
+    @media (max-width:360px){
+      .specGrid{
+        grid-template-columns:1fr !important;
       }
     }
 
     /* Lightbox */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
     }
 
-    .lightbox.open {
-      display: flex
+    .lightbox.open{ display:flex; }
+
+    .lbImg{
+      max-width:95vw;
+      max-height:85vh;
+      object-fit:contain;
+      border-radius:12px;
+      background:#111;
     }
 
-    .lbImg {
-      max-width: 95vw;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 12px;
-      background: #111;
+    .lbClose{
+      position:absolute;
+      top:16px;
+      right:16px;
+      font-size:22px;
+      border:none;
+      border-radius:10px;
+      padding:8px 12px;
+      cursor:pointer;
     }
 
-    .lbClose {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 22px;
-      border: none;
-      border-radius: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
+    .lbNav{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:40px;
+      border:none;
+      border-radius:12px;
+      padding:6px 14px;
+      cursor:pointer;
     }
 
-    .lbNav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 40px;
-      border: none;
-      border-radius: 12px;
-      padding: 6px 14px;
-      cursor: pointer;
-    }
+    .lbPrev{ left:16px; }
+    .lbNext{ right:16px; }
 
-    .lbPrev {
-      left: 16px
-    }
-
-    .lbNext {
-      right: 16px
-    }
-
-    .lbCount {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #fff;
-      font-size: 14px;
-      opacity: .9;
-    }
-
-    /* ===== MOBILE TIGHTENING (final) ===== */
-    @media (max-width: 600px) {
-      main {
-        padding: 14px 12px;
-      }
-
-      /* tighten vertical spacing */
-      .backRow {
-        margin-bottom: 10px;
-      }
-
-      .gallery {
-        padding: 12px;
-        gap: 8px;
-      }
-
-      .info {
-        padding: 14px;
-      }
-
-      .contact {
-        padding: 14px;
-      }
-
-      .trust {
-        padding: 12px;
-        margin-top: 12px;
-      }
-
-      .sectionTitle {
-        margin: 12px 0 8px;
-      }
-
-      /* main image slightly shorter */
-      .main-img {
-        height: 260px;
-        border-radius: 12px;
-      }
-
-      /* thumbs smaller so the page is shorter */
-      .thumbs {
-        gap: 8px;
-      }
-
-      .thumb {
-        width: 72px;
-        height: 54px;
-        padding: 3px;
-      }
-
-      /* title + price slightly tighter */
-      h1 {
-        font-size: 1.35rem;
-        margin: 0 0 4px;
-      }
-
-      .price {
-        font-size: 1.25rem;
-        margin: 6px 0 10px;
-      }
-
-      /* keep Key Specs 2x2 (shorter page) */
-      .specGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-      }
-
-      /* shrink each spec box */
-      .specItem {
-        padding: 8px 10px;
-        border-radius: 10px;
-      }
-
-      .specLabel {
-        font-size: 0.72rem;
-      }
-
-      .specValue {
-        font-size: 0.9rem;
-      }
-
-      /* description tighter */
-      .descBox {
-        padding: 10px;
-        border-radius: 12px;
-        line-height: 1.5;
-      }
-
-      /* contact button spacing */
-      .btn {
-        margin-top: 10px;
-        padding: 10px 14px;
-      }
-    }
-
-    /* super tiny phones: go 1 column to avoid squashing */
-    @media (max-width: 360px) {
-      .specGrid {
-        grid-template-columns: 1fr;
-      }
+    .lbCount{
+      position:absolute;
+      bottom:16px;
+      left:50%;
+      transform:translateX(-50%);
+      color:#fff;
+      font-size:14px;
+      opacity:.9;
     }
   </style>
 </head>
@@ -463,9 +402,8 @@
   </header>
 
   <main>
-    <div style="padding:6px 10px;background:#fffbcc;border:1px solid #f2e6a3;border-radius:10px;margin-bottom:10px;">
-      VERSION: CAR-PAGE v7
-    </div>
+    <div class="debugVersion">VERSION: CAR-PAGE v8</div>
+
     <div class="backRow">
       <a class="backLink" href="/cars-page">← Back to cars</a>
     </div>
@@ -548,9 +486,9 @@
       const div = document.createElement("div");
       div.className = "specItem";
       div.innerHTML = `
-      <div class="specLabel">${escapeText(label)}</div>
-      <div class="specValue">${escapeText(v)}</div>
-    `;
+        <div class="specLabel">${escapeText(label)}</div>
+        <div class="specValue">${escapeText(v)}</div>
+      `;
       specGrid.appendChild(div);
     }
 
@@ -571,7 +509,6 @@
           loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
           return;
         }
-
         if (!Array.isArray(garages)) garages = [];
 
         loading.style.display = "none";
@@ -590,11 +527,11 @@
         const town = (garage && garage.town) ? garage.town : "Isle of Wight";
 
         document.getElementById("garageBox").innerHTML = `
-        <div><strong>${escapeText(garageName)}</strong></div>
-        <div>${escapeText(town)}</div>
-        <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
-        ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
-      `;
+          <div><strong>${escapeText(garageName)}</strong></div>
+          <div>${escapeText(town)}</div>
+          <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
+          ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
+        `;
 
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
@@ -633,9 +570,9 @@
         addSpec(specGrid, "Colour", car.colour);
         addSpec(specGrid, "Owners", (Number.isFinite(Number(car.owners)) ? String(car.owners) : ""));
         addSpec(specGrid, "Service history", car.serviceHistory);
-        const mot = String(car.motUntil || "").trim();
-        addSpec(specGrid, "MOT until", mot.replace("-", " / "));
 
+        const mot = String(car.motUntil || "").trim();
+        if (mot) addSpec(specGrid, "MOT until", mot.replace(/-/g, " / "));
 
         if (specGrid.children.length > 0) specsWrap.style.display = "block";
 
@@ -719,11 +656,10 @@
           if (e.key === "ArrowRight") showNext();
         });
       }).catch((err) => {
-        loading.textContent = "Could not load car. Is Node running?";
+        loading.textContent = "Could not load car.";
         console.log(err);
       });
     }
   </script>
 </body>
-
 </html>
