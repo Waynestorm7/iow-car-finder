@@ -6,276 +6,280 @@
   <title>Cars | Island Car Finder</title>
 
   <style>
-    :root {
-      --bg: #f5f5f5;
-      --card: #fff;
-      --text: #111827;
-      --muted: #6b7280;
-      --brand: #2c3e50;
-      --accent: #e67e22;
-      --shadow: 0 2px 10px rgba(0, 0, 0, .10);
-      --radius: 14px;
+    :root{
+      --bg:#f5f5f5;
+      --card:#fff;
+      --text:#111827;
+      --muted:#6b7280;
+      --brand:#2c3e50;
+      --accent:#e67e22;
+      --shadow:0 2px 10px rgba(0,0,0,.10);
+      --radius:14px;
     }
 
-    * { box-sizing: border-box; }
+    *{ box-sizing:border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
-    header {
-      background: rgba(0, 0, 0, .75);
-      color: #fff;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(6px);
+    header{
+      background:rgba(0,0,0,.75);
+      color:#fff;
+      padding:16px 20px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(6px);
     }
 
-    header .top {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    header .top{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
 
-    header a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
+    header a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
     }
 
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 20px;
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px 20px;
     }
 
-    h1 {
-      margin: 10px 0 14px;
-      font-size: 1.7rem;
-      color: var(--brand);
+    h1{
+      margin:10px 0 14px;
+      font-size:1.7rem;
+      color:var(--brand);
     }
 
-    .status {
-      background: var(--card);
-      padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
+    .status{
+      background:var(--card);
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
     }
 
     /* Filters */
-    .filters {
-      background: var(--card);
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      padding: 12px;
-      display: grid;
-      grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 0.7fr;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 14px;
+    .filters{
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 2px 5px rgba(0,0,0,.08);
+      padding:12px;
+      display:grid;
+      grid-template-columns:1.4fr 0.7fr 0.7fr 0.7fr 0.7fr;
+      gap:10px;
+      align-items:center;
+      margin-bottom:14px;
     }
 
     .filters input,
-    .filters select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      font-size: .95rem;
-      outline: none;
-      background: #fff;
+    .filters select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      font-size:.95rem;
+      outline:none;
+      background:#fff;
     }
 
-    .filters .btnRow {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
+    .filters .btnRow{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
     }
 
-    .btn {
-      border: none;
-      border-radius: 10px;
-      padding: 10px 12px;
-      cursor: pointer;
-      font-weight: 800;
-      background: #eef2f6;
-      color: #111827;
+    .btn{
+      border:none;
+      border-radius:10px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+      background:#eef2f6;
+      color:#111827;
     }
 
-    .btn.primary {
-      background: var(--accent);
-      color: #fff;
+    .btn.primary{
+      background:var(--accent);
+      color:#fff;
     }
 
-    .filters .hint {
-      grid-column: 1 / -1;
-      color: var(--muted);
-      font-size: .88rem;
-      margin-top: -2px;
+    .filters .hint{
+      grid-column:1 / -1;
+      color:var(--muted);
+      font-size:.88rem;
+      margin-top:-2px;
     }
 
-    @media (max-width: 980px) {
-      .filters {
-        grid-template-columns: 1fr 1fr;
-      }
-      .filters .btnRow {
-        justify-content: flex-start;
-      }
+    @media (max-width:980px){
+      .filters{ grid-template-columns:1fr 1fr; }
+      .filters .btnRow{ justify-content:flex-start; }
     }
 
-    @media (max-width: 600px) {
-      main { padding: 16px 14px; }
-      .filters {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-      .filters .btnRow {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-      .btn { width: 100%; }
+    @media (max-width:600px){
+      main{ padding:16px 14px; }
+      .filters{ grid-template-columns:1fr; gap:8px; }
+      .filters .btnRow{ display:grid; grid-template-columns:1fr 1fr; }
+      .btn{ width:100%; }
     }
 
     /* Cards grid */
-    .grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:16px;
     }
 
-    @media (max-width: 980px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width:980px){
+      .grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; gap: 14px; }
+    @media (max-width:600px){
+      .grid{ grid-template-columns:1fr; gap:14px; }
     }
 
-    .carCard {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      position: relative;
-      transition: transform .15s ease, box-shadow .15s ease;
+    .carCard{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      text-decoration:none;
+      color:inherit;
+      display:block;
+      position:relative;
+      transition:transform .15s ease, box-shadow .15s ease;
     }
 
-    .carCard:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 26px rgba(0,0,0,.14);
+    .carCard:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 26px rgba(0,0,0,.14);
     }
 
-    .imgWrap {
-      position: relative;
-      background: #eee;
+    .imgWrap{
+      position:relative;
+      background:#eee;
     }
 
-    .carImg {
-      width: 100%;
-      height: 210px;
-      object-fit: cover;
-      display: block;
-      background: #eee;
+    .carImg{
+      width:100%;
+      height:210px;
+      object-fit:cover;
+      display:block;
+      background:#eee;
     }
 
-    @media (max-width: 600px) {
-      .carImg { height: 220px; }
+    @media (max-width:600px){
+      .carImg{ height:220px; }
     }
 
-    .soldBadge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, .78);
-      color: #fff;
-      font-weight: 900;
-      font-size: .85rem;
-      letter-spacing: .2px;
+    .soldBadge{
+      position:absolute;
+      top:12px;
+      left:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.78);
+      color:#fff;
+      font-weight:900;
+      font-size:.85rem;
+      letter-spacing:.2px;
     }
 
-    .body { padding: 14px; }
+    .body{ padding:14px; }
 
-    .name {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: var(--brand);
-      line-height: 1.2;
+    .name{
+      margin:0;
+      font-size:1.1rem;
+      font-weight:900;
+      color:var(--brand);
+      line-height:1.2;
     }
 
-    .price {
-      margin: 8px 0 10px;
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: #0f172a;
+    .price{
+      margin:8px 0 10px;
+      font-size:1.25rem;
+      font-weight:900;
+      color:#0f172a;
     }
 
-    /* Key specs tiles */
-    .specGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
+    /* Base spec tiles */
+    .specGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
     }
 
-    .spec {
-      padding: 9px 10px;
-      border-radius: 12px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      min-width: 0;
+    .spec{
+      padding:9px 10px;
+      border-radius:12px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      min-width:0;
     }
 
-    .specLabel {
-      font-size: .74rem;
-      color: var(--muted);
-      margin-bottom: 2px;
+    .specLabel{
+      font-size:.74rem;
+      color:var(--muted);
+      margin-bottom:2px;
     }
 
-    .specValue {
-      font-size: .95rem;
-      font-weight: 900;
-      color: #111827;
-      line-height: 1.1;
-      word-break: break-word;
+    .specValue{
+      font-size:.95rem;
+      font-weight:900;
+      color:#111827;
+      line-height:1.1;
+      word-break:break-word;
     }
 
-    /* ✅ Force 2x2 on real phones too */
-    @media (max-width: 800px) {
-      .specGrid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
-        width: 100% !important;
+    /* ✅ FINAL MOBILE FIX: keep 2 columns on phones */
+    @media (max-width:800px){
+      .specGrid{
+        display:grid !important;
+        grid-template-columns:1fr 1fr !important;
+        gap:10px !important;
+        width:100% !important;
       }
-      .specGrid > .spec {
-        width: auto !important;
-        min-width: 0 !important;
-        max-width: none !important;
-        display: block !important;
+      .specGrid > .spec{
+        width:auto !important;
+        min-width:0 !important;
+        max-width:none !important;
+        display:block !important;
       }
     }
 
-    @media (max-width: 360px) {
-      .specGrid { grid-template-columns: 1fr !important; }
+    @media (max-width:360px){
+      .specGrid{ grid-template-columns:1fr !important; }
     }
 
-    .mutedLine {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: .92rem;
+    /* ✅ Optional tighter look for browse cards */
+    .specGrid.compact{
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      margin-top:6px;
+    }
+    .specGrid.compact .spec{
+      padding:6px 8px;
+      border-radius:11px;
+    }
+    .specGrid.compact .specValue{
+      font-size:.9rem;
+    }
+
+    .mutedLine{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:.92rem;
     }
   </style>
 </head>
@@ -293,7 +297,6 @@
   <main>
     <h1>Cars</h1>
 
-    <!-- Filters (Phase 1 + Phase 2) -->
     <div class="filters">
       <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
 
@@ -305,7 +308,6 @@
         <option value="mileage-asc">Mileage: Lowest</option>
       </select>
 
-      <!-- Phase 2 filters -->
       <select id="fuelBox">
         <option value="">Fuel (All)</option>
       </select>
@@ -338,41 +340,46 @@
   </main>
 
   <script>
-    function money(n) {
+    function money(n){
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
     }
 
-    function miles(n) {
+    function miles(n){
       const num = Number(n);
       if (!Number.isFinite(num)) return "";
-      // ✅ 42,000 not 42000
       return num.toLocaleString("en-GB") + " miles";
     }
 
-    function pickPhoto(car) {
+    function pickPhoto(car){
       if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
       if (car.photo) return car.photo;
       return "/images/hero.png";
     }
 
-    function safeText(s) { return String(s ?? "").trim(); }
+    function safeText(s){ return String(s ?? "").trim(); }
+    function norm(s){ return safeText(s).toLowerCase(); }
 
-    function norm(s) {
-      return safeText(s).toLowerCase();
-    }
-
-    function uniqueSorted(arr) {
+    function uniqueSorted(arr){
       const set = new Set(arr.filter(Boolean));
-      return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
+      return [...set].sort((a,b)=>a.localeCompare(b,"en",{sensitivity:"base"}));
     }
 
-    async function fetchCars() {
-      // Prefer /cars (your server.js supports it). Keep fallback just in case.
+    function escapeHtml(t){
+      return String(t ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[ch]));
+    }
+
+    function escapeAttr(t){
+      return escapeHtml(t).replace(/"/g,"&quot;");
+    }
+
+    async function fetchCars(){
       const tryUrls = ["/cars", "/cars-data"];
-      for (const url of tryUrls) {
-        try {
-          const res = await fetch(url, { cache: "no-store" });
+      for (const url of tryUrls){
+        try{
+          const res = await fetch(url, { cache:"no-store" });
           if (!res.ok) continue;
           const data = await res.json();
           if (Array.isArray(data)) return data;
@@ -383,33 +390,23 @@
 
     let ALL = [];
 
-    function fillDropdowns(cars) {
+    function fillDropdowns(cars){
       const fuelBox = document.getElementById("fuelBox");
       const gearBox = document.getElementById("gearBox");
 
       const fuels = uniqueSorted(cars.map(c => safeText(c.fuel)));
       const gears = uniqueSorted(cars.map(c => safeText(c.transmission)));
 
-      // Reset to default option then append
-      fuelBox.innerHTML = `<option value="">Fuel (All)</option>` +
+      fuelBox.innerHTML =
+        `<option value="">Fuel (All)</option>` +
         fuels.map(f => `<option value="${escapeAttr(f)}">${escapeHtml(f)}</option>`).join("");
 
-      gearBox.innerHTML = `<option value="">Gear (All)</option>` +
+      gearBox.innerHTML =
+        `<option value="">Gear (All)</option>` +
         gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
     }
 
-    function escapeHtml(t) {
-      return String(t ?? "").replace(/[&<>"']/g, ch => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[ch]));
-    }
-
-    function escapeAttr(t) {
-      // safe for putting in value=""
-      return escapeHtml(t).replace(/"/g, "&quot;");
-    }
-
-    function applyFilters() {
+    function applyFilters(){
       const search = norm(document.getElementById("searchBox").value);
       const sort = document.getElementById("sortBox").value;
       const fuel = norm(document.getElementById("fuelBox").value);
@@ -418,29 +415,24 @@
 
       let filtered = [...ALL];
 
-      // Search across common fields (and name)
-      if (search) {
+      if (search){
         filtered = filtered.filter(c => {
-          const hay = [
-            c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageId
-          ].map(norm).join(" ");
+          const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageId]
+            .map(norm).join(" ");
           return hay.includes(search);
         });
       }
 
-      // Phase 2: fuel/gear/max price
       if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
       if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
       if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-      // Sorting
-      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
+      if (sort === "price-asc") filtered.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
+      else if (sort === "price-desc") filtered.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
+      else if (sort === "year-desc") filtered.sort((a,b)=>(Number(b.year)||0)-(Number(a.year)||0));
+      else if (sort === "mileage-asc") filtered.sort((a,b)=>(Number(a.mileage)||0)-(Number(b.mileage)||0));
       else {
-        // recent (default)
-        filtered.sort((a, b) => {
+        filtered.sort((a,b)=>{
           const ta = new Date(a.updatedAt || 0).getTime() || 0;
           const tb = new Date(b.updatedAt || 0).getTime() || 0;
           return tb - ta;
@@ -449,15 +441,15 @@
 
       renderCars(filtered);
 
-      const countLine = document.getElementById("countLine");
-      countLine.textContent = `Showing ${filtered.length} of ${ALL.length} cars.`;
+      document.getElementById("countLine").textContent =
+        `Showing ${filtered.length} of ${ALL.length} cars.`;
     }
 
-    function renderCars(cars) {
+    function renderCars(cars){
       const status = document.getElementById("status");
       const grid = document.getElementById("grid");
 
-      if (!Array.isArray(cars) || cars.length === 0) {
+      if (!Array.isArray(cars) || cars.length === 0){
         grid.style.display = "none";
         status.style.display = "block";
         status.textContent = "No cars match your filters.";
@@ -468,14 +460,12 @@
       grid.style.display = "grid";
       grid.innerHTML = "";
 
-      for (const car of cars) {
+      for (const car of cars){
         const name = safeText(car.name) || "Car";
         const href = "/car?name=" + encodeURIComponent(name);
 
         const year = safeText(car.year);
         const mi = miles(car.mileage);
-        const fuel = safeText(car.fuel);
-        const gear = safeText(car.transmission);
 
         const a = document.createElement("a");
         a.className = "carCard";
@@ -492,7 +482,7 @@
             <h2 class="name">${escapeHtml(name)}</h2>
             <div class="price">${escapeHtml(money(car.price))}</div>
 
-            <div class="specGrid">
+            <div class="specGrid compact">
               ${year ? `
                 <div class="spec">
                   <div class="specLabel">Year</div>
@@ -504,18 +494,6 @@
                   <div class="specLabel">Mileage</div>
                   <div class="specValue">${escapeHtml(mi)}</div>
                 </div>` : ``}
-
-              ${fuel ? `
-                <div class="spec">
-                  <div class="specLabel">Fuel</div>
-                  <div class="specValue">${escapeHtml(fuel)}</div>
-                </div>` : ``}
-
-              ${gear ? `
-                <div class="spec">
-                  <div class="specLabel">Gear</div>
-                  <div class="specValue">${escapeHtml(gear)}</div>
-                </div>` : ``}
             </div>
 
             ${car.garageId ? `<div class="mutedLine">Garage: ${escapeHtml(safeText(car.garageId))}</div>` : ``}
@@ -526,7 +504,7 @@
       }
     }
 
-    function resetFilters() {
+    function resetFilters(){
       document.getElementById("searchBox").value = "";
       document.getElementById("sortBox").value = "recent";
       document.getElementById("fuelBox").value = "";
@@ -535,12 +513,12 @@
       applyFilters();
     }
 
-    (async function init() {
+    (async function init(){
       const status = document.getElementById("status");
       const countLine = document.getElementById("countLine");
 
       const cars = await fetchCars();
-      if (!cars) {
+      if (!cars){
         status.textContent = "Could not load cars.";
         countLine.textContent = "Could not load.";
         return;
@@ -551,14 +529,12 @@
       fillDropdowns(ALL);
       applyFilters();
 
-      // Phase 1 live UX + Phase 2 apply/reset
       document.getElementById("searchBox").addEventListener("input", applyFilters);
       document.getElementById("sortBox").addEventListener("change", applyFilters);
 
       document.getElementById("applyBtn").addEventListener("click", applyFilters);
       document.getElementById("resetBtn").addEventListener("click", resetFilters);
 
-      // Also apply instantly when user picks dropdowns (nicer)
       document.getElementById("fuelBox").addEventListener("change", applyFilters);
       document.getElementById("gearBox").addEventListener("change", applyFilters);
       document.getElementById("maxPriceBox").addEventListener("change", applyFilters);
