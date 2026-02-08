@@ -1,324 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | Island Car Finder</title>
 
   <style>
-    :root{
-      --bg:#f5f5f5;
-      --card:#fff;
-      --text:#111827;
-      --muted:#6b7280;
-      --brand:#2c3e50;
-      --accent:#e67e22;
-      --shadow:0 2px 10px rgba(0,0,0,.10);
-      --radius:14px;
+    :root {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --brand: #2c3e50;
+      --accent: #e67e22;
+      --shadow: 0 2px 10px rgba(0, 0, 0, .10);
+      --radius: 14px;
     }
 
-    *{ box-sizing:border-box; }
-
-    body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
+    * {
+      box-sizing: border-box;
     }
 
-    header{
-      background:rgba(0,0,0,.75);
-      color:#fff;
-      padding:16px 20px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(6px);
-    }
-    header .top{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    header a{
-      color:#fff;
-      text-decoration:none;
-      font-weight:bold;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
 
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px 20px;
+    header {
+      background: rgba(0, 0, 0, .75);
+      color: #fff;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      backdrop-filter: blur(6px);
     }
 
-    .backRow{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-bottom:12px;
+    header .top {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .backLink{
-      display:inline-block;
-      padding:8px 12px;
-      background:#fff;
-      border-radius:10px;
-      text-decoration:none;
-      color:var(--brand);
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
-      font-weight:bold;
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    .layout{
-      display:grid;
-      grid-template-columns:1.6fr 1fr;
-      gap:16px;
-    }
-    @media (max-width:900px){
-      .layout{ grid-template-columns:1fr; }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px;
     }
 
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
+    .backRow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
-    .status{
-      background:var(--card);
-      padding:16px;
-      border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
+    .backLink {
+      display: inline-block;
+      padding: 8px 12px;
+      background: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--brand);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
+      font-weight: bold;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width:900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .status {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
     }
 
     /* Gallery */
-    .gallery{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:10px;
-      padding:14px;
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 14px;
     }
-    .main-img{
-      width:100%;
-      height:360px;
-      object-fit:contain;
-      background:#f1f1f1;
-      border-radius:12px;
-      cursor:zoom-in;
+
+    .main-img {
+      width: 100%;
+      height: 360px;
+      object-fit: contain;
+      background: #f1f1f1;
+      border-radius: 12px;
+      cursor: zoom-in;
     }
-    .thumbs{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+
+    .thumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-    .thumb{
-      width:90px;
-      height:65px;
-      object-fit:contain;
-      border-radius:10px;
-      cursor:pointer;
-      border:2px solid transparent;
-      background:#eee;
-      padding:4px;
+
+    .thumb {
+      width: 90px;
+      height: 65px;
+      object-fit: contain;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      background: #eee;
+      padding: 4px;
     }
-    .thumb.active{ border-color:var(--accent); }
+
+    .thumb.active {
+      border-color: var(--accent);
+    }
 
     /* Right column */
-    .info{ padding:16px; }
-
-    h1{
-      margin:0 0 6px;
-      font-size:1.5rem;
-      color:var(--brand);
+    .info {
+      padding: 16px;
     }
 
-    .price{
-      font-size:1.25rem;
-      font-weight:800;
-      margin:8px 0 14px;
-      color:#0f172a;
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      color: var(--brand);
     }
 
-    .sectionTitle{
-      margin:14px 0 10px;
-      font-size:1.05rem;
-      color:var(--brand);
+    .price {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 8px 0 14px;
+      color: #0f172a;
+    }
+
+    .sectionTitle {
+      margin: 14px 0 10px;
+      font-size: 1.05rem;
+      color: var(--brand);
     }
 
     /* Specs grid */
-    .specGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr; /* desktop 2 columns */
-      gap:10px;
-      margin-top:8px;
-    }
-    .specItem{
-      padding:8px 10px;
-      border-radius:10px;
-      background:#f9fafb;
-      border:1px solid #e5e7eb;
-    }
-    .specLabel{
-      font-size:.75rem;
-      color:var(--muted);
-      margin-bottom:2px;
-    }
-    .specValue{
-      font-size:.92rem;
-      font-weight:700;
-      color:#111827;
+    .specGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      /* desktop 2 columns */
+      gap: 10px;
+      margin-top: 8px;
     }
 
-    .descBox{
-      background:#eef2f6;
-      border-radius:12px;
-      padding:12px;
-      line-height:1.6;
-      color:#111827;
-      white-space:pre-line;
+    .specItem {
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
     }
 
-    .contact{ padding:16px; }
-    .contact h2{
-      margin:0 0 10px;
-      font-size:1.1rem;
-      color:var(--brand);
-    }
-    .contact .box{
-      background:#eef2f6;
-      border-radius:12px;
-      padding:12px;
-      line-height:1.6;
+    .specLabel {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: 2px;
     }
 
-    .btn{
-      display:inline-block;
-      margin-top:12px;
-      background:var(--accent);
-      color:#fff;
-      padding:10px 14px;
-      border-radius:10px;
-      text-decoration:none;
-      font-weight:bold;
-    }
-    .btn.disabled{
-      opacity:.6;
-      pointer-events:none;
+    .specValue {
+      font-size: .92rem;
+      font-weight: 700;
+      color: #111827;
     }
 
-    .trust{
-      margin-top:16px;
-      background:#fff;
-      padding:14px;
-      border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
-      border-left:6px solid var(--brand);
-      line-height:1.6;
-    }
-    .trust a{
-      color:var(--brand);
-      font-weight:bold;
-      text-decoration:none;
+    .descBox {
+      background: #eef2f6;
+      border-radius: 12px;
+      padding: 12px;
+      line-height: 1.6;
+      color: #111827;
+      white-space: pre-line;
     }
 
-    .small{
-      color:#666;
-      font-size:.9rem;
-      margin-top:8px;
+    .contact {
+      padding: 16px;
+    }
+
+    .contact h2 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+      color: var(--brand);
+    }
+
+    .contact .box {
+      background: #eef2f6;
+      border-radius: 12px;
+      padding: 12px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .btn.disabled {
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .trust {
+      margin-top: 16px;
+      background: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
+      border-left: 6px solid var(--brand);
+      line-height: 1.6;
+    }
+
+    .trust a {
+      color: var(--brand);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .small {
+      color: #666;
+      font-size: .9rem;
+      margin-top: 8px;
     }
 
     /* ===== MOBILE TIGHTENING (single block, no duplicates) ===== */
-    @media (max-width:600px){
-      main{ padding:14px 12px; }
-
-      .backRow{ margin-bottom:10px; }
-
-      .gallery{ padding:12px; gap:8px; }
-
-      .info, .contact{ padding:14px; }
-
-      .trust{ padding:12px; margin-top:12px; }
-
-      .sectionTitle{ margin:12px 0 8px; }
-
-      .main-img{ height:260px; }
-
-      .thumbs{ gap:8px; }
-      .thumb{ width:72px; height:54px; padding:3px; }
-
-      h1{ font-size:1.35rem; margin:0 0 4px; }
-      .price{ font-size:1.25rem; margin:6px 0 10px; }
-
-      /* ✅ FORCE KEY SPECS TO 2x2 ON MOBILE */
-      .specGrid{
-        display:grid !important;
-        grid-template-columns:1fr 1fr !important;
-        gap:8px !important;
+    @media (max-width:600px) {
+      main {
+        padding: 14px 12px;
       }
 
-      .specItem{ padding:8px 10px; border-radius:10px; }
-      .specLabel{ font-size:.72rem; }
-      .specValue{ font-size:.9rem; }
+      .backRow {
+        margin-bottom: 10px;
+      }
 
-      .descBox{ padding:10px; line-height:1.5; }
+      .gallery {
+        padding: 12px;
+        gap: 8px;
+      }
 
-      .btn{ margin-top:10px; padding:10px 14px; }
+      .info,
+      .contact {
+        padding: 14px;
+      }
+
+      .trust {
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .sectionTitle {
+        margin: 12px 0 8px;
+      }
+
+      .main-img {
+        height: 260px;
+      }
+
+      .thumbs {
+        gap: 8px;
+      }
+
+      .thumb {
+        width: 72px;
+        height: 54px;
+        padding: 3px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        margin: 0 0 4px;
+      }
+
+      .price {
+        font-size: 1.25rem;
+        margin: 6px 0 10px;
+      }
+
+      /* ✅ FORCE KEY SPECS TO 2x2 ON MOBILE */
+      .specGrid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+      }
+
+      .specItem {
+        padding: 8px 10px;
+        border-radius: 10px;
+      }
+
+      .specLabel {
+        font-size: .72rem;
+      }
+
+      .specValue {
+        font-size: .9rem;
+      }
+
+      .descBox {
+        padding: 10px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        margin-top: 10px;
+        padding: 10px 14px;
+      }
     }
 
     /* Lightbox */
-    .lightbox{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.85);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      padding:20px;
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
     }
-    .lightbox.open{ display:flex; }
 
-    .lbImg{
-      max-width:95vw;
-      max-height:85vh;
-      object-fit:contain;
-      border-radius:12px;
-      background:#111;
+    .lightbox.open {
+      display: flex;
     }
-    .lbClose{
-      position:absolute;
-      top:16px;
-      right:16px;
-      font-size:22px;
-      border:none;
-      border-radius:10px;
-      padding:8px 12px;
-      cursor:pointer;
-    }
-    .lbNav{
-      position:absolute;
-      top:50%;
-      transform:translateY(-50%);
-      font-size:40px;
-      border:none;
-      border-radius:12px;
-      padding:6px 14px;
-      cursor:pointer;
-    }
-    .lbPrev{ left:16px; }
-    .lbNext{ right:16px; }
 
-    .lbCount{
-      position:absolute;
-      bottom:16px;
-      left:50%;
-      transform:translateX(-50%);
-      color:#fff;
-      font-size:14px;
-      opacity:.9;
+    .lbImg {
+      max-width: 95vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    .lbClose {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 22px;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .lbNav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 40px;
+      border: none;
+      border-radius: 12px;
+      padding: 6px 14px;
+      cursor: pointer;
+    }
+
+    .lbPrev {
+      left: 16px;
+    }
+
+    .lbNext {
+      right: 16px;
+    }
+
+    .lbCount {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 14px;
+      opacity: .9;
     }
   </style>
 </head>
@@ -334,11 +417,6 @@
   </header>
 
   <main>
-    <!-- Version banner (remove later) -->
-    <div style="padding:6px 10px;background:#fffbcc;border:1px solid #f2e6a3;border-radius:10px;margin-bottom:10px;">
-      VERSION: CAR-PAGE v9
-    </div>
-
     <div class="backRow">
       <a class="backLink" href="/cars-page">← Back to cars</a>
     </div>
@@ -399,23 +477,23 @@
   </div>
 
   <script>
-    function money(n){
+    function money(n) {
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
     }
 
-    function escapeText(t){
+    function escapeText(t) {
       return String(t || "").replace(/[&<>"']/g, (ch) => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[ch]));
     }
 
-    function miles(n){
+    function miles(n) {
       if (!Number.isFinite(Number(n))) return "";
       return Number(n).toLocaleString("en-GB") + " miles";
     }
 
-    function addSpec(specGrid, label, value){
+    function addSpec(specGrid, label, value) {
       const v = String(value || "").trim();
       if (!v) return;
       const div = document.createElement("div");
@@ -433,7 +511,7 @@
     const loading = document.getElementById("loading");
     const content = document.getElementById("content");
 
-    if (!carName){
+    if (!carName) {
       loading.innerHTML = "No car selected. <a href='/cars-page'>Go back to cars</a>.";
     } else {
       Promise.all([
@@ -445,7 +523,7 @@
           .catch(() => [])
       ]).then(([car, garages]) => {
 
-        if (!car || car.success === false){
+        if (!car || car.success === false) {
           loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
           return;
         }
@@ -465,7 +543,7 @@
         const garageName = (garage && garage.name) ? garage.name : (garageId || "Local garage");
         const phone = (garage && garage.phone) ? garage.phone : "";
         const email = (garage && garage.email) ? garage.email : "";
-        const town  = (garage && garage.town) ? garage.town : "Isle of Wight";
+        const town = (garage && garage.town) ? garage.town : "Isle of Wight";
 
         document.getElementById("garageBox").innerHTML = `
           <div><strong>${escapeText(garageName)}</strong></div>
@@ -474,10 +552,10 @@
           ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
         `;
 
-        const callBtn  = document.getElementById("callBtn");
+        const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
 
-        if (phone){
+        if (phone) {
           callBtn.href = "tel:" + phone.replace(/\s/g, "");
           callBtn.classList.remove("disabled");
           callNote.textContent = "Call the garage directly about this car.";
@@ -500,7 +578,7 @@
         report.href = "mailto:you@example.com?subject=" + subject + "&body=" + body;
 
         // Specs
-        const specGrid  = document.getElementById("specGrid");
+        const specGrid = document.getElementById("specGrid");
         const specsWrap = document.getElementById("specsWrap");
 
         addSpec(specGrid, "Year", car.year);
@@ -519,15 +597,15 @@
 
         // Description
         const descWrap = document.getElementById("descWrap");
-        const descBox  = document.getElementById("descBox");
-        if (car.description && String(car.description).trim()){
+        const descBox = document.getElementById("descBox");
+        if (car.description && String(car.description).trim()) {
           descBox.textContent = String(car.description);
           descWrap.style.display = "block";
         }
 
         // Photos
         const mainImg = document.getElementById("mainImg");
-        const thumbs  = document.getElementById("thumbs");
+        const thumbs = document.getElementById("thumbs");
 
         const photos = (Array.isArray(car.photos) && car.photos.length)
           ? car.photos
@@ -535,7 +613,7 @@
 
         let currentIndex = 0;
 
-        function setMain(index){
+        function setMain(index) {
           currentIndex = index;
           mainImg.src = photos[index];
           [...thumbs.querySelectorAll("img")]
@@ -557,29 +635,29 @@
 
         // Lightbox
         const lightbox = document.getElementById("lightbox");
-        const lbImg  = document.getElementById("lbImg");
+        const lbImg = document.getElementById("lbImg");
         const lbClose = document.getElementById("lbClose");
         const lbPrev = document.getElementById("lbPrev");
         const lbNext = document.getElementById("lbNext");
         const lbCount = document.getElementById("lbCount");
 
-        function openLightbox(index){
+        function openLightbox(index) {
           currentIndex = index;
           lbImg.src = photos[currentIndex];
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
           lightbox.classList.add("open");
           document.body.style.overflow = "hidden";
         }
-        function closeLightbox(){
+        function closeLightbox() {
           lightbox.classList.remove("open");
           document.body.style.overflow = "";
         }
-        function showPrev(){
+        function showPrev() {
           currentIndex = (currentIndex - 1 + photos.length) % photos.length;
           lbImg.src = photos[currentIndex];
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
         }
-        function showNext(){
+        function showNext() {
           currentIndex = (currentIndex + 1) % photos.length;
           lbImg.src = photos[currentIndex];
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
@@ -608,4 +686,5 @@
     }
   </script>
 </body>
+
 </html>
