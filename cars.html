@@ -9,13 +9,12 @@
   <style>
     :root {
       --bg0: #f6f7f9;
-      --bg1: #f2f4f7;
+      --bg1: #eef2f6;
 
       --card: #ffffff;
       --text: #0b1220;
       --muted: #667085;
 
-      --brand: #111827;
       --accent: #e67e22;
 
       --stroke: rgba(17, 24, 39, .10);
@@ -36,7 +35,10 @@
       margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
+      background:
+        radial-gradient(900px 480px at 10% -10%, rgba(230, 126, 34, .10), transparent 60%),
+        radial-gradient(900px 480px at 90% -10%, rgba(17, 24, 39, .06), transparent 60%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
     }
 
     a {
@@ -48,11 +50,11 @@
     header {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 60;
       background: rgba(8, 10, 14, .78);
       color: #fff;
       border-bottom: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
     }
 
     header .top {
@@ -65,93 +67,109 @@
       gap: 12px;
     }
 
-    header .brand {
+    .brand {
       display: flex;
       flex-direction: column;
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
-    header .brand strong {
-      font-size: 1rem;
+    .brand strong {
+      font-size: 1.02rem;
       letter-spacing: .01em;
     }
 
-    header .brand span {
+    .brand span {
       font-size: .82rem;
       opacity: .78;
+      margin-top: 2px;
     }
 
     header nav {
       display: flex;
-      gap: 14px;
+      gap: 10px;
       align-items: center;
-      font-weight: 800;
+      font-weight: 850;
     }
 
     header nav a {
-      padding: 8px 10px;
-      border-radius: 12px;
-      transition: background .15s ease;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: background .15s ease, border-color .15s ease;
+      border: 1px solid transparent;
     }
 
     header nav a:hover {
       background: rgba(255, 255, 255, .10);
+      border-color: rgba(255, 255, 255, .12);
     }
 
     header nav a.active {
       background: rgba(255, 255, 255, .14);
-      border: 1px solid rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .18);
     }
 
-    /* ===== Hero (Cars page intro) ===== */
+    /* ===== Intro ===== */
     .hero {
       max-width: 1120px;
       margin: 0 auto;
       padding: 22px 18px 10px;
       display: grid;
-      gap: 6px;
+      gap: 8px;
     }
 
     .hero h1 {
       margin: 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.2rem);
-      letter-spacing: -0.02em;
-      color: var(--brand);
+      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+      letter-spacing: -0.03em;
+      font-weight: 950;
     }
 
     .hero p {
       margin: 0;
       color: var(--muted);
       font-size: 1rem;
-      line-height: 1.45;
+      line-height: 1.5;
+      max-width: 62ch;
     }
 
-    /* ===== Main layout ===== */
     main {
       max-width: 1120px;
       margin: 0 auto;
       padding: 12px 18px 28px;
     }
 
-    /* ===== Filters panel ===== */
+    /* ===== Sticky filters wrapper ===== */
     .filtersWrap {
       position: sticky;
-      top: 64px; /* header height-ish */
-      z-index: 40;
+      top: 64px;
+      z-index: 55;
       margin-bottom: 16px;
     }
 
     .filters {
       background: rgba(255, 255, 255, .92);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--stroke);
       box-shadow: var(--shadowSoft);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 14px;
+    }
+
+    /* Top row */
+    .filtersTop {
       display: grid;
-      grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 0.7fr;
+      grid-template-columns: 1.4fr 1fr auto;
       gap: 10px;
       align-items: center;
+    }
+
+    /* Advanced row */
+    .filtersAdvanced {
+      display: grid;
+      grid-template-columns: 0.9fr 0.9fr 0.9fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
     }
 
     .filters input,
@@ -172,10 +190,11 @@
       box-shadow: 0 0 0 4px rgba(230, 126, 34, .15);
     }
 
-    .filters .btnRow {
+    .btnRow {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
+      align-items: center;
     }
 
     .btn {
@@ -183,7 +202,7 @@
       border-radius: 14px;
       padding: 11px 14px;
       cursor: pointer;
-      font-weight: 900;
+      font-weight: 950;
       background: #ffffff;
       color: #111827;
       box-shadow: 0 6px 18px rgba(0, 0, 0, .07);
@@ -207,25 +226,44 @@
       box-shadow: 0 14px 30px rgba(230, 126, 34, .26);
     }
 
-    .filters .hint {
+    .btn.ghost {
+      background: rgba(17, 24, 39, .04);
+      border: 1px solid rgba(17, 24, 39, .12);
+      box-shadow: none;
+    }
+
+    .hint {
       grid-column: 1 / -1;
       color: var(--muted);
       font-size: .9rem;
-      margin-top: 2px;
+      margin-top: 6px;
       padding-left: 2px;
     }
 
+    /* Desktop: show advanced always, hide toggle button */
+    @media (min-width: 981px) {
+      #toggleFilters {
+        display: none;
+      }
+    }
+
+    /* Tablet/mobile: compact + toggle */
     @media (max-width: 980px) {
-      .filters {
+      .filtersWrap {
+        top: 60px;
+      }
+
+      .filtersTop {
+        grid-template-columns: 1fr 1fr auto;
+      }
+
+      .filtersAdvanced {
+        display: none;
         grid-template-columns: 1fr 1fr;
       }
 
-      .filters .btnRow {
-        justify-content: flex-start;
-      }
-
-      .filtersWrap {
-        top: 60px;
+      #filtersBar.is-open .filtersAdvanced {
+        display: grid;
       }
     }
 
@@ -235,7 +273,7 @@
       }
 
       .hero {
-        padding: 18px 14px 6px;
+        padding: 18px 14px 8px;
       }
 
       .filtersWrap {
@@ -243,13 +281,19 @@
       }
 
       .filters {
-        grid-template-columns: 1fr;
-        gap: 8px;
         padding: 12px;
         border-radius: 18px;
       }
 
-      .filters .btnRow {
+      .filtersTop {
+        grid-template-columns: 1fr;
+      }
+
+      .filtersAdvanced {
+        grid-template-columns: 1fr;
+      }
+
+      .btnRow {
         display: grid;
         grid-template-columns: 1fr 1fr;
       }
@@ -314,28 +358,29 @@
 
     .imgWrap {
       position: relative;
-      background: #eee;
+      background: #e9edf2;
     }
 
     .carImg {
       width: 100%;
-      height: 220px;
+      height: 230px;
       object-fit: cover;
       display: block;
-      background: #eee;
+      background: #e9edf2;
     }
 
+    /* Cinematic fade overlay */
     .imgWrap::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .20) 100%);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .22) 100%);
       pointer-events: none;
     }
 
     @media (max-width: 600px) {
       .carImg {
-        height: 240px;
+        height: 250px;
       }
     }
 
@@ -359,16 +404,15 @@
 
     .name {
       margin: 0;
-      font-size: 1.12rem;
+      font-size: 1.14rem;
       font-weight: 950;
       letter-spacing: -0.01em;
-      color: var(--brand);
       line-height: 1.2;
     }
 
     .price {
       margin: 10px 0 10px;
-      font-size: 1.38rem;
+      font-size: 1.45rem;
       font-weight: 1000;
       color: #0b1220;
     }
@@ -409,13 +453,6 @@
       word-break: break-word;
     }
 
-    /* ✅ keep 2 columns on phones, but allow 1 col on super small */
-    @media (max-width: 800px) {
-      .specGrid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
     @media (max-width: 360px) {
       .specGrid {
         grid-template-columns: 1fr;
@@ -430,9 +467,8 @@
       font-size: .92rem;
     }
 
-    /* ===== Tiny footer space ===== */
     .spacer {
-      height: 24px;
+      height: 22px;
     }
   </style>
 </head>
@@ -459,42 +495,50 @@
 
   <main>
     <div class="filtersWrap">
-      <div class="filters">
-        <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
+      <div class="filters" id="filtersBar">
+        <div class="filtersTop">
+          <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
 
-        <select id="sortBox">
-          <option value="recent">Sort: Recently updated</option>
-          <option value="price-asc">Price: Low → High</option>
-          <option value="price-desc">Price: High → Low</option>
-          <option value="year-desc">Year: Newest</option>
-          <option value="mileage-asc">Mileage: Lowest</option>
-        </select>
+          <select id="sortBox">
+            <option value="recent">Sort: Recently updated</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="year-desc">Year: Newest</option>
+            <option value="mileage-asc">Mileage: Lowest</option>
+          </select>
 
-        <select id="fuelBox">
-          <option value="">Fuel (All)</option>
-        </select>
-
-        <select id="gearBox">
-          <option value="">Gear (All)</option>
-        </select>
-
-        <select id="maxPriceBox">
-          <option value="">Max price</option>
-          <option value="5000">£5,000</option>
-          <option value="7500">£7,500</option>
-          <option value="10000">£10,000</option>
-          <option value="15000">£15,000</option>
-          <option value="20000">£20,000</option>
-          <option value="30000">£30,000</option>
-          <option value="50000">£50,000</option>
-        </select>
-
-        <div class="btnRow">
-          <button id="resetBtn" class="btn" type="button">Reset</button>
-          <button id="applyBtn" class="btn primary" type="button">Apply</button>
+          <button id="toggleFilters" class="btn ghost" type="button" aria-expanded="false">
+            Filters
+          </button>
         </div>
 
-        <div id="countLine" class="hint">Loading…</div>
+        <div class="filtersAdvanced">
+          <select id="fuelBox">
+            <option value="">Fuel (All)</option>
+          </select>
+
+          <select id="gearBox">
+            <option value="">Gear (All)</option>
+          </select>
+
+          <select id="maxPriceBox">
+            <option value="">Max price</option>
+            <option value="5000">£5,000</option>
+            <option value="7500">£7,500</option>
+            <option value="10000">£10,000</option>
+            <option value="15000">£15,000</option>
+            <option value="20000">£20,000</option>
+            <option value="30000">£30,000</option>
+            <option value="50000">£50,000</option>
+          </select>
+
+          <div class="btnRow">
+            <button id="resetBtn" class="btn" type="button">Reset</button>
+            <button id="applyBtn" class="btn primary" type="button">Apply</button>
+          </div>
+
+          <div id="countLine" class="hint">Loading…</div>
+        </div>
       </div>
     </div>
 
@@ -694,10 +738,45 @@
       fillDropdowns(ALL);
       applyFilters();
 
+      // Toggle advanced filters (mobile)
+      const filtersBar = document.getElementById("filtersBar");
+      const toggleBtn = document.getElementById("toggleFilters");
+
+      if (toggleBtn && filtersBar) {
+        toggleBtn.addEventListener("click", () => {
+          const open = filtersBar.classList.toggle("is-open");
+          toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+          toggleBtn.textContent = open ? "Close filters" : "Filters";
+        });
+      }
+
+      // UX: Enter applies, Escape closes filters (mobile)
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") applyFilters();
+        if (e.key === "Escape" && filtersBar?.classList.contains("is-open")) {
+          filtersBar.classList.remove("is-open");
+          if (toggleBtn) {
+            toggleBtn.setAttribute("aria-expanded", "false");
+            toggleBtn.textContent = "Filters";
+          }
+        }
+      });
+
       document.getElementById("searchBox").addEventListener("input", applyFilters);
       document.getElementById("sortBox").addEventListener("change", applyFilters);
 
-      document.getElementById("applyBtn").addEventListener("click", applyFilters);
+      document.getElementById("applyBtn").addEventListener("click", () => {
+        applyFilters();
+        // Mobile: close after apply
+        if (window.matchMedia("(max-width: 980px)").matches && filtersBar?.classList.contains("is-open")) {
+          filtersBar.classList.remove("is-open");
+          if (toggleBtn) {
+            toggleBtn.setAttribute("aria-expanded", "false");
+            toggleBtn.textContent = "Filters";
+          }
+        }
+      });
+
       document.getElementById("resetBtn").addEventListener("click", resetFilters);
 
       document.getElementById("fuelBox").addEventListener("change", applyFilters);
