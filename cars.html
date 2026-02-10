@@ -1,474 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cars | IOW Car Finder</title>
 
   <style>
-    :root {
-      --bg0: #f6f7f9;
-      --bg1: #eef2f6;
+    :root{
+      --bg0:#f6f7f9;
+      --bg1:#eef2f6;
 
-      --card: #ffffff;
-      --text: #0b1220;
-      --muted: #667085;
+      --card:#ffffff;
+      --text:#0b1220;
+      --muted:#667085;
 
-      --accent: #e67e22;
+      --accent:#e67e22;
+      --accent2:#ffb36b;
 
-      --stroke: rgba(17, 24, 39, .10);
-      --strokeSoft: rgba(17, 24, 39, .08);
+      --stroke:rgba(17,24,39,.10);
+      --strokeSoft:rgba(17,24,39,.08);
 
-      --shadowSoft: 0 12px 40px rgba(0, 0, 0, .08);
-      --shadowHover: 0 18px 55px rgba(0, 0, 0, .14);
+      --shadowSoft:0 14px 44px rgba(0,0,0,.08);
+      --shadowHover:0 20px 60px rgba(0,0,0,.14);
 
-      --radius: 18px;
-      --radiusCard: 22px;
+      --radius:18px;
+      --radiusCard:22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+      color:var(--text);
       background:
-        radial-gradient(900px 480px at 10% -10%, rgba(230, 126, 34, .10), transparent 60%),
-        radial-gradient(900px 480px at 90% -10%, rgba(17, 24, 39, .06), transparent 60%),
-        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
+        radial-gradient(900px 480px at 10% -10%, rgba(230,126,34,.12), transparent 60%),
+        radial-gradient(900px 480px at 90% -10%, rgba(17,24,39,.07), transparent 60%),
+        linear-gradient(180deg,var(--bg0) 0%,var(--bg1) 100%);
     }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a{ color:inherit; text-decoration:none; }
 
     /* ===== Header ===== */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: rgba(8, 10, 14, .78);
-      color: #fff;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    header{
+      position:sticky;
+      top:0;
+      z-index:60;
+      background:rgba(8,10,14,.78);
+      color:#fff;
+      border-bottom:1px solid rgba(255,255,255,.08);
       backdrop-filter: blur(12px);
     }
-
-    header .top {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    header .top{
+      max-width:1120px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
+    .brand{ display:flex; flex-direction:column; line-height:1.05; }
+    .brand strong{ font-size:1.02rem; letter-spacing:.01em; }
+    .brand span{ font-size:.82rem; opacity:.78; margin-top:2px; }
 
-    .brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
+    header nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-weight:850;
     }
-
-    .brand strong {
-      font-size: 1.02rem;
-      letter-spacing: .01em;
-    }
-
-    .brand span {
-      font-size: .82rem;
-      opacity: .78;
-      margin-top: 2px;
-    }
-
-    header nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 850;
-    }
-
-    header nav a {
-      padding: 8px 12px;
-      border-radius: 999px;
+    header nav a{
+      padding:8px 12px;
+      border-radius:999px;
       transition: background .15s ease, border-color .15s ease;
-      border: 1px solid transparent;
+      border:1px solid transparent;
     }
-
-    header nav a:hover {
-      background: rgba(255, 255, 255, .10);
-      border-color: rgba(255, 255, 255, .12);
+    header nav a:hover{
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.12);
     }
-
-    header nav a.active {
-      background: rgba(255, 255, 255, .14);
-      border: 1px solid rgba(255, 255, 255, .18);
+    header nav a.active{
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
     }
 
     /* ===== Intro ===== */
-    .hero {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 22px 18px 10px;
-      display: grid;
-      gap: 8px;
+    .hero{
+      max-width:1120px;
+      margin:0 auto;
+      padding:22px 18px 10px;
+      display:grid;
+      gap:10px;
+    }
+    .hero h1{
+      margin:0;
+      font-size:clamp(1.6rem,2.6vw,2.25rem);
+      letter-spacing:-0.03em;
+      font-weight:950;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.5;
+      max-width:62ch;
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
-      letter-spacing: -0.03em;
-      font-weight: 950;
+    main{
+      max-width:1120px;
+      margin:0 auto;
+      padding:12px 18px 28px;
     }
 
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.5;
-      max-width: 62ch;
+    /* ===== Filters (NOT sticky) ===== */
+    .filtersWrap{
+      position:static;
+      margin-bottom:16px;
     }
 
-    main {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 12px 18px 28px;
-    }
-
-    /* ===== Sticky filters wrapper ===== */
-    .filtersWrap {
-      position: sticky;
-      top: 64px;
-      z-index: 55;
-      margin-bottom: 16px;
-    }
-
-    .filters {
-      background: rgba(255, 255, 255, .92);
+    .filters{
+      background: rgba(255,255,255,.92);
       backdrop-filter: blur(12px);
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadowSoft);
-      border-radius: 22px;
-      padding: 14px;
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadowSoft);
+      border-radius:22px;
+      padding:14px;
     }
 
-    /* Top row */
-    .filtersTop {
-      display: grid;
+    /* premium top highlight */
+    .filters::before{
+      content:"";
+      display:block;
+      height:2px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(230,126,34,.0), rgba(230,126,34,.55), rgba(255,179,107,.35), rgba(230,126,34,.0));
+      margin:-4px 4px 12px;
+    }
+
+    .filtersTop{
+      display:grid;
       grid-template-columns: 1.4fr 1fr auto;
-      gap: 10px;
-      align-items: center;
+      gap:10px;
+      align-items:center;
     }
-
-    /* Advanced row */
-    .filtersAdvanced {
-      display: grid;
-      grid-template-columns: 0.9fr 0.9fr 0.9fr auto;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
+    .filtersAdvanced{
+      display:grid;
+      grid-template-columns: .9fr .9fr .9fr auto;
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
     }
 
     .filters input,
-    .filters select {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(17, 24, 39, .12);
-      font-size: .95rem;
-      outline: none;
-      background: rgba(255, 255, 255, .96);
+    .filters select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid rgba(17,24,39,.12);
+      font-size:.95rem;
+      outline:none;
+      background: rgba(255,255,255,.96);
       transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
     }
-
     .filters input:focus,
-    .filters select:focus {
-      border-color: rgba(230, 126, 34, .45);
-      box-shadow: 0 0 0 4px rgba(230, 126, 34, .15);
+    .filters select:focus{
+      border-color: rgba(230,126,34,.55);
+      box-shadow: 0 0 0 4px rgba(230,126,34,.16);
     }
 
-    .btnRow {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      align-items: center;
+    .btnRow{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      align-items:center;
     }
 
-    .btn {
-      border: 1px solid rgba(17, 24, 39, .10);
-      border-radius: 14px;
-      padding: 11px 14px;
-      cursor: pointer;
-      font-weight: 950;
-      background: #ffffff;
-      color: #111827;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .07);
+    .btn{
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:14px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:950;
+      background:#fff;
+      color:#111827;
+      box-shadow: 0 6px 18px rgba(0,0,0,.07);
       transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
-      white-space: nowrap;
+      white-space:nowrap;
     }
-
-    .btn:hover {
+    .btn:hover{
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .10);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
     }
-
-    .btn.primary {
+    .btn.primary{
       background: var(--accent);
-      border-color: rgba(230, 126, 34, .55);
-      color: #fff;
-      box-shadow: 0 10px 24px rgba(230, 126, 34, .22);
+      border-color: rgba(230,126,34,.55);
+      color:#fff;
+      box-shadow: 0 10px 24px rgba(230,126,34,.22);
+    }
+    .btn.primary:hover{
+      box-shadow: 0 14px 30px rgba(230,126,34,.26);
+    }
+    .btn.ghost{
+      background: rgba(17,24,39,.04);
+      border: 1px solid rgba(17,24,39,.12);
+      box-shadow:none;
+    }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
     }
 
-    .btn.primary:hover {
-      box-shadow: 0 14px 30px rgba(230, 126, 34, .26);
+    .hint{
+      grid-column:1 / -1;
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:6px;
+      padding-left:2px;
     }
 
-    .btn.ghost {
-      background: rgba(17, 24, 39, .04);
-      border: 1px solid rgba(17, 24, 39, .12);
-      box-shadow: none;
+    /* Desktop: show advanced always, hide toggle */
+    @media (min-width:981px){
+      #toggleFilters{ display:none; }
     }
 
-    .hint {
-      grid-column: 1 / -1;
-      color: var(--muted);
-      font-size: .9rem;
-      margin-top: 6px;
-      padding-left: 2px;
+    /* Tablet/mobile: toggle advanced */
+    @media (max-width:980px){
+      .filtersTop{ grid-template-columns:1fr 1fr auto; }
+      .filtersAdvanced{ display:none; grid-template-columns: 1fr 1fr; }
+      #filtersBar.is-open .filtersAdvanced{ display:grid; }
     }
 
-    /* Desktop: show advanced always, hide toggle button */
-    @media (min-width: 981px) {
-      #toggleFilters {
-        display: none;
-      }
-    }
-
-    /* Tablet/mobile: compact + toggle */
-    @media (max-width: 980px) {
-      .filtersWrap {
-        top: 60px;
-      }
-
-      .filtersTop {
-        grid-template-columns: 1fr 1fr auto;
-      }
-
-      .filtersAdvanced {
-        display: none;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      #filtersBar.is-open .filtersAdvanced {
-        display: grid;
-      }
-    }
-
-    @media (max-width: 600px) {
-      main {
-        padding: 10px 14px 22px;
-      }
-
-      .hero {
-        padding: 18px 14px 8px;
-      }
-
-      .filtersWrap {
-        top: 58px;
-      }
-
-      .filters {
-        padding: 12px;
-        border-radius: 18px;
-      }
-
-      .filtersTop {
-        grid-template-columns: 1fr;
-      }
-
-      .filtersAdvanced {
-        grid-template-columns: 1fr;
-      }
-
-      .btnRow {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .btn {
-        width: 100%;
-        box-shadow: none;
-      }
-
-      .btn:not(.primary) {
-        background: transparent;
-      }
+    @media (max-width:600px){
+      main{ padding:10px 14px 22px; }
+      .hero{ padding:18px 14px 8px; }
+      .filters{ padding:12px; border-radius:18px; }
+      .filtersTop{ grid-template-columns:1fr; }
+      .filtersAdvanced{ grid-template-columns:1fr; }
+      .btnRow{ display:grid; grid-template-columns:1fr 1fr; }
+      .btn{ width:100%; box-shadow:none; }
+      .btn:not(.primary){ background:transparent; }
     }
 
     /* ===== Status ===== */
-    .status {
-      background: var(--card);
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--strokeSoft);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
-      color: var(--muted);
+    .status{
+      background:var(--card);
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--strokeSoft);
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      color:var(--muted);
     }
 
     /* ===== Cards grid ===== */
-    .grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:16px;
+    }
+    @media (max-width:980px){
+      .grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width:600px){
+      .grid{ grid-template-columns:1fr; gap:14px; }
     }
 
-    @media (max-width: 980px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 600px) {
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-    }
-
-    /* ===== Car card ===== */
-    .carCard {
-      background: var(--card);
-      border-radius: var(--radiusCard);
-      box-shadow: var(--shadowSoft);
-      border: 1px solid var(--strokeSoft);
-      overflow: hidden;
-      display: block;
-      position: relative;
+    /* ===== Card ===== */
+    .carCard{
+      background:var(--card);
+      border-radius:var(--radiusCard);
+      box-shadow:var(--shadowSoft);
+      border:1px solid var(--strokeSoft);
+      overflow:hidden;
+      display:block;
+      position:relative;
       transition: transform .15s ease, box-shadow .15s ease;
     }
-
-    .carCard:hover {
+    .carCard:hover{
       transform: translateY(-3px);
       box-shadow: var(--shadowHover);
     }
 
-    .imgWrap {
-      position: relative;
-      background: #e9edf2;
+    .imgWrap{ position:relative; background:#e9edf2; }
+    .carImg{
+      width:100%;
+      height:230px;
+      object-fit:cover;
+      display:block;
+      background:#e9edf2;
+    }
+    .imgWrap::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.22) 100%);
+      pointer-events:none;
+    }
+    @media (max-width:600px){
+      .carImg{ height:250px; }
     }
 
-    .carImg {
-      width: 100%;
-      height: 230px;
-      object-fit: cover;
-      display: block;
-      background: #e9edf2;
+    .soldBadge{
+      position:absolute;
+      top:12px;
+      left:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(0,0,0,.78);
+      color:#fff;
+      font-weight:1000;
+      font-size:.84rem;
+      letter-spacing:.2px;
+      border:1px solid rgba(255,255,255,.16);
     }
 
-    /* Cinematic fade overlay */
-    .imgWrap::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .22) 100%);
-      pointer-events: none;
+    .body{ padding:16px; }
+    .name{
+      margin:0;
+      font-size:1.14rem;
+      font-weight:950;
+      letter-spacing:-0.01em;
+      line-height:1.2;
+    }
+    .price{
+      margin:10px 0 10px;
+      font-size:1.45rem;
+      font-weight:1000;
+      color:#0b1220;
     }
 
-    @media (max-width: 600px) {
-      .carImg {
-        height: 250px;
-      }
-    }
-
-    .soldBadge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, .78);
-      color: #fff;
-      font-weight: 1000;
-      font-size: .84rem;
-      letter-spacing: .2px;
-      border: 1px solid rgba(255, 255, 255, .16);
-    }
-
-    .body {
-      padding: 16px;
-    }
-
-    .name {
-      margin: 0;
-      font-size: 1.14rem;
-      font-weight: 950;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-
-    .price {
-      margin: 10px 0 10px;
-      font-size: 1.45rem;
-      font-weight: 1000;
-      color: #0b1220;
-    }
-
-    /* ===== Spec chips ===== */
-    .specGrid {
-      display: grid;
+    .specGrid{
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
+      gap:10px;
+      margin-top:10px;
+    }
+    .specGrid.compact{ gap:8px; margin-top:10px; }
+    .spec{
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(17,24,39,.03);
+      border:1px solid rgba(17,24,39,.08);
+      min-width:0;
+    }
+    .specLabel{
+      font-size:.74rem;
+      color: rgba(17,24,39,.55);
+      margin-bottom:3px;
+      letter-spacing:.02em;
+    }
+    .specValue{
+      font-size:.98rem;
+      font-weight:950;
+      color:#0b1220;
+      line-height:1.12;
+      word-break:break-word;
+    }
+    @media (max-width:360px){
+      .specGrid{ grid-template-columns:1fr; }
     }
 
-    .specGrid.compact {
-      gap: 8px;
-      margin-top: 10px;
+    .mutedLine{
+      margin-top:12px;
+      padding-top:10px;
+      border-top:1px solid rgba(17,24,39,.08);
+      color:var(--muted);
+      font-size:.92rem;
     }
 
-    .spec {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(17, 24, 39, .03);
-      border: 1px solid rgba(17, 24, 39, .08);
-      min-width: 0;
-    }
+    .spacer{ height:22px; }
 
-    .specLabel {
-      font-size: .74rem;
-      color: rgba(17, 24, 39, .55);
-      margin-bottom: 3px;
-      letter-spacing: .02em;
-    }
-
-    .specValue {
-      font-size: .98rem;
-      font-weight: 950;
-      color: #0b1220;
-      line-height: 1.12;
-      word-break: break-word;
-    }
-
-    @media (max-width: 360px) {
-      .specGrid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .mutedLine {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(17, 24, 39, .08);
-      color: var(--muted);
-      font-size: .92rem;
-    }
-
-    .spacer {
-      height: 22px;
+    /* ===== Reduced motion ===== */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto; }
     }
   </style>
 </head>
@@ -592,7 +498,7 @@
           if (!res.ok) continue;
           const data = await res.json();
           if (Array.isArray(data)) return data;
-        } catch { }
+        } catch {}
       }
       return null;
     }
@@ -726,21 +632,36 @@
       const status = document.getElementById("status");
       const countLine = document.getElementById("countLine");
 
+      const applyBtn = document.getElementById("applyBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      applyBtn.disabled = true;
+
       const cars = await fetchCars();
       if (!cars) {
         status.textContent = "Could not load cars.";
         countLine.textContent = "Could not load.";
+        applyBtn.disabled = false;
         return;
       }
 
       ALL = cars;
-
       fillDropdowns(ALL);
       applyFilters();
+      applyBtn.disabled = false;
 
-      // Toggle advanced filters (mobile)
+      // Mobile: toggle advanced filters
       const filtersBar = document.getElementById("filtersBar");
       const toggleBtn = document.getElementById("toggleFilters");
+
+      function closeMobileFilters() {
+        if (filtersBar && filtersBar.classList.contains("is-open")) {
+          filtersBar.classList.remove("is-open");
+          if (toggleBtn) {
+            toggleBtn.setAttribute("aria-expanded", "false");
+            toggleBtn.textContent = "Filters";
+          }
+        }
+      }
 
       if (toggleBtn && filtersBar) {
         toggleBtn.addEventListener("click", () => {
@@ -750,40 +671,43 @@
         });
       }
 
-      // UX: Enter applies, Escape closes filters (mobile)
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") applyFilters();
-        if (e.key === "Escape" && filtersBar?.classList.contains("is-open")) {
-          filtersBar.classList.remove("is-open");
-          if (toggleBtn) {
-            toggleBtn.setAttribute("aria-expanded", "false");
-            toggleBtn.textContent = "Filters";
-          }
-        }
+      // Apply / Reset
+      applyBtn.addEventListener("click", () => {
+        applyFilters();
+        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
       });
 
-      document.getElementById("searchBox").addEventListener("input", applyFilters);
+      resetBtn.addEventListener("click", () => {
+        resetFilters();
+        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
+      });
+
+      // Small UX: typing/search doesn't constantly rerender; but keeps page feeling fast
+      let searchTimer = null;
+      document.getElementById("searchBox").addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => applyFilters(), 120);
+      });
+
+      // Sort feels instant
       document.getElementById("sortBox").addEventListener("change", applyFilters);
 
-      document.getElementById("applyBtn").addEventListener("click", () => {
-        applyFilters();
-        // Mobile: close after apply
-        if (window.matchMedia("(max-width: 980px)").matches && filtersBar?.classList.contains("is-open")) {
-          filtersBar.classList.remove("is-open");
-          if (toggleBtn) {
-            toggleBtn.setAttribute("aria-expanded", "false");
-            toggleBtn.textContent = "Filters";
-          }
+      // Change dropdowns: wait for Apply (more “premium” / intentional)
+      // If you prefer instant filtering, swap these to: addEventListener("change", applyFilters)
+      document.getElementById("fuelBox").addEventListener("change", () => {});
+      document.getElementById("gearBox").addEventListener("change", () => {});
+      document.getElementById("maxPriceBox").addEventListener("change", () => {});
+
+      // Keyboard
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          // Enter applies (intentional, since we have an Apply button)
+          applyFilters();
+          if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
         }
+        if (e.key === "Escape") closeMobileFilters();
       });
-
-      document.getElementById("resetBtn").addEventListener("click", resetFilters);
-
-      document.getElementById("fuelBox").addEventListener("change", applyFilters);
-      document.getElementById("gearBox").addEventListener("change", applyFilters);
-      document.getElementById("maxPriceBox").addEventListener("change", applyFilters);
     })();
   </script>
 </body>
-
 </html>
