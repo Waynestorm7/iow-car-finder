@@ -1,285 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cars | Island Car Finder</title>
+  <title>Cars | IOW Car Finder</title>
 
   <style>
-    :root{
-      --bg:#f5f5f5;
-      --card:#fff;
-      --text:#111827;
-      --muted:#6b7280;
-      --brand:#2c3e50;
-      --accent:#e67e22;
-      --shadow:0 2px 10px rgba(0,0,0,.10);
-      --radius:14px;
+    :root {
+      --bg0: #f6f7f9;
+      --bg1: #f2f4f7;
+
+      --card: #ffffff;
+      --text: #0b1220;
+      --muted: #667085;
+
+      --brand: #111827;
+      --accent: #e67e22;
+
+      --stroke: rgba(17, 24, 39, .10);
+      --strokeSoft: rgba(17, 24, 39, .08);
+
+      --shadowSoft: 0 12px 40px rgba(0, 0, 0, .08);
+      --shadowHover: 0 18px 55px rgba(0, 0, 0, .14);
+
+      --radius: 18px;
+      --radiusCard: 22px;
     }
 
-    *{ box-sizing:border-box; }
-
-    body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      background:var(--bg);
-      color:var(--text);
+    * {
+      box-sizing: border-box;
     }
 
-    header{
-      background:rgba(0,0,0,.75);
-      color:#fff;
-      padding:16px 20px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(6px);
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
     }
 
-    header .top{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    header a{
-      color:#fff;
-      text-decoration:none;
-      font-weight:700;
+    /* ===== Header ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(8, 10, 14, .78);
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      backdrop-filter: blur(10px);
     }
 
-    main{
-      max-width:1100px;
-      margin:0 auto;
-      padding:24px 20px;
+    header .top {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    h1{
-      margin:10px 0 14px;
-      font-size:1.7rem;
-      color:var(--brand);
+    header .brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
     }
 
-    .status{
-      background:var(--card);
-      padding:14px;
-      border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
+    header .brand strong {
+      font-size: 1rem;
+      letter-spacing: .01em;
     }
 
-    /* Filters */
-    .filters{
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 2px 5px rgba(0,0,0,.08);
-      padding:12px;
-      display:grid;
-      grid-template-columns:1.4fr 0.7fr 0.7fr 0.7fr 0.7fr;
-      gap:10px;
-      align-items:center;
-      margin-bottom:14px;
+    header .brand span {
+      font-size: .82rem;
+      opacity: .78;
+    }
+
+    header nav {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      font-weight: 800;
+    }
+
+    header nav a {
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background .15s ease;
+    }
+
+    header nav a:hover {
+      background: rgba(255, 255, 255, .10);
+    }
+
+    header nav a.active {
+      background: rgba(255, 255, 255, .14);
+      border: 1px solid rgba(255, 255, 255, .16);
+    }
+
+    /* ===== Hero (Cars page intro) ===== */
+    .hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 18px 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+      letter-spacing: -0.02em;
+      color: var(--brand);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    /* ===== Main layout ===== */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 18px 28px;
+    }
+
+    /* ===== Filters panel ===== */
+    .filtersWrap {
+      position: sticky;
+      top: 64px; /* header height-ish */
+      z-index: 40;
+      margin-bottom: 16px;
+    }
+
+    .filters {
+      background: rgba(255, 255, 255, .92);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadowSoft);
+      border-radius: 20px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr 0.7fr;
+      gap: 10px;
+      align-items: center;
     }
 
     .filters input,
-    .filters select{
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid #e5e7eb;
-      font-size:.95rem;
-      outline:none;
-      background:#fff;
+    .filters select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(17, 24, 39, .12);
+      font-size: .95rem;
+      outline: none;
+      background: rgba(255, 255, 255, .96);
+      transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
     }
 
-    .filters .btnRow{
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
+    .filters input:focus,
+    .filters select:focus {
+      border-color: rgba(230, 126, 34, .45);
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, .15);
     }
 
-    .btn{
-      border:none;
-      border-radius:10px;
-      padding:10px 12px;
-      cursor:pointer;
-      font-weight:800;
-      background:#eef2f6;
-      color:#111827;
+    .filters .btnRow {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
     }
 
-    .btn.primary{
-      background:var(--accent);
-      color:#fff;
+    .btn {
+      border: 1px solid rgba(17, 24, 39, .10);
+      border-radius: 14px;
+      padding: 11px 14px;
+      cursor: pointer;
+      font-weight: 900;
+      background: #ffffff;
+      color: #111827;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .07);
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+      white-space: nowrap;
     }
 
-    .filters .hint{
-      grid-column:1 / -1;
-      color:var(--muted);
-      font-size:.88rem;
-      margin-top:-2px;
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .10);
     }
 
-    @media (max-width:980px){
-      .filters{ grid-template-columns:1fr 1fr; }
-      .filters .btnRow{ justify-content:flex-start; }
+    .btn.primary {
+      background: var(--accent);
+      border-color: rgba(230, 126, 34, .55);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(230, 126, 34, .22);
     }
 
-    @media (max-width:600px){
-      main{ padding:16px 14px; }
-      .filters{ grid-template-columns:1fr; gap:8px; }
-      .filters .btnRow{ display:grid; grid-template-columns:1fr 1fr; }
-      .btn{ width:100%; }
+    .btn.primary:hover {
+      box-shadow: 0 14px 30px rgba(230, 126, 34, .26);
     }
 
-    /* Cards grid */
-    .grid{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0, 1fr));
-      gap:16px;
+    .filters .hint {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 2px;
+      padding-left: 2px;
     }
 
-    @media (max-width:980px){
-      .grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
-    }
-
-    @media (max-width:600px){
-      .grid{ grid-template-columns:1fr; gap:14px; }
-    }
-
-    .carCard{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      text-decoration:none;
-      color:inherit;
-      display:block;
-      position:relative;
-      transition:transform .15s ease, box-shadow .15s ease;
-    }
-
-    .carCard:hover{
-      transform:translateY(-2px);
-      box-shadow:0 10px 26px rgba(0,0,0,.14);
-    }
-
-    .imgWrap{
-      position:relative;
-      background:#eee;
-    }
-
-    .carImg{
-      width:100%;
-      height:210px;
-      object-fit:cover;
-      display:block;
-      background:#eee;
-    }
-
-    @media (max-width:600px){
-      .carImg{ height:220px; }
-    }
-
-    .soldBadge{
-      position:absolute;
-      top:12px;
-      left:12px;
-      padding:7px 10px;
-      border-radius:999px;
-      background:rgba(0,0,0,.78);
-      color:#fff;
-      font-weight:900;
-      font-size:.85rem;
-      letter-spacing:.2px;
-    }
-
-    .body{ padding:14px; }
-
-    .name{
-      margin:0;
-      font-size:1.1rem;
-      font-weight:900;
-      color:var(--brand);
-      line-height:1.2;
-    }
-
-    .price{
-      margin:8px 0 10px;
-      font-size:1.25rem;
-      font-weight:900;
-      color:#0f172a;
-    }
-
-    /* Base spec tiles */
-    .specGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:10px;
-    }
-
-    .spec{
-      padding:9px 10px;
-      border-radius:12px;
-      background:#f9fafb;
-      border:1px solid #e5e7eb;
-      min-width:0;
-    }
-
-    .specLabel{
-      font-size:.74rem;
-      color:var(--muted);
-      margin-bottom:2px;
-    }
-
-    .specValue{
-      font-size:.95rem;
-      font-weight:900;
-      color:#111827;
-      line-height:1.1;
-      word-break:break-word;
-    }
-
-    /* ✅ FINAL MOBILE FIX: keep 2 columns on phones */
-    @media (max-width:800px){
-      .specGrid{
-        display:grid !important;
-        grid-template-columns:1fr 1fr !important;
-        gap:10px !important;
-        width:100% !important;
+    @media (max-width: 980px) {
+      .filters {
+        grid-template-columns: 1fr 1fr;
       }
-      .specGrid > .spec{
-        width:auto !important;
-        min-width:0 !important;
-        max-width:none !important;
-        display:block !important;
+
+      .filters .btnRow {
+        justify-content: flex-start;
+      }
+
+      .filtersWrap {
+        top: 60px;
       }
     }
 
-    @media (max-width:360px){
-      .specGrid{ grid-template-columns:1fr !important; }
+    @media (max-width: 600px) {
+      main {
+        padding: 10px 14px 22px;
+      }
+
+      .hero {
+        padding: 18px 14px 6px;
+      }
+
+      .filtersWrap {
+        top: 58px;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 18px;
+      }
+
+      .filters .btnRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .btn {
+        width: 100%;
+        box-shadow: none;
+      }
+
+      .btn:not(.primary) {
+        background: transparent;
+      }
     }
 
-    /* ✅ Optional tighter look for browse cards */
-    .specGrid.compact{
-      grid-template-columns:1fr 1fr;
-      gap:6px;
-      margin-top:6px;
-    }
-    .specGrid.compact .spec{
-      padding:6px 8px;
-      border-radius:11px;
-    }
-    .specGrid.compact .specValue{
-      font-size:.9rem;
+    /* ===== Status ===== */
+    .status {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--strokeSoft);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+      color: var(--muted);
     }
 
-    .mutedLine{
-      margin-top:8px;
-      color:var(--muted);
-      font-size:.92rem;
+    /* ===== Cards grid ===== */
+    .grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+    }
+
+    /* ===== Car card ===== */
+    .carCard {
+      background: var(--card);
+      border-radius: var(--radiusCard);
+      box-shadow: var(--shadowSoft);
+      border: 1px solid var(--strokeSoft);
+      overflow: hidden;
+      display: block;
+      position: relative;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .carCard:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadowHover);
+    }
+
+    .imgWrap {
+      position: relative;
+      background: #eee;
+    }
+
+    .carImg {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #eee;
+    }
+
+    .imgWrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .20) 100%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .carImg {
+        height: 240px;
+      }
+    }
+
+    .soldBadge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, .78);
+      color: #fff;
+      font-weight: 1000;
+      font-size: .84rem;
+      letter-spacing: .2px;
+      border: 1px solid rgba(255, 255, 255, .16);
+    }
+
+    .body {
+      padding: 16px;
+    }
+
+    .name {
+      margin: 0;
+      font-size: 1.12rem;
+      font-weight: 950;
+      letter-spacing: -0.01em;
+      color: var(--brand);
+      line-height: 1.2;
+    }
+
+    .price {
+      margin: 10px 0 10px;
+      font-size: 1.38rem;
+      font-weight: 1000;
+      color: #0b1220;
+    }
+
+    /* ===== Spec chips ===== */
+    .specGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .specGrid.compact {
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .spec {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(17, 24, 39, .03);
+      border: 1px solid rgba(17, 24, 39, .08);
+      min-width: 0;
+    }
+
+    .specLabel {
+      font-size: .74rem;
+      color: rgba(17, 24, 39, .55);
+      margin-bottom: 3px;
+      letter-spacing: .02em;
+    }
+
+    .specValue {
+      font-size: .98rem;
+      font-weight: 950;
+      color: #0b1220;
+      line-height: 1.12;
+      word-break: break-word;
+    }
+
+    /* ✅ keep 2 columns on phones, but allow 1 col on super small */
+    @media (max-width: 800px) {
+      .specGrid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .specGrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mutedLine {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(17, 24, 39, .08);
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* ===== Tiny footer space ===== */
+    .spacer {
+      height: 24px;
     }
   </style>
 </head>
@@ -287,110 +440,122 @@
 <body>
   <header>
     <div class="top">
-      <a href="/">Island Car Finder</a>
-      <nav style="display:flex; gap:14px; align-items:center;">
-        <a href="/cars-page">Cars</a>
+      <a class="brand" href="/">
+        <strong>IOW Car Finder</strong>
+        <span>Isle of Wight • Used cars • Local garages</span>
+      </a>
+
+      <nav>
+        <a href="/" aria-label="Home">Home</a>
+        <a class="active" href="/cars-page" aria-label="Cars">Cars</a>
       </nav>
     </div>
   </header>
 
-  <main>
+  <section class="hero">
     <h1>Cars</h1>
+    <p>Browse listings from local Isle of Wight garages. Filter by fuel, gear, price and more.</p>
+  </section>
 
-    <div class="filters">
-      <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
+  <main>
+    <div class="filtersWrap">
+      <div class="filters">
+        <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
 
-      <select id="sortBox">
-        <option value="recent">Sort: Recently updated</option>
-        <option value="price-asc">Price: Low → High</option>
-        <option value="price-desc">Price: High → Low</option>
-        <option value="year-desc">Year: Newest</option>
-        <option value="mileage-asc">Mileage: Lowest</option>
-      </select>
+        <select id="sortBox">
+          <option value="recent">Sort: Recently updated</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+          <option value="year-desc">Year: Newest</option>
+          <option value="mileage-asc">Mileage: Lowest</option>
+        </select>
 
-      <select id="fuelBox">
-        <option value="">Fuel (All)</option>
-      </select>
+        <select id="fuelBox">
+          <option value="">Fuel (All)</option>
+        </select>
 
-      <select id="gearBox">
-        <option value="">Gear (All)</option>
-      </select>
+        <select id="gearBox">
+          <option value="">Gear (All)</option>
+        </select>
 
-      <select id="maxPriceBox">
-        <option value="">Max price</option>
-        <option value="5000">£5,000</option>
-        <option value="7500">£7,500</option>
-        <option value="10000">£10,000</option>
-        <option value="15000">£15,000</option>
-        <option value="20000">£20,000</option>
-        <option value="30000">£30,000</option>
-        <option value="50000">£50,000</option>
-      </select>
+        <select id="maxPriceBox">
+          <option value="">Max price</option>
+          <option value="5000">£5,000</option>
+          <option value="7500">£7,500</option>
+          <option value="10000">£10,000</option>
+          <option value="15000">£15,000</option>
+          <option value="20000">£20,000</option>
+          <option value="30000">£30,000</option>
+          <option value="50000">£50,000</option>
+        </select>
 
-      <div class="btnRow">
-        <button id="resetBtn" class="btn" type="button">Reset</button>
-        <button id="applyBtn" class="btn primary" type="button">Apply</button>
+        <div class="btnRow">
+          <button id="resetBtn" class="btn" type="button">Reset</button>
+          <button id="applyBtn" class="btn primary" type="button">Apply</button>
+        </div>
+
+        <div id="countLine" class="hint">Loading…</div>
       </div>
-
-      <div id="countLine" class="hint">Loading…</div>
     </div>
 
     <div id="status" class="status">Loading cars…</div>
     <div id="grid" class="grid" style="display:none;"></div>
+
+    <div class="spacer"></div>
   </main>
 
   <script>
-    function money(n){
+    function money(n) {
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
     }
 
-    function miles(n){
+    function miles(n) {
       const num = Number(n);
       if (!Number.isFinite(num)) return "";
       return num.toLocaleString("en-GB") + " miles";
     }
 
-    function pickPhoto(car){
+    function pickPhoto(car) {
       if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
       if (car.photo) return car.photo;
       return "/images/hero.png";
     }
 
-    function safeText(s){ return String(s ?? "").trim(); }
-    function norm(s){ return safeText(s).toLowerCase(); }
+    function safeText(s) { return String(s ?? "").trim(); }
+    function norm(s) { return safeText(s).toLowerCase(); }
 
-    function uniqueSorted(arr){
+    function uniqueSorted(arr) {
       const set = new Set(arr.filter(Boolean));
-      return [...set].sort((a,b)=>a.localeCompare(b,"en",{sensitivity:"base"}));
+      return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
     }
 
-    function escapeHtml(t){
+    function escapeHtml(t) {
       return String(t ?? "").replace(/[&<>"']/g, ch => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[ch]));
     }
 
-    function escapeAttr(t){
-      return escapeHtml(t).replace(/"/g,"&quot;");
+    function escapeAttr(t) {
+      return escapeHtml(t).replace(/"/g, "&quot;");
     }
 
-    async function fetchCars(){
+    async function fetchCars() {
       const tryUrls = ["/cars", "/cars-data"];
-      for (const url of tryUrls){
-        try{
-          const res = await fetch(url, { cache:"no-store" });
+      for (const url of tryUrls) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
           if (!res.ok) continue;
           const data = await res.json();
           if (Array.isArray(data)) return data;
-        } catch {}
+        } catch { }
       }
       return null;
     }
 
     let ALL = [];
 
-    function fillDropdowns(cars){
+    function fillDropdowns(cars) {
       const fuelBox = document.getElementById("fuelBox");
       const gearBox = document.getElementById("gearBox");
 
@@ -406,7 +571,7 @@
         gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
     }
 
-    function applyFilters(){
+    function applyFilters() {
       const search = norm(document.getElementById("searchBox").value);
       const sort = document.getElementById("sortBox").value;
       const fuel = norm(document.getElementById("fuelBox").value);
@@ -415,7 +580,7 @@
 
       let filtered = [...ALL];
 
-      if (search){
+      if (search) {
         filtered = filtered.filter(c => {
           const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageId]
             .map(norm).join(" ");
@@ -427,12 +592,12 @@
       if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
       if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-      if (sort === "price-asc") filtered.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
-      else if (sort === "price-desc") filtered.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
-      else if (sort === "year-desc") filtered.sort((a,b)=>(Number(b.year)||0)-(Number(a.year)||0));
-      else if (sort === "mileage-asc") filtered.sort((a,b)=>(Number(a.mileage)||0)-(Number(b.mileage)||0));
+      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
       else {
-        filtered.sort((a,b)=>{
+        filtered.sort((a, b) => {
           const ta = new Date(a.updatedAt || 0).getTime() || 0;
           const tb = new Date(b.updatedAt || 0).getTime() || 0;
           return tb - ta;
@@ -445,11 +610,11 @@
         `Showing ${filtered.length} of ${ALL.length} cars.`;
     }
 
-    function renderCars(cars){
+    function renderCars(cars) {
       const status = document.getElementById("status");
       const grid = document.getElementById("grid");
 
-      if (!Array.isArray(cars) || cars.length === 0){
+      if (!Array.isArray(cars) || cars.length === 0) {
         grid.style.display = "none";
         status.style.display = "block";
         status.textContent = "No cars match your filters.";
@@ -460,7 +625,7 @@
       grid.style.display = "grid";
       grid.innerHTML = "";
 
-      for (const car of cars){
+      for (const car of cars) {
         const name = safeText(car.name) || "Car";
         const href = "/car?name=" + encodeURIComponent(name);
 
@@ -504,7 +669,7 @@
       }
     }
 
-    function resetFilters(){
+    function resetFilters() {
       document.getElementById("searchBox").value = "";
       document.getElementById("sortBox").value = "recent";
       document.getElementById("fuelBox").value = "";
@@ -513,12 +678,12 @@
       applyFilters();
     }
 
-    (async function init(){
+    (async function init() {
       const status = document.getElementById("status");
       const countLine = document.getElementById("countLine");
 
       const cars = await fetchCars();
-      if (!cars){
+      if (!cars) {
         status.textContent = "Could not load cars.";
         countLine.textContent = "Could not load.";
         return;
@@ -541,4 +706,5 @@
     })();
   </script>
 </body>
+
 </html>
