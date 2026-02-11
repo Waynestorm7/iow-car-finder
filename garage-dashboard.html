@@ -578,7 +578,7 @@
         }
 
         const cars = allCars
-          .filter(c => (c.garageId || "demo-garage") === garageId)
+          .filter(c => true)
           .sort((a, b) => (new Date(b.updatedAt || 0).getTime() || 0) - (new Date(a.updatedAt || 0).getTime() || 0));
 
 

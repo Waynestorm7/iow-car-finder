@@ -1,20 +1,38 @@
+// server.js
 require("dotenv").config();
 
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
+const { createClient } = require("@supabase/supabase-js");
 
 // =============================
 // ENV
 // =============================
 const ADMIN_KEY = process.env.ADMIN_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SECRET = process.env.SUPABASE_SECRET; // service role / secret key (server only)
+
 if (!ADMIN_KEY) {
   console.error("❌ ADMIN_KEY missing. Set it in .env (local) or Render → Environment.");
   process.exit(1);
 }
+if (!SUPABASE_URL) {
+  console.error("❌ SUPABASE_URL missing. Set it in .env or Render → Environment.");
+  process.exit(1);
+}
+if (!SUPABASE_SECRET) {
+  console.error("❌ SUPABASE_SECRET missing. Set it in .env or Render → Environment.");
+  process.exit(1);
+}
 
 const PORT = process.env.PORT || 3000;
+
+// Supabase client (server-side privileged)
+const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET, {
+  auth: { persistSession: false },
+});
 
 // =============================
 // SOLD HELPERS (UK date DD/MM/YYYY)
@@ -34,12 +52,9 @@ function parseUKDate(str) {
   if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) return null;
   if (day < 1 || day > 31 || month < 1 || month > 12 || year < 2000 || year > 2100) return null;
 
-  // Date(year, monthIndex, day)
   const d = new Date(year, month - 1, day);
 
-  // Guard against invalid dates like 31/02/2026
-  if (d.getFullYear() !== year || d.getMonth() !== (month - 1) || d.getDate() !== day) return null;
-
+  if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) return null;
   return d;
 }
 
@@ -50,7 +65,15 @@ function soldTooOld(car) {
   if (!soldDate) return false;
 
   const hideAfterMs = SOLD_HIDE_DAYS * 24 * 60 * 60 * 1000;
-  return (Date.now() - soldDate.getTime()) > hideAfterMs;
+  return Date.now() - soldDate.getTime() > hideAfterMs;
+}
+
+function todayUK() {
+  const d = new Date();
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = String(d.getFullYear());
+  return `${dd}/${mm}/${yyyy}`;
 }
 
 // =============================
@@ -77,7 +100,7 @@ function getMime(filePath) {
     ".jpeg": "image/jpeg",
     ".webp": "image/webp",
     ".svg": "image/svg+xml",
-    ".ico": "image/x-icon"
+    ".ico": "image/x-icon",
   };
   return types[ext] || "application/octet-stream";
 }
@@ -86,7 +109,6 @@ function serveFile(res, filePath) {
   if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
   }
-
   const data = fs.readFileSync(filePath);
   return send(res, 200, { "Content-Type": getMime(filePath) }, data);
 }
@@ -94,7 +116,6 @@ function serveFile(res, filePath) {
 function safeReadJsonArray(filename) {
   const filePath = path.join(__dirname, filename);
   if (!fs.existsSync(filePath)) return [];
-
   try {
     const raw = fs.readFileSync(filePath, "utf8").trim();
     if (!raw) return [];
@@ -105,41 +126,196 @@ function safeReadJsonArray(filename) {
   }
 }
 
-function writeJsonFile(filename, data) {
-  const filePath = path.join(__dirname, filename);
-  const tmpPath = filePath + ".tmp";
-  fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), "utf8");
-  fs.renameSync(tmpPath, filePath);
-}
-
-function readCars() {
-  return safeReadJsonArray("cars.json");
-}
-
 function readGarages() {
+  // garages still from file (you can move later)
   return safeReadJsonArray("garages.json");
 }
 
 function isAdmin(req) {
-  const key = String(req.headers["x-garage-key"] || "").trim();
+  const key = String(req.headers["x-garage-key"] || req.headers["x-garage-key".toLowerCase()] || "").trim();
+  // also accept X-Garage-Key in any casing:
+  // Node lowercases headers, so "x-garage-key" is enough.
   return key === ADMIN_KEY;
 }
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
-    req.on("data", chunk => (body += chunk));
+    req.on("data", (chunk) => (body += chunk));
     req.on("end", () => resolve(body));
     req.on("error", reject);
   });
 }
 
-function todayUK() {
-  const d = new Date();
-  const dd = String(d.getDate()).padStart(2, "0");
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const yyyy = String(d.getFullYear());
-  return `${dd}/${mm}/${yyyy}`;
+// =============================
+// SUPABASE MAPPING
+// =============================
+function mapDbCar(row) {
+  let photos = [];
+
+  if (Array.isArray(row.photos)) {
+    photos = row.photos.filter(Boolean);
+  } else if (typeof row.photos === "string" && row.photos.trim()) {
+    // if it ever comes back as JSON string
+    try {
+      const parsed = JSON.parse(row.photos);
+      if (Array.isArray(parsed)) photos = parsed.filter(Boolean);
+    } catch {
+      photos = [];
+    }
+  }
+
+  return {
+    id: row.id,
+
+    name: row.name,
+    year: row.year,
+    price: row.price,
+
+    // DB snake_case -> frontend camelCase
+    garageId: row.garage_id ?? null,
+
+    photos,
+    photo: photos.length ? photos[0] : null,
+
+    mileage: row.mileage ?? null,
+    fuel: row.fuel ?? null,
+    transmission: row.transmission ?? null,
+    engine: row.engine ?? null,
+    owners: row.owners ?? null,
+    colour: row.colour ?? null,
+    description: row.description ?? null,
+
+    // frontend sorts using updatedAt
+    createdAt: row.created_at ?? null,
+    updatedAt: row.updatedat ?? row.updated_at ?? row.created_at ?? null,
+
+    sold: row.sold ?? false,
+    soldDate: row.solddate ?? row.sold_date ?? null,
+  };
+}
+
+// =============================
+// SUPABASE DB FUNCTIONS
+// =============================
+
+function mapDbCar(row) {
+  let photos = [];
+
+  // photos stored as JSON string in text column
+  if (typeof row.photos === "string" && row.photos.trim()) {
+    try {
+      const parsed = JSON.parse(row.photos);
+      if (Array.isArray(parsed)) photos = parsed;
+    } catch {
+      photos = [];
+    }
+  }
+
+  return {
+    id: row.id,
+    name: row.name,
+    year: row.year,
+    price: row.price,
+
+    garageId: row.garageId,
+
+    photos,
+    photo: photos.length ? photos[0] : null,
+
+    mileage: row.mileage,
+    fuel: row.fuel,
+    transmission: row.transmission,
+    engine: row.engine,
+    owners: row.owners,
+    colour: row.colour,
+    description: row.description,
+
+    createdAt: row.created_at,
+    updatedAt: row.updatedAt,
+
+    sold: row.sold,
+    soldDate: row.soldDate,
+  };
+}
+
+async function dbListCars() {
+  const { data, error } = await supabase
+    .from("cars")
+    .select("*")
+    .order("updatedAt", { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(mapDbCar);
+}
+
+async function dbGetCarByName(name) {
+  const { data, error } = await supabase
+    .from("cars")
+    .select("*")
+    .eq("name", name)
+    .limit(1);
+
+  if (error) throw error;
+  const row = (data || [])[0];
+  return row ? mapDbCar(row) : null;
+}
+
+async function dbInsertCar(payload) {
+  const photosArray = Array.isArray(payload.photos) ? payload.photos : [];
+
+  const row = {
+    name: String(payload.name || "").trim(),
+    year: Number(payload.year),
+    price: Number(payload.price),
+
+    // NOTE: your column is garageId (camelCase)
+    garageId: String(payload.garageId || "").trim(),
+
+    // NOTE: your column photos is TEXT, so store JSON string
+    photos: JSON.stringify(photosArray),
+
+    mileage: payload.mileage ?? null,
+    fuel: payload.fuel ?? null,
+    transmission: payload.transmission ?? null,
+    engine: payload.engine ?? null,
+    owners: payload.owners ?? null,
+    colour: payload.colour ?? null,
+    description: payload.description ?? null,
+
+    sold: false,
+    soldDate: null,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const { error } = await supabase.from("cars").insert(row);
+  if (error) throw error;
+}
+
+async function dbDeleteCarByName(name) {
+  const { error, count } = await supabase
+    .from("cars")
+    .delete({ count: "exact" })
+    .eq("name", name);
+
+  if (error) throw error;
+  return count || 0;
+}
+
+async function dbMarkSoldByName(name) {
+  const soldDate = todayUK();
+
+  const { error } = await supabase
+    .from("cars")
+    .update({
+      sold: true,
+      soldDate: soldDate,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq("name", name);
+
+  if (error) throw error;
+  return soldDate;
 }
 
 // =============================
@@ -153,12 +329,10 @@ const server = http.createServer(async (req, res) => {
   // STATIC FILES
   // -----------------------------
   if (req.method === "GET") {
-    // /images/*
     if (pathname.startsWith("/images/")) {
       return serveFile(res, path.join(__dirname, pathname));
     }
 
-    // Any other static file that exists (favicon, css, etc)
     const possible = path.join(__dirname, pathname);
     if (pathname !== "/" && fs.existsSync(possible) && fs.statSync(possible).isFile()) {
       return serveFile(res, possible);
@@ -169,33 +343,44 @@ const server = http.createServer(async (req, res) => {
   // API: GET
   // -----------------------------
   if (req.method === "GET" && pathname === "/cars") {
-    // Public list: hide sold cars after SOLD_HIDE_DAYS
-    const cars = readCars().filter(c => !soldTooOld(c));
-    return sendJson(res, 200, cars);
+    try {
+      const cars = (await dbListCars()).filter((c) => !soldTooOld(c));
+      return sendJson(res, 200, cars);
+    } catch (e) {
+      console.error("GET /cars error:", e);
+      return sendJson(res, 500, { success: false, message: "Database error" });
+    }
   }
 
   if (req.method === "GET" && pathname === "/car-data") {
     const name = String(urlObj.searchParams.get("name") || "").trim();
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
-    const cars = readCars();
-    const car = cars.find(c => String(c.name || "").toLowerCase() === name.toLowerCase());
-
-    if (!car || soldTooOld(car)) {
-      return sendJson(res, 404, { success: false, message: "Car not found" });
+    try {
+      const car = await dbGetCarByName(name);
+      if (!car || soldTooOld(car)) return sendJson(res, 404, { success: false, message: "Car not found" });
+      return sendJson(res, 200, car);
+    } catch (e) {
+      console.error("GET /car-data error:", e);
+      return sendJson(res, 500, { success: false, message: "Database error" });
     }
-
-    return sendJson(res, 200, car);
   }
 
   if (req.method === "GET" && pathname === "/garages-data") {
     return sendJson(res, 200, readGarages());
   }
 
-  // Optional: admin endpoint to see ALL cars (including sold/old)
+  // Admin: see all cars (including sold/old)
   if (req.method === "GET" && pathname === "/cars-admin") {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Forbidden" });
-    return sendJson(res, 200, readCars());
+
+    try {
+      const cars = await dbListCars();
+      return sendJson(res, 200, cars);
+    } catch (e) {
+      console.error("GET /cars-admin error:", e);
+      return sendJson(res, 500, { success: false, message: "Database error" });
+    }
   }
 
   // -----------------------------
@@ -223,41 +408,13 @@ const server = http.createServer(async (req, res) => {
     if (!Number.isFinite(price) || price <= 0) return sendJson(res, 400, { success: false, message: "Price must be > 0" });
     if (!photos.length) return sendJson(res, 400, { success: false, message: "At least 1 photo required" });
 
-    const cars = readCars();
-
-    const car = {
-      name,
-      year,
-      price,
-      garageId,
-      photos,
-      photo: photos[0],
-      updatedAt: new Date().toISOString()
-    };
-
-    // Optional fields (copy if present)
-    [
-      "mileage",
-      "engine",
-      "fuel",
-      "transmission",
-      "colour",
-      "owners",
-      "serviceHistory",
-      "motUntil",
-      "description",
-      "sold",
-      "soldDate"
-    ].forEach(k => {
-      if (data[k] !== undefined && data[k] !== null && String(data[k]).trim() !== "") {
-        car[k] = data[k];
-      }
-    });
-
-    cars.push(car);
-    writeJsonFile("cars.json", cars);
-
-    return sendJson(res, 200, { success: true });
+    try {
+      await dbInsertCar(data);
+      return sendJson(res, 200, { success: true });
+    } catch (e) {
+      console.error("POST /cars error:", e);
+      return sendJson(res, 500, { success: false, message: "Database insert failed" });
+    }
   }
 
   // -----------------------------
@@ -269,23 +426,18 @@ const server = http.createServer(async (req, res) => {
     const name = String(urlObj.searchParams.get("name") || "").trim();
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
-    const cars = readCars();
-    const before = cars.length;
-
-    const remaining = cars.filter(
-      c => String(c.name || "").toLowerCase() !== name.toLowerCase()
-    );
-
-    if (remaining.length === before) {
-      return sendJson(res, 404, { success: false, message: "Not found" });
+    try {
+      const deleted = await dbDeleteCarByName(name);
+      if (!deleted) return sendJson(res, 404, { success: false, message: "Not found" });
+      return sendJson(res, 200, { success: true });
+    } catch (e) {
+      console.error("DELETE /cars error:", e);
+      return sendJson(res, 500, { success: false, message: "Database delete failed" });
     }
-
-    writeJsonFile("cars.json", remaining);
-    return sendJson(res, 200, { success: true });
   }
 
   // -----------------------------
-  // OPTIONAL: Mark sold (simple endpoint)
+  // OPTIONAL: Mark sold
   // POST /cars-sold?name=
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars-sold") {
@@ -294,18 +446,14 @@ const server = http.createServer(async (req, res) => {
     const name = String(urlObj.searchParams.get("name") || "").trim();
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
-    const cars = readCars();
-    const idx = cars.findIndex(
-      c => String(c.name || "").toLowerCase() === name.toLowerCase()
-    );
-    if (idx === -1) return sendJson(res, 404, { success: false, message: "Not found" });
-
-    cars[idx].sold = true;
-    cars[idx].soldDate = cars[idx].soldDate || todayUK();
-    cars[idx].updatedAt = new Date().toISOString();
-
-    writeJsonFile("cars.json", cars);
-    return sendJson(res, 200, { success: true, soldDate: cars[idx].soldDate });
+    try {
+      const car = await dbMarkSoldByName(name);
+      if (!car) return sendJson(res, 404, { success: false, message: "Not found" });
+      return sendJson(res, 200, { success: true, soldDate: car.soldDate || todayUK() });
+    } catch (e) {
+      console.error("POST /cars-sold error:", e);
+      return sendJson(res, 500, { success: false, message: "Database update failed" });
+    }
   }
 
   // -----------------------------

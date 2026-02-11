@@ -585,8 +585,15 @@
     }
 
     function miles(n) {
+      if (n === null || n === undefined || n === "") {
+        return "Not provided";
+      }
+
       const num = Number(n);
-      if (!Number.isFinite(num)) return "";
+      if (!Number.isFinite(num) || num <= 0) {
+        return "Not provided";
+      }
+
       return num.toLocaleString("en-GB") + " miles";
     }
 

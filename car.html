@@ -489,8 +489,13 @@
     }
 
     function miles(n) {
-      if (!Number.isFinite(Number(n))) return "";
-      return Number(n).toLocaleString("en-GB") + " miles";
+      const num = Number(n);
+
+      if (!Number.isFinite(num) || num <= 0) {
+        return "Not provided";
+      }
+
+      return num.toLocaleString("en-GB") + " miles";
     }
 
     function addSpec(specGrid, label, value) {
@@ -581,14 +586,21 @@
         const specGrid = document.getElementById("specGrid");
         const specsWrap = document.getElementById("specsWrap");
 
-        addSpec(specGrid, "Year", car.year);
-        addSpec(specGrid, "Mileage", miles(car.mileage));
-        addSpec(specGrid, "Engine", car.engine);
-        addSpec(specGrid, "Fuel", car.fuel);
-        addSpec(specGrid, "Transmission", car.transmission);
-        addSpec(specGrid, "Colour", car.colour);
-        addSpec(specGrid, "Owners", (Number.isFinite(Number(car.owners)) ? String(car.owners) : ""));
-        addSpec(specGrid, "Service history", car.serviceHistory);
+        if (car.year) addSpec(specGrid, "Year", car.year);
+
+        if (car.mileage) {
+          const mi = miles(car.mileage);
+          if (mi !== "Not provided") addSpec(specGrid, "Mileage", mi);
+        }
+
+        if (car.engine) addSpec(specGrid, "Engine", car.engine);
+        if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
+        if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
+        if (car.colour) addSpec(specGrid, "Colour", car.colour);
+
+        if (Number.isFinite(Number(car.owners)) && Number(car.owners) > 0) {
+          addSpec(specGrid, "Owners", car.owners);
+        }
 
         const mot = String(car.motUntil || "").trim();
         if (mot) addSpec(specGrid, "MOT until", mot.replace("-", " / "));
