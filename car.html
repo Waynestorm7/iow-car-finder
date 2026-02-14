@@ -18,9 +18,7 @@
       --radius: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -83,9 +81,7 @@
     }
 
     @media (max-width:900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .layout { grid-template-columns: 1fr; }
     }
 
     .card {
@@ -136,14 +132,10 @@
       padding: 4px;
     }
 
-    .thumb.active {
-      border-color: var(--accent);
-    }
+    .thumb.active { border-color: var(--accent); }
 
     /* Right column */
-    .info {
-      padding: 16px;
-    }
+    .info { padding: 16px; }
 
     h1 {
       margin: 0 0 6px;
@@ -168,7 +160,6 @@
     .specGrid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      /* desktop 2 columns */
       gap: 10px;
       margin-top: 8px;
     }
@@ -201,9 +192,18 @@
       white-space: pre-line;
     }
 
-    .contact {
-      padding: 16px;
+    /* ✅ Extras bullets */
+    .extrasList {
+      margin: 0;
+      padding-left: 18px;
     }
+
+    .extrasList li {
+      margin: 6px 0;
+      line-height: 1.5;
+    }
+
+    .contact { padding: 16px; }
 
     .contact h2 {
       margin: 0 0 10px;
@@ -256,88 +256,28 @@
       margin-top: 8px;
     }
 
-    /* ===== MOBILE TIGHTENING (single block, no duplicates) ===== */
+    /* ===== MOBILE TIGHTENING ===== */
     @media (max-width:600px) {
-      main {
-        padding: 14px 12px;
-      }
+      main { padding: 14px 12px; }
+      .backRow { margin-bottom: 10px; }
+      .gallery { padding: 12px; gap: 8px; }
+      .info, .contact { padding: 14px; }
+      .trust { padding: 12px; margin-top: 12px; }
+      .sectionTitle { margin: 12px 0 8px; }
+      .main-img { height: 260px; }
+      .thumbs { gap: 8px; }
+      .thumb { width: 72px; height: 54px; padding: 3px; }
+      h1 { font-size: 1.35rem; margin: 0 0 4px; }
+      .price { font-size: 1.25rem; margin: 6px 0 10px; }
 
-      .backRow {
-        margin-bottom: 10px;
-      }
-
-      .gallery {
-        padding: 12px;
-        gap: 8px;
-      }
-
-      .info,
-      .contact {
-        padding: 14px;
-      }
-
-      .trust {
-        padding: 12px;
-        margin-top: 12px;
-      }
-
-      .sectionTitle {
-        margin: 12px 0 8px;
-      }
-
-      .main-img {
-        height: 260px;
-      }
-
-      .thumbs {
-        gap: 8px;
-      }
-
-      .thumb {
-        width: 72px;
-        height: 54px;
-        padding: 3px;
-      }
-
-      h1 {
-        font-size: 1.35rem;
-        margin: 0 0 4px;
-      }
-
-      .price {
-        font-size: 1.25rem;
-        margin: 6px 0 10px;
-      }
-
-      /* ✅ FORCE KEY SPECS TO 2x2 ON MOBILE */
       .specGrid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 8px !important;
       }
 
-      .specItem {
-        padding: 8px 10px;
-        border-radius: 10px;
-      }
-
-      .specLabel {
-        font-size: .72rem;
-      }
-
-      .specValue {
-        font-size: .9rem;
-      }
-
-      .descBox {
-        padding: 10px;
-        line-height: 1.5;
-      }
-
-      .btn {
-        margin-top: 10px;
-        padding: 10px 14px;
-      }
+      .descBox { padding: 10px; line-height: 1.5; }
+      .btn { margin-top: 10px; padding: 10px 14px; }
     }
 
     /* Lightbox */
@@ -352,9 +292,7 @@
       padding: 20px;
     }
 
-    .lightbox.open {
-      display: flex;
-    }
+    .lightbox.open { display: flex; }
 
     .lbImg {
       max-width: 95vw;
@@ -386,13 +324,8 @@
       cursor: pointer;
     }
 
-    .lbPrev {
-      left: 16px;
-    }
-
-    .lbNext {
-      right: 16px;
-    }
+    .lbPrev { left: 16px; }
+    .lbNext { right: 16px; }
 
     .lbCount {
       position: absolute;
@@ -447,6 +380,14 @@
             <div class="sectionTitle">Description</div>
             <div id="descBox" class="descBox"></div>
           </div>
+
+          <!-- ✅ EXTRAS (BULLETS) -->
+          <div id="extrasWrap" style="display:none;">
+            <div class="sectionTitle">Key features</div>
+            <div class="descBox">
+              <ul id="extrasList" class="extrasList"></ul>
+            </div>
+          </div>
         </div>
 
         <div class="card contact" style="margin-top:16px;">
@@ -490,11 +431,7 @@
 
     function miles(n) {
       const num = Number(n);
-
-      if (!Number.isFinite(num) || num <= 0) {
-        return "Not provided";
-      }
-
+      if (!Number.isFinite(num) || num <= 0) return "Not provided";
       return num.toLocaleString("en-GB") + " miles";
     }
 
@@ -580,7 +517,7 @@
           "Page: " + window.location.href + "\n\n" +
           "Issue:\n"
         );
-        report.href = "mailto:you@example.com?subject=" + subject + "&body=" + body;
+        report.href = "mailto:contact@iowcarfinder.co.uk?subject=" + subject + "&body=" + body;
 
         // Specs
         const specGrid = document.getElementById("specGrid");
@@ -613,6 +550,23 @@
         if (car.description && String(car.description).trim()) {
           descBox.textContent = String(car.description);
           descWrap.style.display = "block";
+        }
+
+        // ✅ Extras (bullet list, one per line)
+        const extrasWrap = document.getElementById("extrasWrap");
+        const extrasList = document.getElementById("extrasList");
+
+        const extrasRaw = String(car.extras || "").trim();
+        if (extrasRaw) {
+          const lines = extrasRaw
+            .split(/\r?\n/)
+            .map(s => s.trim())
+            .filter(Boolean);
+
+          extrasList.innerHTML = lines.map(line => `<li>${escapeText(line)}</li>`).join("");
+          extrasWrap.style.display = "block";
+        } else {
+          extrasWrap.style.display = "none";
         }
 
         // Photos
