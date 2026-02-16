@@ -18,9 +18,7 @@
       --radius: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -83,9 +81,7 @@
     }
 
     @media (max-width:900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .layout { grid-template-columns: 1fr; }
     }
 
     .card {
@@ -136,14 +132,10 @@
       padding: 4px;
     }
 
-    .thumb.active {
-      border-color: var(--accent);
-    }
+    .thumb.active { border-color: var(--accent); }
 
     /* Right column */
-    .info {
-      padding: 16px;
-    }
+    .info { padding: 16px; }
 
     h1 {
       margin: 0 0 6px;
@@ -158,7 +150,6 @@
       color: #0f172a;
     }
 
-    /* Section headings like Description / Key Features */
     .sectionTitle {
       font-size: 20px;
       font-weight: 700;
@@ -194,7 +185,6 @@
       color: #111827;
     }
 
-    /* Description / boxes */
     .descBox {
       line-height: 1.6;
       font-size: 15px;
@@ -206,21 +196,16 @@
       white-space: pre-line;
     }
 
-    /* Extras */
     .extrasList {
       margin: 0;
       padding-left: 20px;
       line-height: 1.8;
     }
 
-    .extrasList li {
-      margin-bottom: 4px;
-    }
+    .extrasList li { margin-bottom: 4px; }
 
     /* Contact */
-    .contact {
-      padding: 16px;
-    }
+    .contact { padding: 16px; }
 
     .contact h2 {
       margin: 0 0 10px;
@@ -279,73 +264,16 @@
       text-decoration: none;
     }
 
-    /* ===== MOBILE TIGHTENING ===== */
+    /* Mobile */
     @media (max-width:600px) {
-      main {
-        padding: 14px 12px;
-      }
-
-      .backRow {
-        margin-bottom: 10px;
-      }
-
-      .gallery {
-        padding: 12px;
-        gap: 8px;
-      }
-
-      .info,
-      .contact {
-        padding: 14px;
-      }
-
-      .trust {
-        padding: 12px;
-        margin-top: 12px;
-      }
-
-      .sectionTitle {
-        margin: 14px 0 10px;
-      }
-
-      .main-img {
-        height: 260px;
-      }
-
-      .thumbs {
-        gap: 8px;
-      }
-
-      .thumb {
-        width: 72px;
-        height: 54px;
-        padding: 3px;
-      }
-
-      h1 {
-        font-size: 1.35rem;
-        margin: 0 0 4px;
-      }
-
-      .price {
-        font-size: 1.25rem;
-        margin: 6px 0 10px;
-      }
-
-      .specGrid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .descBox {
-        padding: 10px;
-        line-height: 1.5;
-      }
-
-      .btn {
-        margin-top: 10px;
-        padding: 10px 14px;
-      }
+      main { padding: 14px 12px; }
+      .gallery { padding: 12px; gap: 8px; }
+      .info, .contact { padding: 14px; }
+      .main-img { height: 260px; }
+      .thumb { width: 72px; height: 54px; padding: 3px; }
+      h1 { font-size: 1.35rem; }
+      .specGrid { gap: 8px; }
+      .descBox { padding: 10px; line-height: 1.5; }
     }
 
     /* Lightbox */
@@ -360,9 +288,7 @@
       padding: 20px;
     }
 
-    .lightbox.open {
-      display: flex;
-    }
+    .lightbox.open { display: flex; }
 
     .lbImg {
       max-width: 95vw;
@@ -394,13 +320,8 @@
       cursor: pointer;
     }
 
-    .lbPrev {
-      left: 16px;
-    }
-
-    .lbNext {
-      right: 16px;
-    }
+    .lbPrev { left: 16px; }
+    .lbNext { right: 16px; }
 
     .lbCount {
       position: absolute;
@@ -467,8 +388,10 @@
         <div class="card contact" style="margin-top:16px;">
           <h2>Contact garage</h2>
           <div class="box" id="garageBox"></div>
+
           <a id="callBtn" class="btn" href="#">Call garage</a>
           <div class="small" id="callNote"></div>
+
           <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Get directions</a>
           <div class="small" id="mapNote"></div>
         </div>
@@ -544,7 +467,6 @@
           .then(r => r.ok ? r.json() : [])
           .catch(() => [])
       ]).then(([car, garages]) => {
-        console.log("CAR DATA:", car);
 
         if (!car || car.success === false) {
           loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
@@ -559,7 +481,7 @@
         document.getElementById("carTitle").textContent = car.name || "Car";
         document.getElementById("carPrice").textContent = money(car.price);
 
-        // Photos (jsonb array)
+        // Photos
         const photos = (Array.isArray(car.photos) && car.photos.length)
           ? car.photos
           : [(car.photo || "/images/hero.png")];
@@ -590,44 +512,40 @@
 
         setMain(0);
 
-        // Garage/contact
+        // ===== Garage / Contact =====
         const garageId = String(car.garageId || "").trim();
         const garage = garages.find(g => String(g.id || "").trim() === garageId) || null;
 
-        const garageName = (garage && garage.name) ? garage.name : (garageId || "Local garage");
-        const phone = (garage && garage.phone) ? garage.phone : "";
-        const email = (garage && garage.email) ? garage.email : "";
-        const town = (garage && garage.town) ? garage.town : "Isle of Wight";
-        const address = (garage && garage.address) ? garage.address : "";
-        const postcode = (garage && garage.postcode) ? garage.postcode : "";
-        const website = (garage && garage.website) ? garage.website : "";
-        const openingHours = (garage && garage.openingHours) ? garage.openingHours : "";
+        const garageName = garage && garage.name ? garage.name : (garageId || "Local garage");
+        const phone = garage && garage.phone ? garage.phone : "";
+        const email = garage && garage.email ? garage.email : "";
+        const town = garage && garage.town ? garage.town : "Isle of Wight";
+        const address = garage && garage.address ? garage.address : "";
+        const postcode = garage && garage.postcode ? garage.postcode : "";
+        const website = garage && garage.website ? garage.website : "";
+        const openingHours = garage && garage.openingHours ? garage.openingHours : "";
 
-        const mapQuery = [address, postcode, town].filter(Boolean).join(", ");
-        const mapsLink = mapQuery ? ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)) : "";
+        // postcode first (most accurate), then address, then town
+        const mapQuery = (postcode || address || town || "").trim();
+        const mapsLink = mapQuery
+          ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
+          : "";
 
         const garageBox = document.getElementById("garageBox");
-        garageBox.innerHTML = `
-          <div><strong>${escapeText(garageName)}</strong></div>
-          ${address ? `<div>${escapeText(address)}</div>` : ""}
-          <div>${escapeText(town)}</div>
-          ${postcode ? `<div>${escapeText(postcode)}</div>` : ""}
-          <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
-          ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
-          ${website
-            ? `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`
-            : ""
-          }
-          ${mapsLink
-            ? `<div><strong>Directions:</strong> <a href="${mapsLink}" target="_blank" rel="noopener">Open in Google Maps</a></div>`
-            : ""
-          }
-          ${openingHours
-            ? `<div style="margin-top:8px"><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`
-            : ""
-          }
-        `;
 
+        let html = "";
+        html += "<div><strong>" + escapeText(garageName) + "</strong></div>";
+        if (address) html += "<div>" + escapeText(address) + "</div>";
+        if (town) html += "<div>" + escapeText(town) + "</div>";
+        if (postcode) html += "<div>" + escapeText(postcode) + "</div>";
+        html += "<div><strong>Phone:</strong> " + (phone ? escapeText(phone) : "Not provided") + "</div>";
+        if (email) html += "<div><strong>Email:</strong> " + escapeText(email) + "</div>";
+        if (website) html += '<div><strong>Website:</strong> <a href="' + escapeText(website) + '" target="_blank" rel="noopener">Visit site</a></div>';
+        if (openingHours) html += '<div style="margin-top:8px"><strong>Opening hours:</strong><br>' + escapeText(openingHours) + "</div>";
+
+        garageBox.innerHTML = html;
+
+        // Call button
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
 
@@ -639,6 +557,20 @@
           callBtn.href = "#";
           callBtn.classList.add("disabled");
           callNote.textContent = "Phone number not provided yet.";
+        }
+
+        // Map button
+        const mapBtn = document.getElementById("mapBtn");
+        const mapNote = document.getElementById("mapNote");
+
+        if (mapsLink) {
+          mapBtn.href = mapsLink;
+          mapBtn.classList.remove("disabled");
+          mapNote.textContent = "Opens Google Maps.";
+        } else {
+          mapBtn.href = "#";
+          mapBtn.classList.add("disabled");
+          mapNote.textContent = "Address not provided yet.";
         }
 
         // Report mailto
@@ -674,12 +606,13 @@
         const mot = String(car.motUntil || "").trim();
         if (mot) addSpec(specGrid, "MOT until", mot.replace("-", " / "));
 
-        if (specGrid.children.length > 0) specsWrap.style.display = "block";
+        specsWrap.style.display = specGrid.children.length ? "block" : "none";
 
         // Description
         const descWrap = document.getElementById("descWrap");
         const descBox = document.getElementById("descBox");
         const descRaw = String(car.description || "").trim();
+
         if (descRaw) {
           descBox.textContent = descRaw;
           descWrap.style.display = "block";
@@ -687,24 +620,20 @@
           descWrap.style.display = "none";
         }
 
-        // Extras (bullet list, one per line)
+        // Extras (bullets)
         const extrasWrap = document.getElementById("extrasWrap");
         const extrasList = document.getElementById("extrasList");
         const extrasRaw = String(car.extras || "").trim();
 
         if (extrasRaw) {
-          const lines = extrasRaw
-            .split(/\r?\n/)
-            .map(s => s.trim())
-            .filter(Boolean);
-
-          extrasList.innerHTML = lines.map(line => `<li>${escapeText(line)}</li>`).join("");
+          const lines = extrasRaw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+          extrasList.innerHTML = lines.map(line => "<li>" + escapeText(line) + "</li>").join("");
           extrasWrap.style.display = "block";
         } else {
           extrasWrap.style.display = "none";
         }
 
-        // Lightbox (fixes the yellow aria warning by toggling aria-hidden + restoring focus)
+        // Lightbox (fixes yellow aria warning)
         const lightbox = document.getElementById("lightbox");
         const lbImg = document.getElementById("lbImg");
         const lbClose = document.getElementById("lbClose");
@@ -719,7 +648,7 @@
           currentIndex = index;
 
           lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
 
           lightbox.classList.add("open");
           lightbox.setAttribute("aria-hidden", "false");
@@ -742,13 +671,13 @@
         function showPrev() {
           currentIndex = (currentIndex - 1 + photos.length) % photos.length;
           lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
         }
 
         function showNext() {
           currentIndex = (currentIndex + 1) % photos.length;
           lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
         }
 
         mainImg.addEventListener("click", () => openLightbox(currentIndex));
@@ -766,7 +695,6 @@
           if (e.key === "ArrowLeft") showPrev();
           if (e.key === "ArrowRight") showNext();
         });
-
       }).catch((err) => {
         loading.textContent = "Could not load car. Is Node running?";
         console.log(err);
@@ -774,5 +702,4 @@
     }
   </script>
 </body>
-
 </html>
