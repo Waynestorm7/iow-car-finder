@@ -1,9 +1,13 @@
 [
   {
-    "id": "demo-garage",
-    "name": "Demo Motors",
+    "id": "Island Garage (Demo)",
+    "name": "Island Garage (Demo)",
+    "address1": "123 High Street",
+    "town": "Newport",
+    "postcode": "PO30 1AA",
     "phone": "01983 123456",
-    "email": "demo@example.com",
-    "town": "Newport"
+    "email": "sales@islandgarage.co.uk",
+    "website": "",
+    "hours": "Mon–Fri 9:00–17:30, Sat 9:00–13:00"
   }
 ]

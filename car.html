@@ -18,7 +18,9 @@
       --radius: 14px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -81,7 +83,9 @@
     }
 
     @media (max-width:900px) {
-      .layout { grid-template-columns: 1fr; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
@@ -132,10 +136,14 @@
       padding: 4px;
     }
 
-    .thumb.active { border-color: var(--accent); }
+    .thumb.active {
+      border-color: var(--accent);
+    }
 
     /* Right column */
-    .info { padding: 16px; }
+    .info {
+      padding: 16px;
+    }
 
     h1 {
       margin: 0 0 6px;
@@ -203,7 +211,9 @@
       line-height: 1.5;
     }
 
-    .contact { padding: 16px; }
+    .contact {
+      padding: 16px;
+    }
 
     .contact h2 {
       margin: 0 0 10px;
@@ -258,17 +268,56 @@
 
     /* ===== MOBILE TIGHTENING ===== */
     @media (max-width:600px) {
-      main { padding: 14px 12px; }
-      .backRow { margin-bottom: 10px; }
-      .gallery { padding: 12px; gap: 8px; }
-      .info, .contact { padding: 14px; }
-      .trust { padding: 12px; margin-top: 12px; }
-      .sectionTitle { margin: 12px 0 8px; }
-      .main-img { height: 260px; }
-      .thumbs { gap: 8px; }
-      .thumb { width: 72px; height: 54px; padding: 3px; }
-      h1 { font-size: 1.35rem; margin: 0 0 4px; }
-      .price { font-size: 1.25rem; margin: 6px 0 10px; }
+      main {
+        padding: 14px 12px;
+      }
+
+      .backRow {
+        margin-bottom: 10px;
+      }
+
+      .gallery {
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .info,
+      .contact {
+        padding: 14px;
+      }
+
+      .trust {
+        padding: 12px;
+        margin-top: 12px;
+      }
+
+      .sectionTitle {
+        margin: 12px 0 8px;
+      }
+
+      .main-img {
+        height: 260px;
+      }
+
+      .thumbs {
+        gap: 8px;
+      }
+
+      .thumb {
+        width: 72px;
+        height: 54px;
+        padding: 3px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+        margin: 0 0 4px;
+      }
+
+      .price {
+        font-size: 1.25rem;
+        margin: 6px 0 10px;
+      }
 
       .specGrid {
         display: grid !important;
@@ -276,8 +325,15 @@
         gap: 8px !important;
       }
 
-      .descBox { padding: 10px; line-height: 1.5; }
-      .btn { margin-top: 10px; padding: 10px 14px; }
+      .descBox {
+        padding: 10px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        margin-top: 10px;
+        padding: 10px 14px;
+      }
     }
 
     /* Lightbox */
@@ -292,7 +348,9 @@
       padding: 20px;
     }
 
-    .lightbox.open { display: flex; }
+    .lightbox.open {
+      display: flex;
+    }
 
     .lbImg {
       max-width: 95vw;
@@ -324,8 +382,13 @@
       cursor: pointer;
     }
 
-    .lbPrev { left: 16px; }
-    .lbNext { right: 16px; }
+    .lbPrev {
+      left: 16px;
+    }
+
+    .lbNext {
+      right: 16px;
+    }
 
     .lbCount {
       position: absolute;
@@ -335,6 +398,37 @@
       color: #fff;
       font-size: 14px;
       opacity: .9;
+    }
+
+    /* Section headings like Description / Key Features */
+    .sectionTitle {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: #222;
+    }
+
+    /* Description box styling */
+    .descBox {
+      line-height: 1.6;
+      font-size: 15px;
+      color: #444;
+      background: #fafafa;
+      padding: 16px 18px;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+
+    /* Key Features list spacing */
+    #extrasList {
+      margin-top: 10px;
+      padding-left: 20px;
+      line-height: 1.8;
+    }
+
+    #extrasList li {
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -383,9 +477,9 @@
 
           <!-- ✅ EXTRAS (BULLETS) -->
           <div id="extrasWrap" style="display:none;">
-            <div class="sectionTitle">Key features</div>
+            <div class="sectionTitle">Key Features</div>
             <div class="descBox">
-              <ul id="extrasList" class="extrasList"></ul>
+              <ul id="extrasList"></ul>
             </div>
           </div>
         </div>
@@ -465,6 +559,8 @@
           .catch(() => [])
       ]).then(([car, garages]) => {
 
+        console.log("CAR DATA:", car);
+
         if (!car || car.success === false) {
           loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
           return;
@@ -486,12 +582,23 @@
         const phone = (garage && garage.phone) ? garage.phone : "";
         const email = (garage && garage.email) ? garage.email : "";
         const town = (garage && garage.town) ? garage.town : "Isle of Wight";
+        const address1 = (garage && garage.address1) ? garage.address1 : "";
+        const postcode = (garage && garage.postcode) ? garage.postcode : "";
+        const website = (garage && garage.website) ? garage.website : "";
+        const hours = (garage && garage.hours) ? garage.hours : "";
 
         document.getElementById("garageBox").innerHTML = `
           <div><strong>${escapeText(garageName)}</strong></div>
+
+          ${address1 ? `<div>${escapeText(address1)}</div>` : ""}
           <div>${escapeText(town)}</div>
+          ${postcode ? `<div>${escapeText(postcode)}</div>` : ""}
+
           <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
           ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
+
+          ${website ? `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>` : ""}
+          ${hours ? `<div style="margin-top:8px"><strong>Opening hours:</strong><br>${escapeText(hours)}</div>` : ""}
         `;
 
         const callBtn = document.getElementById("callBtn");
@@ -606,18 +713,28 @@
         const lbPrev = document.getElementById("lbPrev");
         const lbNext = document.getElementById("lbNext");
         const lbCount = document.getElementById("lbCount");
+        let lastFocusEl = null;
 
         function openLightbox(index) {
+          let lastFocusEl = null;
           currentIndex = index;
           lbImg.src = photos[currentIndex];
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
           lightbox.classList.add("open");
           document.body.style.overflow = "hidden";
         }
+        
         function closeLightbox() {
           lightbox.classList.remove("open");
           document.body.style.overflow = "";
+
+          // ✅ return focus so the yellow warning goes away
+          if (lastFocusEl && typeof lastFocusEl.focus === "function") {
+            lastFocusEl.focus();
+          }
+          lastFocusEl = null;
         }
+
         function showPrev() {
           currentIndex = (currentIndex - 1 + photos.length) % photos.length;
           lbImg.src = photos[currentIndex];
