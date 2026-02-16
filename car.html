@@ -49,7 +49,7 @@
     header a {
       color: #fff;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     main {
@@ -73,7 +73,7 @@
       text-decoration: none;
       color: var(--brand);
       box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .layout {
@@ -158,10 +158,13 @@
       color: #0f172a;
     }
 
+    /* Section headings like Description / Key Features */
     .sectionTitle {
-      margin: 14px 0 10px;
-      font-size: 1.05rem;
-      color: var(--brand);
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 22px;
+      margin-bottom: 12px;
+      color: #222;
     }
 
     /* Specs grid */
@@ -191,26 +194,30 @@
       color: #111827;
     }
 
+    /* Description / boxes */
     .descBox {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
       line-height: 1.6;
-      color: #111827;
+      font-size: 15px;
+      color: #444;
+      background: #fafafa;
+      padding: 16px 18px;
+      border-radius: 10px;
+      border: 1px solid #eee;
       white-space: pre-line;
     }
 
-    /* ✅ Extras bullets */
+    /* Extras */
     .extrasList {
       margin: 0;
-      padding-left: 18px;
+      padding-left: 20px;
+      line-height: 1.8;
     }
 
     .extrasList li {
-      margin: 6px 0;
-      line-height: 1.5;
+      margin-bottom: 4px;
     }
 
+    /* Contact */
     .contact {
       padding: 16px;
     }
@@ -236,12 +243,24 @@
       padding: 10px 14px;
       border-radius: 10px;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 700;
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: var(--brand);
+      border: 1px solid #e5e7eb;
     }
 
     .btn.disabled {
       opacity: .6;
       pointer-events: none;
+    }
+
+    .small {
+      color: #666;
+      font-size: .9rem;
+      margin-top: 8px;
     }
 
     .trust {
@@ -256,14 +275,8 @@
 
     .trust a {
       color: var(--brand);
-      font-weight: bold;
+      font-weight: 700;
       text-decoration: none;
-    }
-
-    .small {
-      color: #666;
-      font-size: .9rem;
-      margin-top: 8px;
     }
 
     /* ===== MOBILE TIGHTENING ===== */
@@ -292,7 +305,7 @@
       }
 
       .sectionTitle {
-        margin: 12px 0 8px;
+        margin: 14px 0 10px;
       }
 
       .main-img {
@@ -320,9 +333,8 @@
       }
 
       .specGrid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
       .descBox {
@@ -399,37 +411,6 @@
       font-size: 14px;
       opacity: .9;
     }
-
-    /* Section headings like Description / Key Features */
-    .sectionTitle {
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 28px;
-      margin-bottom: 12px;
-      color: #222;
-    }
-
-    /* Description box styling */
-    .descBox {
-      line-height: 1.6;
-      font-size: 15px;
-      color: #444;
-      background: #fafafa;
-      padding: 16px 18px;
-      border-radius: 10px;
-      border: 1px solid #eee;
-    }
-
-    /* Key Features list spacing */
-    #extrasList {
-      margin-top: 10px;
-      padding-left: 20px;
-      line-height: 1.8;
-    }
-
-    #extrasList li {
-      margin-bottom: 4px;
-    }
   </style>
 </head>
 
@@ -437,7 +418,7 @@
   <header>
     <div class="top">
       <a href="/">IOW Car Finder</a>
-      <nav style="display:flex; gap:14px; align-items:center;">
+      <nav style="display:flex;gap:14px;align-items:center;">
         <a href="/cars-page">Cars</a>
       </nav>
     </div>
@@ -475,11 +456,10 @@
             <div id="descBox" class="descBox"></div>
           </div>
 
-          <!-- ✅ EXTRAS (BULLETS) -->
           <div id="extrasWrap" style="display:none;">
-            <div class="sectionTitle">Key Features</div>
+            <div class="sectionTitle">Key features</div>
             <div class="descBox">
-              <ul id="extrasList"></ul>
+              <ul id="extrasList" class="extrasList"></ul>
             </div>
           </div>
         </div>
@@ -489,6 +469,8 @@
           <div class="box" id="garageBox"></div>
           <a id="callBtn" class="btn" href="#">Call garage</a>
           <div class="small" id="callNote"></div>
+          <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Get directions</a>
+          <div class="small" id="mapNote"></div>
         </div>
 
         <div class="trust">
@@ -519,7 +501,11 @@
 
     function escapeText(t) {
       return String(t || "").replace(/[&<>"']/g, (ch) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
       }[ch]));
     }
 
@@ -558,7 +544,6 @@
           .then(r => r.ok ? r.json() : [])
           .catch(() => [])
       ]).then(([car, garages]) => {
-
         console.log("CAR DATA:", car);
 
         if (!car || car.success === false) {
@@ -574,31 +559,73 @@
         document.getElementById("carTitle").textContent = car.name || "Car";
         document.getElementById("carPrice").textContent = money(car.price);
 
+        // Photos (jsonb array)
+        const photos = (Array.isArray(car.photos) && car.photos.length)
+          ? car.photos
+          : [(car.photo || "/images/hero.png")];
+
+        const mainImg = document.getElementById("mainImg");
+        const thumbs = document.getElementById("thumbs");
+
+        let currentIndex = 0;
+
+        function setMain(index) {
+          currentIndex = index;
+          mainImg.src = photos[index] || "/images/hero.png";
+          [...thumbs.querySelectorAll("img")].forEach((el, i) => {
+            el.classList.toggle("active", i === index);
+          });
+        }
+
+        thumbs.innerHTML = "";
+        photos.forEach((src, i) => {
+          const t = document.createElement("img");
+          t.src = src;
+          t.className = "thumb" + (i === 0 ? " active" : "");
+          t.alt = "Car photo thumbnail";
+          t.onerror = () => { t.src = "/images/hero.png"; };
+          t.addEventListener("click", () => setMain(i));
+          thumbs.appendChild(t);
+        });
+
+        setMain(0);
+
         // Garage/contact
-        const garageId = car.garageId || "";
-        const garage = garages.find(g => g.id === garageId) || null;
+        const garageId = String(car.garageId || "").trim();
+        const garage = garages.find(g => String(g.id || "").trim() === garageId) || null;
 
         const garageName = (garage && garage.name) ? garage.name : (garageId || "Local garage");
         const phone = (garage && garage.phone) ? garage.phone : "";
         const email = (garage && garage.email) ? garage.email : "";
         const town = (garage && garage.town) ? garage.town : "Isle of Wight";
-        const address1 = (garage && garage.address1) ? garage.address1 : "";
+        const address = (garage && garage.address) ? garage.address : "";
         const postcode = (garage && garage.postcode) ? garage.postcode : "";
         const website = (garage && garage.website) ? garage.website : "";
-        const hours = (garage && garage.hours) ? garage.hours : "";
+        const openingHours = (garage && garage.openingHours) ? garage.openingHours : "";
 
-        document.getElementById("garageBox").innerHTML = `
+        const mapQuery = [address, postcode, town].filter(Boolean).join(", ");
+        const mapsLink = mapQuery ? ("https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)) : "";
+
+        const garageBox = document.getElementById("garageBox");
+        garageBox.innerHTML = `
           <div><strong>${escapeText(garageName)}</strong></div>
-
-          ${address1 ? `<div>${escapeText(address1)}</div>` : ""}
+          ${address ? `<div>${escapeText(address)}</div>` : ""}
           <div>${escapeText(town)}</div>
           ${postcode ? `<div>${escapeText(postcode)}</div>` : ""}
-
           <div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>
           ${email ? `<div><strong>Email:</strong> ${escapeText(email)}</div>` : ""}
-
-          ${website ? `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>` : ""}
-          ${hours ? `<div style="margin-top:8px"><strong>Opening hours:</strong><br>${escapeText(hours)}</div>` : ""}
+          ${website
+            ? `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`
+            : ""
+          }
+          ${mapsLink
+            ? `<div><strong>Directions:</strong> <a href="${mapsLink}" target="_blank" rel="noopener">Open in Google Maps</a></div>`
+            : ""
+          }
+          ${openingHours
+            ? `<div style="margin-top:8px"><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`
+            : ""
+          }
         `;
 
         const callBtn = document.getElementById("callBtn");
@@ -631,12 +658,10 @@
         const specsWrap = document.getElementById("specsWrap");
 
         if (car.year) addSpec(specGrid, "Year", car.year);
-
         if (car.mileage) {
           const mi = miles(car.mileage);
           if (mi !== "Not provided") addSpec(specGrid, "Mileage", mi);
         }
-
         if (car.engine) addSpec(specGrid, "Engine", car.engine);
         if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
         if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
@@ -654,16 +679,19 @@
         // Description
         const descWrap = document.getElementById("descWrap");
         const descBox = document.getElementById("descBox");
-        if (car.description && String(car.description).trim()) {
-          descBox.textContent = String(car.description);
+        const descRaw = String(car.description || "").trim();
+        if (descRaw) {
+          descBox.textContent = descRaw;
           descWrap.style.display = "block";
+        } else {
+          descWrap.style.display = "none";
         }
 
-        // ✅ Extras (bullet list, one per line)
+        // Extras (bullet list, one per line)
         const extrasWrap = document.getElementById("extrasWrap");
         const extrasList = document.getElementById("extrasList");
-
         const extrasRaw = String(car.extras || "").trim();
+
         if (extrasRaw) {
           const lines = extrasRaw
             .split(/\r?\n/)
@@ -676,59 +704,35 @@
           extrasWrap.style.display = "none";
         }
 
-        // Photos
-        const mainImg = document.getElementById("mainImg");
-        const thumbs = document.getElementById("thumbs");
-
-        const photos = (Array.isArray(car.photos) && car.photos.length)
-          ? car.photos
-          : [(car.photo || "/images/hero.png")];
-
-        let currentIndex = 0;
-
-        function setMain(index) {
-          currentIndex = index;
-          mainImg.src = photos[index];
-          [...thumbs.querySelectorAll("img")]
-            .forEach((el, i) => el.classList.toggle("active", i === index));
-        }
-
-        thumbs.innerHTML = "";
-        photos.forEach((src, i) => {
-          const t = document.createElement("img");
-          t.src = src;
-          t.className = "thumb" + (i === 0 ? " active" : "");
-          t.alt = "Car photo thumbnail";
-          t.onerror = () => { t.src = "/images/hero.png"; };
-          t.addEventListener("click", () => setMain(i));
-          thumbs.appendChild(t);
-        });
-
-        setMain(0);
-
-        // Lightbox
+        // Lightbox (fixes the yellow aria warning by toggling aria-hidden + restoring focus)
         const lightbox = document.getElementById("lightbox");
         const lbImg = document.getElementById("lbImg");
         const lbClose = document.getElementById("lbClose");
         const lbPrev = document.getElementById("lbPrev");
         const lbNext = document.getElementById("lbNext");
         const lbCount = document.getElementById("lbCount");
+
         let lastFocusEl = null;
 
         function openLightbox(index) {
-          let lastFocusEl = null;
+          lastFocusEl = document.activeElement;
           currentIndex = index;
-          lbImg.src = photos[currentIndex];
+
+          lbImg.src = photos[currentIndex] || "/images/hero.png";
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+
           lightbox.classList.add("open");
+          lightbox.setAttribute("aria-hidden", "false");
           document.body.style.overflow = "hidden";
+
+          lbClose.focus();
         }
-        
+
         function closeLightbox() {
           lightbox.classList.remove("open");
+          lightbox.setAttribute("aria-hidden", "true");
           document.body.style.overflow = "";
 
-          // ✅ return focus so the yellow warning goes away
           if (lastFocusEl && typeof lastFocusEl.focus === "function") {
             lastFocusEl.focus();
           }
@@ -737,12 +741,13 @@
 
         function showPrev() {
           currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-          lbImg.src = photos[currentIndex];
+          lbImg.src = photos[currentIndex] || "/images/hero.png";
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
         }
+
         function showNext() {
           currentIndex = (currentIndex + 1) % photos.length;
-          lbImg.src = photos[currentIndex];
+          lbImg.src = photos[currentIndex] || "/images/hero.png";
           lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
         }
 
