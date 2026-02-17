@@ -436,12 +436,8 @@
         <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
 
         <label for="extras">Key features / Extras (optional)</label>
-        <textarea id="extras" placeholder="One per line, e.g.
-18&quot; alloys
-Heated seats
-Parking sensors
-Reverse camera"></textarea>
-        <div class="small">Tip: one feature per line.</div>
+        <textarea id="extras" placeholder="One per line (e.g. Heated seats)"></textarea>
+        <div class="small">Tip: one feature per line</div>
 
         <div class="btnRow">
           <button id="addBtn" class="btn primary" type="button">Add car</button>
@@ -777,7 +773,7 @@ Reverse camera"></textarea>
         autoGrow(photosInput);
         autoGrow(descriptionInput);
         autoGrow(extrasInput);
-        
+
 
         addBtn.disabled = false;
         addBtn.textContent = "Add car";

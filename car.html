@@ -432,6 +432,13 @@
       }[ch]));
     }
 
+    // Cloudinary optimiser (put ONCE here)
+    function cloudinaryOptimise(url, width = 1200) {
+      const u = String(url || "");
+      if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) return u;
+      return u.replace("/image/upload/", `/image/upload/f_auto,q_auto,c_limit,w_${width}/`);
+    }
+
     function miles(n) {
       const num = Number(n);
       if (!Number.isFinite(num) || num <= 0) return "Not provided";
@@ -481,14 +488,23 @@
         document.getElementById("carTitle").textContent = car.name || "Car";
         document.getElementById("carPrice").textContent = money(car.price);
 
-        // Photos
-        const photos = (Array.isArray(car.photos) && car.photos.length)
-          ? car.photos
-          : [(car.photo || "/images/hero.png")];
+        // ===== Photos (clean + limit + optimise) =====
+        const MAX_PHOTOS = 20;
+
+        let photos = (Array.isArray(car.photos) ? car.photos : [])
+          .map(p => cloudinaryOptimise(String(p).trim(), 1200))
+          .filter(Boolean)
+          .slice(0, MAX_PHOTOS);
+
+        if (!photos.length && car.photo) {
+          photos = [cloudinaryOptimise(String(car.photo).trim(), 1200)];
+        }
+        if (!photos.length) {
+          photos = ["/images/hero.png"];
+        }
 
         const mainImg = document.getElementById("mainImg");
         const thumbs = document.getElementById("thumbs");
-
         let currentIndex = 0;
 
         function setMain(index) {
@@ -519,14 +535,17 @@
         const garageName = garage && garage.name ? garage.name : (garageId || "Local garage");
         const phone = garage && garage.phone ? garage.phone : "";
         const email = garage && garage.email ? garage.email : "";
-        const town = garage && garage.town ? garage.town : "Isle of Wight";
+        const town = garage && garage.town ? garage.town : "";
         const address = garage && garage.address ? garage.address : "";
         const postcode = garage && garage.postcode ? garage.postcode : "";
         const website = garage && garage.website ? garage.website : "";
         const openingHours = garage && garage.openingHours ? garage.openingHours : "";
 
-        // postcode first (most accurate), then address, then town
-        const mapQuery = (postcode || address || town || "").trim();
+        const cleanPostcode = String(postcode || "").trim();
+        const cleanAddress = String(address || "").trim();
+        const cleanTown = String(town || "").trim();
+
+        const mapQuery = cleanPostcode || cleanAddress || cleanTown || "";
         const mapsLink = mapQuery
           ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
           : "";
@@ -535,9 +554,9 @@
 
         let html = "";
         html += "<div><strong>" + escapeText(garageName) + "</strong></div>";
-        if (address) html += "<div>" + escapeText(address) + "</div>";
-        if (town) html += "<div>" + escapeText(town) + "</div>";
-        if (postcode) html += "<div>" + escapeText(postcode) + "</div>";
+        if (cleanAddress) html += "<div>" + escapeText(cleanAddress) + "</div>";
+        if (cleanTown) html += "<div>" + escapeText(cleanTown) + "</div>";
+        if (cleanPostcode) html += "<div>" + escapeText(cleanPostcode) + "</div>";
         html += "<div><strong>Phone:</strong> " + (phone ? escapeText(phone) : "Not provided") + "</div>";
         if (email) html += "<div><strong>Email:</strong> " + escapeText(email) + "</div>";
         if (website) html += '<div><strong>Website:</strong> <a href="' + escapeText(website) + '" target="_blank" rel="noopener">Visit site</a></div>';
@@ -590,10 +609,12 @@
         const specsWrap = document.getElementById("specsWrap");
 
         if (car.year) addSpec(specGrid, "Year", car.year);
-        if (car.mileage) {
-          const mi = miles(car.mileage);
-          if (mi !== "Not provided") addSpec(specGrid, "Mileage", mi);
+
+        // show mileage even if 0/blank? (your miles() handles it)
+        if (car.mileage !== null && car.mileage !== undefined && String(car.mileage).trim() !== "") {
+          addSpec(specGrid, "Mileage", miles(car.mileage));
         }
+
         if (car.engine) addSpec(specGrid, "Engine", car.engine);
         if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
         if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
@@ -633,7 +654,7 @@
           extrasWrap.style.display = "none";
         }
 
-        // Lightbox (fixes yellow aria warning)
+        // ===== Lightbox (aria fix + focus restore) =====
         const lightbox = document.getElementById("lightbox");
         const lbImg = document.getElementById("lbImg");
         const lbClose = document.getElementById("lbClose");
@@ -695,6 +716,7 @@
           if (e.key === "ArrowLeft") showPrev();
           if (e.key === "ArrowRight") showNext();
         });
+
       }).catch((err) => {
         loading.textContent = "Could not load car. Is Node running?";
         console.log(err);
@@ -702,4 +724,5 @@
     }
   </script>
 </body>
+
 </html>
