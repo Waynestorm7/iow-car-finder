@@ -18,7 +18,9 @@
       --radius: 14px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -81,7 +83,9 @@
     }
 
     @media (max-width:900px) {
-      .layout { grid-template-columns: 1fr; }
+      .layout {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
@@ -132,10 +136,14 @@
       padding: 4px;
     }
 
-    .thumb.active { border-color: var(--accent); }
+    .thumb.active {
+      border-color: var(--accent);
+    }
 
     /* Right column */
-    .info { padding: 16px; }
+    .info {
+      padding: 16px;
+    }
 
     h1 {
       margin: 0 0 6px;
@@ -202,10 +210,14 @@
       line-height: 1.8;
     }
 
-    .extrasList li { margin-bottom: 4px; }
+    .extrasList li {
+      margin-bottom: 4px;
+    }
 
     /* Contact */
-    .contact { padding: 16px; }
+    .contact {
+      padding: 16px;
+    }
 
     .contact h2 {
       margin: 0 0 10px;
@@ -266,14 +278,42 @@
 
     /* Mobile */
     @media (max-width:600px) {
-      main { padding: 14px 12px; }
-      .gallery { padding: 12px; gap: 8px; }
-      .info, .contact { padding: 14px; }
-      .main-img { height: 260px; }
-      .thumb { width: 72px; height: 54px; padding: 3px; }
-      h1 { font-size: 1.35rem; }
-      .specGrid { gap: 8px; }
-      .descBox { padding: 10px; line-height: 1.5; }
+      main {
+        padding: 14px 12px;
+      }
+
+      .gallery {
+        padding: 12px;
+        gap: 8px;
+      }
+
+      .info,
+      .contact {
+        padding: 14px;
+      }
+
+      .main-img {
+        height: 260px;
+      }
+
+      .thumb {
+        width: 72px;
+        height: 54px;
+        padding: 3px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+      }
+
+      .specGrid {
+        gap: 8px;
+      }
+
+      .descBox {
+        padding: 10px;
+        line-height: 1.5;
+      }
     }
 
     /* Lightbox */
@@ -288,7 +328,9 @@
       padding: 20px;
     }
 
-    .lightbox.open { display: flex; }
+    .lightbox.open {
+      display: flex;
+    }
 
     .lbImg {
       max-width: 95vw;
@@ -320,8 +362,13 @@
       cursor: pointer;
     }
 
-    .lbPrev { left: 16px; }
-    .lbNext { right: 16px; }
+    .lbPrev {
+      left: 16px;
+    }
+
+    .lbNext {
+      right: 16px;
+    }
 
     .lbCount {
       position: absolute;
@@ -432,7 +479,6 @@
       }[ch]));
     }
 
-    // Cloudinary optimiser (put ONCE here)
     function cloudinaryOptimise(url, width = 1200) {
       const u = String(url || "");
       if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) return u;
@@ -451,9 +497,9 @@
       const div = document.createElement("div");
       div.className = "specItem";
       div.innerHTML = `
-        <div class="specLabel">${escapeText(label)}</div>
-        <div class="specValue">${escapeText(v)}</div>
-      `;
+      <div class="specLabel">${escapeText(label)}</div>
+      <div class="specValue">${escapeText(v)}</div>
+    `;
       specGrid.appendChild(div);
     }
 
@@ -464,263 +510,140 @@
     const content = document.getElementById("content");
 
     if (!carName) {
-      loading.innerHTML = "No car selected. <a href='/cars-page'>Go back to cars</a>.";
+      loading.innerHTML = "No car selected.";
     } else {
-      Promise.all([
-        fetch("/car-data?name=" + encodeURIComponent(carName))
-          .then(r => r.ok ? r.json() : null)
-          .catch(() => null),
-        fetch("/garages-data")
-          .then(r => r.ok ? r.json() : [])
-          .catch(() => [])
-      ]).then(([car, garages]) => {
 
-        if (!car || car.success === false) {
-          loading.innerHTML = "Car not found. <a href='/cars-page'>Go back to cars</a>.";
-          return;
-        }
+      fetch("/car-data?name=" + encodeURIComponent(carName))
+        .then(r => r.ok ? r.json() : null)
+        .then(payload => {
 
-        if (!Array.isArray(garages)) garages = [];
+          const car = payload?.car;
+          const garage = payload?.garage;
 
-        loading.style.display = "none";
-        content.style.display = "grid";
-
-        document.getElementById("carTitle").textContent = car.name || "Car";
-        document.getElementById("carPrice").textContent = money(car.price);
-
-        // ===== Photos (clean + limit + optimise) =====
-        const MAX_PHOTOS = 20;
-
-        let photos = (Array.isArray(car.photos) ? car.photos : [])
-          .map(p => cloudinaryOptimise(String(p).trim(), 1200))
-          .filter(Boolean)
-          .slice(0, MAX_PHOTOS);
-
-        if (!photos.length && car.photo) {
-          photos = [cloudinaryOptimise(String(car.photo).trim(), 1200)];
-        }
-        if (!photos.length) {
-          photos = ["/images/hero.png"];
-        }
-
-        const mainImg = document.getElementById("mainImg");
-        const thumbs = document.getElementById("thumbs");
-        let currentIndex = 0;
-
-        function setMain(index) {
-          currentIndex = index;
-          mainImg.src = photos[index] || "/images/hero.png";
-          [...thumbs.querySelectorAll("img")].forEach((el, i) => {
-            el.classList.toggle("active", i === index);
-          });
-        }
-
-        thumbs.innerHTML = "";
-        photos.forEach((src, i) => {
-          const t = document.createElement("img");
-          t.src = src;
-          t.className = "thumb" + (i === 0 ? " active" : "");
-          t.alt = "Car photo thumbnail";
-          t.onerror = () => { t.src = "/images/hero.png"; };
-          t.addEventListener("click", () => setMain(i));
-          thumbs.appendChild(t);
-        });
-
-        setMain(0);
-
-        // ===== Garage / Contact =====
-        const garageId = String(car.garageId || "").trim();
-        const garage = garages.find(g => String(g.id || "").trim() === garageId) || null;
-
-        const garageName = garage && garage.name ? garage.name : (garageId || "Local garage");
-        const phone = garage && garage.phone ? garage.phone : "";
-        const email = garage && garage.email ? garage.email : "";
-        const town = garage && garage.town ? garage.town : "";
-        const address = garage && garage.address ? garage.address : "";
-        const postcode = garage && garage.postcode ? garage.postcode : "";
-        const website = garage && garage.website ? garage.website : "";
-        const openingHours = garage && garage.openingHours ? garage.openingHours : "";
-
-        const cleanPostcode = String(postcode || "").trim();
-        const cleanAddress = String(address || "").trim();
-        const cleanTown = String(town || "").trim();
-
-        const mapQuery = cleanPostcode || cleanAddress || cleanTown || "";
-        const mapsLink = mapQuery
-          ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
-          : "";
-
-        const garageBox = document.getElementById("garageBox");
-
-        let html = "";
-        html += "<div><strong>" + escapeText(garageName) + "</strong></div>";
-        if (cleanAddress) html += "<div>" + escapeText(cleanAddress) + "</div>";
-        if (cleanTown) html += "<div>" + escapeText(cleanTown) + "</div>";
-        if (cleanPostcode) html += "<div>" + escapeText(cleanPostcode) + "</div>";
-        html += "<div><strong>Phone:</strong> " + (phone ? escapeText(phone) : "Not provided") + "</div>";
-        if (email) html += "<div><strong>Email:</strong> " + escapeText(email) + "</div>";
-        if (website) html += '<div><strong>Website:</strong> <a href="' + escapeText(website) + '" target="_blank" rel="noopener">Visit site</a></div>';
-        if (openingHours) html += '<div style="margin-top:8px"><strong>Opening hours:</strong><br>' + escapeText(openingHours) + "</div>";
-
-        garageBox.innerHTML = html;
-
-        // Call button
-        const callBtn = document.getElementById("callBtn");
-        const callNote = document.getElementById("callNote");
-
-        if (phone) {
-          callBtn.href = "tel:" + phone.replace(/\s/g, "");
-          callBtn.classList.remove("disabled");
-          callNote.textContent = "Call the garage directly about this car.";
-        } else {
-          callBtn.href = "#";
-          callBtn.classList.add("disabled");
-          callNote.textContent = "Phone number not provided yet.";
-        }
-
-        // Map button
-        const mapBtn = document.getElementById("mapBtn");
-        const mapNote = document.getElementById("mapNote");
-
-        if (mapsLink) {
-          mapBtn.href = mapsLink;
-          mapBtn.classList.remove("disabled");
-          mapNote.textContent = "Opens Google Maps.";
-        } else {
-          mapBtn.href = "#";
-          mapBtn.classList.add("disabled");
-          mapNote.textContent = "Address not provided yet.";
-        }
-
-        // Report mailto
-        const report = document.getElementById("reportLink");
-        const subject = encodeURIComponent("Report listing: " + (car.name || "Car"));
-        const body = encodeURIComponent(
-          "Hi IOW Car Finder,\n\nI want to report an issue with this listing:\n\n" +
-          "Car: " + (car.name || "") + "\n" +
-          "Garage: " + garageName + "\n" +
-          "Page: " + window.location.href + "\n\n" +
-          "Issue:\n"
-        );
-        report.href = "mailto:contact@iowcarfinder.co.uk?subject=" + subject + "&body=" + body;
-
-        // Specs
-        const specGrid = document.getElementById("specGrid");
-        const specsWrap = document.getElementById("specsWrap");
-
-        if (car.year) addSpec(specGrid, "Year", car.year);
-
-        // show mileage even if 0/blank? (your miles() handles it)
-        if (car.mileage !== null && car.mileage !== undefined && String(car.mileage).trim() !== "") {
-          addSpec(specGrid, "Mileage", miles(car.mileage));
-        }
-
-        if (car.engine) addSpec(specGrid, "Engine", car.engine);
-        if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
-        if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
-        if (car.colour) addSpec(specGrid, "Colour", car.colour);
-
-        if (Number.isFinite(Number(car.owners)) && Number(car.owners) > 0) {
-          addSpec(specGrid, "Owners", car.owners);
-        }
-
-        const mot = String(car.motUntil || "").trim();
-        if (mot) addSpec(specGrid, "MOT until", mot.replace("-", " / "));
-
-        specsWrap.style.display = specGrid.children.length ? "block" : "none";
-
-        // Description
-        const descWrap = document.getElementById("descWrap");
-        const descBox = document.getElementById("descBox");
-        const descRaw = String(car.description || "").trim();
-
-        if (descRaw) {
-          descBox.textContent = descRaw;
-          descWrap.style.display = "block";
-        } else {
-          descWrap.style.display = "none";
-        }
-
-        // Extras (bullets)
-        const extrasWrap = document.getElementById("extrasWrap");
-        const extrasList = document.getElementById("extrasList");
-        const extrasRaw = String(car.extras || "").trim();
-
-        if (extrasRaw) {
-          const lines = extrasRaw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-          extrasList.innerHTML = lines.map(line => "<li>" + escapeText(line) + "</li>").join("");
-          extrasWrap.style.display = "block";
-        } else {
-          extrasWrap.style.display = "none";
-        }
-
-        // ===== Lightbox (aria fix + focus restore) =====
-        const lightbox = document.getElementById("lightbox");
-        const lbImg = document.getElementById("lbImg");
-        const lbClose = document.getElementById("lbClose");
-        const lbPrev = document.getElementById("lbPrev");
-        const lbNext = document.getElementById("lbNext");
-        const lbCount = document.getElementById("lbCount");
-
-        let lastFocusEl = null;
-
-        function openLightbox(index) {
-          lastFocusEl = document.activeElement;
-          currentIndex = index;
-
-          lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
-
-          lightbox.classList.add("open");
-          lightbox.setAttribute("aria-hidden", "false");
-          document.body.style.overflow = "hidden";
-
-          lbClose.focus();
-        }
-
-        function closeLightbox() {
-          lightbox.classList.remove("open");
-          lightbox.setAttribute("aria-hidden", "true");
-          document.body.style.overflow = "";
-
-          if (lastFocusEl && typeof lastFocusEl.focus === "function") {
-            lastFocusEl.focus();
+          if (!car) {
+            loading.innerHTML = "Car not found.";
+            return;
           }
-          lastFocusEl = null;
-        }
 
-        function showPrev() {
-          currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-          lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
-        }
+          loading.style.display = "none";
+          content.style.display = "grid";
 
-        function showNext() {
-          currentIndex = (currentIndex + 1) % photos.length;
-          lbImg.src = photos[currentIndex] || "/images/hero.png";
-          lbCount.textContent = (currentIndex + 1) + " / " + photos.length;
-        }
+          document.getElementById("carTitle").textContent = car.name || "Car";
+          document.getElementById("carPrice").textContent = money(car.price);
 
-        mainImg.addEventListener("click", () => openLightbox(currentIndex));
-        lbClose.addEventListener("click", closeLightbox);
-        lbPrev.addEventListener("click", showPrev);
-        lbNext.addEventListener("click", showNext);
+          // ===== Photos =====
+          const MAX_PHOTOS = 20;
 
-        lightbox.addEventListener("click", (e) => {
-          if (e.target === lightbox) closeLightbox();
+          let photos = (Array.isArray(car.photos) ? car.photos : [])
+            .map(p => cloudinaryOptimise(String(p).trim(), 1200))
+            .filter(Boolean)
+            .slice(0, MAX_PHOTOS);
+
+          if (!photos.length && car.photo) {
+            photos = [cloudinaryOptimise(String(car.photo).trim(), 1200)];
+          }
+          if (!photos.length) {
+            photos = ["/images/hero.png"];
+          }
+
+          const mainImg = document.getElementById("mainImg");
+          const thumbs = document.getElementById("thumbs");
+          let currentIndex = 0;
+
+          function setMain(index) {
+            currentIndex = index;
+            mainImg.src = photos[index];
+            [...thumbs.querySelectorAll("img")].forEach((el, i) => {
+              el.classList.toggle("active", i === index);
+            });
+          }
+
+          thumbs.innerHTML = "";
+          photos.forEach((src, i) => {
+            const t = document.createElement("img");
+            t.src = src;
+            t.className = "thumb" + (i === 0 ? " active" : "");
+            t.onclick = () => setMain(i);
+            thumbs.appendChild(t);
+          });
+
+          setMain(0);
+
+          // ===== Garage (FROM SUPABASE NOW) =====
+          const garageName = garage?.name || "Local garage";
+          const phone = garage?.phone || "";
+          const email = garage?.email || "";
+          const town = garage?.town || "";
+          const address = garage?.address || "";
+          const postcode = garage?.postcode || "";
+          const website = garage?.website || "";
+          const openingHours = garage?.opening_hours || garage?.openingHours || "";
+
+          const mapQuery = postcode || address || town || "";
+          const mapsLink = mapQuery
+            ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
+            : "";
+
+          const garageBox = document.getElementById("garageBox");
+
+          let html = `<div><strong>${escapeText(garageName)}</strong></div>`;
+          if (address) html += `<div>${escapeText(address)}</div>`;
+          if (town) html += `<div>${escapeText(town)}</div>`;
+          if (postcode) html += `<div>${escapeText(postcode)}</div>`;
+          html += `<div><strong>Phone:</strong> ${phone || "Not provided"}</div>`;
+          if (email) html += `<div><strong>Email:</strong> ${escapeText(email)}</div>`;
+          if (website) html += `<div><strong>Website:</strong> <a href="${website}" target="_blank">Visit site</a></div>`;
+          if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
+
+          garageBox.innerHTML = html;
+
+          // Buttons
+          const callBtn = document.getElementById("callBtn");
+          if (phone) {
+            callBtn.href = "tel:" + phone.replace(/\s/g, "");
+            callBtn.classList.remove("disabled");
+          } else {
+            callBtn.classList.add("disabled");
+          }
+
+          const mapBtn = document.getElementById("mapBtn");
+          if (mapsLink) {
+            mapBtn.href = mapsLink;
+          } else {
+            mapBtn.classList.add("disabled");
+          }
+
+          // ===== Specs =====
+          const specGrid = document.getElementById("specGrid");
+
+          if (car.year) addSpec(specGrid, "Year", car.year);
+          if (car.mileage !== undefined) addSpec(specGrid, "Mileage", miles(car.mileage));
+          if (car.engine) addSpec(specGrid, "Engine", car.engine);
+          if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
+          if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
+          if (car.colour) addSpec(specGrid, "Colour", car.colour);
+
+          document.getElementById("specsWrap").style.display =
+            specGrid.children.length ? "block" : "none";
+
+          // ===== Description =====
+          if (car.description) {
+            document.getElementById("descBox").textContent = car.description;
+            document.getElementById("descWrap").style.display = "block";
+          }
+
+          // ===== Extras =====
+          if (car.extras) {
+            const lines = car.extras.split(/\n/).filter(Boolean);
+            document.getElementById("extrasList").innerHTML =
+              lines.map(l => `<li>${escapeText(l)}</li>`).join("");
+            document.getElementById("extrasWrap").style.display = "block";
+          }
+
+        })
+        .catch(() => {
+          loading.textContent = "Could not load car.";
         });
-
-        document.addEventListener("keydown", (e) => {
-          if (!lightbox.classList.contains("open")) return;
-          if (e.key === "Escape") closeLightbox();
-          if (e.key === "ArrowLeft") showPrev();
-          if (e.key === "ArrowRight") showNext();
-        });
-
-      }).catch((err) => {
-        loading.textContent = "Could not load car. Is Node running?";
-        console.log(err);
-      });
     }
   </script>
 </body>

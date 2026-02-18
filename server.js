@@ -313,8 +313,25 @@ const server = http.createServer(async (req, res) => {
 
     try {
       const car = await dbGetCarByName(name);
-      if (!car || soldTooOld(car)) return sendJson(res, 404, { success: false, message: "Car not found" });
-      return sendJson(res, 200, car);
+      if (!car || soldTooOld(car)) {
+        return sendJson(res, 404, { success: false, message: "Car not found" });
+      }
+
+      // ✅ Fetch the garage row from Supabase (if garageId exists)
+      let garage = null;
+      if (car.garageId) {
+        const { data, error } = await supabase
+          .from("garages")
+          .select("*")
+          .eq("id", car.garageId)
+          .single();
+
+        if (!error) garage = data;
+      }
+
+      // ✅ Return BOTH
+      return sendJson(res, 200, { car, garage });
+
     } catch (e) {
       console.error("GET /car-data error:", e);
       return sendJson(res, 500, { success: false, message: "Database error" });
