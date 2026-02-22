@@ -16,7 +16,6 @@
       --muted: #667085;
 
       --accent: #e67e22;
-      --accent2: #ffb36b;
 
       --stroke: rgba(17, 24, 39, .10);
       --strokeSoft: rgba(17, 24, 39, .08);
@@ -24,7 +23,6 @@
       --shadowSoft: 0 14px 44px rgba(0, 0, 0, .08);
       --shadowHover: 0 20px 60px rgba(0, 0, 0, .14);
 
-      --radius: 18px;
       --radiusCard: 22px;
     }
 
@@ -99,8 +97,8 @@
     header nav a {
       padding: 8px 12px;
       border-radius: 999px;
-      transition: background .15s ease, border-color .15s ease;
       border: 1px solid transparent;
+      transition: background .15s ease, border-color .15s ease;
     }
 
     header nav a:hover {
@@ -143,9 +141,8 @@
       padding: 12px 18px 28px;
     }
 
-    /* ===== Filters (NOT sticky) ===== */
+    /* ===== Filters ===== */
     .filtersWrap {
-      position: static;
       margin-bottom: 16px;
     }
 
@@ -158,13 +155,12 @@
       padding: 14px;
     }
 
-    /* premium top highlight */
     .filters::before {
       content: "";
       display: block;
       height: 2px;
       border-radius: 999px;
-      background: linear-gradient(90deg, rgba(230, 126, 34, .0), rgba(230, 126, 34, .55), rgba(255, 179, 107, .35), rgba(230, 126, 34, .0));
+      background: linear-gradient(90deg, rgba(230, 126, 34, .0), rgba(230, 126, 34, .55), rgba(230, 126, 34, .0));
       margin: -4px 4px 12px;
     }
 
@@ -192,7 +188,6 @@
       font-size: .95rem;
       outline: none;
       background: rgba(255, 255, 255, .96);
-      transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
     }
 
     .filters input:focus,
@@ -217,13 +212,7 @@
       background: #fff;
       color: #111827;
       box-shadow: 0 6px 18px rgba(0, 0, 0, .07);
-      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
       white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .10);
     }
 
     .btn.primary {
@@ -231,10 +220,6 @@
       border-color: rgba(230, 126, 34, .55);
       color: #fff;
       box-shadow: 0 10px 24px rgba(230, 126, 34, .22);
-    }
-
-    .btn.primary:hover {
-      box-shadow: 0 14px 30px rgba(230, 126, 34, .26);
     }
 
     .btn.ghost {
@@ -246,7 +231,6 @@
     .btn:disabled {
       opacity: .55;
       cursor: not-allowed;
-      transform: none;
       box-shadow: none;
     }
 
@@ -258,14 +242,12 @@
       padding-left: 2px;
     }
 
-    /* Desktop: show advanced always, hide toggle */
     @media (min-width:981px) {
       #toggleFilters {
         display: none;
       }
     }
 
-    /* Tablet/mobile: toggle advanced */
     @media (max-width:980px) {
       .filtersTop {
         grid-template-columns: 1fr 1fr auto;
@@ -357,18 +339,17 @@
       border: 1px solid var(--strokeSoft);
       overflow: hidden;
       display: block;
-      position: relative;
       transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .carCard.sold {
-      opacity: 0.75;
-      filter: grayscale(0.15);
     }
 
     .carCard:hover {
       transform: translateY(-3px);
       box-shadow: var(--shadowHover);
+    }
+
+    .carCard.sold {
+      opacity: .75;
+      filter: grayscale(.15);
     }
 
     .imgWrap {
@@ -384,14 +365,6 @@
       background: #e9edf2;
     }
 
-    .imgWrap::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .22) 100%);
-      pointer-events: none;
-    }
-
     @media (max-width:600px) {
       .carImg {
         height: 250px;
@@ -402,23 +375,14 @@
       position: absolute;
       top: 12px;
       left: 12px;
-
       padding: 8px 14px;
       border-radius: 999px;
-
       background: linear-gradient(135deg, #000, #333);
       color: #fff;
-
       font-weight: 900;
       font-size: .9rem;
-      letter-spacing: .5px;
-
-      text-transform: uppercase;
-
       border: 1px solid rgba(255, 255, 255, .25);
       box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
-
-      backdrop-filter: blur(4px);
     }
 
     .body {
@@ -429,27 +393,26 @@
       margin: 0;
       font-size: 1.14rem;
       font-weight: 950;
-      letter-spacing: -0.01em;
       line-height: 1.2;
     }
 
     .price {
-      margin: 10px 0 10px;
+      margin: 10px 0;
       font-size: 1.45rem;
       font-weight: 1000;
-      color: #0b1220;
     }
 
     .specGrid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
       margin-top: 10px;
     }
 
-    .specGrid.compact {
-      gap: 8px;
-      margin-top: 10px;
+    @media (max-width:360px) {
+      .specGrid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .spec {
@@ -464,21 +427,13 @@
       font-size: .74rem;
       color: rgba(17, 24, 39, .55);
       margin-bottom: 3px;
-      letter-spacing: .02em;
     }
 
     .specValue {
       font-size: .98rem;
       font-weight: 950;
-      color: #0b1220;
       line-height: 1.12;
       word-break: break-word;
-    }
-
-    @media (max-width:360px) {
-      .specGrid {
-        grid-template-columns: 1fr;
-      }
     }
 
     .mutedLine {
@@ -487,18 +442,6 @@
       border-top: 1px solid rgba(17, 24, 39, .08);
       color: var(--muted);
       font-size: .92rem;
-    }
-
-    .spacer {
-      height: 22px;
-    }
-
-    /* ===== Reduced motion ===== */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        scroll-behavior: auto;
-      }
     }
   </style>
 </head>
@@ -520,7 +463,7 @@
 
   <section class="hero">
     <h1>Cars</h1>
-    <p>Browse listings from local Isle of Wight garages. Filter by fuel, gear, price and more.</p>
+    <p>Browse listings... Filter by fuel, transmission, price and more.</p>
   </section>
 
   <main>
@@ -537,9 +480,7 @@
             <option value="mileage-asc">Mileage: Lowest</option>
           </select>
 
-          <button id="toggleFilters" class="btn ghost" type="button" aria-expanded="false">
-            Filters
-          </button>
+          <button id="toggleFilters" class="btn ghost" type="button" aria-expanded="false">Filters</button>
         </div>
 
         <div class="filtersAdvanced">
@@ -548,7 +489,7 @@
           </select>
 
           <select id="gearBox">
-            <option value="">Gear (All)</option>
+            <option value="">Transmission (All)</option>
           </select>
 
           <select id="maxPriceBox">
@@ -574,8 +515,6 @@
 
     <div id="status" class="status">Loading cars…</div>
     <div id="grid" class="grid" style="display:none;"></div>
-
-    <div class="spacer"></div>
   </main>
 
   <script>
@@ -585,15 +524,8 @@
     }
 
     function miles(n) {
-      if (n === null || n === undefined || n === "") {
-        return "Not provided";
-      }
-
       const num = Number(n);
-      if (!Number.isFinite(num) || num <= 0) {
-        return "Not provided";
-      }
-
+      if (!Number.isFinite(num) || num <= 0) return "Not provided";
       return num.toLocaleString("en-GB") + " miles";
     }
 
@@ -607,7 +539,7 @@
     function norm(s) { return safeText(s).toLowerCase(); }
 
     function uniqueSorted(arr) {
-      const set = new Set(arr.filter(Boolean));
+      const set = new Set(arr.map(safeText).filter(Boolean));
       return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
     }
 
@@ -640,93 +572,88 @@
       const fuelBox = document.getElementById("fuelBox");
       const gearBox = document.getElementById("gearBox");
 
-      const fuels = uniqueSorted(cars.map(c => safeText(c.fuel)));
-      const gears = uniqueSorted(cars.map(c => safeText(c.transmission)));
+      const fuels = uniqueSorted(cars.map(c => c.fuel));
+      const gears = uniqueSorted(cars.map(c => c.transmission));
 
       fuelBox.innerHTML =
         `<option value="">Fuel (All)</option>` +
         fuels.map(f => `<option value="${escapeAttr(f)}">${escapeHtml(f)}</option>`).join("");
 
       gearBox.innerHTML =
-        `<option value="">Gear (All)</option>` +
+        `<option value="">Transmission (All)</option>` +
         gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
-    }
 
-    function applyFilters() {
-      const search = norm(document.getElementById("searchBox").value);
-      const sort = document.getElementById("sortBox").value;
-      const fuel = norm(document.getElementById("fuelBox").value);
-      const gear = norm(document.getElementById("gearBox").value);
-      const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
+      function applyFilters() {
+        const search = norm(document.getElementById("searchBox").value);
+        const sort = document.getElementById("sortBox").value;
+        const fuel = norm(document.getElementById("fuelBox").value);
+        const gear = norm(document.getElementById("gearBox").value);
+        const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
 
-      let filtered = [...ALL];
+        let filtered = [...ALL];
 
-      if (search) {
-        filtered = filtered.filter(c => {
-          const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageId]
-            .map(norm).join(" ");
-          return hay.includes(search);
-        });
-      }
-
-      if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
-      if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
-      if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
-
-      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
-      else {
-        filtered.sort((a, b) => {
-          const ta = new Date(a.updatedAt || 0).getTime() || 0;
-          const tb = new Date(b.updatedAt || 0).getTime() || 0;
-          return tb - ta;
-        });
-      }
-
-      renderCars(filtered);
-
-      document.getElementById("countLine").textContent =
-        `Showing ${filtered.length} of ${ALL.length} cars.`;
-    }
-
-    function renderCars(cars) {
-      const status = document.getElementById("status");
-      const grid = document.getElementById("grid");
-
-      if (!Array.isArray(cars) || cars.length === 0) {
-        grid.style.display = "none";
-        status.style.display = "block";
-        status.textContent = "No cars match your filters.";
-        return;
-      }
-
-      status.style.display = "none";
-      grid.style.display = "grid";
-      grid.innerHTML = "";
-
-      for (const car of cars) {
-        const name = safeText(car.name) || "Car";
-        const href = "/car?name=" + encodeURIComponent(name);
-
-        const year = safeText(car.year);
-        const mi = miles(car.mileage);
-
-        const a = document.createElement("a");
-
-        a.className = "carCard";
-
-        if (car.sold) {
-          a.classList.add("sold");
+        if (search) {
+          filtered = filtered.filter(c => {
+            const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageName]
+              .map(norm).join(" ");
+            return hay.includes(search);
+          });
         }
 
-        a.href = href;
+        if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
+        if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
+        if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-        a.innerHTML = `
+        if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+        else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+        else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+        else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
+        else {
+          filtered.sort((a, b) => {
+            const ta = new Date(a.updatedAt || 0).getTime() || 0;
+            const tb = new Date(b.updatedAt || 0).getTime() || 0;
+            return tb - ta;
+          });
+        }
+
+        renderCars(filtered);
+        document.getElementById("countLine").textContent = `Showing ${filtered.length} of ${ALL.length} cars.`;
+      }
+
+      function renderCars(cars) {
+        const status = document.getElementById("status");
+        const grid = document.getElementById("grid");
+
+        if (!Array.isArray(cars) || cars.length === 0) {
+          grid.style.display = "none";
+          status.style.display = "block";
+          status.textContent = "No cars match your filters.";
+          return;
+        }
+
+        status.style.display = "none";
+        grid.style.display = "grid";
+        grid.innerHTML = "";
+
+        for (const car of cars) {
+          const name = safeText(car.name) || "Car";
+          const href = "/car?name=" + encodeURIComponent(name);
+
+          const year = safeText(car.year);
+          const mi = miles(car.mileage);
+
+          const garageName = safeText(car.garageName) || "Local garage";
+
+          const a = document.createElement("a");
+          a.className = "carCard" + (car.sold ? " sold" : "");
+          a.href = href;
+
+          a.innerHTML = `
           <div class="imgWrap">
-            <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}"
-                 onerror="this.src='/images/hero.png'">
+            <img class="carImg"
+              src="${escapeAttr(pickPhoto(car))}"
+              alt="${escapeHtml(name)}"
+              onerror="this.src='/images/hero.png'">
             ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
           </div>
 
@@ -734,117 +661,102 @@
             <h2 class="name">${escapeHtml(name)}</h2>
             <div class="price">${escapeHtml(money(car.price))}</div>
 
-            <div class="specGrid compact">
+            <div class="specGrid">
               ${year ? `
                 <div class="spec">
                   <div class="specLabel">Year</div>
                   <div class="specValue">${escapeHtml(year)}</div>
                 </div>` : ``}
 
-              ${mi ? `
-                <div class="spec">
-                  <div class="specLabel">Mileage</div>
-                  <div class="specValue">${escapeHtml(mi)}</div>
-                </div>` : ``}
+              <div class="spec">
+                <div class="specLabel">Mileage</div>
+                <div class="specValue">${escapeHtml(mi)}</div>
+              </div>
             </div>
 
-            ${car.garageId ? `<div class="mutedLine">Garage: ${escapeHtml(safeText(car.garageId))}</div>` : ``}
+            <div class="mutedLine">Garage: ${escapeHtml(garageName)}</div>
           </div>
         `;
 
-        grid.appendChild(a);
+          grid.appendChild(a);
+        }
       }
-    }
 
-    function resetFilters() {
-      document.getElementById("searchBox").value = "";
-      document.getElementById("sortBox").value = "recent";
-      document.getElementById("fuelBox").value = "";
-      document.getElementById("gearBox").value = "";
-      document.getElementById("maxPriceBox").value = "";
-      applyFilters();
-    }
+      function resetFilters() {
+        document.getElementById("searchBox").value = "";
+        document.getElementById("sortBox").value = "recent";
+        document.getElementById("fuelBox").value = "";
+        document.getElementById("gearBox").value = "";
+        document.getElementById("maxPriceBox").value = "";
+        applyFilters();
+      }
 
-    (async function init() {
-      const status = document.getElementById("status");
-      const countLine = document.getElementById("countLine");
+      (async function init() {
+        const status = document.getElementById("status");
+        const countLine = document.getElementById("countLine");
+        const applyBtn = document.getElementById("applyBtn");
+        const resetBtn = document.getElementById("resetBtn");
 
-      const applyBtn = document.getElementById("applyBtn");
-      const resetBtn = document.getElementById("resetBtn");
-      applyBtn.disabled = true;
+        applyBtn.disabled = true;
 
-      const cars = await fetchCars();
-      if (!cars) {
-        status.textContent = "Could not load cars.";
-        countLine.textContent = "Could not load.";
+        const cars = await fetchCars();
+        if (!cars) {
+          status.textContent = "Could not load cars.";
+          countLine.textContent = "Could not load.";
+          applyBtn.disabled = false;
+          return;
+        }
+
+        ALL = cars;
+        fillDropdowns(ALL);
+        applyFilters();
         applyBtn.disabled = false;
-        return;
-      }
 
-      ALL = cars;
-      fillDropdowns(ALL);
-      applyFilters();
-      applyBtn.disabled = false;
+        const filtersBar = document.getElementById("filtersBar");
+        const toggleBtn = document.getElementById("toggleFilters");
 
-      // Mobile: toggle advanced filters
-      const filtersBar = document.getElementById("filtersBar");
-      const toggleBtn = document.getElementById("toggleFilters");
-
-      function closeMobileFilters() {
-        if (filtersBar && filtersBar.classList.contains("is-open")) {
-          filtersBar.classList.remove("is-open");
-          if (toggleBtn) {
+        function closeMobileFilters() {
+          if (filtersBar && filtersBar.classList.contains("is-open")) {
+            filtersBar.classList.remove("is-open");
             toggleBtn.setAttribute("aria-expanded", "false");
             toggleBtn.textContent = "Filters";
           }
         }
-      }
 
-      if (toggleBtn && filtersBar) {
-        toggleBtn.addEventListener("click", () => {
-          const open = filtersBar.classList.toggle("is-open");
-          toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
-          toggleBtn.textContent = open ? "Close filters" : "Filters";
-        });
-      }
+        if (toggleBtn && filtersBar) {
+          toggleBtn.addEventListener("click", () => {
+            const open = filtersBar.classList.toggle("is-open");
+            toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+            toggleBtn.textContent = open ? "Close filters" : "Filters";
+          });
+        }
 
-      // Apply / Reset
-      applyBtn.addEventListener("click", () => {
-        applyFilters();
-        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-      });
-
-      resetBtn.addEventListener("click", () => {
-        resetFilters();
-        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-      });
-
-      // Small UX: typing/search doesn't constantly rerender; but keeps page feeling fast
-      let searchTimer = null;
-      document.getElementById("searchBox").addEventListener("input", () => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => applyFilters(), 120);
-      });
-
-      // Sort feels instant
-      document.getElementById("sortBox").addEventListener("change", applyFilters);
-
-      // Change dropdowns: wait for Apply (more “premium” / intentional)
-      // If you prefer instant filtering, swap these to: addEventListener("change", applyFilters)
-      document.getElementById("fuelBox").addEventListener("change", () => { });
-      document.getElementById("gearBox").addEventListener("change", () => { });
-      document.getElementById("maxPriceBox").addEventListener("change", () => { });
-
-      // Keyboard
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          // Enter applies (intentional, since we have an Apply button)
+        applyBtn.addEventListener("click", () => {
           applyFilters();
           if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-        }
-        if (e.key === "Escape") closeMobileFilters();
-      });
-    })();
+        });
+
+        resetBtn.addEventListener("click", () => {
+          resetFilters();
+          if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
+        });
+
+        let searchTimer = null;
+        document.getElementById("searchBox").addEventListener("input", () => {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(applyFilters, 120);
+        });
+
+        document.getElementById("sortBox").addEventListener("change", applyFilters);
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            applyFilters();
+            if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
+          }
+          if (e.key === "Escape") closeMobileFilters();
+        });
+      })();
   </script>
 </body>
 

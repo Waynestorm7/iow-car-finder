@@ -1,383 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | IOW Car Finder</title>
 
   <style>
-    :root {
-      --bg: #f5f5f5;
-      --card: #fff;
-      --text: #111827;
-      --muted: #6b7280;
-      --brand: #2c3e50;
-      --accent: #e67e22;
-      --shadow: 0 2px 10px rgba(0, 0, 0, .10);
-      --radius: 14px;
+    :root{
+      --bg:#f7f7f8;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --brand:#2c3e50;
+      --accent:#e67e22;
+
+      --shadow: 0 10px 24px rgba(0,0,0,.08);
+      --border: 1px solid rgba(0,0,0,.07);
+      --r: 16px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    *{ box-sizing:border-box; }
 
-    body {
-      margin: 0;
+    body{
+      margin:0;
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
 
-    header {
-      background: rgba(0, 0, 0, .75);
-      color: #fff;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    header{
+      background: rgba(0,0,0,.75);
+      color:#fff;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
       backdrop-filter: blur(6px);
     }
-
-    header .top {
-      max-width: 1100px;
+    header .top{
+      max-width: 1180px;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap: 12px;
     }
-
-    header a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
+    header a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      letter-spacing:.2px;
     }
 
-    main {
-      max-width: 1100px;
+    main{
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 24px 20px;
+      padding: 10px 14px 18px; /* ✅ tighter top/bottom */
     }
 
-    .backRow {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 12px;
+    .backRow{
+      display:flex;
+      align-items:center;
+      margin: 0 0 10px; /* ✅ smaller gap */
     }
-
-    .backLink {
-      display: inline-block;
+    .backLink{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
       padding: 8px 12px;
       background: #fff;
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--brand);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      font-weight: 700;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width:900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .status {
-      background: var(--card);
-      padding: 16px;
       border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
+      text-decoration:none;
+      color: var(--brand);
+      border: var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      font-weight:800;
     }
 
-    /* Gallery */
-    .gallery {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
+    .status{
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       padding: 14px;
     }
 
-    .main-img {
-      width: 100%;
-      height: 360px;
-      object-fit: contain;
-      background: #f1f1f1;
-      border-radius: 12px;
+    .layout{
+      display:grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 14px; /* ✅ tighter */
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .layout{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+
+    /* =========================
+       GALLERY
+       ========================= */
+    .gallery{
+      padding: 12px;
+      display:grid;
+      gap: 10px;
+    }
+
+    .main-img{
+      width:100%;
+      height: 460px;
+      object-fit: contain; /* ✅ no crop */
+      background: #f3f4f6;
+      border-radius: 14px;
+      display:block;
       cursor: zoom-in;
     }
 
-    .thumbs {
-      display: flex;
+    .thumbs{
+      display:flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .thumb {
-      width: 90px;
-      height: 65px;
-      object-fit: contain;
-      border-radius: 10px;
-      cursor: pointer;
+    .thumb{
+      width: 86px;
+      height: 62px;
+      object-fit: contain; /* ✅ no crop */
+      background:#f3f4f6;
+      border-radius: 12px;
       border: 2px solid transparent;
-      background: #eee;
+      cursor:pointer;
       padding: 4px;
+      transition: transform .08s ease;
     }
-
-    .thumb.active {
+    .thumb:hover{ transform: translateY(-1px); }
+    .thumb.active{
       border-color: var(--accent);
     }
 
-    /* Right column */
-    .info {
-      padding: 16px;
+    @media (max-width: 900px){
+      .main-img{ height: 340px; }
+    }
+    @media (max-width: 600px){
+      .main-img{ height: 280px; }
+      .thumb{ width: 72px; height: 54px; }
     }
 
-    h1 {
+    /* =========================
+       RIGHT COLUMN
+       ========================= */
+    .info{
+      padding: 14px 14px 12px; /* ✅ tighter */
+    }
+
+    h1{
       margin: 0 0 6px;
-      font-size: 1.5rem;
+      font-size: 1.45rem;
+      line-height: 1.1;
       color: var(--brand);
+      font-weight: 900;
     }
 
-    .price {
+    .price{
+      margin: 0 0 10px; /* ✅ tighter */
       font-size: 1.25rem;
-      font-weight: 800;
-      margin: 8px 0 14px;
-      color: #0f172a;
+      font-weight: 900;
+      color:#0f172a;
     }
 
-    .sectionTitle {
-      font-size: 20px;
-      font-weight: 700;
-      margin-top: 22px;
-      margin-bottom: 12px;
-      color: #222;
+    .sectionTitle{
+      margin: 12px 0 8px; /* ✅ reduces big gaps */
+      font-size: 1.05rem;
+      font-weight: 900;
+      color:#111827;
     }
 
-    /* Specs grid */
-    .specGrid {
-      display: grid;
+    /* Specs */
+    .specGrid{
+      display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 8px;
+    }
+    @media (max-width: 600px){
+      .specGrid{ grid-template-columns: 1fr; }
     }
 
-    .specItem {
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
+    .specItem{
+      padding: 9px 10px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid rgba(0,0,0,.06);
     }
-
-    .specLabel {
+    .specLabel{
       font-size: .75rem;
       color: var(--muted);
       margin-bottom: 2px;
     }
-
-    .specValue {
-      font-size: .92rem;
-      font-weight: 700;
+    .specValue{
+      font-size: .95rem;
+      font-weight: 800;
       color: #111827;
     }
 
-    .descBox {
-      line-height: 1.6;
+    /* Description + Extras wrapper box */
+    .descBox{
+      background: #f8fafc;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 14px;
+      padding: 12px 12px; /* ✅ tighter */
+      line-height: 1.55;
       font-size: 15px;
-      color: #444;
-      background: #fafafa;
-      padding: 16px 18px;
-      border-radius: 10px;
-      border: 1px solid #eee;
+      color:#334155;
       white-space: pre-line;
     }
 
-    .extrasList {
-      margin: 0;
-      padding-left: 20px;
-      line-height: 1.8;
+    /* ✅ Reduce gap above/below Key features list specifically */
+    .extrasList{
+      margin: 0;              /* ✅ removes default ul margin */
+      padding-left: 18px;     /* tidy indent */
+      line-height: 1.7;
     }
+    .extrasList li{ margin: 4px 0; }
 
-    .extrasList li {
-      margin-bottom: 4px;
-    }
-
-    /* Contact */
-    .contact {
-      padding: 16px;
-    }
-
-    .contact h2 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-      color: var(--brand);
-    }
-
-    .contact .box {
-      background: #eef2f6;
-      border-radius: 12px;
-      padding: 12px;
-      line-height: 1.6;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 12px;
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .btn.ghost {
-      background: #fff;
-      color: var(--brand);
-      border: 1px solid #e5e7eb;
-    }
-
-    .btn.disabled {
-      opacity: .6;
-      pointer-events: none;
-    }
-
-    .small {
-      color: #666;
-      font-size: .9rem;
-      margin-top: 8px;
-    }
-
-    .trust {
-      margin-top: 16px;
-      background: #fff;
+    /* Contact card */
+    .contact{
       padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, .08);
-      border-left: 6px solid var(--brand);
-      line-height: 1.6;
+      margin-top: 12px; /* ✅ less space between cards */
     }
-
-    .trust a {
+    .contact h2{
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      font-weight: 900;
       color: var(--brand);
-      font-weight: 700;
-      text-decoration: none;
+    }
+    .contact .box{
+      background: #eef2f6;
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid rgba(0,0,0,.06);
+      line-height: 1.55;
     }
 
-    /* Mobile */
-    @media (max-width:600px) {
-      main {
-        padding: 14px 12px;
-      }
-
-      .gallery {
-        padding: 12px;
-        gap: 8px;
-      }
-
-      .info,
-      .contact {
-        padding: 14px;
-      }
-
-      .main-img {
-        height: 260px;
-      }
-
-      .thumb {
-        width: 72px;
-        height: 54px;
-        padding: 3px;
-      }
-
-      h1 {
-        font-size: 1.35rem;
-      }
-
-      .specGrid {
-        gap: 8px;
-      }
-
-      .descBox {
-        padding: 10px;
-        line-height: 1.5;
-      }
+    .btnRow{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
-    /* Lightbox */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-    }
-
-    .lightbox.open {
-      display: flex;
-    }
-
-    .lbImg {
-      max-width: 95vw;
-      max-height: 85vh;
-      object-fit: contain;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
       border-radius: 12px;
-      background: #111;
+      text-decoration:none;
+      font-weight: 900;
+      border: 0;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn.primary{
+      background: var(--accent);
+      color:#fff;
+    }
+    .btn.ghost{
+      background:#fff;
+      color: var(--brand);
+      border: 1px solid rgba(0,0,0,.12);
+    }
+    .btn.disabled{
+      opacity:.55;
+      pointer-events:none;
     }
 
-    .lbClose {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 22px;
-      border: none;
-      border-radius: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
+    .small{
+      color:#667085;
+      font-size: .9rem;
+      margin-top: 6px;
+      line-height: 1.4;
     }
 
-    .lbNav {
-      position: absolute;
+    .trust{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #fff;
+      border: var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      border-left: 6px solid var(--brand);
+      line-height: 1.55;
+    }
+    .trust a{
+      color: var(--brand);
+      font-weight: 900;
+      text-decoration:none;
+    }
+
+    /* =========================
+       LIGHTBOX
+       ========================= */
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.88);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding: 18px;
+    }
+    .lightbox.open{ display:flex; }
+
+    .lbImg{
+      max-width: min(1200px, 95vw);
+      max-height: 86vh;
+      object-fit: contain;
+      border-radius: 14px;
+      background:#111;
+    }
+
+    .lbClose, .lbNav{
+      position:absolute;
+      border:0;
+      border-radius: 12px;
+      cursor:pointer;
+      background: rgba(255,255,255,.92);
+      font-weight: 900;
+    }
+    .lbClose{
+      top: 14px;
+      right: 14px;
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+    }
+    .lbNav{
       top: 50%;
       transform: translateY(-50%);
-      font-size: 40px;
-      border: none;
-      border-radius: 12px;
-      padding: 6px 14px;
-      cursor: pointer;
+      width: 54px;
+      height: 54px;
+      font-size: 34px;
+      line-height: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
     }
+    .lbPrev{ left: 14px; }
+    .lbNext{ right: 14px; }
 
-    .lbPrev {
-      left: 16px;
-    }
-
-    .lbNext {
-      right: 16px;
-    }
-
-    .lbCount {
-      position: absolute;
-      bottom: 16px;
+    .lbCount{
+      position:absolute;
+      bottom: 14px;
       left: 50%;
       transform: translateX(-50%);
-      color: #fff;
+      color:#fff;
       font-size: 14px;
-      opacity: .9;
+      opacity:.9;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -432,14 +416,16 @@
           </div>
         </div>
 
-        <div class="card contact" style="margin-top:16px;">
+        <div class="card contact">
           <h2>Contact garage</h2>
           <div class="box" id="garageBox"></div>
 
-          <a id="callBtn" class="btn" href="#">Call garage</a>
-          <div class="small" id="callNote"></div>
+          <div class="btnRow">
+            <a id="callBtn" class="btn primary" href="#">Call garage</a>
+            <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Get directions</a>
+          </div>
 
-          <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Get directions</a>
+          <div class="small" id="callNote"></div>
           <div class="small" id="mapNote"></div>
         </div>
 
@@ -464,64 +450,114 @@
   </div>
 
   <script>
-    function money(n) {
-      try { return "£" + Number(n).toLocaleString("en-GB"); }
-      catch { return "£" + (n ?? ""); }
+    function money(n){
+      try{ return "£" + Number(n).toLocaleString("en-GB"); }
+      catch{ return "£" + (n ?? ""); }
     }
 
-    function escapeText(t) {
-      return String(t || "").replace(/[&<>"']/g, (ch) => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
+    function escapeText(t){
+      return String(t || "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
       }[ch]));
     }
 
-    function cloudinaryOptimise(url, width = 1200) {
+    function cloudinaryOptimise(url, width = 1200){
       const u = String(url || "");
       if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) return u;
       return u.replace("/image/upload/", `/image/upload/f_auto,q_auto,c_limit,w_${width}/`);
     }
 
-    function miles(n) {
+    function miles(n){
       const num = Number(n);
       if (!Number.isFinite(num) || num <= 0) return "Not provided";
       return num.toLocaleString("en-GB") + " miles";
     }
 
-    function addSpec(specGrid, label, value) {
-      const v = String(value || "").trim();
+    function addSpec(specGrid, label, value){
+      const v = String(value ?? "").trim();
       if (!v) return;
       const div = document.createElement("div");
       div.className = "specItem";
       div.innerHTML = `
-      <div class="specLabel">${escapeText(label)}</div>
-      <div class="specValue">${escapeText(v)}</div>
-    `;
+        <div class="specLabel">${escapeText(label)}</div>
+        <div class="specValue">${escapeText(v)}</div>
+      `;
       specGrid.appendChild(div);
     }
 
+    // ===== Lightbox state =====
+    const lightbox = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lbImg");
+    const lbClose = document.getElementById("lbClose");
+    const lbPrev = document.getElementById("lbPrev");
+    const lbNext = document.getElementById("lbNext");
+    const lbCount = document.getElementById("lbCount");
+
+    let photos = [];
+    let currentIndex = 0;
+
+    function openLightbox(index){
+      currentIndex = index;
+      lbImg.src = photos[currentIndex];
+      lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lbImg.src = "";
+      lbCount.textContent = "";
+    }
+
+    function nextPhoto(){
+      if (!photos.length) return;
+      currentIndex = (currentIndex + 1) % photos.length;
+      lbImg.src = photos[currentIndex];
+      lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+    }
+
+    function prevPhoto(){
+      if (!photos.length) return;
+      currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+      lbImg.src = photos[currentIndex];
+      lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
+    }
+
+    lbClose.addEventListener("click", closeLightbox);
+    lbNext.addEventListener("click", nextPhoto);
+    lbPrev.addEventListener("click", prevPhoto);
+
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextPhoto();
+      if (e.key === "ArrowLeft") prevPhoto();
+    });
+
+    // ===== Load car =====
     const params = new URLSearchParams(window.location.search);
     const carName = params.get("name");
 
     const loading = document.getElementById("loading");
     const content = document.getElementById("content");
 
-    if (!carName) {
-      loading.innerHTML = "No car selected.";
+    if (!carName){
+      loading.textContent = "No car selected.";
     } else {
-
       fetch("/car-data?name=" + encodeURIComponent(carName))
         .then(r => r.ok ? r.json() : null)
         .then(payload => {
-
           const car = payload?.car;
           const garage = payload?.garage;
 
-          if (!car) {
-            loading.innerHTML = "Car not found.";
+          if (!car){
+            loading.textContent = "Car not found.";
             return;
           }
 
@@ -533,25 +569,22 @@
 
           // ===== Photos =====
           const MAX_PHOTOS = 20;
-
-          let photos = (Array.isArray(car.photos) ? car.photos : [])
-            .map(p => cloudinaryOptimise(String(p).trim(), 1200))
+          photos = (Array.isArray(car.photos) ? car.photos : [])
+            .map(p => cloudinaryOptimise(String(p).trim(), 1400))
             .filter(Boolean)
             .slice(0, MAX_PHOTOS);
 
-          if (!photos.length && car.photo) {
-            photos = [cloudinaryOptimise(String(car.photo).trim(), 1200)];
+          if (!photos.length && car.photo){
+            photos = [cloudinaryOptimise(String(car.photo).trim(), 1400)];
           }
-          if (!photos.length) {
+          if (!photos.length){
             photos = ["/images/hero.png"];
           }
 
           const mainImg = document.getElementById("mainImg");
           const thumbs = document.getElementById("thumbs");
-          let currentIndex = 0;
 
-          function setMain(index) {
-            currentIndex = index;
+          function setMain(index){
             mainImg.src = photos[index];
             [...thumbs.querySelectorAll("img")].forEach((el, i) => {
               el.classList.toggle("active", i === index);
@@ -563,13 +596,20 @@
             const t = document.createElement("img");
             t.src = src;
             t.className = "thumb" + (i === 0 ? " active" : "");
-            t.onclick = () => setMain(i);
+            t.addEventListener("click", () => setMain(i));
             thumbs.appendChild(t);
           });
 
           setMain(0);
 
-          // ===== Garage (FROM SUPABASE NOW) =====
+          // click main image -> open lightbox at current image
+          mainImg.addEventListener("click", () => {
+            const activeIndex = [...thumbs.querySelectorAll("img")]
+              .findIndex(el => el.classList.contains("active"));
+            openLightbox(activeIndex >= 0 ? activeIndex : 0);
+          });
+
+          // ===== Garage =====
           const garageName = garage?.name || "Local garage";
           const phone = garage?.phone || "";
           const email = garage?.email || "";
@@ -592,32 +632,41 @@
           if (postcode) html += `<div>${escapeText(postcode)}</div>`;
           html += `<div><strong>Phone:</strong> ${phone || "Not provided"}</div>`;
           if (email) html += `<div><strong>Email:</strong> ${escapeText(email)}</div>`;
-          if (website) html += `<div><strong>Website:</strong> <a href="${website}" target="_blank">Visit site</a></div>`;
+          if (website) html += `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`;
           if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
-
           garageBox.innerHTML = html;
 
           // Buttons
           const callBtn = document.getElementById("callBtn");
-          if (phone) {
+          const callNote = document.getElementById("callNote");
+          if (phone){
             callBtn.href = "tel:" + phone.replace(/\s/g, "");
             callBtn.classList.remove("disabled");
+            callNote.textContent = "";
           } else {
             callBtn.classList.add("disabled");
+            callBtn.href = "#";
+            callNote.textContent = "Phone number not provided.";
           }
 
           const mapBtn = document.getElementById("mapBtn");
-          if (mapsLink) {
+          const mapNote = document.getElementById("mapNote");
+          if (mapsLink){
             mapBtn.href = mapsLink;
+            mapBtn.classList.remove("disabled");
+            mapNote.textContent = "";
           } else {
             mapBtn.classList.add("disabled");
+            mapBtn.href = "#";
+            mapNote.textContent = "Location not provided.";
           }
 
           // ===== Specs =====
           const specGrid = document.getElementById("specGrid");
+          specGrid.innerHTML = "";
 
           if (car.year) addSpec(specGrid, "Year", car.year);
-          if (car.mileage !== undefined) addSpec(specGrid, "Mileage", miles(car.mileage));
+          addSpec(specGrid, "Mileage", miles(car.mileage));
           if (car.engine) addSpec(specGrid, "Engine", car.engine);
           if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
           if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
@@ -627,19 +676,22 @@
             specGrid.children.length ? "block" : "none";
 
           // ===== Description =====
-          if (car.description) {
+          if (car.description){
             document.getElementById("descBox").textContent = car.description;
             document.getElementById("descWrap").style.display = "block";
+          } else {
+            document.getElementById("descWrap").style.display = "none";
           }
 
           // ===== Extras =====
-          if (car.extras) {
-            const lines = car.extras.split(/\n/).filter(Boolean);
+          if (car.extras){
+            const lines = String(car.extras).split(/\n/).map(s => s.trim()).filter(Boolean);
             document.getElementById("extrasList").innerHTML =
               lines.map(l => `<li>${escapeText(l)}</li>`).join("");
             document.getElementById("extrasWrap").style.display = "block";
+          } else {
+            document.getElementById("extrasWrap").style.display = "none";
           }
-
         })
         .catch(() => {
           loading.textContent = "Could not load car.";
@@ -647,5 +699,4 @@
     }
   </script>
 </body>
-
 </html>

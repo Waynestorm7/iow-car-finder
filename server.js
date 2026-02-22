@@ -1,34 +1,45 @@
-// server.js
 require("dotenv").config();
 
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
+
 const { createClient } = require("@supabase/supabase-js");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+
+// =============================
+// Upload temp directory
+// =============================
+const UPLOAD_DIR = path.join(__dirname, "uploads");
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 // =============================
 // ENV
 // =============================
 const ADMIN_KEY = process.env.ADMIN_KEY;
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SECRET = process.env.SUPABASE_SECRET; // service role key (server only)
+const SUPABASE_SECRET = process.env.SUPABASE_SECRET;
 const PORT = process.env.PORT || 3000;
 
-if (!ADMIN_KEY) {
-  console.error("❌ ADMIN_KEY missing. Set it in .env (local) or Render → Environment.");
-  process.exit(1);
-}
-if (!SUPABASE_URL) {
-  console.error("❌ SUPABASE_URL missing. Set it in .env or Render → Environment.");
-  process.exit(1);
-}
-if (!SUPABASE_SECRET) {
-  console.error("❌ SUPABASE_SECRET missing. Set it in .env or Render → Environment.");
-  process.exit(1);
-}
+// ... your ENV checks stay the same ...
 
-// Supabase client (server-side privileged)
+// =============================
+// Cloudinary Config
+// =============================
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Multer (disk temp)
+const upload = multer({ dest: UPLOAD_DIR });
+
+// Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET, {
   auth: { persistSession: false },
 });
@@ -122,11 +133,13 @@ function safeReadJsonArray(filename) {
   }
 }
 
-function readGarages() {
+function readGaragesFile() {
+  // Legacy file-based garages.json (optional)
   return safeReadJsonArray("garages.json");
 }
 
 function isAdmin(req) {
+  // Node lowercases headers
   const key = String(req.headers["x-garage-key"] || "").trim();
   return key === ADMIN_KEY;
 }
@@ -140,11 +153,20 @@ function readBody(req) {
   });
 }
 
+function safeUnlink(filePath) {
+  try {
+    if (filePath && fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch { }
+}
+
 // =============================
 // SUPABASE MAPPING (DB -> frontend)
 // =============================
 function mapDbCar(row) {
   const photos = Array.isArray(row.photos) ? row.photos.filter(Boolean) : [];
+
+  // If you used a join, Supabase may return the garage row under "garages"
+  const joinedGarage = row.garages || row.garage || null;
 
   return {
     id: row.id,
@@ -152,7 +174,11 @@ function mapDbCar(row) {
     year: row.year ?? null,
     price: row.price ?? null,
 
-    garageId: row.garageId ?? null,
+    // supports both column styles
+    garageId: row.garageId ?? row.garage_id ?? null,
+
+    // ✅ NEW: garageName (used by cars.html so you don’t show UUID)
+    garageName: joinedGarage?.name ?? row.garageName ?? null,
 
     photos,
     photo: photos.length ? photos[0] : null,
@@ -168,7 +194,7 @@ function mapDbCar(row) {
     extras: row.extras ?? null,
 
     createdAt: row.created_at ?? null,
-    updatedAt: row.updatedAt ?? row.updated_at ?? row.created_at ?? null,
+    updatedAt: row.updatedAt ?? null,
 
     sold: row.sold ?? false,
     soldDate: row.soldDate ?? row.sold_date ?? null,
@@ -176,7 +202,7 @@ function mapDbCar(row) {
 }
 
 // =============================
-// SUPABASE DB FUNCTIONS
+// SUPABASE DB FUNCTIONS (CARS)
 // =============================
 async function dbListCars() {
   const { data, error } = await supabase
@@ -218,17 +244,17 @@ async function dbInsertCar(payload) {
     owners: payload.owners ?? null,
     colour: payload.colour ?? null,
 
-    // ✅ description MUST be saved
+    // ✅ description saved
     description: (payload.description && String(payload.description).trim())
       ? String(payload.description).trim()
       : null,
 
-    // ✅ photos: jsonb array of strings
+    // ✅ photos jsonb array
     photos: (Array.isArray(payload.photos) ? payload.photos : [])
       .map((x) => String(x).trim())
       .filter(Boolean),
 
-    // ✅ extras: saved as a single string (your UI splits into bullets)
+    // ✅ extras saved as string
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
       : null,
@@ -261,7 +287,7 @@ async function dbMarkSoldByName(name) {
     .update({
       sold: true,
       soldDate,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     })
     .eq("name", name)
     .select("soldDate")
@@ -273,16 +299,79 @@ async function dbMarkSoldByName(name) {
 }
 
 // =============================
+// DB FUNCTION (GARAGES)
+// =============================
+async function dbGetGaragesByIds(ids) {
+  const clean = [...new Set((ids || []).filter(Boolean))];
+  if (!clean.length) return [];
+
+  const { data, error } = await supabase
+    .from("garages")
+    .select("id, name")
+    .in("id", clean);
+
+  if (error) throw error;
+  return data || [];
+}
+
+// =============================
 // SERVER
 // =============================
 const server = http.createServer(async (req, res) => {
   const base = `http://${req.headers.host || "localhost"}`;
   const urlObj = new URL(req.url, base);
-  const pathname = urlObj.pathname; // ✅ (REMOVED the bad "|")
+  const pathname = urlObj.pathname;
+
+  // =============================
+  // ROUTE: POST /upload (Cloudinary multiple)
+  // Field name: "photos" (up to 12)
+  // Returns: { success: true, urls: [...] }
+  // =============================
+  if (req.method === "POST" && pathname === "/upload") {
+    if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
+
+    return upload.array("photos", 12)(req, res, async (err) => {
+      if (err) {
+        console.error("multer error:", err);
+        return sendJson(res, 400, { success: false, message: "Upload parse failed" });
+      }
+
+      const files = Array.isArray(req.files) ? req.files : [];
+      if (!files.length) {
+        return sendJson(res, 400, { success: false, message: "No files uploaded. Field name must be 'photos'." });
+      }
+
+      try {
+        const urls = await Promise.all(
+          files.map((f) =>
+            cloudinary.uploader
+              .upload(f.path, { folder: "cars" })
+              .then((r) => r.secure_url)
+          )
+        );
+
+        // cleanup temp files
+        files.forEach((f) => fs.unlink(f.path, () => { }));
+
+        return sendJson(res, 200, { success: true, urls });
+      } catch (e) {
+        console.error("Cloudinary upload failed:", e);
+
+        // cleanup temp files
+        files.forEach((f) => fs.unlink(f.path, () => { }));
+
+        return sendJson(res, 500, { success: false, message: "Cloudinary upload failed" });
+      }
+    });
+  }
 
   // -----------------------------
   // STATIC FILES
   // -----------------------------
+  if (req.method === "GET" && pathname === "/favicon.ico") {
+    return serveFile(res, path.join(__dirname, "favicon.ico"));
+  }
+
   if (req.method === "GET") {
     if (pathname.startsWith("/images/")) {
       return serveFile(res, path.join(__dirname, pathname));
@@ -295,18 +384,33 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // API: GET
+  // API: GET /cars
   // -----------------------------
-  if (req.method === "GET" && pathname === "/cars") {
-    try {
-      const cars = (await dbListCars()).filter((c) => !soldTooOld(c));
-      return sendJson(res, 200, cars);
-    } catch (e) {
-      console.error("GET /cars error:", e);
-      return sendJson(res, 500, { success: false, message: "Database error" });
-    }
-  }
+if (req.method === "GET" && pathname === "/cars") {
+  try {
+    const carsRaw = (await dbListCars()).filter((c) => !soldTooOld(c));
 
+    const garageIds = carsRaw.map(c => c.garageId).filter(Boolean);
+    const garages = await dbGetGaragesByIds(garageIds);
+
+    const garageMap = new Map(garages.map(g => [g.id, g.name]));
+
+    const cars = carsRaw.map(c => ({
+      ...c,
+      garageName: garageMap.get(c.garageId) || null,
+    }));
+
+    return sendJson(res, 200, cars);
+  } catch (e) {
+    console.error("GET /cars error:", e);
+    return sendJson(res, 500, { success: false, message: "Database error" });
+  }
+}
+
+  // -----------------------------
+  // API: GET /car-data?name=
+  // returns { car, garage }
+  // -----------------------------
   if (req.method === "GET" && pathname === "/car-data") {
     const name = String(urlObj.searchParams.get("name") || "").trim();
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
@@ -317,32 +421,25 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, 404, { success: false, message: "Car not found" });
       }
 
-      // ✅ Fetch the garage row from Supabase (if garageId exists)
-      let garage = null;
-      if (car.garageId) {
-        const { data, error } = await supabase
-          .from("garages")
-          .select("*")
-          .eq("id", car.garageId)
-          .single();
+      const garage = car.garageId ? await dbGetGarageById(car.garageId) : null;
 
-        if (!error) garage = data;
-      }
-
-      // ✅ Return BOTH
       return sendJson(res, 200, { car, garage });
-
     } catch (e) {
       console.error("GET /car-data error:", e);
       return sendJson(res, 500, { success: false, message: "Database error" });
     }
   }
 
+  // -----------------------------
+  // (Optional/legacy) GET /garages-data from file
+  // -----------------------------
   if (req.method === "GET" && pathname === "/garages-data") {
-    return sendJson(res, 200, readGarages());
+    return sendJson(res, 200, readGaragesFile());
   }
 
-  // Admin: see ALL cars including old sold ones
+  // -----------------------------
+  // Admin: GET /cars-admin
+  // -----------------------------
   if (req.method === "GET" && pathname === "/cars-admin") {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Forbidden" });
 
@@ -356,7 +453,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // API: POST /cars (dashboard add)
+  // API: POST /cars
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars") {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
@@ -409,7 +506,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // POST /cars-sold?name=
+  // API: POST /cars-sold?name=
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars-sold") {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });

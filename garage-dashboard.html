@@ -19,9 +19,7 @@
       --r: 14px;
     }
 
-    * {
-      box-sizing: border-box
-    }
+    * { box-sizing: border-box }
 
     body {
       margin: 0;
@@ -57,15 +55,8 @@
       padding: 18px 14px
     }
 
-    h1 {
-      margin: 0;
-      font-size: 1.35rem
-    }
-
-    h2 {
-      margin: 0 0 10px;
-      font-size: 1.05rem
-    }
+    h1 { margin: 0; font-size: 1.35rem }
+    h2 { margin: 0 0 10px; font-size: 1.05rem }
 
     .hint {
       color: var(--muted);
@@ -82,9 +73,7 @@
     }
 
     @media (min-width:900px) {
-      .grid {
-        grid-template-columns: 1fr 1.2fr
-      }
+      .grid { grid-template-columns: 1fr 1.2fr }
     }
 
     .card {
@@ -101,9 +90,7 @@
       margin: 12px 0 6px
     }
 
-    input,
-    textarea,
-    select {
+    input, textarea, select {
       width: 100%;
       padding: 12px;
       border: 1px solid var(--line);
@@ -111,7 +98,6 @@
       outline: none;
       background: #fff;
       font-size: 16px;
-      /* prevents iPhone zoom */
     }
 
     textarea {
@@ -127,9 +113,7 @@
     }
 
     @media (max-width:700px) {
-      .row {
-        grid-template-columns: 1fr
-      }
+      .row { grid-template-columns: 1fr }
     }
 
     details {
@@ -140,10 +124,7 @@
       background: #fff
     }
 
-    summary {
-      cursor: pointer;
-      font-weight: bold
-    }
+    summary { cursor: pointer; font-weight: bold }
 
     .divider {
       height: 1px;
@@ -167,30 +148,14 @@
       font-size: 16px
     }
 
-    .btn.primary {
-      background: var(--brand);
-      color: #fff
-    }
+    .btn.primary { background: var(--brand); color: #fff }
+    .btn.ghost { background: #fff; border: 1px solid var(--line); color: #111827 }
 
-    .btn.ghost {
-      background: #fff;
-      border: 1px solid var(--line);
-      color: #111827
-    }
-
-    .btn:disabled {
-      opacity: .6;
-      cursor: not-allowed
-    }
+    .btn:disabled { opacity: .6; cursor: not-allowed }
 
     @media (max-width:520px) {
-      .btnRow {
-        flex-direction: column
-      }
-
-      .btn {
-        width: 100%
-      }
+      .btnRow { flex-direction: column }
+      .btn { width: 100% }
     }
 
     .msg {
@@ -216,9 +181,7 @@
       color: #8a1f1f
     }
 
-    .cars {
-      margin-top: 10px
-    }
+    .cars { margin-top: 10px }
 
     .carRow {
       display: flex;
@@ -229,9 +192,7 @@
       border-bottom: 1px solid var(--line)
     }
 
-    .carRow:last-child {
-      border-bottom: none
-    }
+    .carRow:last-child { border-bottom: none }
 
     .left {
       display: flex;
@@ -276,10 +237,7 @@
       white-space: nowrap
     }
 
-    .danger:disabled {
-      opacity: .6;
-      cursor: not-allowed
-    }
+    .danger:disabled { opacity: .6; cursor: not-allowed }
 
     .btnSold {
       background: #fff;
@@ -293,10 +251,7 @@
       white-space: nowrap
     }
 
-    .btnSold:disabled {
-      opacity: .6;
-      cursor: not-allowed
-    }
+    .btnSold:disabled { opacity: .6; cursor: not-allowed }
 
     .twoColMot {
       display: grid;
@@ -305,9 +260,7 @@
     }
 
     @media (max-width:520px) {
-      .twoColMot {
-        grid-template-columns: 1fr
-      }
+      .twoColMot { grid-template-columns: 1fr }
     }
 
     .small {
@@ -336,7 +289,8 @@
 
   <main>
     <h1>Garage Dashboard</h1>
-    <div class="hint">Paste photo links (Cloudinary). Optional details only show on the car page if you fill them in.
+    <div class="hint">
+      Upload photos (recommended). Optional details only show on the car page if you fill them in.
     </div>
 
     <div class="grid">
@@ -365,9 +319,15 @@
         <label for="price">Price (£)</label>
         <input id="price" type="number" placeholder="12995" />
 
-        <label for="photos">Photo links (comma separated)</label>
+        <label for="photoFiles">Upload photos (recommended)</label>
+        <input id="photoFiles" type="file" accept="image/*" multiple />
+        <div class="small">Select up to 12 photos. First photo becomes the cover image.</div>
+
+        <div class="divider"></div>
+
+        <label for="photos">Or paste photo links (comma separated)</label>
         <textarea id="photos" placeholder="https://.../a.jpg, https://.../b.jpg"></textarea>
-        <div class="small">First URL becomes the cover image.</div>
+        <div class="small">If you uploaded photos above, you can leave this empty.</div>
 
         <details>
           <summary>More optional details</summary>
@@ -413,18 +373,10 @@
           <div class="twoColMot">
             <select id="motMonth">
               <option value="">Month</option>
-              <option value="Jan">Jan</option>
-              <option value="Feb">Feb</option>
-              <option value="Mar">Mar</option>
-              <option value="Apr">Apr</option>
-              <option value="May">May</option>
-              <option value="Jun">Jun</option>
-              <option value="Jul">Jul</option>
-              <option value="Aug">Aug</option>
-              <option value="Sep">Sep</option>
-              <option value="Oct">Oct</option>
-              <option value="Nov">Nov</option>
-              <option value="Dec">Dec</option>
+              <option value="Jan">Jan</option><option value="Feb">Feb</option><option value="Mar">Mar</option>
+              <option value="Apr">Apr</option><option value="May">May</option><option value="Jun">Jun</option>
+              <option value="Jul">Jul</option><option value="Aug">Aug</option><option value="Sep">Sep</option>
+              <option value="Oct">Oct</option><option value="Nov">Nov</option><option value="Dec">Dec</option>
             </select>
             <select id="motYear">
               <option value="">Year</option>
@@ -469,6 +421,7 @@
     const yearInput = document.getElementById("year");
     const priceInput = document.getElementById("price");
     const photosInput = document.getElementById("photos");
+    const photoFilesInput = document.getElementById("photoFiles");
     const descriptionInput = document.getElementById("description");
     const extrasInput = document.getElementById("extras");
 
@@ -481,6 +434,9 @@
     const serviceHistoryInput = document.getElementById("serviceHistory");
     const motMonth = document.getElementById("motMonth");
     const motYear = document.getElementById("motYear");
+
+    // holds uploaded URLs for this listing
+    let uploadedPhotoUrls = [];
 
     function showMsg(type, text) {
       msgBox.className = "msg " + type;
@@ -546,6 +502,58 @@
       }
     })();
 
+    async function uploadPhotos(files, adminKey) {
+      const list = Array.from(files || []).slice(0, 12);
+      if (!list.length) return [];
+
+      const fd = new FormData();
+      list.forEach(f => fd.append("photos", f)); // MUST match multer field: photos
+
+      const res = await fetch("/upload", {
+        method: "POST",
+        headers: { "X-Garage-Key": adminKey },
+        body: fd
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data || !data.success) {
+        throw new Error((data && data.message) ? data.message : "Photo upload failed");
+      }
+
+      return Array.isArray(data.urls) ? data.urls : [];
+    }
+
+    photoFilesInput.addEventListener("change", async () => {
+      clearMsg();
+
+      const adminKey = String(secretInput.value || "").trim();
+      if (!adminKey) {
+        uploadedPhotoUrls = [];
+        photoFilesInput.value = "";
+        showMsg("error", "Enter your Admin key first, then upload photos.");
+        return;
+      }
+
+      if (!photoFilesInput.files || !photoFilesInput.files.length) return;
+
+      addBtn.disabled = true;
+      addBtn.textContent = "Uploading…";
+
+      try {
+        showMsg("success", "Uploading photos…");
+        const urls = await uploadPhotos(photoFilesInput.files, adminKey);
+        uploadedPhotoUrls = urls;
+        showMsg("success", `${urls.length} photo(s) uploaded. Now click “Add car”.`);
+      } catch (e) {
+        uploadedPhotoUrls = [];
+        showMsg("error", e.message || "Upload failed.");
+      } finally {
+        addBtn.disabled = false;
+        addBtn.textContent = "Add car";
+      }
+    });
+
     async function renderCars() {
       clearMsg();
       carsBox.textContent = "Loading…";
@@ -577,7 +585,10 @@
 
         const cars = allCars
           .filter(c => String(c.garageId || c.garage_id || "") === garageId)
-          .sort((a, b) => (new Date(b.updatedAt || b.updated_at || 0).getTime() || 0) - (new Date(a.updatedAt || a.updated_at || 0).getTime() || 0));
+          .sort((a, b) =>
+            (new Date(b.updatedAt || b.updated_at || 0).getTime() || 0) -
+            (new Date(a.updatedAt || a.updated_at || 0).getTime() || 0)
+          );
 
         carsBox.innerHTML = "";
         if (!cars.length) {
@@ -691,7 +702,10 @@
       const year = optNumber(yearInput.value);
       const price = optNumber(priceInput.value);
 
-      const photos = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+      // Prefer uploaded photos, fallback to pasted URLs
+      const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+      const photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
+
       const description = optText(descriptionInput.value);
       const extras = optText(extrasInput.value);
 
@@ -700,7 +714,7 @@
       if (!name) return showMsg("error", "Car name required.");
       if (!Number.isFinite(year)) return showMsg("error", "Year must be a number.");
       if (!Number.isFinite(price) || price <= 0) return showMsg("error", "Price must be > 0.");
-      if (!photos.length) return showMsg("error", "Paste at least 1 photo URL.");
+      if (!photos.length) return showMsg("error", "Upload photos (or paste at least 1 photo URL).");
 
       const payload = {
         name,
@@ -730,7 +744,7 @@
       if (mm && yy) payload.motUntil = `${mm} ${yy}`;
 
       if (description) payload.description = description;
-      if (extras) payload.extras = extras; // <-- new
+      if (extras) payload.extras = extras;
 
       addBtn.disabled = true;
       addBtn.textContent = "Saving…";
@@ -770,10 +784,13 @@
         motMonth.value = "";
         motYear.value = "";
 
+        // Clear upload state
+        uploadedPhotoUrls = [];
+        photoFilesInput.value = "";
+
         autoGrow(photosInput);
         autoGrow(descriptionInput);
         autoGrow(extrasInput);
-
 
         addBtn.disabled = false;
         addBtn.textContent = "Add car";
