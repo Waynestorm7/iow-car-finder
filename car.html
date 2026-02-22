@@ -1,81 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | IOW Car Finder</title>
 
   <style>
-    :root{
-      --bg:#f7f7f8;
-      --card:#ffffff;
-      --text:#111827;
-      --muted:#6b7280;
-      --brand:#2c3e50;
-      --accent:#e67e22;
+    :root {
+      --bg: #f7f7f8;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --brand: #2c3e50;
+      --accent: #e67e22;
 
-      --shadow: 0 10px 24px rgba(0,0,0,.08);
-      --border: 1px solid rgba(0,0,0,.07);
+      --shadow: 0 10px 24px rgba(0, 0, 0, .08);
+      --border: 1px solid rgba(0, 0, 0, .07);
       --r: 16px;
     }
 
-    *{ box-sizing:border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    body{
-      margin:0;
+    body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
 
-    header{
-      background: rgba(0,0,0,.75);
-      color:#fff;
+    header {
+      background: rgba(0, 0, 0, .75);
+      color: #fff;
       padding: 12px 16px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
       backdrop-filter: blur(6px);
     }
-    header .top{
+
+    header .top {
       max-width: 1180px;
       margin: 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
     }
-    header a{
-      color:#fff;
-      text-decoration:none;
-      font-weight:800;
-      letter-spacing:.2px;
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .2px;
     }
 
-    main{
+    main {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 10px 14px 18px; /* ✅ tighter top/bottom */
+      padding: 10px 14px 18px;
+      /* ✅ tighter top/bottom */
     }
 
-    .backRow{
-      display:flex;
-      align-items:center;
-      margin: 0 0 10px; /* ✅ smaller gap */
+    .backRow {
+      display: flex;
+      align-items: center;
+      margin: 0 0 10px;
+      /* ✅ smaller gap */
     }
-    .backLink{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+
+    .backLink {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 12px;
       background: #fff;
       border-radius: 12px;
-      text-decoration:none;
+      text-decoration: none;
       color: var(--brand);
       border: var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-      font-weight:800;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+      font-weight: 800;
     }
 
-    .status{
+    .status {
       background: var(--card);
       border: var(--border);
       border-radius: var(--r);
@@ -83,17 +91,21 @@
       padding: 14px;
     }
 
-    .layout{
-      display:grid;
+    .layout {
+      display: grid;
       grid-template-columns: 1.35fr 1fr;
-      gap: 14px; /* ✅ tighter */
-      align-items:start;
-    }
-    @media (max-width: 900px){
-      .layout{ grid-template-columns: 1fr; }
+      gap: 14px;
+      /* ✅ tighter */
+      align-items: start;
     }
 
-    .card{
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
       background: var(--card);
       border: var(--border);
       border-radius: var(--r);
@@ -103,60 +115,76 @@
     /* =========================
        GALLERY
        ========================= */
-    .gallery{
+    .gallery {
       padding: 12px;
-      display:grid;
+      display: grid;
       gap: 10px;
     }
 
-    .main-img{
-      width:100%;
+    .main-img {
+      width: 100%;
       height: 460px;
-      object-fit: contain; /* ✅ no crop */
+      object-fit: contain;
+      /* ✅ no crop */
       background: #f3f4f6;
       border-radius: 14px;
-      display:block;
+      display: block;
       cursor: zoom-in;
     }
 
-    .thumbs{
-      display:flex;
+    .thumbs {
+      display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .thumb{
+    .thumb {
       width: 86px;
       height: 62px;
-      object-fit: contain; /* ✅ no crop */
-      background:#f3f4f6;
+      object-fit: contain;
+      /* ✅ no crop */
+      background: #f3f4f6;
       border-radius: 12px;
       border: 2px solid transparent;
-      cursor:pointer;
+      cursor: pointer;
       padding: 4px;
       transition: transform .08s ease;
     }
-    .thumb:hover{ transform: translateY(-1px); }
-    .thumb.active{
+
+    .thumb:hover {
+      transform: translateY(-1px);
+    }
+
+    .thumb.active {
       border-color: var(--accent);
     }
 
-    @media (max-width: 900px){
-      .main-img{ height: 340px; }
+    @media (max-width: 900px) {
+      .main-img {
+        height: 340px;
+      }
     }
-    @media (max-width: 600px){
-      .main-img{ height: 280px; }
-      .thumb{ width: 72px; height: 54px; }
+
+    @media (max-width: 600px) {
+      .main-img {
+        height: 280px;
+      }
+
+      .thumb {
+        width: 72px;
+        height: 54px;
+      }
     }
 
     /* =========================
        RIGHT COLUMN
        ========================= */
-    .info{
-      padding: 14px 14px 12px; /* ✅ tighter */
+    .info {
+      padding: 14px 14px 12px;
+      /* ✅ tighter */
     }
 
-    h1{
+    h1 {
       margin: 0 0 6px;
       font-size: 1.45rem;
       line-height: 1.1;
@@ -164,203 +192,235 @@
       font-weight: 900;
     }
 
-    .price{
-      margin: 0 0 10px; /* ✅ tighter */
+    .price {
+      margin: 0 0 10px;
+      /* ✅ tighter */
       font-size: 1.25rem;
       font-weight: 900;
-      color:#0f172a;
+      color: #0f172a;
     }
 
-    .sectionTitle{
-      margin: 12px 0 8px; /* ✅ reduces big gaps */
+    .sectionTitle {
+      margin: 12px 0 8px;
+      /* ✅ reduces big gaps */
       font-size: 1.05rem;
       font-weight: 900;
-      color:#111827;
+      color: #111827;
     }
 
     /* Specs */
-    .specGrid{
-      display:grid;
+    .specGrid {
+      display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    @media (max-width: 600px){
-      .specGrid{ grid-template-columns: 1fr; }
+
+    @media (max-width: 600px) {
+      .specGrid {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .specItem{
+    .specItem {
       padding: 9px 10px;
       border-radius: 12px;
       background: #f8fafc;
-      border: 1px solid rgba(0,0,0,.06);
+      border: 1px solid rgba(0, 0, 0, .06);
     }
-    .specLabel{
+
+    .specLabel {
       font-size: .75rem;
       color: var(--muted);
       margin-bottom: 2px;
     }
-    .specValue{
+
+    .specValue {
       font-size: .95rem;
       font-weight: 800;
       color: #111827;
     }
 
     /* Description + Extras wrapper box */
-    .descBox{
+    .descBox {
       background: #f8fafc;
-      border: 1px solid rgba(0,0,0,.06);
+      border: 1px solid rgba(0, 0, 0, .06);
       border-radius: 14px;
-      padding: 12px 12px; /* ✅ tighter */
+      padding: 12px 12px;
+      /* ✅ tighter */
       line-height: 1.55;
       font-size: 15px;
-      color:#334155;
+      color: #334155;
       white-space: pre-line;
     }
 
     /* ✅ Reduce gap above/below Key features list specifically */
-    .extrasList{
-      margin: 0;              /* ✅ removes default ul margin */
-      padding-left: 18px;     /* tidy indent */
+    .extrasList {
+      margin: 0;
+      /* ✅ removes default ul margin */
+      padding-left: 18px;
+      /* tidy indent */
       line-height: 1.7;
     }
-    .extrasList li{ margin: 4px 0; }
+
+    .extrasList li {
+      margin: 4px 0;
+    }
 
     /* Contact card */
-    .contact{
+    .contact {
       padding: 14px;
-      margin-top: 12px; /* ✅ less space between cards */
+      margin-top: 12px;
+      /* ✅ less space between cards */
     }
-    .contact h2{
+
+    .contact h2 {
       margin: 0 0 8px;
       font-size: 1.05rem;
       font-weight: 900;
       color: var(--brand);
     }
-    .contact .box{
+
+    .contact .box {
       background: #eef2f6;
       border-radius: 14px;
       padding: 12px;
-      border: 1px solid rgba(0,0,0,.06);
+      border: 1px solid rgba(0, 0, 0, .06);
       line-height: 1.55;
     }
 
-    .btnRow{
-      display:flex;
+    .btnRow {
+      display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 10px;
     }
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 10px 14px;
       border-radius: 12px;
-      text-decoration:none;
+      text-decoration: none;
       font-weight: 900;
       border: 0;
-      cursor:pointer;
-      user-select:none;
-    }
-    .btn.primary{
-      background: var(--accent);
-      color:#fff;
-    }
-    .btn.ghost{
-      background:#fff;
-      color: var(--brand);
-      border: 1px solid rgba(0,0,0,.12);
-    }
-    .btn.disabled{
-      opacity:.55;
-      pointer-events:none;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .small{
-      color:#667085;
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: var(--brand);
+      border: 1px solid rgba(0, 0, 0, .12);
+    }
+
+    .btn.disabled {
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .small {
+      color: #667085;
       font-size: .9rem;
       margin-top: 6px;
       line-height: 1.4;
     }
 
-    .trust{
+    .trust {
       margin-top: 12px;
       padding: 12px;
       border-radius: 14px;
       background: #fff;
       border: var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
       border-left: 6px solid var(--brand);
       line-height: 1.55;
     }
-    .trust a{
+
+    .trust a {
       color: var(--brand);
       font-weight: 900;
-      text-decoration:none;
+      text-decoration: none;
     }
 
     /* =========================
        LIGHTBOX
        ========================= */
-    .lightbox{
-      position:fixed;
-      inset:0;
-      background: rgba(0,0,0,.88);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
       padding: 18px;
     }
-    .lightbox.open{ display:flex; }
 
-    .lbImg{
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lbImg {
       max-width: min(1200px, 95vw);
       max-height: 86vh;
       object-fit: contain;
       border-radius: 14px;
-      background:#111;
+      background: #111;
     }
 
-    .lbClose, .lbNav{
-      position:absolute;
-      border:0;
+    .lbClose,
+    .lbNav {
+      position: absolute;
+      border: 0;
       border-radius: 12px;
-      cursor:pointer;
-      background: rgba(255,255,255,.92);
+      cursor: pointer;
+      background: rgba(255, 255, 255, .92);
       font-weight: 900;
     }
-    .lbClose{
+
+    .lbClose {
       top: 14px;
       right: 14px;
       width: 44px;
       height: 44px;
       font-size: 18px;
     }
-    .lbNav{
+
+    .lbNav {
       top: 50%;
       transform: translateY(-50%);
       width: 54px;
       height: 54px;
       font-size: 34px;
       line-height: 1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      user-select:none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
     }
-    .lbPrev{ left: 14px; }
-    .lbNext{ right: 14px; }
 
-    .lbCount{
-      position:absolute;
+    .lbPrev {
+      left: 14px;
+    }
+
+    .lbNext {
+      right: 14px;
+    }
+
+    .lbCount {
+      position: absolute;
       bottom: 14px;
       left: 50%;
       transform: translateX(-50%);
-      color:#fff;
+      color: #fff;
       font-size: 14px;
-      opacity:.9;
+      opacity: .9;
       font-weight: 700;
     }
   </style>
@@ -423,21 +483,22 @@
           <div class="btnRow">
             <a id="callBtn" class="btn primary" href="#">Call garage</a>
             <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Get directions</a>
+            <a id="moreBtn" class="btn ghost" href="/cars-page">View more cars</a>
           </div>
 
           <div class="small" id="callNote"></div>
           <div class="small" id="mapNote"></div>
-        </div>
+          <div class="small" id="moreNote"></div>
 
-        <div class="trust">
-          <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
-          To enquire, contact the garage directly.
-          <div class="small">
-            See something wrong? <a id="reportLink" href="#">Report this listing</a>
+          <div class="trust">
+            <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
+            To enquire, contact the garage directly.
+            <div class="small">
+              See something wrong? <a id="reportLink" href="#">Report this listing</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   </main>
 
   <!-- Lightbox -->
@@ -450,30 +511,30 @@
   </div>
 
   <script>
-    function money(n){
-      try{ return "£" + Number(n).toLocaleString("en-GB"); }
-      catch{ return "£" + (n ?? ""); }
+    function money(n) {
+      try { return "£" + Number(n).toLocaleString("en-GB"); }
+      catch { return "£" + (n ?? ""); }
     }
 
-    function escapeText(t){
+    function escapeText(t) {
       return String(t || "").replace(/[&<>"']/g, ch => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[ch]));
     }
 
-    function cloudinaryOptimise(url, width = 1200){
+    function cloudinaryOptimise(url, width = 1200) {
       const u = String(url || "");
       if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) return u;
       return u.replace("/image/upload/", `/image/upload/f_auto,q_auto,c_limit,w_${width}/`);
     }
 
-    function miles(n){
+    function miles(n) {
       const num = Number(n);
       if (!Number.isFinite(num) || num <= 0) return "Not provided";
       return num.toLocaleString("en-GB") + " miles";
     }
 
-    function addSpec(specGrid, label, value){
+    function addSpec(specGrid, label, value) {
       const v = String(value ?? "").trim();
       if (!v) return;
       const div = document.createElement("div");
@@ -496,7 +557,7 @@
     let photos = [];
     let currentIndex = 0;
 
-    function openLightbox(index){
+    function openLightbox(index) {
       currentIndex = index;
       lbImg.src = photos[currentIndex];
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
@@ -504,21 +565,21 @@
       lightbox.setAttribute("aria-hidden", "false");
     }
 
-    function closeLightbox(){
+    function closeLightbox() {
       lightbox.classList.remove("open");
       lightbox.setAttribute("aria-hidden", "true");
       lbImg.src = "";
       lbCount.textContent = "";
     }
 
-    function nextPhoto(){
+    function nextPhoto() {
       if (!photos.length) return;
       currentIndex = (currentIndex + 1) % photos.length;
       lbImg.src = photos[currentIndex];
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
-    function prevPhoto(){
+    function prevPhoto() {
       if (!photos.length) return;
       currentIndex = (currentIndex - 1 + photos.length) % photos.length;
       lbImg.src = photos[currentIndex];
@@ -547,7 +608,7 @@
     const loading = document.getElementById("loading");
     const content = document.getElementById("content");
 
-    if (!carName){
+    if (!carName) {
       loading.textContent = "No car selected.";
     } else {
       fetch("/car-data?name=" + encodeURIComponent(carName))
@@ -556,7 +617,7 @@
           const car = payload?.car;
           const garage = payload?.garage;
 
-          if (!car){
+          if (!car) {
             loading.textContent = "Car not found.";
             return;
           }
@@ -574,17 +635,17 @@
             .filter(Boolean)
             .slice(0, MAX_PHOTOS);
 
-          if (!photos.length && car.photo){
+          if (!photos.length && car.photo) {
             photos = [cloudinaryOptimise(String(car.photo).trim(), 1400)];
           }
-          if (!photos.length){
+          if (!photos.length) {
             photos = ["/images/hero.png"];
           }
 
           const mainImg = document.getElementById("mainImg");
           const thumbs = document.getElementById("thumbs");
 
-          function setMain(index){
+          function setMain(index) {
             mainImg.src = photos[index];
             [...thumbs.querySelectorAll("img")].forEach((el, i) => {
               el.classList.toggle("active", i === index);
@@ -611,6 +672,16 @@
 
           // ===== Garage =====
           const garageName = garage?.name || "Local garage";
+          // ===== Link to other cars from this garage =====
+          const moreBtn = document.getElementById("moreBtn");
+          const moreNote = document.getElementById("moreNote");
+
+          if (car.garageId) {
+            moreBtn.href = "/cars-page?garageId=" + encodeURIComponent(car.garageId);
+            moreNote.textContent = "See more vehicles from " + garageName + ".";
+          } else {
+            moreBtn.style.display = "none";
+          }
           const phone = garage?.phone || "";
           const email = garage?.email || "";
           const town = garage?.town || "";
@@ -639,7 +710,7 @@
           // Buttons
           const callBtn = document.getElementById("callBtn");
           const callNote = document.getElementById("callNote");
-          if (phone){
+          if (phone) {
             callBtn.href = "tel:" + phone.replace(/\s/g, "");
             callBtn.classList.remove("disabled");
             callNote.textContent = "";
@@ -651,7 +722,7 @@
 
           const mapBtn = document.getElementById("mapBtn");
           const mapNote = document.getElementById("mapNote");
-          if (mapsLink){
+          if (mapsLink) {
             mapBtn.href = mapsLink;
             mapBtn.classList.remove("disabled");
             mapNote.textContent = "";
@@ -676,7 +747,7 @@
             specGrid.children.length ? "block" : "none";
 
           // ===== Description =====
-          if (car.description){
+          if (car.description) {
             document.getElementById("descBox").textContent = car.description;
             document.getElementById("descWrap").style.display = "block";
           } else {
@@ -684,7 +755,7 @@
           }
 
           // ===== Extras =====
-          if (car.extras){
+          if (car.extras) {
             const lines = String(car.extras).split(/\n/).map(s => s.trim()).filter(Boolean);
             document.getElementById("extrasList").innerHTML =
               lines.map(l => `<li>${escapeText(l)}</li>`).join("");
@@ -699,4 +770,5 @@
     }
   </script>
 </body>
+
 </html>

@@ -207,23 +207,49 @@ function mapDbCar(row) {
 async function dbListCars() {
   const { data, error } = await supabase
     .from("cars")
-    .select("*")
+    .select(`
+      *,
+      garages (
+        id,
+        name
+      )
+    `)
     .order("updatedAt", { ascending: false });
 
   if (error) throw error;
-  return (data || []).map(mapDbCar);
+
+  return (data || []).map(row => {
+    const mapped = mapDbCar(row);
+
+    // ✅ attach friendly garage name
+    mapped.garageName = row.garages?.name || null;
+
+    return mapped;
+  });
 }
 
 async function dbGetCarByName(name) {
   const { data, error } = await supabase
     .from("cars")
-    .select("*")
+    .select(`
+      *,
+      garages (
+        id,
+        name
+      )
+    `)
     .eq("name", name)
     .limit(1);
 
   if (error) throw error;
+
   const row = (data || [])[0];
-  return row ? mapDbCar(row) : null;
+  if (!row) return null;
+
+  const mapped = mapDbCar(row);
+  mapped.garageName = row.garages?.name || null;
+
+  return mapped;
 }
 
 async function dbInsertCar(payload) {
@@ -386,26 +412,26 @@ const server = http.createServer(async (req, res) => {
   // -----------------------------
   // API: GET /cars
   // -----------------------------
-if (req.method === "GET" && pathname === "/cars") {
-  try {
-    const carsRaw = (await dbListCars()).filter((c) => !soldTooOld(c));
+  if (req.method === "GET" && pathname === "/cars") {
+    try {
+      const carsRaw = (await dbListCars()).filter((c) => !soldTooOld(c));
 
-    const garageIds = carsRaw.map(c => c.garageId).filter(Boolean);
-    const garages = await dbGetGaragesByIds(garageIds);
+      const garageIds = carsRaw.map(c => c.garageId).filter(Boolean);
+      const garages = await dbGetGaragesByIds(garageIds);
 
-    const garageMap = new Map(garages.map(g => [g.id, g.name]));
+      const garageMap = new Map(garages.map(g => [g.id, g.name]));
 
-    const cars = carsRaw.map(c => ({
-      ...c,
-      garageName: garageMap.get(c.garageId) || null,
-    }));
+      const cars = carsRaw.map(c => ({
+        ...c,
+        garageName: garageMap.get(c.garageId) || null,
+      }));
 
-    return sendJson(res, 200, cars);
-  } catch (e) {
-    console.error("GET /cars error:", e);
-    return sendJson(res, 500, { success: false, message: "Database error" });
+      return sendJson(res, 200, cars);
+    } catch (e) {
+      console.error("GET /cars error:", e);
+      return sendJson(res, 500, { success: false, message: "Database error" });
+    }
   }
-}
 
   // -----------------------------
   // API: GET /car-data?name=

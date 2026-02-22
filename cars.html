@@ -49,7 +49,6 @@
       text-decoration: none;
     }
 
-    /* ===== Header ===== */
     header {
       position: sticky;
       top: 0;
@@ -111,7 +110,6 @@
       border: 1px solid rgba(255, 255, 255, .18);
     }
 
-    /* ===== Intro ===== */
     .hero {
       max-width: 1120px;
       margin: 0 auto;
@@ -141,7 +139,6 @@
       padding: 12px 18px 28px;
     }
 
-    /* ===== Filters ===== */
     .filtersWrap {
       margin-bottom: 16px;
     }
@@ -300,7 +297,6 @@
       }
     }
 
-    /* ===== Status ===== */
     .status {
       background: var(--card);
       padding: 14px;
@@ -310,7 +306,6 @@
       color: var(--muted);
     }
 
-    /* ===== Cards grid ===== */
     .grid {
       margin-top: 14px;
       display: grid;
@@ -331,7 +326,6 @@
       }
     }
 
-    /* ===== Card ===== */
     .carCard {
       background: var(--card);
       border-radius: var(--radiusCard);
@@ -582,181 +576,185 @@
       gearBox.innerHTML =
         `<option value="">Transmission (All)</option>` +
         gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
+    } // ✅ IMPORTANT: fillDropdowns ends here
 
-      function applyFilters() {
-        const search = norm(document.getElementById("searchBox").value);
-        const sort = document.getElementById("sortBox").value;
-        const fuel = norm(document.getElementById("fuelBox").value);
-        const gear = norm(document.getElementById("gearBox").value);
-        const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
+    function applyFilters() {
+      const search = norm(document.getElementById("searchBox").value);
+      const sort = document.getElementById("sortBox").value;
+      const fuel = norm(document.getElementById("fuelBox").value);
+      const gear = norm(document.getElementById("gearBox").value);
+      const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
 
-        let filtered = [...ALL];
+      let filtered = [...ALL];
 
-        if (search) {
-          filtered = filtered.filter(c => {
-            const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageName]
-              .map(norm).join(" ");
-            return hay.includes(search);
-          });
-        }
-
-        if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
-        if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
-        if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
-
-        if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-        else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-        else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-        else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
-        else {
-          filtered.sort((a, b) => {
-            const ta = new Date(a.updatedAt || 0).getTime() || 0;
-            const tb = new Date(b.updatedAt || 0).getTime() || 0;
-            return tb - ta;
-          });
-        }
-
-        renderCars(filtered);
-        document.getElementById("countLine").textContent = `Showing ${filtered.length} of ${ALL.length} cars.`;
+      if (search) {
+        filtered = filtered.filter(c => {
+          const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageName]
+            .map(norm).join(" ");
+          return hay.includes(search);
+        });
       }
 
-      function renderCars(cars) {
-        const status = document.getElementById("status");
-        const grid = document.getElementById("grid");
+      if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
+      if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
+      if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-        if (!Array.isArray(cars) || cars.length === 0) {
-          grid.style.display = "none";
-          status.style.display = "block";
-          status.textContent = "No cars match your filters.";
-          return;
-        }
+      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
+      else {
+        filtered.sort((a, b) => {
+          const ta = new Date(a.updatedAt || 0).getTime() || 0;
+          const tb = new Date(b.updatedAt || 0).getTime() || 0;
+          return tb - ta;
+        });
+      }
 
-        status.style.display = "none";
-        grid.style.display = "grid";
-        grid.innerHTML = "";
+      renderCars(filtered);
+      document.getElementById("countLine").textContent =
+        `Showing ${filtered.length} of ${ALL.length} cars.`;
+    }
 
-        for (const car of cars) {
-          const name = safeText(car.name) || "Car";
-          const href = "/car?name=" + encodeURIComponent(name);
+    function renderCars(cars) {
+      const status = document.getElementById("status");
+      const grid = document.getElementById("grid");
 
-          const year = safeText(car.year);
-          const mi = miles(car.mileage);
+      if (!Array.isArray(cars) || cars.length === 0) {
+        grid.style.display = "none";
+        status.style.display = "block";
+        status.textContent = "No cars match your filters.";
+        return;
+      }
 
-          const garageName = safeText(car.garageName) || "Local garage";
+      status.style.display = "none";
+      grid.style.display = "grid";
+      grid.innerHTML = "";
 
-          const a = document.createElement("a");
-          a.className = "carCard" + (car.sold ? " sold" : "");
-          a.href = href;
+      for (const car of cars) {
+        const name = safeText(car.name) || "Car";
+        const href = "/car?name=" + encodeURIComponent(name);
 
-          a.innerHTML = `
-          <div class="imgWrap">
-            <img class="carImg"
-              src="${escapeAttr(pickPhoto(car))}"
-              alt="${escapeHtml(name)}"
-              onerror="this.src='/images/hero.png'">
-            ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
-          </div>
+        const year = safeText(car.year);
+        const mi = miles(car.mileage);
+        const garageName = safeText(car.garageName) || "Local garage";
 
-          <div class="body">
-            <h2 class="name">${escapeHtml(name)}</h2>
-            <div class="price">${escapeHtml(money(car.price))}</div>
+        const a = document.createElement("a");
+        a.className = "carCard" + (car.sold ? " sold" : "");
+        a.href = href;
 
-            <div class="specGrid">
-              ${year ? `
-                <div class="spec">
-                  <div class="specLabel">Year</div>
-                  <div class="specValue">${escapeHtml(year)}</div>
-                </div>` : ``}
+        a.innerHTML = `
+        <div class="imgWrap">
+          <img class="carImg"
+            src="${escapeAttr(pickPhoto(car))}"
+            alt="${escapeHtml(name)}"
+            onerror="this.src='/images/hero.png'">
+          ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
+        </div>
 
+        <div class="body">
+          <h2 class="name">${escapeHtml(name)}</h2>
+          <div class="price">${escapeHtml(money(car.price))}</div>
+
+          <div class="specGrid">
+            ${year ? `
               <div class="spec">
-                <div class="specLabel">Mileage</div>
-                <div class="specValue">${escapeHtml(mi)}</div>
-              </div>
+                <div class="specLabel">Year</div>
+                <div class="specValue">${escapeHtml(year)}</div>
+              </div>` : ``}
+
+            <div class="spec">
+              <div class="specLabel">Mileage</div>
+              <div class="specValue">${escapeHtml(mi)}</div>
             </div>
-
-            <div class="mutedLine">Garage: ${escapeHtml(garageName)}</div>
           </div>
-        `;
 
-          grid.appendChild(a);
-        }
+          <div class="mutedLine">Garage: ${escapeHtml(garageName)}</div>
+        </div>
+      `;
+
+        grid.appendChild(a);
       }
+    }
 
-      function resetFilters() {
-        document.getElementById("searchBox").value = "";
-        document.getElementById("sortBox").value = "recent";
-        document.getElementById("fuelBox").value = "";
-        document.getElementById("gearBox").value = "";
-        document.getElementById("maxPriceBox").value = "";
-        applyFilters();
-      }
+    function resetFilters() {
+      document.getElementById("searchBox").value = "";
+      document.getElementById("sortBox").value = "recent";
+      document.getElementById("fuelBox").value = "";
+      document.getElementById("gearBox").value = "";
+      document.getElementById("maxPriceBox").value = "";
+      applyFilters();
+    }
 
-      (async function init() {
-        const status = document.getElementById("status");
-        const countLine = document.getElementById("countLine");
-        const applyBtn = document.getElementById("applyBtn");
-        const resetBtn = document.getElementById("resetBtn");
+    (async function init() {
+      const status = document.getElementById("status");
+      const countLine = document.getElementById("countLine");
 
-        applyBtn.disabled = true;
+      const applyBtn = document.getElementById("applyBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const filtersBar = document.getElementById("filtersBar");
+      const toggleBtn = document.getElementById("toggleFilters");
 
-        const cars = await fetchCars();
-        if (!cars) {
-          status.textContent = "Could not load cars.";
-          countLine.textContent = "Could not load.";
-          applyBtn.disabled = false;
-          return;
-        }
+      applyBtn.disabled = true;
 
-        ALL = cars;
-        fillDropdowns(ALL);
-        applyFilters();
+      const cars = await fetchCars();
+      if (!cars) {
+        status.textContent = "Could not load cars.";
+        countLine.textContent = "Could not load.";
         applyBtn.disabled = false;
+        return;
+      }
 
-        const filtersBar = document.getElementById("filtersBar");
-        const toggleBtn = document.getElementById("toggleFilters");
+      ALL = cars;
+      fillDropdowns(ALL);
+      applyFilters();
+      applyBtn.disabled = false;
 
-        function closeMobileFilters() {
-          if (filtersBar && filtersBar.classList.contains("is-open")) {
-            filtersBar.classList.remove("is-open");
+      function closeMobileFilters() {
+        if (filtersBar && filtersBar.classList.contains("is-open")) {
+          filtersBar.classList.remove("is-open");
+          if (toggleBtn) {
             toggleBtn.setAttribute("aria-expanded", "false");
             toggleBtn.textContent = "Filters";
           }
         }
+      }
 
-        if (toggleBtn && filtersBar) {
-          toggleBtn.addEventListener("click", () => {
-            const open = filtersBar.classList.toggle("is-open");
-            toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
-            toggleBtn.textContent = open ? "Close filters" : "Filters";
-          });
-        }
+      if (toggleBtn && filtersBar) {
+        toggleBtn.addEventListener("click", () => {
+          const open = filtersBar.classList.toggle("is-open");
+          toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+          toggleBtn.textContent = open ? "Close filters" : "Filters";
+        });
+      }
 
-        applyBtn.addEventListener("click", () => {
+      applyBtn.addEventListener("click", () => {
+        applyFilters();
+        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
+      });
+
+      resetBtn.addEventListener("click", () => {
+        resetFilters();
+        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
+      });
+
+      let searchTimer = null;
+      document.getElementById("searchBox").addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(applyFilters, 120);
+      });
+
+      document.getElementById("sortBox").addEventListener("change", applyFilters);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
           applyFilters();
           if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-        });
+        }
+        if (e.key === "Escape") closeMobileFilters();
+      });
 
-        resetBtn.addEventListener("click", () => {
-          resetFilters();
-          if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-        });
-
-        let searchTimer = null;
-        document.getElementById("searchBox").addEventListener("input", () => {
-          clearTimeout(searchTimer);
-          searchTimer = setTimeout(applyFilters, 120);
-        });
-
-        document.getElementById("sortBox").addEventListener("change", applyFilters);
-
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") {
-            applyFilters();
-            if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-          }
-          if (e.key === "Escape") closeMobileFilters();
-        });
-      })();
+    })(); // ✅ closes init() and immediately runs it
   </script>
 </body>
 
