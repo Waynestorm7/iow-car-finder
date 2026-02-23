@@ -238,7 +238,7 @@ async function dbGetCarByName(name) {
         name
       )
     `)
-    .eq("name", name)
+    .ilike("name", name)
     .limit(1);
 
   if (error) throw error;
@@ -254,14 +254,17 @@ async function dbGetCarByName(name) {
 
 async function dbInsertCar(payload) {
   const name = String(payload.name || "").trim();
-  const garageId = String(payload.garageId || "").trim();
+
+  // ✅ accept either garage_id (new) or garageId (old)
+  const garage_id = String(payload.garage_id || payload.garageId || "").trim() || null;
 
   const row = {
     name,
     year: Number(payload.year),
     price: Number(payload.price),
 
-    garageId,
+    // ✅ correct column name in Supabase
+    garage_id,
 
     mileage: payload.mileage ?? null,
     fuel: payload.fuel ?? null,
@@ -270,17 +273,14 @@ async function dbInsertCar(payload) {
     owners: payload.owners ?? null,
     colour: payload.colour ?? null,
 
-    // ✅ description saved
     description: (payload.description && String(payload.description).trim())
       ? String(payload.description).trim()
       : null,
 
-    // ✅ photos jsonb array
     photos: (Array.isArray(payload.photos) ? payload.photos : [])
       .map((x) => String(x).trim())
       .filter(Boolean),
 
-    // ✅ extras saved as string
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
       : null,
@@ -313,20 +313,65 @@ async function dbMarkSoldByName(name) {
     .update({
       sold: true,
       soldDate,
-      updated_at: new Date().toISOString(),
+      updatedAt: new Date().toISOString(), // <-- keep if column is updatedAt
     })
     .eq("name", name)
     .select("soldDate")
-    .limit(1);
+    .single();
 
   if (error) throw error;
-  const updated = (data || [])[0];
-  return updated ? updated.soldDate : soldDate;
+  return data?.soldDate || soldDate;
+}
+
+async function dbGetCarById(id) {
+  const { data, error } = await supabase
+    .from("cars")
+    .select(`
+      *,
+      garages (
+        id,
+        name
+      )
+    `)
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  if (!data) return null;
+
+  const mapped = mapDbCar(data);
+  mapped.garageName = data.garages?.name || null;
+
+  return mapped;
 }
 
 // =============================
 // DB FUNCTION (GARAGES)
 // =============================
+async function dbGetGarageById(id) {
+  const cleanId = String(id || "").trim();
+  if (!cleanId) return null;
+
+  const { data, error } = await supabase
+    .from("garages")
+    .select(`
+      id,
+      name,
+      address,
+      town,
+      postcode,
+      phone,
+      email,
+      website,
+      opening_hours
+    `)
+    .eq("id", cleanId)
+    .single();
+
+  if (error) throw error;
+  return data || null;
+}
+
 async function dbGetGaragesByIds(ids) {
   const clean = [...new Set((ids || []).filter(Boolean))];
   if (!clean.length) return [];
@@ -433,20 +478,18 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // -----------------------------
-  // API: GET /car-data?name=
-  // returns { car, garage }
-  // -----------------------------
+  // API: GET /car-data?id=
   if (req.method === "GET" && pathname === "/car-data") {
-    const name = String(urlObj.searchParams.get("name") || "").trim();
-    if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
+    const id = String(urlObj.searchParams.get("id") || "").trim();
+    if (!id) return sendJson(res, 400, { success: false, message: "Missing id" });
 
     try {
-      const car = await dbGetCarByName(name);
+      const car = await dbGetCarById(id);
       if (!car || soldTooOld(car)) {
         return sendJson(res, 404, { success: false, message: "Car not found" });
       }
 
+      // If you have garageName already on car, you may not even need this:
       const garage = car.garageId ? await dbGetGarageById(car.garageId) : null;
 
       return sendJson(res, 200, { car, garage });

@@ -512,6 +512,22 @@
   </main>
 
   <script>
+    // ---------- helpers ----------
+    function safeText(s) { return String(s ?? "").trim(); }
+    function norm(s) { return safeText(s).toLowerCase(); }
+
+    function escapeHtml(t) {
+      return String(t ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+    function escapeAttr(t) { return escapeHtml(t).replace(/"/g, "&quot;"); }
+
+    function uniqueSorted(arr) {
+      const set = new Set(arr.map(safeText).filter(Boolean));
+      return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
+    }
+
     function money(n) {
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
@@ -529,24 +545,6 @@
       return "/images/hero.png";
     }
 
-    function safeText(s) { return String(s ?? "").trim(); }
-    function norm(s) { return safeText(s).toLowerCase(); }
-
-    function uniqueSorted(arr) {
-      const set = new Set(arr.map(safeText).filter(Boolean));
-      return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
-    }
-
-    function escapeHtml(t) {
-      return String(t ?? "").replace(/[&<>"']/g, ch => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      }[ch]));
-    }
-
-    function escapeAttr(t) {
-      return escapeHtml(t).replace(/"/g, "&quot;");
-    }
-
     async function fetchCars() {
       const tryUrls = ["/cars", "/cars-data"];
       for (const url of tryUrls) {
@@ -560,11 +558,13 @@
       return null;
     }
 
+    // ---------- state ----------
     let ALL = [];
 
+    // ---------- dropdowns ----------
     function fillDropdowns(cars) {
       const fuelBox = document.getElementById("fuelBox");
-      const gearBox = document.getElementById("gearBox");
+      const gearBox = document.getElementById("gearBox"); // still id="gearBox" but label is Transmission
 
       const fuels = uniqueSorted(cars.map(c => c.fuel));
       const gears = uniqueSorted(cars.map(c => c.transmission));
@@ -576,46 +576,9 @@
       gearBox.innerHTML =
         `<option value="">Transmission (All)</option>` +
         gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
-    } // ✅ IMPORTANT: fillDropdowns ends here
-
-    function applyFilters() {
-      const search = norm(document.getElementById("searchBox").value);
-      const sort = document.getElementById("sortBox").value;
-      const fuel = norm(document.getElementById("fuelBox").value);
-      const gear = norm(document.getElementById("gearBox").value);
-      const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
-
-      let filtered = [...ALL];
-
-      if (search) {
-        filtered = filtered.filter(c => {
-          const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageName]
-            .map(norm).join(" ");
-          return hay.includes(search);
-        });
-      }
-
-      if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
-      if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
-      if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
-
-      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
-      else {
-        filtered.sort((a, b) => {
-          const ta = new Date(a.updatedAt || 0).getTime() || 0;
-          const tb = new Date(b.updatedAt || 0).getTime() || 0;
-          return tb - ta;
-        });
-      }
-
-      renderCars(filtered);
-      document.getElementById("countLine").textContent =
-        `Showing ${filtered.length} of ${ALL.length} cars.`;
     }
 
+    // ---------- render ----------
     function renderCars(cars) {
       const status = document.getElementById("status");
       const grid = document.getElementById("grid");
@@ -633,15 +596,21 @@
 
       for (const car of cars) {
         const name = safeText(car.name) || "Car";
-        const href = "/car?name=" + encodeURIComponent(name);
+        const href = "/car.html?id=" + encodeURIComponent(car.id);
 
         const year = safeText(car.year);
         const mi = miles(car.mileage);
+
+        const garageId = safeText(car.garageId);
         const garageName = safeText(car.garageName) || "Local garage";
 
         const a = document.createElement("a");
         a.className = "carCard" + (car.sold ? " sold" : "");
         a.href = href;
+
+        const moreFromGarage = garageId
+          ? `<a class="btn ghost" href="/cars-page?garageId=${encodeURIComponent(garageId)}">View more from this garage</a>`
+          : "";
 
         a.innerHTML = `
         <div class="imgWrap">
@@ -669,12 +638,68 @@
             </div>
           </div>
 
-          <div class="mutedLine">Garage: ${escapeHtml(garageName)}</div>
+          <div class="mutedLine">
+            Garage: ${escapeHtml(garageName)}
+            ${moreFromGarage ? `<div style="margin-top:10px;">${moreFromGarage}</div>` : ``}
+          </div>
         </div>
       `;
 
         grid.appendChild(a);
       }
+    }
+
+    // ---------- filtering ----------
+    function applyFilters() {
+      const search = norm(document.getElementById("searchBox").value);
+      const sort = document.getElementById("sortBox").value;
+      const fuel = norm(document.getElementById("fuelBox").value);
+      const gear = norm(document.getElementById("gearBox").value);
+      const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
+
+      // read ?garageId= from URL (View more from this garage)
+      const garageIdParamRaw = safeText(new URLSearchParams(window.location.search).get("garageId"));
+      const garageIdParam = norm(garageIdParamRaw);
+
+      let filtered = [...ALL];
+
+      // If user clicked "View more from this garage"
+      if (garageIdParam) {
+        filtered = filtered.filter(c => norm(c.garageId) === garageIdParam);
+      }
+
+      if (search) {
+        filtered = filtered.filter(c => {
+          const hay = [
+            c.name, c.fuel, c.transmission, c.engine, c.colour,
+            c.garageName, c.garageId
+          ].map(norm).join(" ");
+          return hay.includes(search);
+        });
+      }
+
+      if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
+      if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
+      if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
+
+      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
+      else {
+        filtered.sort((a, b) => {
+          const ta = new Date(a.updatedAt || 0).getTime() || 0;
+          const tb = new Date(b.updatedAt || 0).getTime() || 0;
+          return tb - ta;
+        });
+      }
+
+      renderCars(filtered);
+
+      document.getElementById("countLine").textContent =
+        garageIdParam
+          ? `Showing ${filtered.length} cars from this garage.`
+          : `Showing ${filtered.length} of ${ALL.length} cars.`;
     }
 
     function resetFilters() {
@@ -683,13 +708,18 @@
       document.getElementById("fuelBox").value = "";
       document.getElementById("gearBox").value = "";
       document.getElementById("maxPriceBox").value = "";
+
+      // IMPORTANT: if you're on /cars-page?garageId=... remove it so reset really resets
+      const url = new URL(window.location.href);
+      url.searchParams.delete("garageId");
+      window.history.replaceState({}, "", url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : ""));
+
       applyFilters();
     }
 
+    // ---------- init ----------
     (async function init() {
       const status = document.getElementById("status");
-      const countLine = document.getElementById("countLine");
-
       const applyBtn = document.getElementById("applyBtn");
       const resetBtn = document.getElementById("resetBtn");
       const filtersBar = document.getElementById("filtersBar");
@@ -700,7 +730,7 @@
       const cars = await fetchCars();
       if (!cars) {
         status.textContent = "Could not load cars.";
-        countLine.textContent = "Could not load.";
+        document.getElementById("countLine").textContent = "Could not load.";
         applyBtn.disabled = false;
         return;
       }
@@ -753,8 +783,7 @@
         }
         if (e.key === "Escape") closeMobileFilters();
       });
-
-    })(); // ✅ closes init() and immediately runs it
+    })();
   </script>
 </body>
 
