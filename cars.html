@@ -437,6 +437,114 @@
       color: var(--muted);
       font-size: .92rem;
     }
+
+    /* --- Garage row on card --- */
+    .garageRow {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(17, 24, 39, .08);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .garageText {
+      min-width: 0;
+      color: var(--muted);
+      font-size: .92rem;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .garageLabel {
+      opacity: .85;
+      white-space: nowrap;
+    }
+
+    .garageValue {
+      color: var(--text);
+      font-weight: 900;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Button/pill on the right */
+    .garageBtnWrap {
+      flex: 0 0 auto;
+    }
+
+    .garagePill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-weight: 950;
+      font-size: .92rem;
+      background: rgba(17, 24, 39, .04);
+      border: 1px solid rgba(17, 24, 39, .12);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .garagePill:hover {
+      background: rgba(17, 24, 39, .07);
+    }
+
+    /* Mobile: stack neatly */
+    @media (max-width: 520px) {
+      .garageRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .garageBtnWrap {
+        width: 100%;
+      }
+
+      .garagePill {
+        width: 100%;
+      }
+
+      .garageRow {
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(17, 24, 39, .08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .garageText {
+        min-width: 0;
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+        flex-wrap: wrap;
+      }
+
+      .garageLabel {
+        color: rgba(17, 24, 39, .55);
+        font-size: .85rem;
+        font-weight: 800;
+      }
+
+      .garageValue {
+        color: var(--muted);
+        font-size: .92rem;
+        font-weight: 900;
+      }
+
+      .garageBtnWrap {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
   </style>
 </head>
 
@@ -609,7 +717,7 @@
         a.href = href;
 
         const moreFromGarage = garageId
-          ? `<a class="btn ghost" href="/cars-page?garageId=${encodeURIComponent(garageId)}">View more from this garage</a>`
+          ? `<span class="garagePill" data-garageid="${escapeAttr(garageId)}">More from this garage</span>`
           : "";
 
         a.innerHTML = `
@@ -638,10 +746,14 @@
             </div>
           </div>
 
-          <div class="mutedLine">
-            Garage: ${escapeHtml(garageName)}
-            ${moreFromGarage ? `<div style="margin-top:10px;">${moreFromGarage}</div>` : ``}
-          </div>
+     <div class="garageRow">
+  <div class="garageText">
+    <span class="garageLabel">Garage:</span>
+    <span class="garageValue">${escapeHtml(garageName)}</span>
+  </div>
+
+  ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ``}
+</div>
         </div>
       `;
 
@@ -663,7 +775,7 @@
 
       let filtered = [...ALL];
 
-      // If user clicked "View more from this garage"
+      // If user clicked "More from this garage"
       if (garageIdParam) {
         filtered = filtered.filter(c => norm(c.garageId) === garageIdParam);
       }
@@ -671,8 +783,13 @@
       if (search) {
         filtered = filtered.filter(c => {
           const hay = [
-            c.name, c.fuel, c.transmission, c.engine, c.colour,
-            c.garageName, c.garageId
+            c.name,
+            c.fuel,
+            c.transmission,
+            c.engine,
+            c.colour,
+            c.garageName,
+            c.garageId
           ].map(norm).join(" ");
           return hay.includes(search);
         });
@@ -682,11 +799,16 @@
       if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
       if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-      if (sort === "price-asc") filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      else if (sort === "price-desc") filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      else if (sort === "year-desc") filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-      else if (sort === "mileage-asc") filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
-      else {
+      if (sort === "price-asc") {
+        filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+      } else if (sort === "price-desc") {
+        filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+      } else if (sort === "year-desc") {
+        filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+      } else if (sort === "mileage-asc") {
+        filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
+      } else {
+        // recent
         filtered.sort((a, b) => {
           const ta = new Date(a.updatedAt || 0).getTime() || 0;
           const tb = new Date(b.updatedAt || 0).getTime() || 0;
@@ -712,7 +834,11 @@
       // IMPORTANT: if you're on /cars-page?garageId=... remove it so reset really resets
       const url = new URL(window.location.href);
       url.searchParams.delete("garageId");
-      window.history.replaceState({}, "", url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : ""));
+      window.history.replaceState(
+        {},
+        "",
+        url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : "")
+      );
 
       applyFilters();
     }
@@ -724,6 +850,7 @@
       const resetBtn = document.getElementById("resetBtn");
       const filtersBar = document.getElementById("filtersBar");
       const toggleBtn = document.getElementById("toggleFilters");
+      const grid = document.getElementById("grid");
 
       applyBtn.disabled = true;
 
@@ -739,6 +866,21 @@
       fillDropdowns(ALL);
       applyFilters();
       applyBtn.disabled = false;
+
+      // ✅ Make the "More from this garage" pill clickable without opening the car
+      // (Because it's inside the <a class="carCard">...)
+      grid.addEventListener("click", (e) => {
+        const pill = e.target.closest(".garagePill");
+        if (!pill) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const gid = pill.getAttribute("data-garageid");
+        if (!gid) return;
+
+        window.location.href = "/cars-page?garageId=" + encodeURIComponent(gid);
+      });
 
       function closeMobileFilters() {
         if (filtersBar && filtersBar.classList.contains("is-open")) {
@@ -775,6 +917,9 @@
       });
 
       document.getElementById("sortBox").addEventListener("change", applyFilters);
+      document.getElementById("fuelBox").addEventListener("change", applyFilters);
+      document.getElementById("gearBox").addEventListener("change", applyFilters);
+      document.getElementById("maxPriceBox").addEventListener("change", applyFilters);
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
