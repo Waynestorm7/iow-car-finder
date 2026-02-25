@@ -452,27 +452,29 @@
 
     .garageText {
       min-width: 0;
-      color: var(--muted);
-      font-size: .92rem;
+      flex: 1;
       display: flex;
       align-items: baseline;
       gap: 6px;
     }
 
     .garageLabel {
-      opacity: .85;
-      white-space: nowrap;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 500;
+      /* softer label */
     }
 
     .garageValue {
+      font-weight: 600;
+      /* was 900 — this is the fix */
       color: var(--text);
-      font-weight: 900;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+
+      /* allow wrapping instead of truncating */
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
 
-    /* Button/pill on the right */
     .garageBtnWrap {
       flex: 0 0 auto;
     }
@@ -484,65 +486,27 @@
       padding: 9px 12px;
       border-radius: 999px;
       font-weight: 950;
-      font-size: .92rem;
+      font-size: .9rem;
       background: rgba(17, 24, 39, .04);
       border: 1px solid rgba(17, 24, 39, .12);
       cursor: pointer;
       user-select: none;
+      white-space: nowrap;
     }
 
     .garagePill:hover {
       background: rgba(17, 24, 39, .07);
     }
 
-    /* Mobile: stack neatly */
+    /* Mobile layout */
     @media (max-width: 520px) {
       .garageRow {
         flex-direction: column;
         align-items: stretch;
       }
 
-      .garageBtnWrap {
-        width: 100%;
-      }
-
       .garagePill {
         width: 100%;
-      }
-
-      .garageRow {
-        margin-top: 12px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(17, 24, 39, .08);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-      }
-
-      .garageText {
-        min-width: 0;
-        display: flex;
-        gap: 6px;
-        align-items: baseline;
-        flex-wrap: wrap;
-      }
-
-      .garageLabel {
-        color: rgba(17, 24, 39, .55);
-        font-size: .85rem;
-        font-weight: 800;
-      }
-
-      .garageValue {
-        color: var(--muted);
-        font-size: .92rem;
-        font-weight: 900;
-      }
-
-      .garageBtnWrap {
-        display: flex;
-        justify-content: flex-end;
       }
     }
   </style>

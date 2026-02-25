@@ -19,9 +19,7 @@
       --r: 16px;
     }
 
-    * {
-      box-sizing: border-box
-    }
+    * { box-sizing: border-box }
 
     body {
       margin: 0;
@@ -96,9 +94,7 @@
     }
 
     @media (max-width:900px) {
-      .layout {
-        grid-template-columns: 1fr
-      }
+      .layout { grid-template-columns: 1fr }
     }
 
     .card {
@@ -143,35 +139,20 @@
       transition: transform .08s ease
     }
 
-    .thumb:hover {
-      transform: translateY(-1px)
-    }
-
-    .thumb.active {
-      border-color: var(--accent)
-    }
+    .thumb:hover { transform: translateY(-1px) }
+    .thumb.active { border-color: var(--accent) }
 
     @media(max-width:900px) {
-      .main-img {
-        height: 340px
-      }
+      .main-img { height: 340px }
     }
 
     @media(max-width:600px) {
-      .main-img {
-        height: 280px
-      }
-
-      .thumb {
-        width: 72px;
-        height: 54px
-      }
+      .main-img { height: 280px }
+      .thumb { width: 72px; height: 54px }
     }
 
     /* right column */
-    .info {
-      padding: 14px 14px 12px
-    }
+    .info { padding: 14px 14px 12px }
 
     h1 {
       margin: 0 0 6px;
@@ -202,9 +183,7 @@
     }
 
     @media(max-width:600px) {
-      .specGrid {
-        grid-template-columns: 1fr
-      }
+      .specGrid { grid-template-columns: 1fr }
     }
 
     .specItem {
@@ -243,29 +222,7 @@
       line-height: 1.7
     }
 
-    .extrasList li {
-      margin: 4px 0
-    }
-
-    .contact {
-      padding: 14px;
-      margin-top: 12px
-    }
-
-    .contact h2 {
-      margin: 0 0 8px;
-      font-size: 1.05rem;
-      font-weight: 900;
-      color: var(--brand)
-    }
-
-    .contact .box {
-      background: #eef2f6;
-      border-radius: 14px;
-      padding: 12px;
-      border: 1px solid rgba(0, 0, 0, .06);
-      line-height: 1.55
-    }
+    .extrasList li { margin: 4px 0 }
 
     .btnRow {
       display: flex;
@@ -287,21 +244,9 @@
       user-select: none
     }
 
-    .btn.primary {
-      background: var(--accent);
-      color: #fff
-    }
-
-    .btn.ghost {
-      background: #fff;
-      color: var(--brand);
-      border: 1px solid rgba(0, 0, 0, .12)
-    }
-
-    .btn.disabled {
-      opacity: .55;
-      pointer-events: none
-    }
+    .btn.primary { background: var(--accent); color: #fff }
+    .btn.ghost { background: #fff; color: var(--brand); border: 1px solid rgba(0, 0, 0, .12) }
+    .btn.disabled { opacity: .55; pointer-events: none }
 
     .small {
       color: #667085;
@@ -339,9 +284,7 @@
       padding: 18px
     }
 
-    .lightbox.open {
-      display: flex
-    }
+    .lightbox.open { display: flex }
 
     .lbImg {
       max-width: min(1200px, 95vw);
@@ -351,8 +294,7 @@
       background: #111
     }
 
-    .lbClose,
-    .lbNav {
+    .lbClose, .lbNav {
       position: absolute;
       border: 0;
       border-radius: 12px;
@@ -382,13 +324,8 @@
       user-select: none
     }
 
-    .lbPrev {
-      left: 14px
-    }
-
-    .lbNext {
-      right: 14px
-    }
+    .lbPrev { left: 14px }
+    .lbNext { right: 14px }
 
     .lbCount {
       position: absolute;
@@ -401,25 +338,16 @@
       font-weight: 700;
     }
 
-    /* ✅ tighter button row on mobile */
-    .btnRowTight {
-      gap: 8px;
-    }
-
-    .btnRowTight .btn {
-      padding: 10px 12px;
-      border-radius: 12px;
-    }
+    /* tighter button row on mobile */
+    .btnRowTight { gap: 8px }
+    .btnRowTight .btn { padding: 10px 12px; border-radius: 12px }
 
     @media (max-width: 520px) {
       .btnRowTight {
         display: grid;
         grid-template-columns: 1fr 1fr;
       }
-
-      #moreBtn {
-        grid-column: 1 / -1;
-      }
+      #moreBtn { grid-column: 1 / -1 }
     }
   </style>
 </head>
@@ -484,6 +412,14 @@
         <div class="small" id="mapNote"></div>
         <div class="small" id="moreNote"></div>
 
+        <!-- ✅ FIX: this was missing, but your JS writes into #garageBox -->
+        <div class="card" style="margin-top:12px;">
+          <div class="info" style="padding:14px;">
+            <div class="sectionTitle" style="margin-top:0;">Contact garage</div>
+            <div id="garageBox" class="descBox"></div>
+          </div>
+        </div>
+
         <div class="trust">
           <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
           To enquire, contact the garage directly.
@@ -492,7 +428,6 @@
           </div>
         </div>
       </div>
-    </div>
     </div>
   </main>
 
@@ -582,13 +517,13 @@
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
-    lbClose.addEventListener("click", closeLightbox);
-    lbNext.addEventListener("click", nextPhoto);
-    lbPrev.addEventListener("click", prevPhoto);
-    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+    if (lbClose) lbClose.addEventListener("click", closeLightbox);
+    if (lbNext) lbNext.addEventListener("click", nextPhoto);
+    if (lbPrev) lbPrev.addEventListener("click", prevPhoto);
+    if (lightbox) lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
 
     document.addEventListener("keydown", (e) => {
-      if (!lightbox.classList.contains("open")) return;
+      if (!lightbox || !lightbox.classList.contains("open")) return;
       if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowRight") nextPhoto();
       if (e.key === "ArrowLeft") prevPhoto();
@@ -600,34 +535,33 @@
       const content = document.getElementById("content");
 
       try {
-        // Get id from URL
         const params = new URLSearchParams(window.location.search);
         const id = params.get("id");
 
         if (!id) {
-          loading.textContent = "Missing car id.";
+          if (loading) loading.textContent = "Missing car id.";
           return;
         }
 
-        // Fetch car using ID
         const res = await fetch("/car-data?id=" + encodeURIComponent(id), { cache: "no-store" });
         const json = await res.json().catch(() => ({}));
 
         if (!res.ok || !json.car) {
-          loading.textContent = json.message || "Car not found.";
+          if (loading) loading.textContent = json.message || "Car not found.";
           return;
         }
 
         const car = json.car;
         const garage = json.garage;
 
-        // Show page
-        loading.style.display = "none";
-        content.style.display = "grid";
+        if (loading) loading.style.display = "none";
+        if (content) content.style.display = "grid";
 
         // Title + price
-        document.getElementById("carTitle").textContent = car.name || "Car";
-        document.getElementById("carPrice").textContent = money(car.price);
+        const carTitle = document.getElementById("carTitle");
+        const carPrice = document.getElementById("carPrice");
+        if (carTitle) carTitle.textContent = car.name || "Car";
+        if (carPrice) carPrice.textContent = money(car.price);
 
         // Photos
         const MAX_PHOTOS = 20;
@@ -647,29 +581,36 @@
         const thumbs = document.getElementById("thumbs");
 
         function setMain(index) {
-          mainImg.src = photos[index];
-          [...thumbs.querySelectorAll("img")].forEach((el, i) => {
-            el.classList.toggle("active", i === index);
+          if (mainImg) mainImg.src = photos[index];
+          if (thumbs) {
+            [...thumbs.querySelectorAll("img")].forEach((el, i) => {
+              el.classList.toggle("active", i === index);
+            });
+          }
+        }
+
+        if (thumbs) {
+          thumbs.innerHTML = "";
+          photos.forEach((src, i) => {
+            const t = document.createElement("img");
+            t.src = src;
+            t.alt = "Car photo";
+            t.className = "thumb" + (i === 0 ? " active" : "");
+            t.addEventListener("click", () => setMain(i));
+            thumbs.appendChild(t);
           });
         }
 
-        thumbs.innerHTML = "";
-        photos.forEach((src, i) => {
-          const t = document.createElement("img");
-          t.src = src;
-          t.alt = "Car photo";
-          t.className = "thumb" + (i === 0 ? " active" : "");
-          t.addEventListener("click", () => setMain(i));
-          thumbs.appendChild(t);
-        });
-
         setMain(0);
 
-        mainImg.addEventListener("click", () => {
-          const activeIndex = [...thumbs.querySelectorAll("img")]
-            .findIndex(el => el.classList.contains("active"));
-          openLightbox(activeIndex >= 0 ? activeIndex : 0);
-        });
+        if (mainImg) {
+          mainImg.addEventListener("click", () => {
+            if (!thumbs) return openLightbox(0);
+            const activeIndex = [...thumbs.querySelectorAll("img")]
+              .findIndex(el => el.classList.contains("active"));
+            openLightbox(activeIndex >= 0 ? activeIndex : 0);
+          });
+        }
 
         // Garage block
         const garageName = garage?.name || car.garageName || "Local garage";
@@ -682,94 +623,107 @@
         const openingHours = garage?.opening_hours || garage?.openingHours || "";
 
         const garageBox = document.getElementById("garageBox");
-        let html = `<div><strong>${escapeText(garageName)}</strong></div>`;
-        if (address) html += `<div>${escapeText(address)}</div>`;
-        if (town) html += `<div>${escapeText(town)}</div>`;
-        if (postcode) html += `<div>${escapeText(postcode)}</div>`;
-        html += `<div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>`;
-        if (email) html += `<div><strong>Email:</strong> ${escapeText(email)}</div>`;
-        if (website) html += `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`;
-        if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
-        garageBox.innerHTML = html;
+        if (garageBox) {
+          let html = `<div><strong>${escapeText(garageName)}</strong></div>`;
+          if (address) html += `<div>${escapeText(address)}</div>`;
+          if (town) html += `<div>${escapeText(town)}</div>`;
+          if (postcode) html += `<div>${escapeText(postcode)}</div>`;
+          html += `<div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>`;
+          if (email) html += `<div><strong>Email:</strong> ${escapeText(email)}</div>`;
+          if (website) html += `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`;
+          if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
+          garageBox.innerHTML = html;
+        }
 
         // Call button
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
-        if (phone) {
-          callBtn.href = "tel:" + phone.replace(/\s/g, "");
-          callBtn.classList.remove("disabled");
-          callNote.textContent = "";
-        } else {
-          callBtn.href = "#";
-          callBtn.classList.add("disabled");
-          callNote.textContent = "Phone number not provided.";
+        if (callBtn) {
+          if (phone) {
+            callBtn.href = "tel:" + phone.replace(/\s/g, "");
+            callBtn.classList.remove("disabled");
+            if (callNote) callNote.textContent = "";
+          } else {
+            callBtn.href = "#";
+            callBtn.classList.add("disabled");
+            if (callNote) callNote.textContent = "Phone number not provided.";
+          }
         }
 
         // Maps button
         const mapBtn = document.getElementById("mapBtn");
         const mapNote = document.getElementById("mapNote");
-        const mapQuery = postcode || address || town || "";
-        const mapsLink = mapQuery
-          ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
-          : "";
+        if (mapBtn) {
+          const mapQuery = postcode || address || town || "";
+          const mapsLink = mapQuery
+            ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
+            : "";
 
-        if (mapsLink) {
-          mapBtn.href = mapsLink;
-          mapBtn.classList.remove("disabled");
-          mapNote.textContent = "";
-        } else {
-          mapBtn.href = "#";
-          mapBtn.classList.add("disabled");
-          mapNote.textContent = "Location not provided.";
+          if (mapsLink) {
+            mapBtn.href = mapsLink;
+            mapBtn.classList.remove("disabled");
+            if (mapNote) mapNote.textContent = "";
+          } else {
+            mapBtn.href = "#";
+            mapBtn.classList.add("disabled");
+            if (mapNote) mapNote.textContent = "Location not provided.";
+          }
         }
 
         // View more from this garage
         const moreBtn = document.getElementById("moreBtn");
         const moreNote = document.getElementById("moreNote");
-        if (car.garageId) {
-          moreBtn.href = "/cars-page?garageId=" + encodeURIComponent(car.garageId);
-          moreNote.textContent = "See more vehicles from " + garageName + ".";
-          moreBtn.style.display = "inline-flex";
-        } else {
-          moreBtn.style.display = "none";
-          moreNote.textContent = "";
+        if (moreBtn) {
+          if (car.garageId) {
+            moreBtn.href = "/cars-page?garageId=" + encodeURIComponent(car.garageId);
+            if (moreNote) moreNote.textContent = "See more vehicles from " + garageName + ".";
+            moreBtn.style.display = "inline-flex";
+          } else {
+            moreBtn.style.display = "none";
+            if (moreNote) moreNote.textContent = "";
+          }
         }
 
         // Specs
         const specGrid = document.getElementById("specGrid");
-        specGrid.innerHTML = "";
+        if (specGrid) {
+          specGrid.innerHTML = "";
+          if (car.year) addSpec(specGrid, "Year", car.year);
+          addSpec(specGrid, "Mileage", miles(car.mileage));
+          if (car.engine) addSpec(specGrid, "Engine", car.engine);
+          if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
+          if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
+          if (car.colour) addSpec(specGrid, "Colour", car.colour);
 
-        if (car.year) addSpec(specGrid, "Year", car.year);
-        addSpec(specGrid, "Mileage", miles(car.mileage));
-        if (car.engine) addSpec(specGrid, "Engine", car.engine);
-        if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
-        if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
-        if (car.colour) addSpec(specGrid, "Colour", car.colour);
-
-        document.getElementById("specsWrap").style.display =
-          specGrid.children.length ? "block" : "none";
+          const specsWrap = document.getElementById("specsWrap");
+          if (specsWrap) specsWrap.style.display = specGrid.children.length ? "block" : "none";
+        }
 
         // Description
+        const descWrap = document.getElementById("descWrap");
+        const descBox = document.getElementById("descBox");
         if (car.description) {
-          document.getElementById("descBox").textContent = car.description;
-          document.getElementById("descWrap").style.display = "block";
+          if (descBox) descBox.textContent = car.description;
+          if (descWrap) descWrap.style.display = "block";
         } else {
-          document.getElementById("descWrap").style.display = "none";
+          if (descWrap) descWrap.style.display = "none";
         }
 
         // Extras
+        const extrasWrap = document.getElementById("extrasWrap");
+        const extrasList = document.getElementById("extrasList");
         if (car.extras) {
           const lines = String(car.extras).split(/\n/).map(s => s.trim()).filter(Boolean);
-          document.getElementById("extrasList").innerHTML =
-            lines.map(l => `<li>${escapeText(l)}</li>`).join("");
-          document.getElementById("extrasWrap").style.display = "block";
+          if (extrasList) extrasList.innerHTML = lines.map(l => `<li>${escapeText(l)}</li>`).join("");
+          if (extrasWrap) extrasWrap.style.display = "block";
         } else {
-          document.getElementById("extrasWrap").style.display = "none";
+          if (extrasWrap) extrasWrap.style.display = "none";
         }
 
       } catch (err) {
         console.error(err);
-        loading.textContent = "Could not load car.";
+        const loading = document.getElementById("loading");
+        if (loading) loading.textContent = "Could not load car.";
       }
     })();
   </script>
