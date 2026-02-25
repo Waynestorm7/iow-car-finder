@@ -505,8 +505,16 @@
         align-items: stretch;
       }
 
+      .garageBtnWrap {
+        width: 100%;
+      }
+
       .garagePill {
         width: 100%;
+        white-space: normal;
+        /* ✅ allow wrap on mobile */
+        text-align: center;
+        /* ✅ nicer */
       }
     }
   </style>
@@ -681,45 +689,45 @@
         a.href = href;
 
         const moreFromGarage = garageId
-          ? `<span class="garagePill" data-garageid="${escapeAttr(garageId)}">More from this garage</span>`
+          ? `<span class="garagePill" role="button" tabindex="0" data-garageid="${escapeAttr(garageId)}">More from this garage</span>`
           : "";
 
         a.innerHTML = `
-        <div class="imgWrap">
-          <img class="carImg"
-            src="${escapeAttr(pickPhoto(car))}"
-            alt="${escapeHtml(name)}"
-            onerror="this.src='/images/hero.png'">
-          ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
+      <div class="imgWrap">
+        <img class="carImg"
+          src="${escapeAttr(pickPhoto(car))}"
+          alt="${escapeHtml(name)}"
+          onerror="this.src='/images/hero.png'">
+        ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
+      </div>
+
+      <div class="body">
+        <h2 class="name">${escapeHtml(name)}</h2>
+        <div class="price">${escapeHtml(money(car.price))}</div>
+
+        <div class="specGrid">
+          ${year ? `
+            <div class="spec">
+              <div class="specLabel">Year</div>
+              <div class="specValue">${escapeHtml(year)}</div>
+            </div>` : ``}
+
+          <div class="spec">
+            <div class="specLabel">Mileage</div>
+            <div class="specValue">${escapeHtml(mi)}</div>
+          </div>
         </div>
 
-        <div class="body">
-          <h2 class="name">${escapeHtml(name)}</h2>
-          <div class="price">${escapeHtml(money(car.price))}</div>
-
-          <div class="specGrid">
-            ${year ? `
-              <div class="spec">
-                <div class="specLabel">Year</div>
-                <div class="specValue">${escapeHtml(year)}</div>
-              </div>` : ``}
-
-            <div class="spec">
-              <div class="specLabel">Mileage</div>
-              <div class="specValue">${escapeHtml(mi)}</div>
-            </div>
+        <div class="garageRow">
+          <div class="garageText">
+            <span class="garageLabel">Garage:</span>
+            <span class="garageValue">${escapeHtml(garageName)}</span>
           </div>
 
-     <div class="garageRow">
-  <div class="garageText">
-    <span class="garageLabel">Garage:</span>
-    <span class="garageValue">${escapeHtml(garageName)}</span>
-  </div>
-
-  ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ``}
-</div>
+          ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ``}
         </div>
-      `;
+      </div>
+    `;
 
         grid.appendChild(a);
       }
