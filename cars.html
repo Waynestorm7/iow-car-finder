@@ -10,19 +10,14 @@
     :root {
       --bg0: #f6f7f9;
       --bg1: #eef2f6;
-
       --card: #ffffff;
       --text: #0b1220;
       --muted: #667085;
-
       --accent: #e67e22;
-
       --stroke: rgba(17, 24, 39, .10);
       --strokeSoft: rgba(17, 24, 39, .08);
-
       --shadowSoft: 0 14px 44px rgba(0, 0, 0, .08);
       --shadowHover: 0 20px 60px rgba(0, 0, 0, .14);
-
       --radiusCard: 22px;
     }
 
@@ -329,15 +324,14 @@
     .carCard {
       background: var(--card);
       border-radius: var(--radiusCard);
-      box-shadow: var(--shadowSoft);
-      border: 1px solid var(--strokeSoft);
       overflow: hidden;
-      display: block;
+      border: none;
+      box-shadow: var(--shadowSoft);
       transition: transform .15s ease, box-shadow .15s ease;
     }
 
     .carCard:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: var(--shadowHover);
     }
 
@@ -348,15 +342,15 @@
 
     .imgWrap {
       position: relative;
-      background: #e9edf2;
+      background: #f3f4f6;
+      overflow: hidden;
     }
 
     .carImg {
       width: 100%;
-      height: 230px;
+      height: 220px;
       object-fit: cover;
       display: block;
-      background: #e9edf2;
     }
 
     @media (max-width:600px) {
@@ -410,11 +404,10 @@
     }
 
     .spec {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(17, 24, 39, .03);
-      border: 1px solid rgba(17, 24, 39, .08);
-      min-width: 0;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f5f7fa;
+      border: 1px solid rgba(17, 24, 39, .06);
     }
 
     .specLabel {
@@ -516,6 +509,146 @@
         text-align: center;
         /* ✅ nicer */
       }
+
+      #grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 22px;
+      }
+
+      .carCard {
+        background: var(--card);
+        border-radius: 14px;
+        border: 1px solid rgba(17, 24, 39, .08);
+        overflow: hidden;
+        transition: transform .12s ease, border-color .12s ease;
+      }
+
+      .carCard:hover {
+        transform: translateY(-2px);
+        border-color: rgba(17, 24, 39, .18);
+      }
+
+      .imgWrap {
+        background: #f3f4f6;
+      }
+
+      .carImg {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        display: block;
+      }
+
+      @media (min-width: 900px) {
+        .carImg {
+          height: 200px;
+        }
+      }
+
+      .body {
+        padding: 12px;
+      }
+
+      .name {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+        line-height: 1.2;
+      }
+
+      .price {
+        font-size: 1.5rem;
+        font-weight: 900;
+        margin: 2px 0 8px;
+        letter-spacing: -.4px;
+      }
+    }
+
+    /* ===== Card layout refresh ===== */
+
+    #grid {
+      gap: 18px;
+    }
+
+    .carCard {
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .06);
+      box-shadow: none;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+
+    .carCard:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 0, 0, .12);
+    }
+
+    /* Image becomes the hero */
+    .imgWrap {
+      background: #eef1f5;
+    }
+
+    .carImg {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Tighter content */
+    .body {
+      padding: 12px 12px 10px;
+    }
+
+    .name {
+      font-size: 1rem;
+      font-weight: 650;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    /* PRICE = main focus */
+    .price {
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    /* Specs less dominant */
+    .specGrid {
+      gap: 6px;
+    }
+
+    .spec {
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #f6f7f9;
+    }
+
+    .specLabel {
+      font-size: .7rem;
+      color: var(--muted);
+    }
+
+    .specValue {
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .carCard {
+      border: 1px solid #dcdfe4;
+      border-radius: 14px;
+      /* slightly tighter */
+      background: #ffffff;
+      box-shadow: none;
+      /* remove floaty feel */
+      transition: border-color .12s ease;
+    }
+
+    .carCard:hover {
+      border-color: #c5c9cf;
     }
   </style>
 </head>
@@ -679,7 +812,8 @@
         const href = "/car.html?id=" + encodeURIComponent(car.id);
 
         const year = safeText(car.year);
-        const mi = miles(car.mileage);
+        const mi = car.mileage ?
+          miles(car.mileage) : "";
 
         const garageId = safeText(car.garageId);
         const garageName = safeText(car.garageName) || "Local garage";
