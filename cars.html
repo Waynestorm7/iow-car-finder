@@ -1,666 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Cars | IOW Car Finder</title>
 
   <style>
-    :root {
-      --bg0: #f6f7f9;
-      --bg1: #eef2f6;
-      --card: #ffffff;
-      --text: #0b1220;
-      --muted: #667085;
-      --accent: #e67e22;
-      --stroke: rgba(17, 24, 39, .10);
-      --strokeSoft: rgba(17, 24, 39, .08);
-      --shadowSoft: 0 14px 44px rgba(0, 0, 0, .08);
-      --shadowHover: 0 20px 60px rgba(0, 0, 0, .14);
-      --radiusCard: 22px;
+    /* ---------- Palette & base ---------- */
+    :root{
+      --bg0:#f6f7f9; --bg1:#eef2f6;
+      --card:#fff; --text:#0b1220; --muted:#667085; --accent:#e67e22;
+      --stroke: rgba(17,24,39,.10); --stroke-soft: rgba(17,24,39,.08);
+      --radius: 16px;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--text);
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(900px 480px at 10% -10%, rgba(230, 126, 34, .12), transparent 60%),
-        radial-gradient(900px 480px at 90% -10%, rgba(17, 24, 39, .07), transparent 60%),
-        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: rgba(8, 10, 14, .78);
-      color: #fff;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(12px);
-    }
-
-    header .top {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-
-    .brand strong {
-      font-size: 1.02rem;
-      letter-spacing: .01em;
-    }
-
-    .brand span {
-      font-size: .82rem;
-      opacity: .78;
-      margin-top: 2px;
-    }
-
-    header nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 850;
-    }
-
-    header nav a {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      transition: background .15s ease, border-color .15s ease;
-    }
-
-    header nav a:hover {
-      background: rgba(255, 255, 255, .10);
-      border-color: rgba(255, 255, 255, .12);
-    }
-
-    header nav a.active {
-      background: rgba(255, 255, 255, .14);
-      border: 1px solid rgba(255, 255, 255, .18);
-    }
-
-    .hero {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 22px 18px 10px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
-      letter-spacing: -0.03em;
-      font-weight: 950;
-    }
-
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.5;
-      max-width: 62ch;
-    }
-
-    main {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 12px 18px 28px;
-    }
-
-    .filtersWrap {
-      margin-bottom: 16px;
-    }
-
-    .filters {
-      background: rgba(255, 255, 255, .92);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadowSoft);
-      border-radius: 22px;
-      padding: 14px;
-    }
-
-    .filters::before {
-      content: "";
-      display: block;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(230, 126, 34, .0), rgba(230, 126, 34, .55), rgba(230, 126, 34, .0));
-      margin: -4px 4px 12px;
-    }
-
-    .filtersTop {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .filtersAdvanced {
-      display: grid;
-      grid-template-columns: .9fr .9fr .9fr auto;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .filters input,
-    .filters select {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(17, 24, 39, .12);
-      font-size: .95rem;
-      outline: none;
-      background: rgba(255, 255, 255, .96);
-    }
-
-    .filters input:focus,
-    .filters select:focus {
-      border-color: rgba(230, 126, 34, .55);
-      box-shadow: 0 0 0 4px rgba(230, 126, 34, .16);
-    }
-
-    .btnRow {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    .btn {
-      border: 1px solid rgba(17, 24, 39, .10);
-      border-radius: 14px;
-      padding: 11px 14px;
-      cursor: pointer;
-      font-weight: 950;
-      background: #fff;
-      color: #111827;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .07);
-      white-space: nowrap;
-    }
-
-    .btn.primary {
-      background: var(--accent);
-      border-color: rgba(230, 126, 34, .55);
-      color: #fff;
-      box-shadow: 0 10px 24px rgba(230, 126, 34, .22);
-    }
-
-    .btn.ghost {
-      background: rgba(17, 24, 39, .04);
-      border: 1px solid rgba(17, 24, 39, .12);
-      box-shadow: none;
-    }
-
-    .btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .hint {
-      grid-column: 1 / -1;
-      color: var(--muted);
-      font-size: .9rem;
-      margin-top: 6px;
-      padding-left: 2px;
-    }
-
-    @media (min-width:981px) {
-      #toggleFilters {
-        display: none;
-      }
-    }
-
-    @media (max-width:980px) {
-      .filtersTop {
-        grid-template-columns: 1fr 1fr auto;
-      }
-
-      .filtersAdvanced {
-        display: none;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      #filtersBar.is-open .filtersAdvanced {
-        display: grid;
-      }
-    }
-
-    @media (max-width:600px) {
-      main {
-        padding: 10px 14px 22px;
-      }
-
-      .hero {
-        padding: 18px 14px 8px;
-      }
-
-      .filters {
-        padding: 12px;
-        border-radius: 18px;
-      }
-
-      .filtersTop {
-        grid-template-columns: 1fr;
-      }
-
-      .filtersAdvanced {
-        grid-template-columns: 1fr;
-      }
-
-      .btnRow {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .btn {
-        width: 100%;
-        box-shadow: none;
-      }
-
-      .btn:not(.primary) {
-        background: transparent;
-      }
-    }
-
-    .status {
-      background: var(--card);
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--strokeSoft);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
-      color: var(--muted);
-    }
-
-    .grid {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    @media (max-width:980px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width:600px) {
-      .grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-    }
-
-    .carCard {
-      background: var(--card);
-      border-radius: var(--radiusCard);
-      overflow: hidden;
-      border: none;
-      box-shadow: var(--shadowSoft);
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .carCard:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadowHover);
-    }
-
-    .carCard.sold {
-      opacity: .75;
-      filter: grayscale(.15);
-    }
-
-    .imgWrap {
-      position: relative;
-      background: #f3f4f6;
-      overflow: hidden;
-    }
-
-    .carImg {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
-    }
-
-    @media (max-width:600px) {
-      .carImg {
-        height: 250px;
-      }
-    }
-
-    .soldBadge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #000, #333);
-      color: #fff;
-      font-weight: 900;
-      font-size: .9rem;
-      border: 1px solid rgba(255, 255, 255, .25);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
-    }
-
-    .body {
-      padding: 16px;
-    }
-
-    .name {
-      margin: 0;
-      font-size: 1.14rem;
-      font-weight: 950;
-      line-height: 1.2;
-    }
-
-    .price {
-      margin: 10px 0;
-      font-size: 1.45rem;
-      font-weight: 1000;
-    }
-
-    .specGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    @media (max-width:360px) {
-      .specGrid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .spec {
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #f5f7fa;
-      border: 1px solid rgba(17, 24, 39, .06);
-    }
-
-    .specLabel {
-      font-size: .74rem;
-      color: rgba(17, 24, 39, .55);
-      margin-bottom: 3px;
-    }
-
-    .specValue {
-      font-size: .98rem;
-      font-weight: 950;
-      line-height: 1.12;
-      word-break: break-word;
-    }
-
-    .mutedLine {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(17, 24, 39, .08);
-      color: var(--muted);
-      font-size: .92rem;
-    }
-
-    /* --- Garage row on card --- */
-    .garageRow {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(17, 24, 39, .08);
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .garageText {
-      min-width: 0;
-      flex: 1;
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-    }
-
-    .garageLabel {
-      color: var(--muted);
-      font-size: .9rem;
-      font-weight: 500;
-      /* softer label */
-    }
-
-    .garageValue {
-      font-weight: 600;
-      /* was 900 — this is the fix */
-      color: var(--text);
-
-      /* allow wrapping instead of truncating */
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
-
-    .garageBtnWrap {
-      flex: 0 0 auto;
-    }
-
-    .garagePill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 9px 12px;
-      border-radius: 999px;
-      font-weight: 950;
-      font-size: .9rem;
-      background: rgba(17, 24, 39, .04);
-      border: 1px solid rgba(17, 24, 39, .12);
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
-
-    .garagePill:hover {
-      background: rgba(17, 24, 39, .07);
-    }
-
-    /* Mobile layout */
-    @media (max-width: 520px) {
-      .garageRow {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .garageBtnWrap {
-        width: 100%;
-      }
-
-      .garagePill {
-        width: 100%;
-        white-space: normal;
-        /* ✅ allow wrap on mobile */
-        text-align: center;
-        /* ✅ nicer */
-      }
-
-      #grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 22px;
-      }
-
-      .carCard {
-        background: var(--card);
-        border-radius: 14px;
-        border: 1px solid rgba(17, 24, 39, .08);
-        overflow: hidden;
-        transition: transform .12s ease, border-color .12s ease;
-      }
-
-      .carCard:hover {
-        transform: translateY(-2px);
-        border-color: rgba(17, 24, 39, .18);
-      }
-
-      .imgWrap {
-        background: #f3f4f6;
-      }
-
-      .carImg {
-        width: 100%;
-        height: 210px;
-        object-fit: cover;
-        display: block;
-      }
-
-      @media (min-width: 900px) {
-        .carImg {
-          height: 200px;
-        }
-      }
-
-      .body {
-        padding: 12px;
-      }
-
-      .name {
-        font-size: 1rem;
-        font-weight: 700;
-        margin: 0 0 4px;
-        line-height: 1.2;
-      }
-
-      .price {
-        font-size: 1.5rem;
-        font-weight: 900;
-        margin: 2px 0 8px;
-        letter-spacing: -.4px;
-      }
-    }
-
-    /* ===== Card layout refresh ===== */
-
-    #grid {
-      gap: 18px;
-    }
-
-    .carCard {
-      background: #ffffff;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, .06);
-      box-shadow: none;
-      transition: transform .12s ease, border-color .12s ease;
-    }
-
-    .carCard:hover {
-      transform: translateY(-2px);
-      border-color: rgba(0, 0, 0, .12);
-    }
-
-    /* Image becomes the hero */
-    .imgWrap {
-      background: #eef1f5;
-    }
-
-    .carImg {
-      width: 100%;
-      height: 210px;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* Tighter content */
-    .body {
-      padding: 12px 12px 10px;
-    }
-
-    .name {
-      font-size: 1rem;
-      font-weight: 650;
-      margin-bottom: 4px;
-      line-height: 1.2;
-    }
-
-    /* PRICE = main focus */
-    .price {
-      font-size: 1.25rem;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    /* Specs less dominant */
-    .specGrid {
-      gap: 6px;
-    }
-
-    .spec {
-      padding: 6px 8px;
-      border-radius: 8px;
-      background: #f6f7f9;
-    }
-
-    .specLabel {
-      font-size: .7rem;
-      color: var(--muted);
-    }
-
-    .specValue {
-      font-size: .85rem;
-      font-weight: 600;
-    }
-
-    .carCard {
-      border: 1px solid #dcdfe4;
-      border-radius: 14px;
-      /* slightly tighter */
-      background: #ffffff;
-      box-shadow: none;
-      /* remove floaty feel */
-      transition: border-color .12s ease;
-    }
-
-    .carCard:hover {
-      border-color: #c5c9cf;
+        radial-gradient(900px 480px at 10% -10%, rgba(230,126,34,.12), transparent 60%),
+        radial-gradient(900px 480px at 90% -10%, rgba(17,24,39,.07), transparent 60%),
+        linear-gradient(180deg,var(--bg0) 0%, var(--bg1) 100%);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit; text-decoration:none;}
+
+/* ---------- Header ---------- */
+    header{
+      position:sticky; top:0; z-index:60;
+      background: rgba(8,10,14,.78);
+      color:#fff; border-bottom:1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
+    }
+    .top{max-width:1120px; margin:0 auto; padding:14px 18px; display:flex; gap:12px; align-items:center; justify-content:space-between;}
+    .brand{display:flex; flex-direction:column; line-height:1.05}
+    .brand strong{font-size:1.02rem}
+    .brand span{font-size:.82rem; opacity:.78; margin-top:2px}
+    nav{display:flex; gap:10px; align-items:center; font-weight:800}
+    nav a{padding:8px 12px; border-radius:999px; border:1px solid transparent; transition:background .12s, border-color .12s}
+    nav a:hover{background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12)}
+    nav a.active{background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.18)}
+
+/* ---------- Hero ---------- */
+    .hero{max-width:1120px; margin:0 auto; padding:22px 18px 10px; display:grid; gap:8px}
+    .hero h1{margin:0; font-size:clamp(1.6rem,2.6vw,2.25rem); font-weight:900; letter-spacing:-.02em}
+    .hero p{margin:0; color:var(--muted); max-width:70ch}
+
+/* ---------- Main + filters ---------- */
+    main{max-width:1120px; margin:0 auto; padding:12px 18px 32px}
+    .filtersWrap{margin-bottom:16px}
+    .filters{
+      background: rgba(255,255,255,.94);
+      border:1px solid var(--stroke);
+      border-radius:22px;
+      padding:12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    .filtersTop{display:grid; grid-template-columns:1.4fr 1fr auto; gap:10px; align-items:center}
+    .filtersAdvanced{display:grid; grid-template-columns:.9fr .9fr .9fr auto; gap:10px; align-items:center; margin-top:10px}
+    .filters input, .filters select{
+      width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(17,24,39,.12); font-size:.95rem; background:#fff; outline:none;
+    }
+    .filters input:focus, .filters select:focus{box-shadow:0 0 0 4px rgba(230,126,34,.12); border-color: rgba(230,126,34,.45)}
+    .btn{border-radius:12px; padding:10px 14px; cursor:pointer; border:1px solid rgba(17,24,39,.10); background:#fff; font-weight:800}
+    .btn.primary{background:var(--accent); color:#fff; border-color: rgba(230,126,34,.45)}
+    .btn.ghost{background:rgba(17,24,39,.04); border:1px solid rgba(17,24,39,.12)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .hint{grid-column:1 / -1; color:var(--muted); font-size:.9rem; margin-top:8px}
+
+/* ---------- Grid / cards ---------- */
+    .status{
+      background:var(--card); padding:14px; border-radius:14px; border:1px solid var(--stroke-soft); color:var(--muted)
+    }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+    @media(max-width:980px){ .grid{ grid-template-columns: repeat(2, minmax(0,1fr)) } }
+    @media(max-width:600px){ .grid{ grid-template-columns:1fr; gap:14px } }
+
+    .carCard{
+      display:block;
+      background:var(--card);
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.06);
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+      text-decoration:none; color:inherit;
+    }
+    .carCard:hover{ transform:translateY(-4px); border-color: rgba(0,0,0,.12); box-shadow: 0 8px 28px rgba(0,0,0,.06) }
+    .carCard.sold{ opacity:.8; filter:grayscale(.08) }
+
+    .imgWrap{ position:relative; background:#eef1f5; }
+    .carImg{ width:100%; height:220px; object-fit:cover; display:block }
+    @media(max-width:600px){ .carImg{ height:250px } }
+
+    .soldBadge{
+      position:absolute; left:12px; top:12px; padding:8px 12px; border-radius:999px; background:#111; color:#fff; font-weight:900; font-size:.9rem;
+      border:1px solid rgba(255,255,255,.18)
+    }
+
+    .body{ padding:12px }
+    .name{ margin:0 0 6px; font-size:1rem; font-weight:800; line-height:1.2; color:var(--text) }
+    .price{ margin:0 0 12px; font-size:1.35rem; font-weight:950; color:#071025; letter-spacing:-.3px }
+
+    .specGrid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px }
+    .spec{ padding:6px 10px; border-radius:999px; background:#f1f3f6; border:1px solid rgba(0,0,0,.05) }
+    .specLabel{ font-size:.72rem; color:var(--muted) }
+    .specValue{ font-size:.9rem; font-weight:600 }
+
+    /* garage row */
+    .garageRow{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:6px; padding-top:6px; border-top:1px solid rgba(17,24,39,.06) }
+    .garageText{ min-width:0; display:flex; gap:8px; align-items:baseline; flex:1 }
+    .garageLabel{ font-size:.78rem; color:var(--muted); font-weight:500 }
+    .garageValue{ font-size:.98rem; font-weight:600; color:var(--text); overflow-wrap:anywhere }
+
+    .garageBtnWrap{ flex:0 0 auto }
+    .garagePill{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:8px 12px; border-radius:999px; font-weight:800; font-size:.9rem;
+      background:rgba(17,24,39,.04); border:1px solid rgba(17,24,39,.10); cursor:pointer; white-space:nowrap;
+    }
+    .garageLink{ font-size:.88rem; color:var(--muted); font-weight:600; text-decoration:none }
+    .garageLink:hover{ color:var(--text); text-decoration:underline }
+
+    @media(max-width:520px){
+      .garageRow{ flex-direction:column; align-items:stretch }
+      .garageBtnWrap{ width:100% }
+      .garagePill, .garageLink{ width:100%; text-align:center; white-space:normal }
     }
   </style>
 </head>
-
 <body>
   <header>
     <div class="top">
       <a class="brand" href="/">
         <strong>IOW Car Finder</strong>
-        <span>Isle of Wight • Used cars • Local garages</span>
+        <span>Isle of Wight · Used cars · Local garages</span>
       </a>
-
       <nav>
         <a href="/" aria-label="Home">Home</a>
         <a class="active" href="/cars-page" aria-label="Cars">Cars</a>
@@ -670,15 +152,14 @@
 
   <section class="hero">
     <h1>Cars</h1>
-    <p>Browse listings... Filter by fuel, transmission, price and more.</p>
+    <p>Browse listings — filter by fuel, transmission, price and more.</p>
   </section>
 
   <main>
     <div class="filtersWrap">
       <div class="filters" id="filtersBar">
         <div class="filtersTop">
-          <input id="searchBox" type="text" placeholder="Search cars (e.g. Golf, diesel, auto)…" />
-
+          <input id="searchBox" type="text" placeholder="Search (e.g. Golf, diesel, auto)…" />
           <select id="sortBox">
             <option value="recent">Sort: Recently updated</option>
             <option value="price-asc">Price: Low → High</option>
@@ -686,19 +167,12 @@
             <option value="year-desc">Year: Newest</option>
             <option value="mileage-asc">Mileage: Lowest</option>
           </select>
-
-          <button id="toggleFilters" class="btn ghost" type="button" aria-expanded="false">Filters</button>
+          <button id="toggleFilters" class="btn ghost" aria-expanded="false" type="button">Filters</button>
         </div>
 
         <div class="filtersAdvanced">
-          <select id="fuelBox">
-            <option value="">Fuel (All)</option>
-          </select>
-
-          <select id="gearBox">
-            <option value="">Transmission (All)</option>
-          </select>
-
+          <select id="fuelBox"><option value="">Fuel (All)</option></select>
+          <select id="gearBox"><option value="">Transmission (All)</option></select>
           <select id="maxPriceBox">
             <option value="">Max price</option>
             <option value="5000">£5,000</option>
@@ -721,82 +195,58 @@
     </div>
 
     <div id="status" class="status">Loading cars…</div>
-    <div id="grid" class="grid" style="display:none;"></div>
+    <div id="grid" class="grid" style="display:none"></div>
   </main>
 
   <script>
-    // ---------- helpers ----------
-    function safeText(s) { return String(s ?? "").trim(); }
-    function norm(s) { return safeText(s).toLowerCase(); }
+    /* ---------- helpers ---------- */
+    function safeText(s){ return String(s ?? "").trim() }
+    function norm(s){ return safeText(s).toLowerCase() }
+    function escapeHtml(t){ return String(t ?? "").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch])) }
+    function escapeAttr(t){ return escapeHtml(t).replace(/"/g,"&quot;") }
+    function money(n){ try{ return "£"+Number(n).toLocaleString("en-GB") }catch{ return "£"+(n??"") } }
+    function miles(n){ const num=Number(n); if(!Number.isFinite(num)||num<=0) return ""; return num.toLocaleString("en-GB")+" miles" }
+    function pickPhoto(car){ if(Array.isArray(car.photos)&&car.photos.length) return car.photos[0]; if(car.photo) return car.photo; return "/images/hero.png" }
 
-    function escapeHtml(t) {
-      return String(t ?? "").replace(/[&<>"']/g, ch => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      }[ch]));
-    }
-    function escapeAttr(t) { return escapeHtml(t).replace(/"/g, "&quot;"); }
-
-    function uniqueSorted(arr) {
-      const set = new Set(arr.map(safeText).filter(Boolean));
-      return [...set].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
-    }
-
-    function money(n) {
-      try { return "£" + Number(n).toLocaleString("en-GB"); }
-      catch { return "£" + (n ?? ""); }
-    }
-
-    function miles(n) {
-      const num = Number(n);
-      if (!Number.isFinite(num) || num <= 0) return "Not provided";
-      return num.toLocaleString("en-GB") + " miles";
-    }
-
-    function pickPhoto(car) {
-      if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
-      if (car.photo) return car.photo;
-      return "/images/hero.png";
-    }
-
-    async function fetchCars() {
-      const tryUrls = ["/cars", "/cars-data"];
-      for (const url of tryUrls) {
-        try {
-          const res = await fetch(url, { cache: "no-store" });
-          if (!res.ok) continue;
+    async function fetchCars(){
+      const tryUrls = ["/cars","/cars-data","/cars.json"];
+      for(const u of tryUrls){
+        try{
+          const res = await fetch(u, {cache:"no-store"});
+          if(!res.ok) continue;
           const data = await res.json();
-          if (Array.isArray(data)) return data;
-        } catch { }
+          if(Array.isArray(data)) return data;
+          // Some endpoints return { cars: [...] }
+          if(data && Array.isArray(data.cars)) return data.cars;
+        }catch(e){}
       }
       return null;
     }
 
-    // ---------- state ----------
-    let ALL = [];
-
-    // ---------- dropdowns ----------
-    function fillDropdowns(cars) {
-      const fuelBox = document.getElementById("fuelBox");
-      const gearBox = document.getElementById("gearBox"); // still id="gearBox" but label is Transmission
-
-      const fuels = uniqueSorted(cars.map(c => c.fuel));
-      const gears = uniqueSorted(cars.map(c => c.transmission));
-
-      fuelBox.innerHTML =
-        `<option value="">Fuel (All)</option>` +
-        fuels.map(f => `<option value="${escapeAttr(f)}">${escapeHtml(f)}</option>`).join("");
-
-      gearBox.innerHTML =
-        `<option value="">Transmission (All)</option>` +
-        gears.map(g => `<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
+    function uniqueSorted(arr){
+      const set = new Set(arr.map(safeText).filter(Boolean));
+      return [...set].sort((a,b)=>a.localeCompare(b,"en",{sensitivity:"base"}));
     }
 
-    // ---------- render ----------
-    function renderCars(cars) {
+    /* ---------- state ---------- */
+    let ALL = [];
+
+    /* ---------- populate dropdowns ---------- */
+    function fillDropdowns(cars){
+      const fuelBox = document.getElementById("fuelBox");
+      const gearBox = document.getElementById("gearBox");
+      const fuels = uniqueSorted(cars.map(c=>c.fuel));
+      const gears = uniqueSorted(cars.map(c=>c.transmission));
+      fuelBox.innerHTML = `<option value="">Fuel (All)</option>` + fuels.map(f=>`<option value="${escapeAttr(f)}">${escapeHtml(f)}</option>`).join("");
+      gearBox.innerHTML = `<option value="">Transmission (All)</option>` + gears.map(g=>`<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
+    }
+
+    /* ---------- render ---------- */
+    function renderCars(cars){
       const status = document.getElementById("status");
       const grid = document.getElementById("grid");
 
-      if (!Array.isArray(cars) || cars.length === 0) {
+      if(!Array.isArray(cars) || cars.length === 0){
         grid.style.display = "none";
         status.style.display = "block";
         status.textContent = "No cars match your filters.";
@@ -807,235 +257,189 @@
       grid.style.display = "grid";
       grid.innerHTML = "";
 
-      for (const car of cars) {
+      for(const car of cars){
         const name = safeText(car.name) || "Car";
-        const href = "/car.html?id=" + encodeURIComponent(car.id);
-
+        const href = "/car.html?id="+encodeURIComponent(car.id || "");
         const year = safeText(car.year);
-        const mi = car.mileage ?
-          miles(car.mileage) : "";
-
+        const mi = miles(car.mileage);
         const garageId = safeText(car.garageId);
-        const garageName = safeText(car.garageName) || "Local garage";
+        const garageName = safeText(car.garageName) || "";
 
-        const a = document.createElement("a");
-        a.className = "carCard" + (car.sold ? " sold" : "");
-        a.href = href;
+        // Create card (ONE clickable element)
+        const card = document.createElement("a");
+        card.className = "carCard" + (car.sold ? " sold" : "");
+        card.href = href;
+        card.setAttribute("role","link");
 
-        const moreFromGarage = garageId
-          ? `<span class="garagePill" role="button" tabindex="0" data-garageid="${escapeAttr(garageId)}">More from this garage</span>`
-          : "";
+        // More-from-this-garage as a LIGHT LINK (not nested <a> inside clickable region)
+        // We'll inject it as an <a> but mark with data attribute and intercept clicks to prevent opening the car.
+        const moreFromGarage = garageId ? `<a class="garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">More from this garage →</a>` : "";
 
-        a.innerHTML = `
-      <div class="imgWrap">
-        <img class="carImg"
-          src="${escapeAttr(pickPhoto(car))}"
-          alt="${escapeHtml(name)}"
-          onerror="this.src='/images/hero.png'">
-        ${car.sold ? `<div class="soldBadge">SOLD</div>` : ``}
-      </div>
-
-      <div class="body">
-        <h2 class="name">${escapeHtml(name)}</h2>
-        <div class="price">${escapeHtml(money(car.price))}</div>
-
-        <div class="specGrid">
-          ${year ? `
-            <div class="spec">
-              <div class="specLabel">Year</div>
-              <div class="specValue">${escapeHtml(year)}</div>
-            </div>` : ``}
-
-          <div class="spec">
-            <div class="specLabel">Mileage</div>
-            <div class="specValue">${escapeHtml(mi)}</div>
-          </div>
-        </div>
-
-        <div class="garageRow">
-          <div class="garageText">
-            <span class="garageLabel">Garage:</span>
-            <span class="garageValue">${escapeHtml(garageName)}</span>
+        card.innerHTML = `
+          <div class="imgWrap">
+            <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'"/>
+            ${car.sold?`<div class="soldBadge">SOLD</div>`:""}
           </div>
 
-          ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ``}
-        </div>
-      </div>
-    `;
+          <div class="body">
+            <h3 class="name">${escapeHtml(name)}</h3>
+            <div class="price">${escapeHtml(money(car.price))}</div>
 
-        grid.appendChild(a);
+            <div class="specGrid">
+              ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}
+              ${mi ? `<div class="spec"><div class="specLabel">Mileage</div><div class="specValue">${escapeHtml(mi)}</div></div>` : ""}
+            </div>
+
+            <div class="garageRow">
+              <div class="garageText">
+                <span class="garageLabel">Garage:</span>
+                <span class="garageValue">${escapeHtml(garageName || "—")}</span>
+              </div>
+
+              ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ""}
+            </div>
+          </div>
+        `;
+
+        // If user clicks a "moreFromGarage" link, intercept and go there instead of opening car
+        card.addEventListener("click", (e) => {
+          const gl = e.target.closest('a[data-gid]');
+          if(!gl) return; // normal card click -> follow card.href
+          e.preventDefault();
+          e.stopPropagation();
+          // navigate to garage-specific listing
+          window.location.href = gl.getAttribute("href");
+        });
+
+        grid.appendChild(card);
       }
     }
 
-    // ---------- filtering ----------
-    function applyFilters() {
+    /* ---------- filtering ---------- */
+    function applyFilters(){
       const search = norm(document.getElementById("searchBox").value);
       const sort = document.getElementById("sortBox").value;
       const fuel = norm(document.getElementById("fuelBox").value);
       const gear = norm(document.getElementById("gearBox").value);
       const maxPrice = Number(document.getElementById("maxPriceBox").value || 0);
 
-      // read ?garageId= from URL (View more from this garage)
       const garageIdParamRaw = safeText(new URLSearchParams(window.location.search).get("garageId"));
       const garageIdParam = norm(garageIdParamRaw);
 
       let filtered = [...ALL];
 
-      // If user clicked "More from this garage"
-      if (garageIdParam) {
+      if(garageIdParam){
         filtered = filtered.filter(c => norm(c.garageId) === garageIdParam);
       }
 
-      if (search) {
+      if(search){
         filtered = filtered.filter(c => {
-          const hay = [
-            c.name,
-            c.fuel,
-            c.transmission,
-            c.engine,
-            c.colour,
-            c.garageName,
-            c.garageId
-          ].map(norm).join(" ");
+          const hay = [c.name, c.fuel, c.transmission, c.engine, c.colour, c.garageName, c.garageId].map(norm).join(" ");
           return hay.includes(search);
         });
       }
 
-      if (fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
-      if (gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
-      if (maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
+      if(fuel) filtered = filtered.filter(c => norm(c.fuel) === fuel);
+      if(gear) filtered = filtered.filter(c => norm(c.transmission) === gear);
+      if(maxPrice > 0) filtered = filtered.filter(c => Number(c.price) <= maxPrice);
 
-      if (sort === "price-asc") {
-        filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-      } else if (sort === "price-desc") {
-        filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-      } else if (sort === "year-desc") {
-        filtered.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-      } else if (sort === "mileage-asc") {
-        filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
-      } else {
-        // recent
-        filtered.sort((a, b) => {
-          const ta = new Date(a.updatedAt || 0).getTime() || 0;
-          const tb = new Date(b.updatedAt || 0).getTime() || 0;
+      // sorting
+      if(sort === "price-asc"){ filtered.sort((a,b)=> (Number(a.price)||0) - (Number(b.price)||0)); }
+      else if(sort === "price-desc"){ filtered.sort((a,b)=> (Number(b.price)||0) - (Number(a.price)||0)); }
+      else if(sort === "year-desc"){ filtered.sort((a,b)=> (Number(b.year)||0) - (Number(a.year)||0)); }
+      else if(sort === "mileage-asc"){ filtered.sort((a,b)=> (Number(a.mileage)||0) - (Number(b.mileage)||0)); }
+      else { // recent
+        filtered.sort((a,b)=>{
+          const ta = new Date(a.updatedAt||0).getTime()||0;
+          const tb = new Date(b.updatedAt||0).getTime()||0;
           return tb - ta;
         });
       }
 
       renderCars(filtered);
 
-      document.getElementById("countLine").textContent =
-        garageIdParam
-          ? `Showing ${filtered.length} cars from this garage.`
-          : `Showing ${filtered.length} of ${ALL.length} cars.`;
+      const countLine = document.getElementById("countLine");
+      if(countLine){
+        countLine.textContent = garageIdParam ? `Showing ${filtered.length} cars from this garage.` : `Showing ${filtered.length} of ${ALL.length} cars.`;
+      }
     }
 
-    function resetFilters() {
+    function resetFilters(){
       document.getElementById("searchBox").value = "";
       document.getElementById("sortBox").value = "recent";
       document.getElementById("fuelBox").value = "";
       document.getElementById("gearBox").value = "";
       document.getElementById("maxPriceBox").value = "";
 
-      // IMPORTANT: if you're on /cars-page?garageId=... remove it so reset really resets
-      const url = new URL(window.location.href);
-      url.searchParams.delete("garageId");
-      window.history.replaceState(
-        {},
-        "",
-        url.pathname + (url.searchParams.toString() ? "?" + url.searchParams.toString() : "")
-      );
-
+      const u = new URL(window.location.href);
+      u.searchParams.delete("garageId");
+      window.history.replaceState({}, "", u.pathname + (u.searchParams.toString() ? "?" + u.searchParams.toString() : ""));
       applyFilters();
     }
 
-    // ---------- init ----------
-    (async function init() {
+    /* ---------- init ---------- */
+    (async function init(){
       const status = document.getElementById("status");
       const applyBtn = document.getElementById("applyBtn");
       const resetBtn = document.getElementById("resetBtn");
       const filtersBar = document.getElementById("filtersBar");
       const toggleBtn = document.getElementById("toggleFilters");
-      const grid = document.getElementById("grid");
 
-      applyBtn.disabled = true;
+      if(applyBtn) applyBtn.disabled = true;
 
       const cars = await fetchCars();
-      if (!cars) {
+      if(!cars){
         status.textContent = "Could not load cars.";
-        document.getElementById("countLine").textContent = "Could not load.";
-        applyBtn.disabled = false;
+        const countLine = document.getElementById("countLine");
+        if(countLine) countLine.textContent = "Could not load.";
+        if(applyBtn) applyBtn.disabled = false;
         return;
       }
 
       ALL = cars;
       fillDropdowns(ALL);
       applyFilters();
-      applyBtn.disabled = false;
+      if(applyBtn) applyBtn.disabled = false;
 
-      // ✅ Make the "More from this garage" pill clickable without opening the car
-      // (Because it's inside the <a class="carCard">...)
-      grid.addEventListener("click", (e) => {
-        const pill = e.target.closest(".garagePill");
-        if (!pill) return;
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        const gid = pill.getAttribute("data-garageid");
-        if (!gid) return;
-
-        window.location.href = "/cars-page?garageId=" + encodeURIComponent(gid);
-      });
-
-      function closeMobileFilters() {
-        if (filtersBar && filtersBar.classList.contains("is-open")) {
+      function closeMobileFilters(){
+        if(filtersBar && filtersBar.classList.contains("is-open")){
           filtersBar.classList.remove("is-open");
-          if (toggleBtn) {
-            toggleBtn.setAttribute("aria-expanded", "false");
-            toggleBtn.textContent = "Filters";
-          }
+          if(toggleBtn){ toggleBtn.setAttribute("aria-expanded","false"); toggleBtn.textContent = "Filters"; }
         }
       }
 
-      if (toggleBtn && filtersBar) {
-        toggleBtn.addEventListener("click", () => {
+      if(toggleBtn && filtersBar){
+        toggleBtn.addEventListener("click", ()=>{
           const open = filtersBar.classList.toggle("is-open");
           toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
           toggleBtn.textContent = open ? "Close filters" : "Filters";
         });
       }
 
-      applyBtn.addEventListener("click", () => {
-        applyFilters();
-        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-      });
-
-      resetBtn.addEventListener("click", () => {
-        resetFilters();
-        if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-      });
+      if(applyBtn) applyBtn.addEventListener("click", ()=>{ applyFilters(); if(window.matchMedia("(max-width:980px)").matches) closeMobileFilters(); });
+      if(resetBtn) resetBtn.addEventListener("click", ()=>{ resetFilters(); if(window.matchMedia("(max-width:980px)").matches) closeMobileFilters(); });
 
       let searchTimer = null;
-      document.getElementById("searchBox").addEventListener("input", () => {
+      const searchBox = document.getElementById("searchBox");
+      if(searchBox) searchBox.addEventListener("input", ()=>{
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(applyFilters, 120);
+        searchTimer = setTimeout(applyFilters, 140);
       });
 
-      document.getElementById("sortBox").addEventListener("change", applyFilters);
-      document.getElementById("fuelBox").addEventListener("change", applyFilters);
-      document.getElementById("gearBox").addEventListener("change", applyFilters);
-      document.getElementById("maxPriceBox").addEventListener("change", applyFilters);
+      const sortBox = document.getElementById("sortBox");
+      const fuelBox = document.getElementById("fuelBox");
+      const gearBox = document.getElementById("gearBox");
+      const maxPriceBox = document.getElementById("maxPriceBox");
+      if(sortBox) sortBox.addEventListener("change", applyFilters);
+      if(fuelBox) fuelBox.addEventListener("change", applyFilters);
+      if(gearBox) gearBox.addEventListener("change", applyFilters);
+      if(maxPriceBox) maxPriceBox.addEventListener("change", applyFilters);
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          applyFilters();
-          if (window.matchMedia("(max-width: 980px)").matches) closeMobileFilters();
-        }
-        if (e.key === "Escape") closeMobileFilters();
+      document.addEventListener("keydown",(e)=>{
+        if(e.key === "Enter"){ applyFilters(); if(window.matchMedia("(max-width:980px)").matches) closeMobileFilters(); }
+        if(e.key === "Escape") closeMobileFilters();
       });
     })();
   </script>
 </body>
-
 </html>
