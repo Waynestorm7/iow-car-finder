@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | IOW Car Finder</title>
 
+  <script defer data-domain="iowcarfinder.co.uk" src="https://plausible.io/js/script.js"></script>
+
   <style>
     :root {
       --bg: #f7f7f8;
@@ -19,7 +21,9 @@
       --r: 16px;
     }
 
-    * { box-sizing: border-box }
+    * {
+      box-sizing: border-box
+    }
 
     body {
       margin: 0;
@@ -94,7 +98,9 @@
     }
 
     @media (max-width:900px) {
-      .layout { grid-template-columns: 1fr }
+      .layout {
+        grid-template-columns: 1fr
+      }
     }
 
     .card {
@@ -139,20 +145,35 @@
       transition: transform .08s ease
     }
 
-    .thumb:hover { transform: translateY(-1px) }
-    .thumb.active { border-color: var(--accent) }
+    .thumb:hover {
+      transform: translateY(-1px)
+    }
+
+    .thumb.active {
+      border-color: var(--accent)
+    }
 
     @media(max-width:900px) {
-      .main-img { height: 340px }
+      .main-img {
+        height: 340px
+      }
     }
 
     @media(max-width:600px) {
-      .main-img { height: 280px }
-      .thumb { width: 72px; height: 54px }
+      .main-img {
+        height: 280px
+      }
+
+      .thumb {
+        width: 72px;
+        height: 54px
+      }
     }
 
     /* right column */
-    .info { padding: 14px 14px 12px }
+    .info {
+      padding: 14px 14px 12px
+    }
 
     h1 {
       margin: 0 0 6px;
@@ -183,7 +204,9 @@
     }
 
     @media(max-width:600px) {
-      .specGrid { grid-template-columns: 1fr }
+      .specGrid {
+        grid-template-columns: 1fr
+      }
     }
 
     .specItem {
@@ -222,7 +245,9 @@
       line-height: 1.7
     }
 
-    .extrasList li { margin: 4px 0 }
+    .extrasList li {
+      margin: 4px 0
+    }
 
     .btnRow {
       display: flex;
@@ -244,9 +269,30 @@
       user-select: none
     }
 
-    .btn.primary { background: var(--accent); color: #fff }
-    .btn.ghost { background: #fff; color: var(--brand); border: 1px solid rgba(0, 0, 0, .12) }
-    .btn.disabled { opacity: .55; pointer-events: none }
+    .btn.primary {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: var(--brand);
+      border: 1px solid rgba(0, 0, 0, .12)
+    }
+
+    .btn.disabled {
+      opacity: .55;
+      pointer-events: none
+    }
+
+    .shareBtn {
+      font-size: 15px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
 
     .small {
       color: #667085;
@@ -284,7 +330,9 @@
       padding: 18px
     }
 
-    .lightbox.open { display: flex }
+    .lightbox.open {
+      display: flex
+    }
 
     .lbImg {
       max-width: min(1200px, 95vw);
@@ -294,7 +342,8 @@
       background: #111
     }
 
-    .lbClose, .lbNav {
+    .lbClose,
+    .lbNav {
       position: absolute;
       border: 0;
       border-radius: 12px;
@@ -324,8 +373,13 @@
       user-select: none
     }
 
-    .lbPrev { left: 14px }
-    .lbNext { right: 14px }
+    .lbPrev {
+      left: 14px
+    }
+
+    .lbNext {
+      right: 14px
+    }
 
     .lbCount {
       position: absolute;
@@ -339,15 +393,24 @@
     }
 
     /* tighter button row on mobile */
-    .btnRowTight { gap: 8px }
-    .btnRowTight .btn { padding: 10px 12px; border-radius: 12px }
+    .btnRowTight {
+      gap: 8px
+    }
+
+    .btnRowTight .btn {
+      padding: 10px 12px;
+      border-radius: 12px
+    }
 
     @media (max-width: 520px) {
       .btnRowTight {
         display: grid;
         grid-template-columns: 1fr 1fr;
       }
-      #moreBtn { grid-column: 1 / -1 }
+
+      #moreBtn {
+        grid-column: 1 / -1
+      }
     }
   </style>
 </head>
@@ -405,6 +468,9 @@
         <div class="btnRow btnRowTight">
           <a id="callBtn" class="btn primary" href="#">Call</a>
           <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Directions</a>
+          <button id="shareBtn" class="btn ghost shareBtn" type="button">
+            🔗 Share
+          </button>
           <a id="moreBtn" class="btn ghost" href="/cars-page">More from this garage</a>
         </div>
 
@@ -718,6 +784,36 @@
           if (extrasWrap) extrasWrap.style.display = "block";
         } else {
           if (extrasWrap) extrasWrap.style.display = "none";
+        }
+
+        // Share button
+        const shareBtn = document.getElementById("shareBtn");
+        if (shareBtn) {
+          shareBtn.addEventListener("click", async () => {
+            const shareData = {
+              title: car.name || "Car on IOW Car Finder",
+              text: "Check out this car on IOW Car Finder",
+              url: window.location.href
+            };
+
+            if (navigator.share) {
+              try {
+                await navigator.share(shareData);
+              } catch (err) {
+                // user cancelled, do nothing
+              }
+            } else {
+              try {
+                await navigator.clipboard.writeText(window.location.href);
+                shareBtn.textContent = "Link copied!";
+                setTimeout(() => {
+                  shareBtn.textContent = "Share";
+                }, 1800);
+              } catch (err) {
+                alert("Could not copy link.");
+              }
+            }
+          });
         }
 
       } catch (err) {

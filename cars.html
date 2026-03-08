@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cars | IOW Car Finder</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Details | IOW Car Finder</title>
+
+  <script defer data-domain="iowcarfinder.co.uk" src="https://plausible.io/js/script.js"></script>
 
   <style>
     :root {
@@ -156,12 +159,10 @@
       display: block;
       height: 2px;
       border-radius: 999px;
-      background: linear-gradient(
-        90deg,
-        rgba(230, 126, 34, 0),
-        rgba(230, 126, 34, .55),
-        rgba(230, 126, 34, 0)
-      );
+      background: linear-gradient(90deg,
+          rgba(230, 126, 34, 0),
+          rgba(230, 126, 34, .55),
+          rgba(230, 126, 34, 0));
       margin: -4px 4px 12px;
     }
 
@@ -641,7 +642,7 @@
           const data = await res.json();
           if (Array.isArray(data)) return data;
           if (data && Array.isArray(data.cars)) return data.cars;
-        } catch (e) {}
+        } catch (e) { }
       }
       return null;
     }
@@ -896,4 +897,5 @@
     })();
   </script>
 </body>
+
 </html>
