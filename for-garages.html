@@ -16,8 +16,8 @@
       --accent: #e67e22;
       --line: rgba(17, 24, 39, 0.10);
       --line-soft: rgba(17, 24, 39, 0.07);
-      --shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
-      --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.05);
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+      --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.04);
       --radius: 18px;
     }
 
@@ -34,8 +34,8 @@
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(900px 460px at 10% -10%, rgba(230, 126, 34, 0.10), transparent 60%),
-        radial-gradient(900px 480px at 90% -10%, rgba(44, 62, 80, 0.08), transparent 60%),
+        radial-gradient(900px 460px at 10% -10%, rgba(230, 126, 34, 0.08), transparent 60%),
+        radial-gradient(900px 480px at 90% -10%, rgba(44, 62, 80, 0.07), transparent 60%),
         linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -113,92 +113,6 @@
       padding: 24px 18px 34px;
     }
 
-    .hero {
-      background:
-        linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(44, 62, 80, 0.07)),
-        #fff;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 26px;
-      margin-bottom: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(230, 126, 34, 0.10), transparent 70%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: var(--brand);
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(17, 24, 39, 0.08);
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      font-weight: 950;
-      color: var(--text);
-    }
-
-    .heroText {
-      max-width: 760px;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 1.02rem;
-      margin: 0;
-    }
-
-    .launchNote {
-      margin-top: 14px;
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: rgba(230, 126, 34, 0.10);
-      border: 1px solid rgba(230, 126, 34, 0.16);
-      color: #9a520f;
-      font-weight: 700;
-    }
-
-    .trustStrip {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .trustPill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.76);
-      border: 1px solid rgba(17, 24, 39, 0.08);
-      color: var(--brand);
-      font-weight: 800;
-      box-shadow: var(--shadow-soft);
-    }
-
     .sectionCard {
       background: var(--card);
       border: 1px solid var(--line);
@@ -208,51 +122,93 @@
       margin-bottom: 16px;
     }
 
-    .sectionHead {
-      display: flex;
+    .hero {
+      padding: 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--brand);
+      background: rgba(230, 126, 34, 0.08);
+      border: 1px solid rgba(230, 126, 34, 0.14);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-weight: 950;
+      color: var(--text);
     }
 
     h2 {
-      margin: 0;
-      font-size: 1.28rem;
+      margin: 0 0 10px;
+      font-size: 1.22rem;
       line-height: 1.15;
       font-weight: 900;
       color: var(--text);
     }
 
-    .muted {
+    .heroText {
+      max-width: 700px;
+      margin: 0;
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .launchNote {
+      margin-top: 14px;
+      display: inline-block;
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #9a520f;
+      background: rgba(230, 126, 34, 0.10);
+      border: 1px solid rgba(230, 126, 34, 0.16);
     }
 
     .benefits {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 6px;
     }
 
     .benefit {
       border: 1px solid var(--line-soft);
       border-radius: 14px;
       padding: 14px;
-      background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+      background: #fff;
+      box-shadow: var(--shadow-soft);
     }
 
-    .benefit strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 1rem;
+    .benefitTitle {
+      font-weight: 900;
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .benefitText {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.95rem;
+      margin: 0;
     }
 
     .steps {
-      margin-top: 14px;
       display: grid;
       gap: 12px;
+      margin-top: 8px;
     }
 
     .step {
@@ -262,18 +218,18 @@
       border: 1px solid var(--line-soft);
       border-radius: 14px;
       padding: 14px;
-      background: linear-gradient(180deg, #fff 0%, #fbfcfd 100%);
+      background: #fff;
     }
 
     .stepNo {
-      flex: 0 0 auto;
       width: 34px;
       height: 34px;
+      flex: 0 0 34px;
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(230, 126, 34, 0.12);
+      background: rgba(230, 126, 34, 0.10);
       color: var(--accent);
       font-weight: 900;
       border: 1px solid rgba(230, 126, 34, 0.18);
@@ -281,17 +237,24 @@
 
     .stepTitle {
       font-weight: 900;
-      font-size: 1rem;
+      font-size: 0.98rem;
       margin-bottom: 3px;
     }
 
     .stepText {
       color: var(--muted);
       line-height: 1.55;
+      font-size: 0.95rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
     }
 
     .sendList {
-      margin: 14px 0 0;
+      margin: 12px 0 0;
       padding-left: 20px;
       color: var(--muted);
       line-height: 1.8;
@@ -372,7 +335,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       min-height: 48px;
       padding: 12px 18px;
       border-radius: 14px;
@@ -431,17 +393,26 @@
         padding: 18px 14px 28px;
       }
 
+      .sectionCard,
       .hero {
-        padding: 20px;
-        border-radius: 20px;
-      }
-
-      .sectionCard {
         padding: 16px;
       }
 
       .benefits {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .benefit {
+        padding: 12px;
+      }
+
+      .benefitTitle {
+        font-size: 0.92rem;
+      }
+
+      .benefitText {
+        font-size: 0.88rem;
       }
 
       .formGrid {
@@ -455,6 +426,24 @@
 
       .btn {
         width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .benefits {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .heroText,
+      .muted,
+      .stepText,
+      .benefitText,
+      .sendList {
+        font-size: 0.93rem;
+      }
+
+      .launchNote {
+        font-size: 0.88rem;
       }
     }
   </style>
@@ -475,65 +464,43 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="sectionCard hero">
       <div class="eyebrow">For Isle of Wight garages</div>
       <h1>List your stock and get direct enquiries</h1>
       <p class="heroText">
-        IOW Car Finder helps local buyers discover used cars from Isle of Wight garages.
-        Customers contact your garage directly, and there are no commission charges on sales.
+        Get your cars in front of Isle of Wight buyers. Customers contact your garage directly.
       </p>
-
-      <div class="launchNote">
-        Early garages can list for free during launch.
-      </div>
-
-      <div class="trustStrip">
-        <div class="trustPill">Local Isle of Wight buyers</div>
-        <div class="trustPill">No commission on sales</div>
-        <div class="trustPill">Direct customer enquiries</div>
-      </div>
+      <div class="launchNote">Early garages can list free during launch.</div>
     </section>
 
     <section class="sectionCard">
-      <div class="sectionHead">
-        <h2>Why list with IOW Car Finder</h2>
-      </div>
+      <h2>Why list with IOW Car Finder</h2>
 
       <div class="benefits">
         <div class="benefit">
-          <strong>Local buyers</strong>
-          <p class="muted">
-            Your cars are shown to people specifically searching for used cars on the Isle of Wight.
-          </p>
+          <div class="benefitTitle">Local buyers</div>
+          <p class="benefitText">People searching specifically for used cars on the Isle of Wight.</p>
         </div>
 
         <div class="benefit">
-          <strong>Direct enquiries</strong>
-          <p class="muted">
-            Customers contact your garage directly by phone or email.
-          </p>
+          <div class="benefitTitle">Direct enquiries</div>
+          <p class="benefitText">Customers contact your garage directly by phone or email.</p>
         </div>
 
         <div class="benefit">
-          <strong>Simple listings</strong>
-          <p class="muted">
-            Send us your stock and we handle the listing side. No complicated setup.
-          </p>
+          <div class="benefitTitle">No commission</div>
+          <p class="benefitText">You deal with the customer directly. No sales commission taken.</p>
         </div>
 
         <div class="benefit">
-          <strong>Built for local garages</strong>
-          <p class="muted">
-            Focused on Isle of Wight dealers rather than trying to be a huge national marketplace.
-          </p>
+          <div class="benefitTitle">Simple setup</div>
+          <p class="benefitText">Send us your stock and we handle the listing side.</p>
         </div>
       </div>
     </section>
 
     <section class="sectionCard">
-      <div class="sectionHead">
-        <h2>How it works</h2>
-      </div>
+      <h2>How it works</h2>
 
       <div class="steps">
         <div class="step">
@@ -548,7 +515,7 @@
           <div class="stepNo">2</div>
           <div>
             <div class="stepTitle">We list your cars</div>
-            <div class="stepText">Your cars appear on IOW Car Finder for local buyers to browse.</div>
+            <div class="stepText">Your stock appears on IOW Car Finder for local buyers to browse.</div>
           </div>
         </div>
 
@@ -556,17 +523,14 @@
           <div class="stepNo">3</div>
           <div>
             <div class="stepTitle">Customers contact you</div>
-            <div class="stepText">Your phone and email are shown on your listings, so enquiries come direct to you.</div>
+            <div class="stepText">Phone and email enquiries come straight to your garage.</div>
           </div>
         </div>
       </div>
     </section>
 
     <section class="sectionCard">
-      <div class="sectionHead">
-        <h2>What to send us</h2>
-      </div>
-
+      <h2>What to send us</h2>
       <p class="muted">To get started, we usually need:</p>
 
       <ul class="sendList">
@@ -579,12 +543,10 @@
     </section>
 
     <section class="sectionCard">
-      <div class="sectionHead">
-        <h2>Enquire about listing your cars</h2>
-      </div>
+      <h2>Enquire about listing your cars</h2>
 
       <p class="formIntro">
-        Fill in the form below and we’ll get back to you. Most garages will probably just send a spreadsheet
+        Fill in the form below and we’ll get back to you. Most garages can just send a spreadsheet
         or photo links and we’ll handle the rest.
       </p>
 
@@ -623,8 +585,7 @@
       </form>
 
       <div class="contactMini">
-        <strong>Simple setup:</strong> there’s no complicated dashboard and no commission on sales.
-        The aim is just to make it easy for local garages to get their stock in front of local buyers.
+        <strong>Simple setup:</strong> no complicated dashboard, no marketplace checkout, and no commission on sales.
       </div>
     </section>
   </main>
