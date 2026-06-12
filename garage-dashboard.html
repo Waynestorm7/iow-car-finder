@@ -702,9 +702,20 @@
       const year = optNumber(yearInput.value);
       const price = optNumber(priceInput.value);
 
-      // Prefer uploaded photos, fallback to pasted URLs
-      const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
-      const photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
+// Prefer uploaded photos, fallback to pasted URLs
+const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+let photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
+
+// If files are selected but not uploaded yet, upload them now
+if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
+  try {
+    showMsg("success", "Uploading photos…");
+    photos = await uploadPhotos(photoFilesInput.files, key);
+    uploadedPhotoUrls = photos;
+  } catch (e) {
+    return showMsg("error", e.message || "Photo upload failed.");
+  }
+}
 
       const description = optText(descriptionInput.value);
       const extras = optText(extrasInput.value);
