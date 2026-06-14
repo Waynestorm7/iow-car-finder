@@ -701,6 +701,20 @@
       ? `<a class="garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">More from this garage →</a>`
       : "";
 
+const listedDate =
+  car.createdAt ||
+  car.created_at ||
+  car.updatedAt ||
+  car.updated_at ||
+  "";
+const listedText = listedDate
+  ? new Date(listedDate).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    })
+  : "";
+
     card.innerHTML = `
       <div class="imgWrap">
         <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'">
@@ -710,6 +724,12 @@
       <div class="body">
         <h3 class="name">${escapeHtml(name)}</h3>
         <div class="price">${escapeHtml(money(car.price))}</div>
+
+${listedText ? `
+  <div style="font-size:.85rem;color:#667085;margin:-4px 0 10px;">
+    Listed: ${escapeHtml(listedText)}
+  </div>
+` : ""}
 
         <div class="specGrid">
           ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}

@@ -108,7 +108,6 @@
       box-shadow: var(--shadow)
     }
 
-    /* gallery */
     .gallery {
       padding: 12px;
       display: grid;
@@ -168,7 +167,6 @@
       }
     }
 
-    /* right column */
     .info {
       padding: 14px 14px 12px
     }
@@ -186,6 +184,13 @@
       font-size: 1.25rem;
       font-weight: 900;
       color: #0f172a
+    }
+
+    .listedDate {
+      margin: -2px 0 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
     }
 
     .sectionTitle {
@@ -309,7 +314,6 @@
       text-decoration: none
     }
 
-    /* lightbox */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -383,7 +387,6 @@
       font-weight: 700;
     }
 
-    /* tighter button row on mobile */
     .btnRowTight {
       gap: 8px
     }
@@ -424,7 +427,6 @@
     <div id="loading" class="status">Loading car…</div>
 
     <div id="content" class="layout" style="display:none;">
-      <!-- Gallery -->
       <div class="card">
         <div class="gallery">
           <img id="mainImg" class="main-img" src="" alt="Car photo" onerror="this.src='/images/hero.png'">
@@ -432,11 +434,11 @@
         </div>
       </div>
 
-      <!-- Details + Contact -->
       <div>
         <div class="card info">
           <h1 id="carTitle"></h1>
           <div class="price" id="carPrice"></div>
+          <div id="listedDate" class="listedDate"></div>
 
           <div id="specsWrap" style="display:none;">
             <div class="sectionTitle">Key specs</div>
@@ -459,9 +461,7 @@
         <div class="btnRow btnRowTight">
           <a id="callBtn" class="btn primary" href="#">Call</a>
           <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Directions</a>
-          <button id="shareBtn" class="btn ghost shareBtn" type="button">
-            🔗 Share
-          </button>
+          <button id="shareBtn" class="btn ghost shareBtn" type="button">🔗 Share</button>
           <a id="moreBtn" class="btn ghost" href="/cars-page">More from this garage</a>
         </div>
 
@@ -469,7 +469,6 @@
         <div class="small" id="mapNote"></div>
         <div class="small" id="moreNote"></div>
 
-        <!-- ✅ FIX: this was missing, but your JS writes into #garageBox -->
         <div class="card" style="margin-top:12px;">
           <div class="info" style="padding:14px;">
             <div class="sectionTitle" style="margin-top:0;">Contact garage</div>
@@ -481,16 +480,16 @@
           <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
           To enquire, contact the garage directly.
           <div class="small">
-            See something wrong? <a id="reportLink" href="mailto:contact@iowcarfinder.co.uk?subject=Report%20listing">
-  Report this listing
-</a>
+            See something wrong?
+            <a id="reportLink" href="mailto:contact@iowcarfinder.co.uk?subject=Report%20listing">
+              Report this listing
+            </a>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Lightbox -->
   <div id="lightbox" class="lightbox" aria-hidden="true">
     <button id="lbClose" class="lbClose" aria-label="Close">✕</button>
     <button id="lbPrev" class="lbNav lbPrev" aria-label="Previous">‹</button>
@@ -500,10 +499,22 @@
   </div>
 
   <script>
-    // ---------- helpers ----------
     function money(n) {
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
+    }
+
+    function formatDateShort(value) {
+      if (!value) return "";
+
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "";
+
+      return d.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
     }
 
     function escapeText(t) {
@@ -536,7 +547,6 @@
       specGrid.appendChild(div);
     }
 
-    // ---------- lightbox ----------
     const lightbox = document.getElementById("lightbox");
     const lbImg = document.getElementById("lbImg");
     const lbClose = document.getElementById("lbClose");
@@ -588,7 +598,6 @@
       if (e.key === "ArrowLeft") prevPhoto();
     });
 
-    // ---------- main ----------
     (async function init() {
       const loading = document.getElementById("loading");
       const content = document.getElementById("content");
@@ -616,13 +625,28 @@
         if (loading) loading.style.display = "none";
         if (content) content.style.display = "grid";
 
-        // Title + price
         const carTitle = document.getElementById("carTitle");
         const carPrice = document.getElementById("carPrice");
+        const listedDate = document.getElementById("listedDate");
+
         if (carTitle) carTitle.textContent = car.name || "Car";
         if (carPrice) carPrice.textContent = money(car.price);
 
-        // Photos
+        const dateText = formatDateShort(
+          car.createdAt || car.created_at || car.updatedAt || car.updated_at
+        );
+
+        if (listedDate) {
+          listedDate.textContent = dateText ? "Listed: " + dateText : "";
+        }
+
+        const reportLink = document.getElementById("reportLink");
+        if (reportLink) {
+          reportLink.href =
+            "mailto:contact@iowcarfinder.co.uk?subject=" +
+            encodeURIComponent("Report listing: " + (car.name || "Unknown car"));
+        }
+
         const MAX_PHOTOS = 20;
         photos = (Array.isArray(car.photos) ? car.photos : [])
           .map(p => cloudinaryOptimise(String(p).trim(), 1400))
@@ -632,6 +656,7 @@
         if (!photos.length && car.photo) {
           photos = [cloudinaryOptimise(String(car.photo).trim(), 1400)];
         }
+
         if (!photos.length) {
           photos = ["/images/hero.png"];
         }
@@ -671,7 +696,6 @@
           });
         }
 
-        // Garage block
         const garageName = garage?.name || car.garageName || "Local garage";
         const phone = garage?.phone || "";
         const email = garage?.email || "";
@@ -694,7 +718,6 @@
           garageBox.innerHTML = html;
         }
 
-        // Call button
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
         if (callBtn) {
@@ -709,7 +732,6 @@
           }
         }
 
-        // Maps button
         const mapBtn = document.getElementById("mapBtn");
         const mapNote = document.getElementById("mapNote");
         if (mapBtn) {
@@ -729,7 +751,6 @@
           }
         }
 
-        // View more from this garage
         const moreBtn = document.getElementById("moreBtn");
         const moreNote = document.getElementById("moreNote");
         if (moreBtn) {
@@ -743,7 +764,6 @@
           }
         }
 
-        // Specs
         const specGrid = document.getElementById("specGrid");
         if (specGrid) {
           specGrid.innerHTML = "";
@@ -758,7 +778,6 @@
           if (specsWrap) specsWrap.style.display = specGrid.children.length ? "block" : "none";
         }
 
-        // Description
         const descWrap = document.getElementById("descWrap");
         const descBox = document.getElementById("descBox");
         if (car.description) {
@@ -768,7 +787,6 @@
           if (descWrap) descWrap.style.display = "none";
         }
 
-        // Extras
         const extrasWrap = document.getElementById("extrasWrap");
         const extrasList = document.getElementById("extrasList");
         if (car.extras) {
@@ -779,7 +797,6 @@
           if (extrasWrap) extrasWrap.style.display = "none";
         }
 
-        // Share button
         const shareBtn = document.getElementById("shareBtn");
         if (shareBtn) {
           shareBtn.addEventListener("click", async () => {
@@ -792,15 +809,13 @@
             if (navigator.share) {
               try {
                 await navigator.share(shareData);
-              } catch (err) {
-                // user cancelled, do nothing
-              }
+              } catch (err) { }
             } else {
               try {
                 await navigator.clipboard.writeText(window.location.href);
                 shareBtn.textContent = "Link copied!";
                 setTimeout(() => {
-                  shareBtn.textContent = "Share";
+                  shareBtn.textContent = "🔗 Share";
                 }, 1800);
               } catch (err) {
                 alert("Could not copy link.");
