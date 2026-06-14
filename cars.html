@@ -408,18 +408,17 @@
       flex: 0 0 auto;
     }
 
-    .garageLink {
-      font-size: .88rem;
-      color: var(--muted);
-      font-weight: 600;
-      text-decoration: none;
-    }
+.garageLink {
+  font-size: inherit;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
 
-    .garageLink:hover {
-      color: var(--text);
-      text-decoration: underline;
-    }
-
+.garageLink:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
     /* ---------- Responsive ---------- */
     @media (min-width: 981px) {
       #toggleFilters {
@@ -697,9 +696,9 @@
     card.className = "carCard" + (car.sold ? " sold" : "");
     card.href = href;
 
-    const moreFromGarage = garageId
-      ? `<a class="garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">More from this garage →</a>`
-      : "";
+const garageLink = garageId
+  ? `<a class="garageValue garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">${escapeHtml(garageName || "Garage")}</a>`
+  : `<span class="garageValue">${escapeHtml(garageName || "—")}</span>`;
 
 const listedDate =
   car.createdAt ||
@@ -731,22 +730,19 @@ ${listedText ? `
   </div>
 ` : ""}
 
-        <div class="specGrid">
-          ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}
-          ${mi ? `<div class="spec"><div class="specLabel">Mileage</div><div class="specValue">${escapeHtml(mi)}</div></div>` : ""}
-          ${fuel ? `<div class="spec"><div class="specLabel">Fuel</div><div class="specValue">${escapeHtml(fuel)}</div></div>` : ""}
-          ${transmission ? `<div class="spec"><div class="specLabel">Transmission</div><div class="specValue">${escapeHtml(transmission)}</div></div>` : ""}
-        </div>
+<div class="specGrid">
+  ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}
+  ${mi ? `<div class="spec"><div class="specLabel">Mileage</div><div class="specValue">${escapeHtml(mi)}</div></div>` : ""}
+  ${fuel ? `<div class="spec"><div class="specLabel">Fuel</div><div class="specValue">${escapeHtml(fuel)}</div></div>` : ""}
+  ${transmission ? `<div class="spec"><div class="specLabel">Transmission</div><div class="specValue">${escapeHtml(transmission)}</div></div>` : ""}
+</div>
 
-        <div class="garageRow">
-          <div class="garageText">
-            <span class="garageLabel">Garage:</span>
-            <span class="garageValue">${escapeHtml(garageName || "—")}</span>
-          </div>
-
-          ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ""}
-        </div>
-      </div>
+<div class="garageRow">
+  <div class="garageText">
+    <span class="garageLabel">Garage:</span>
+    ${garageLink}
+  </div>
+</div>
     `;
 
     card.addEventListener("click", (e) => {
