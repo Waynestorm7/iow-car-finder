@@ -19,7 +19,9 @@
       --r: 14px;
     }
 
-    * { box-sizing: border-box }
+    * {
+      box-sizing: border-box
+    }
 
     body {
       margin: 0;
@@ -55,8 +57,15 @@
       padding: 18px 14px
     }
 
-    h1 { margin: 0; font-size: 1.35rem }
-    h2 { margin: 0 0 10px; font-size: 1.05rem }
+    h1 {
+      margin: 0;
+      font-size: 1.35rem
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.05rem
+    }
 
     .hint {
       color: var(--muted);
@@ -73,7 +82,9 @@
     }
 
     @media (min-width:900px) {
-      .grid { grid-template-columns: 1fr 1.2fr }
+      .grid {
+        grid-template-columns: 1fr 1.2fr
+      }
     }
 
     .card {
@@ -90,7 +101,9 @@
       margin: 12px 0 6px
     }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 100%;
       padding: 12px;
       border: 1px solid var(--line);
@@ -113,7 +126,9 @@
     }
 
     @media (max-width:700px) {
-      .row { grid-template-columns: 1fr }
+      .row {
+        grid-template-columns: 1fr
+      }
     }
 
     details {
@@ -124,7 +139,10 @@
       background: #fff
     }
 
-    summary { cursor: pointer; font-weight: bold }
+    summary {
+      cursor: pointer;
+      font-weight: bold
+    }
 
     .divider {
       height: 1px;
@@ -148,14 +166,30 @@
       font-size: 16px
     }
 
-    .btn.primary { background: var(--brand); color: #fff }
-    .btn.ghost { background: #fff; border: 1px solid var(--line); color: #111827 }
+    .btn.primary {
+      background: var(--brand);
+      color: #fff
+    }
 
-    .btn:disabled { opacity: .6; cursor: not-allowed }
+    .btn.ghost {
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #111827
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed
+    }
 
     @media (max-width:520px) {
-      .btnRow { flex-direction: column }
-      .btn { width: 100% }
+      .btnRow {
+        flex-direction: column
+      }
+
+      .btn {
+        width: 100%
+      }
     }
 
     .msg {
@@ -181,7 +215,9 @@
       color: #8a1f1f
     }
 
-    .cars { margin-top: 10px }
+    .cars {
+      margin-top: 10px
+    }
 
     .carRow {
       display: flex;
@@ -192,7 +228,9 @@
       border-bottom: 1px solid var(--line)
     }
 
-    .carRow:last-child { border-bottom: none }
+    .carRow:last-child {
+      border-bottom: none
+    }
 
     .left {
       display: flex;
@@ -237,7 +275,10 @@
       white-space: nowrap
     }
 
-    .danger:disabled { opacity: .6; cursor: not-allowed }
+    .danger:disabled {
+      opacity: .6;
+      cursor: not-allowed
+    }
 
     .btnSold {
       background: #fff;
@@ -251,7 +292,10 @@
       white-space: nowrap
     }
 
-    .btnSold:disabled { opacity: .6; cursor: not-allowed }
+    .btnSold:disabled {
+      opacity: .6;
+      cursor: not-allowed
+    }
 
     .twoColMot {
       display: grid;
@@ -260,7 +304,9 @@
     }
 
     @media (max-width:520px) {
-      .twoColMot { grid-template-columns: 1fr }
+      .twoColMot {
+        grid-template-columns: 1fr
+      }
     }
 
     .small {
@@ -373,10 +419,18 @@
           <div class="twoColMot">
             <select id="motMonth">
               <option value="">Month</option>
-              <option value="Jan">Jan</option><option value="Feb">Feb</option><option value="Mar">Mar</option>
-              <option value="Apr">Apr</option><option value="May">May</option><option value="Jun">Jun</option>
-              <option value="Jul">Jul</option><option value="Aug">Aug</option><option value="Sep">Sep</option>
-              <option value="Oct">Oct</option><option value="Nov">Nov</option><option value="Dec">Dec</option>
+              <option value="Jan">Jan</option>
+              <option value="Feb">Feb</option>
+              <option value="Mar">Mar</option>
+              <option value="Apr">Apr</option>
+              <option value="May">May</option>
+              <option value="Jun">Jun</option>
+              <option value="Jul">Jul</option>
+              <option value="Aug">Aug</option>
+              <option value="Sep">Sep</option>
+              <option value="Oct">Oct</option>
+              <option value="Nov">Nov</option>
+              <option value="Dec">Dec</option>
             </select>
             <select id="motYear">
               <option value="">Year</option>
@@ -613,13 +667,16 @@
               </div>
             </div>
 
-            <div style="display:flex; gap:10px; align-items:center;">
-              ${car.sold ? "" : `<button type="button" class="btnSold">Mark Sold</button>`}
+           <div style="display:flex; gap:10px; align-items:center; margin-left:auto;">
+  ${car.sold
+              ? `<button type="button" class="btnSold btnAvailable">Mark Available</button>`
+              : `<button type="button" class="btnSold">Mark Sold</button>`
+            }
               <button type="button" class="danger">Delete</button>
             </div>
           `;
 
-          const soldBtn = row.querySelector(".btnSold");
+          const soldBtn = row.querySelector(".btnSold:not(.btnAvailable)");
           if (soldBtn) {
             soldBtn.addEventListener("click", async () => {
               if (!confirm(`Mark "${car.name}" as SOLD?`)) return;
@@ -702,20 +759,20 @@
       const year = optNumber(yearInput.value);
       const price = optNumber(priceInput.value);
 
-// Prefer uploaded photos, fallback to pasted URLs
-const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
-let photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
+      // Prefer uploaded photos, fallback to pasted URLs
+      const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+      let photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
 
-// If files are selected but not uploaded yet, upload them now
-if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
-  try {
-    showMsg("success", "Uploading photos…");
-    photos = await uploadPhotos(photoFilesInput.files, key);
-    uploadedPhotoUrls = photos;
-  } catch (e) {
-    return showMsg("error", e.message || "Photo upload failed.");
-  }
-}
+      // If files are selected but not uploaded yet, upload them now
+      if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
+        try {
+          showMsg("success", "Uploading photos…");
+          photos = await uploadPhotos(photoFilesInput.files, key);
+          uploadedPhotoUrls = photos;
+        } catch (e) {
+          return showMsg("error", e.message || "Photo upload failed.");
+        }
+      }
 
       const description = optText(descriptionInput.value);
       const extras = optText(extrasInput.value);
