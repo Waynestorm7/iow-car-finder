@@ -323,6 +323,19 @@ async function dbMarkSoldByName(name) {
   return data?.soldDate || soldDate;
 }
 
+async function dbMarkAvailableByName(name) {
+  const { error } = await supabase
+    .from("cars")
+    .update({
+      sold: false,
+      soldDate: null,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq("name", name);
+
+  if (error) throw error;
+}
+
 async function dbGetCarById(id) {
   const { data, error } = await supabase
     .from("cars")
@@ -588,6 +601,25 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, { success: true, soldDate });
     } catch (e) {
       console.error("POST /cars-sold error:", e);
+      return sendJson(res, 500, { success: false, message: "Database update failed" });
+    }
+  }
+
+  // -----------------------------
+  // API: POST /cars-available?name=
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/cars-available") {
+    if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
+
+    const name = String(urlObj.searchParams.get("name") || "").trim();
+
+    if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
+
+    try {
+      await dbMarkAvailableByName(name);
+      return sendJson(res, 200, { success: true });
+    } catch (e) {
+      console.error("POST /cars-available error:", e);
       return sendJson(res, 500, { success: false, message: "Database update failed" });
     }
   }
