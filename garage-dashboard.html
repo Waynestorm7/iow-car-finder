@@ -682,6 +682,7 @@
           `;
 
           const soldBtn = row.querySelector(".btnSold:not(.btnAvailable)");
+
           if (soldBtn) {
             soldBtn.addEventListener("click", async () => {
               if (!confirm(`Mark "${car.name}" as SOLD?`)) return;
@@ -696,6 +697,7 @@
                 });
 
                 const result = await resp.json().catch(() => null);
+
                 if (!resp.ok || !result || !result.success) {
                   showMsg("error", (result && result.message) ? result.message : "Could not mark sold.");
                   soldBtn.disabled = false;
@@ -705,10 +707,46 @@
 
                 showMsg("success", `Marked SOLD (${result.soldDate || "today"}).`);
                 renderCars();
+
               } catch {
                 showMsg("error", "Network error.");
                 soldBtn.disabled = false;
                 soldBtn.textContent = "Mark Sold";
+              }
+            });
+          }
+
+          const availableBtn = row.querySelector(".btnAvailable");
+
+          if (availableBtn) {
+            availableBtn.addEventListener("click", async () => {
+              if (!confirm(`Mark "${car.name}" as AVAILABLE again?`)) return;
+
+              availableBtn.disabled = true;
+              availableBtn.textContent = "Saving…";
+
+              try {
+                const resp = await fetch("/cars-available?name=" + encodeURIComponent(car.name || ""), {
+                  method: "POST",
+                  headers: { "X-Garage-Key": secretInput.value.trim() }
+                });
+
+                const result = await resp.json().catch(() => null);
+
+                if (!resp.ok || !result || !result.success) {
+                  showMsg("error", (result && result.message) ? result.message : "Could not mark available.");
+                  availableBtn.disabled = false;
+                  availableBtn.textContent = "Mark Available";
+                  return;
+                }
+
+                showMsg("success", "Marked available again.");
+                renderCars();
+
+              } catch {
+                showMsg("error", "Network error.");
+                availableBtn.disabled = false;
+                availableBtn.textContent = "Mark Available";
               }
             });
           }

@@ -612,7 +612,6 @@ const server = http.createServer(async (req, res) => {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
 
     const name = String(urlObj.searchParams.get("name") || "").trim();
-
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
     try {
@@ -623,7 +622,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 500, { success: false, message: "Database update failed" });
     }
   }
-
+  
   // -----------------------------
   // PAGES
   // -----------------------------
