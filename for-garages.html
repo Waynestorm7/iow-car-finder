@@ -7,443 +7,219 @@
 
   <style>
     :root {
-      --bg0: #f6f7f9;
-      --bg1: #eef2f6;
+      --bg: #f4f6f8;
       --card: #ffffff;
-      --text: #0b1220;
+      --text: #111827;
       --muted: #667085;
-      --brand: #2c3e50;
       --accent: #e67e22;
-      --line: rgba(17, 24, 39, 0.10);
-      --line-soft: rgba(17, 24, 39, 0.07);
-      --shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-      --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.04);
+      --brand: #2c3e50;
+      --border: rgba(0,0,0,.08);
+      --shadow: 0 10px 28px rgba(0,0,0,.07);
       --radius: 18px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      background:
-        radial-gradient(900px 460px at 10% -10%, rgba(230, 126, 34, 0.08), transparent 60%),
-        radial-gradient(900px 480px at 90% -10%, rgba(44, 62, 80, 0.07), transparent 60%),
-        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
     }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: rgba(8, 10, 14, 0.78);
-      color: #fff;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,.75);
+      color: white;
+      padding: 12px 16px;
     }
 
     .top {
-      max-width: 1120px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 14px 18px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
     }
 
     .brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-
-    .brand strong {
-      font-size: 1.04rem;
-      letter-spacing: 0.01em;
-    }
-
-    .brand span {
-      font-size: 0.82rem;
-      opacity: 0.78;
-      margin-top: 2px;
-    }
-
-    nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      font-weight: 900;
     }
 
     nav a {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      transition: background 0.15s ease, border-color 0.15s ease;
-    }
-
-    nav a:hover {
-      background: rgba(255, 255, 255, 0.10);
-      border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    nav a.active {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.18);
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      margin-left: 14px;
     }
 
     main {
-      max-width: 1120px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 24px 18px 34px;
+      padding: 18px 14px 40px;
     }
 
-    .sectionCard {
+    .hero, .card {
       background: var(--card);
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 16px;
     }
 
-    .hero {
-      padding: 24px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 12px;
+    .tag {
+      display: inline-block;
+      background: rgba(230,126,34,.12);
+      color: #9a4d0e;
+      font-weight: 900;
+      font-size: .82rem;
+      padding: 7px 10px;
       border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 800;
-      color: var(--brand);
-      background: rgba(230, 126, 34, 0.08);
-      border: 1px solid rgba(230, 126, 34, 0.14);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     h1 {
       margin: 0 0 10px;
-      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
       line-height: 1.05;
-      letter-spacing: -0.03em;
-      font-weight: 950;
-      color: var(--text);
+      color: var(--brand);
     }
 
     h2 {
-      margin: 0 0 10px;
-      font-size: 1.22rem;
-      line-height: 1.15;
-      font-weight: 900;
-      color: var(--text);
+      margin: 0 0 14px;
+      color: var(--brand);
+      font-size: 1.3rem;
     }
 
-    .heroText {
-      max-width: 700px;
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 1rem;
-    }
-
-    .launchNote {
-      margin-top: 14px;
-      display: inline-block;
-      padding: 10px 13px;
-      border-radius: 12px;
-      font-size: 0.94rem;
-      font-weight: 700;
-      color: #9a520f;
-      background: rgba(230, 126, 34, 0.10);
-      border: 1px solid rgba(230, 126, 34, 0.16);
-    }
-
-    .benefits {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .benefit {
-      border: 1px solid var(--line-soft);
-      border-radius: 14px;
-      padding: 14px;
-      background: #fff;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .benefitTitle {
-      font-weight: 900;
-      font-size: 0.98rem;
-      margin-bottom: 4px;
-      color: var(--text);
-    }
-
-    .benefitText {
+    p {
       color: var(--muted);
       line-height: 1.55;
-      font-size: 0.95rem;
-      margin: 0;
+      margin: 0 0 12px;
+    }
+
+    .cta {
+      margin-top: 16px;
+      display: inline-flex;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 900;
+      padding: 12px 18px;
+      border-radius: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mini {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .mini strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
     }
 
     .steps {
       display: grid;
-      gap: 12px;
-      margin-top: 8px;
+      gap: 10px;
     }
 
     .step {
       display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      border: 1px solid var(--line-soft);
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 14px;
-      background: #fff;
     }
 
-    .stepNo {
-      width: 34px;
-      height: 34px;
+    .num {
       flex: 0 0 34px;
-      border-radius: 999px;
-      display: inline-flex;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(230,126,34,.14);
+      color: var(--accent);
+      display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(230, 126, 34, 0.10);
-      color: var(--accent);
       font-weight: 900;
-      border: 1px solid rgba(230, 126, 34, 0.18);
     }
 
-    .stepTitle {
-      font-weight: 900;
-      font-size: 0.98rem;
-      margin-bottom: 3px;
-    }
-
-    .stepText {
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 0.95rem;
-    }
-
-    .muted {
-      color: var(--muted);
-      line-height: 1.6;
+    ul {
       margin: 0;
-    }
-
-    .sendList {
-      margin: 12px 0 0;
       padding-left: 20px;
       color: var(--muted);
-      line-height: 1.8;
+      line-height: 1.7;
     }
 
-    .sendList li {
-      margin: 2px 0;
-    }
-
-    .formIntro {
-      margin: 0 0 14px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .formGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .formField {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .formField.full {
-      grid-column: 1 / -1;
-    }
-
-    .formField label {
-      font-size: 0.95rem;
+    label {
+      display: block;
       font-weight: 800;
-      color: var(--text);
+      margin: 12px 0 6px;
     }
 
-    .formField input,
-    .formField textarea {
+    input, textarea {
       width: 100%;
-      padding: 13px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(17, 24, 39, 0.14);
-      background: #fff;
-      color: var(--text);
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      font-family: inherit;
     }
 
-    .formField input::placeholder,
-    .formField textarea::placeholder {
-      color: #98a2b3;
-    }
-
-    .formField input:focus,
-    .formField textarea:focus {
-      border-color: rgba(230, 126, 34, 0.55);
-      box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.12);
-    }
-
-    .formField textarea {
-      min-height: 130px;
+    textarea {
+      min-height: 120px;
       resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--accent);
+      color: white;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .note {
+      background: #f8fafc;
+      border-left: 5px solid var(--brand);
+      padding: 14px;
+      border-radius: 14px;
+      margin-top: 14px;
+      color: var(--muted);
       line-height: 1.5;
     }
 
-    .formActions {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 12px 18px;
-      border-radius: 14px;
-      border: 1px solid transparent;
-      background: #fff;
-      color: var(--text);
-      font-weight: 900;
-      font-size: 0.98rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn.primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: rgba(230, 126, 34, 0.45);
-      box-shadow: 0 10px 24px rgba(230, 126, 34, 0.20);
-    }
-
-    .formMsg {
-      font-size: 0.95rem;
-      font-weight: 700;
-      min-height: 22px;
-    }
-
-    .contactMini {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1px solid var(--line-soft);
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .contactMini strong {
-      color: var(--text);
-    }
-
     footer {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 4px 18px 34px;
-      color: var(--muted);
-      font-size: 0.92rem;
       text-align: center;
+      color: var(--muted);
+      padding: 20px;
+      font-size: .85rem;
     }
 
-    @media (max-width: 760px) {
-      main {
-        padding: 18px 14px 28px;
-      }
-
-      .sectionCard,
-      .hero {
-        padding: 16px;
-      }
-
-      .benefits {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-
-      .benefit {
-        padding: 12px;
-      }
-
-      .benefitTitle {
-        font-size: 0.92rem;
-      }
-
-      .benefitText {
-        font-size: 0.88rem;
-      }
-
-      .formGrid {
+    @media (max-width: 650px) {
+      .grid {
         grid-template-columns: 1fr;
       }
 
-      .formActions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .benefits {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .heroText,
-      .muted,
-      .stepText,
-      .benefitText,
-      .sendList {
-        font-size: 0.93rem;
-      }
-
-      .launchNote {
-        font-size: 0.88rem;
+      .hero, .card {
+        padding: 18px;
       }
     }
   </style>
@@ -452,187 +228,130 @@
 <body>
   <header>
     <div class="top">
-      <a class="brand" href="/">
-        <strong>IOW Car Finder</strong>
-        <span>Isle of Wight • Used cars • Local garages</span>
-      </a>
-
+      <a class="brand" href="/">IOW Car Finder</a>
       <nav>
+        <a href="/">Home</a>
         <a href="/cars-page">Cars</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="sectionCard hero">
-      <div class="eyebrow">For Isle of Wight garages</div>
+    <section class="hero">
+      <div class="tag">For Isle of Wight garages</div>
       <h1>List your stock and get direct enquiries</h1>
-      <p class="heroText">
-        Get your cars in front of Isle of Wight buyers. Customers contact your garage directly.
+      <p>
+        Get your vehicles in front of local Isle of Wight buyers.
+        IOW Car Finder helps garages showcase their stock online and receive direct customer enquiries.
       </p>
-      <div class="launchNote">Early garages can list free during launch.</div>
+      <p>
+        No marketplace. No online payments. Customers contact your garage directly.
+      </p>
+      <a class="cta" href="#enquiry">Enquire about listing</a>
     </section>
 
-    <section class="sectionCard">
-      <h2>Why list with IOW Car Finder</h2>
+    <section class="card">
+      <h2>Why list with IOW Car Finder?</h2>
 
-      <div class="benefits">
-        <div class="benefit">
-          <div class="benefitTitle">Local buyers</div>
-          <p class="benefitText">People searching specifically for used cars on the Isle of Wight.</p>
+      <div class="grid">
+        <div class="mini">
+          <strong>Local buyers</strong>
+          <p>Reach people searching for used cars on the Isle of Wight.</p>
         </div>
 
-        <div class="benefit">
-          <div class="benefitTitle">Direct enquiries</div>
-          <p class="benefitText">Customers contact your garage directly by phone or email.</p>
+        <div class="mini">
+          <strong>Direct enquiries</strong>
+          <p>Customers contact your garage directly by phone or email.</p>
         </div>
 
-        <div class="benefit">
-          <div class="benefitTitle">No commission</div>
-          <p class="benefitText">You deal with the customer directly. No sales commission taken.</p>
+        <div class="mini">
+          <strong>Simple setup</strong>
+          <p>Send us your stock details and we’ll handle the listing side.</p>
         </div>
 
-        <div class="benefit">
-          <div class="benefitTitle">Simple setup</div>
-          <p class="benefitText">Send us your stock and we handle the listing side.</p>
+        <div class="mini">
+          <strong>Built for local garages</strong>
+          <p>A focused local platform, not a national marketplace.</p>
         </div>
       </div>
     </section>
 
-    <section class="sectionCard">
+    <section class="card">
       <h2>How it works</h2>
 
       <div class="steps">
         <div class="step">
-          <div class="stepNo">1</div>
+          <div class="num">1</div>
           <div>
-            <div class="stepTitle">Send us your stock</div>
-            <div class="stepText">Photos, price, and the basic vehicle details.</div>
+            <strong>Send your stock</strong>
+            <p>Send vehicle details, photos and your garage information.</p>
           </div>
         </div>
 
         <div class="step">
-          <div class="stepNo">2</div>
+          <div class="num">2</div>
           <div>
-            <div class="stepTitle">We list your cars</div>
-            <div class="stepText">Your stock appears on IOW Car Finder for local buyers to browse.</div>
+            <strong>We publish your listings</strong>
+            <p>Your vehicles appear on IOW Car Finder for local buyers to browse.</p>
           </div>
         </div>
 
         <div class="step">
-          <div class="stepNo">3</div>
+          <div class="num">3</div>
           <div>
-            <div class="stepTitle">Customers contact you</div>
-            <div class="stepText">Phone and email enquiries come straight to your garage.</div>
+            <strong>Customers contact you</strong>
+            <p>Phone and email enquiries go directly to your garage.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="sectionCard">
-      <h2>What to send us</h2>
-      <p class="muted">To get started, we usually need:</p>
-
-      <ul class="sendList">
-        <li>Car name, year, and price</li>
-        <li>1–5 photo links</li>
-        <li>Mileage, fuel, and transmission</li>
-        <li>MOT or service notes if you want them shown</li>
-        <li>Your garage name and phone number</li>
-      </ul>
+    <section class="card">
+      <h2>What we’ll need</h2>
+<ul>
+  <li>Vehicle make, model and year</li>
+  <li>Price and mileage</li>
+  <li>Multiple vehicle photos</li>
+  <li>Fuel type and transmission</li>
+  <li>A brief vehicle description</li>
+  <li>Garage name and contact details</li>
+</ul>
     </section>
 
-    <section class="sectionCard">
-      <h2>Enquire about listing your cars</h2>
-
-      <p class="formIntro">
-        Fill in the form below and we’ll get back to you. Most garages can just send a spreadsheet
-        or photo links and we’ll handle the rest.
+    <section class="card" id="enquiry">
+      <h2>Enquire about listing your vehicles</h2>
+      <p>
+        Complete the form below and we’ll get back to you with the next steps.
       </p>
 
-      <form id="enquiryForm">
-        <div class="formGrid">
-          <div class="formField">
-            <label for="gname">Garage name</label>
-            <input type="text" id="gname" name="garage" required />
-          </div>
+      <form action="mailto:contact@iowcarfinder.co.uk" method="post" enctype="text/plain">
+        <label for="garage">Garage name</label>
+        <input id="garage" name="Garage name" type="text" required>
 
-          <div class="formField">
-            <label for="cname">Your name</label>
-            <input type="text" id="cname" name="name" required />
-          </div>
+        <label for="name">Your name</label>
+        <input id="name" name="Your name" type="text" required>
 
-          <div class="formField">
-            <label for="phone">Phone number</label>
-            <input type="tel" id="phone" name="phone" required />
-          </div>
+        <label for="phone">Phone number</label>
+        <input id="phone" name="Phone number" type="tel" required>
 
-          <div class="formField">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" />
-          </div>
+        <label for="email">Email</label>
+        <input id="email" name="Email" type="email" required>
 
-          <div class="formField full">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Tell us about your stock, how many cars you have, or what you’d like to know…" required></textarea>
-          </div>
+        <label for="message">Message</label>
+        <textarea id="message" name="Message" placeholder="Tell us about your garage, how many cars you usually have, and how you'd like to get started."></textarea>
 
-          <div class="formActions">
-            <button type="submit" class="btn primary">Send enquiry</button>
-            <div id="formMsg" class="formMsg"></div>
-          </div>
-        </div>
+        <button type="submit">Send enquiry</button>
       </form>
 
-      <div class="contactMini">
-        <strong>Simple setup:</strong> no complicated dashboard, no marketplace checkout, and no commission on sales.
+      <div class="note">
+        Simple local vehicle advertising for Isle of Wight garages.
+        We’ll discuss listing options clearly before anything goes live.
       </div>
     </section>
   </main>
 
   <footer>
-    © <span id="year"></span> IOW Car Finder.
+    © 2026 IOW Car Finder
   </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-
-  <script>
-    const form = document.getElementById("enquiryForm");
-    const msg = document.getElementById("formMsg");
-
-    if (form) {
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        msg.textContent = "Sending...";
-
-        const data = {
-          garage: document.getElementById("gname").value.trim(),
-          name: document.getElementById("cname").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          message: document.getElementById("message").value.trim()
-        };
-
-        try {
-          const res = await fetch("/enquiry", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
-
-          const out = await res.json();
-
-          if (!out.success) throw new Error();
-
-          msg.textContent = "✅ Thanks — we’ll be in touch soon.";
-          form.reset();
-        } catch {
-          msg.textContent = "❌ Could not send. Please try again later.";
-        }
-      });
-    }
-  </script>
 </body>
 </html>
