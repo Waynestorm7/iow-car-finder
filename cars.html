@@ -3,17 +3,17 @@
 
 <head>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z69W9KDT7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z69W9KDT7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-2Z69W9KDT7');
-</script>
+    gtag('config', 'G-2Z69W9KDT7');
+  </script>
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | IOW Car Finder</title>
 
@@ -419,17 +419,18 @@
       flex: 0 0 auto;
     }
 
-.garageLink {
-  font-size: inherit;
-  color: #2563eb;
-  font-weight: 600;
-  text-decoration: none;
-}
+    .garageLink {
+      font-size: inherit;
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+    }
 
-.garageLink:hover {
-  color: #2563eb;
-  text-decoration: underline;
-}
+    .garageLink:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
     /* ---------- Responsive ---------- */
     @media (min-width: 981px) {
       #toggleFilters {
@@ -679,53 +680,53 @@
     }
 
     function renderCars(cars) {
-  const status = document.getElementById("status");
-  const grid = document.getElementById("grid");
+      const status = document.getElementById("status");
+      const grid = document.getElementById("grid");
 
-  if (!Array.isArray(cars) || cars.length === 0) {
-    grid.style.display = "none";
-    status.style.display = "block";
-    status.textContent = "No cars match your filters.";
-    return;
-  }
+      if (!Array.isArray(cars) || cars.length === 0) {
+        grid.style.display = "none";
+        status.style.display = "block";
+        status.textContent = "No cars match your filters.";
+        return;
+      }
 
-  status.style.display = "none";
-  grid.style.display = "grid";
-  grid.innerHTML = "";
+      status.style.display = "none";
+      grid.style.display = "grid";
+      grid.innerHTML = "";
 
-  for (const car of cars) {
-    const name = safeText(car.name) || "Car";
-    const href = "/car.html?id=" + encodeURIComponent(car.id || "");
-    const year = safeText(car.year);
-    const mi = miles(car.mileage);
-    const fuel = safeText(car.fuel);
-    const transmission = safeText(car.transmission);
-    const garageId = safeText(car.garageId);
-    const garageName = safeText(car.garageName) || "";
+      for (const car of cars) {
+        const name = safeText(car.name) || "Car";
+        const href = "/car.html?id=" + encodeURIComponent(car.id || "");
+        const year = safeText(car.year);
+        const mi = miles(car.mileage);
+        const fuel = safeText(car.fuel);
+        const transmission = safeText(car.transmission);
+        const garageId = safeText(car.garageId);
+        const garageName = safeText(car.garageName) || "";
 
-    const card = document.createElement("a");
-    card.className = "carCard" + (car.sold ? " sold" : "");
-    card.href = href;
+        const card = document.createElement("a");
+        card.className = "carCard" + (car.sold ? " sold" : "");
+        card.href = href;
 
-const garageLink = garageId
-  ? `<a class="garageValue garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">${escapeHtml(garageName || "Garage")}</a>`
-  : `<span class="garageValue">${escapeHtml(garageName || "—")}</span>`;
+        const garageLink = garageId
+          ? `<a class="garageValue garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">${escapeHtml(garageName || "Garage")}</a>`
+          : `<span class="garageValue">${escapeHtml(garageName || "—")}</span>`;
 
-const listedDate =
-  car.createdAt ||
-  car.created_at ||
-  car.updatedAt ||
-  car.updated_at ||
-  "";
-const listedText = listedDate
-  ? new Date(listedDate).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric"
-    })
-  : "";
+        const listedDate =
+          car.createdAt ||
+          car.created_at ||
+          car.updatedAt ||
+          car.updated_at ||
+          "";
+        const listedText = listedDate
+          ? new Date(listedDate).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+          })
+          : "";
 
-    card.innerHTML = `
+        card.innerHTML = `
       <div class="imgWrap">
         <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'">
         ${car.sold ? `<div class="soldBadge">SOLD</div>` : ""}
@@ -756,17 +757,17 @@ ${listedText ? `
 </div>
     `;
 
-    card.addEventListener("click", (e) => {
-      const gl = e.target.closest("a[data-gid]");
-      if (!gl) return;
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.href = gl.getAttribute("href");
-    });
+        card.addEventListener("click", (e) => {
+          const gl = e.target.closest("a[data-gid]");
+          if (!gl) return;
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = gl.getAttribute("href");
+        });
 
-    grid.appendChild(card);
-  }
-}
+        grid.appendChild(card);
+      }
+    }
 
     function applyFilters() {
       const search = norm(document.getElementById("searchBox").value);
@@ -812,11 +813,19 @@ ${listedText ? `
       } else if (sort === "mileage-asc") {
         filtered.sort((a, b) => (Number(a.mileage) || 0) - (Number(b.mileage) || 0));
       } else {
+
         filtered.sort((a, b) => {
-          const ta = new Date(a.updatedAt || 0).getTime() || 0;
-          const tb = new Date(b.updatedAt || 0).getTime() || 0;
+
+          if (a.sold && !b.sold) return 1;
+          if (!a.sold && b.sold) return -1;
+
+          const ta = new Date(a.updatedAt || a.updated_at || 0).getTime() || 0;
+          const tb = new Date(b.updatedAt || b.updated_at || 0).getTime() || 0;
+
           return tb - ta;
+
         });
+
       }
 
       renderCars(filtered);
