@@ -669,73 +669,77 @@
     }
 
     function renderCars(cars) {
-      const status = document.getElementById("status");
-      const grid = document.getElementById("grid");
+  const status = document.getElementById("status");
+  const grid = document.getElementById("grid");
 
-      if (!Array.isArray(cars) || cars.length === 0) {
-        grid.style.display = "none";
-        status.style.display = "block";
-        status.textContent = "No cars match your filters.";
-        return;
-      }
+  if (!Array.isArray(cars) || cars.length === 0) {
+    grid.style.display = "none";
+    status.style.display = "block";
+    status.textContent = "No cars match your filters.";
+    return;
+  }
 
-      status.style.display = "none";
-      grid.style.display = "grid";
-      grid.innerHTML = "";
+  status.style.display = "none";
+  grid.style.display = "grid";
+  grid.innerHTML = "";
 
-      for (const car of cars) {
-        const name = safeText(car.name) || "Car";
-        const href = "/car.html?id=" + encodeURIComponent(car.id || "");
-        const year = safeText(car.year);
-        const mi = miles(car.mileage);
-        const garageId = safeText(car.garageId);
-        const garageName = safeText(car.garageName) || "";
+  for (const car of cars) {
+    const name = safeText(car.name) || "Car";
+    const href = "/car.html?id=" + encodeURIComponent(car.id || "");
+    const year = safeText(car.year);
+    const mi = miles(car.mileage);
+    const fuel = safeText(car.fuel);
+    const transmission = safeText(car.transmission);
+    const garageId = safeText(car.garageId);
+    const garageName = safeText(car.garageName) || "";
 
-        const card = document.createElement("a");
-        card.className = "carCard" + (car.sold ? " sold" : "");
-        card.href = href;
+    const card = document.createElement("a");
+    card.className = "carCard" + (car.sold ? " sold" : "");
+    card.href = href;
 
-        const moreFromGarage = garageId
-          ? `<a class="garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">More from this garage →</a>`
-          : "";
+    const moreFromGarage = garageId
+      ? `<a class="garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">More from this garage →</a>`
+      : "";
 
-        card.innerHTML = `
-          <div class="imgWrap">
-            <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'">
-            ${car.sold ? `<div class="soldBadge">SOLD</div>` : ""}
+    card.innerHTML = `
+      <div class="imgWrap">
+        <img class="carImg" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'">
+        ${car.sold ? `<div class="soldBadge">SOLD</div>` : ""}
+      </div>
+
+      <div class="body">
+        <h3 class="name">${escapeHtml(name)}</h3>
+        <div class="price">${escapeHtml(money(car.price))}</div>
+
+        <div class="specGrid">
+          ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}
+          ${mi ? `<div class="spec"><div class="specLabel">Mileage</div><div class="specValue">${escapeHtml(mi)}</div></div>` : ""}
+          ${fuel ? `<div class="spec"><div class="specLabel">Fuel</div><div class="specValue">${escapeHtml(fuel)}</div></div>` : ""}
+          ${transmission ? `<div class="spec"><div class="specLabel">Transmission</div><div class="specValue">${escapeHtml(transmission)}</div></div>` : ""}
+        </div>
+
+        <div class="garageRow">
+          <div class="garageText">
+            <span class="garageLabel">Garage:</span>
+            <span class="garageValue">${escapeHtml(garageName || "—")}</span>
           </div>
 
-          <div class="body">
-            <h3 class="name">${escapeHtml(name)}</h3>
-            <div class="price">${escapeHtml(money(car.price))}</div>
+          ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ""}
+        </div>
+      </div>
+    `;
 
-            <div class="specGrid">
-              ${year ? `<div class="spec"><div class="specLabel">Year</div><div class="specValue">${escapeHtml(year)}</div></div>` : ""}
-              ${mi ? `<div class="spec"><div class="specLabel">Mileage</div><div class="specValue">${escapeHtml(mi)}</div></div>` : ""}
-            </div>
+    card.addEventListener("click", (e) => {
+      const gl = e.target.closest("a[data-gid]");
+      if (!gl) return;
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = gl.getAttribute("href");
+    });
 
-            <div class="garageRow">
-              <div class="garageText">
-                <span class="garageLabel">Garage:</span>
-                <span class="garageValue">${escapeHtml(garageName || "—")}</span>
-              </div>
-
-              ${moreFromGarage ? `<div class="garageBtnWrap">${moreFromGarage}</div>` : ""}
-            </div>
-          </div>
-        `;
-
-        card.addEventListener("click", (e) => {
-          const gl = e.target.closest('a[data-gid]');
-          if (!gl) return;
-          e.preventDefault();
-          e.stopPropagation();
-          window.location.href = gl.getAttribute("href");
-        });
-
-        grid.appendChild(card);
-      }
-    }
+    grid.appendChild(card);
+  }
+}
 
     function applyFilters() {
       const search = norm(document.getElementById("searchBox").value);
