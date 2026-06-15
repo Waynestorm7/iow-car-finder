@@ -478,7 +478,6 @@
 
         <div class="small" id="callNote"></div>
         <div class="small" id="mapNote"></div>
-        <div class="small" id="moreNote"></div>
 
         <div class="card" style="margin-top:12px;">
           <div class="info" style="padding:14px;">
@@ -763,15 +762,12 @@
         }
 
         const moreBtn = document.getElementById("moreBtn");
-        const moreNote = document.getElementById("moreNote");
         if (moreBtn) {
           if (car.garageId) {
             moreBtn.href = "/cars-page?garageId=" + encodeURIComponent(car.garageId);
-            if (moreNote) moreNote.textContent = "See more vehicles from " + garageName + ".";
             moreBtn.style.display = "inline-flex";
           } else {
             moreBtn.style.display = "none";
-            if (moreNote) moreNote.textContent = "";
           }
         }
 
