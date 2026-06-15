@@ -481,20 +481,64 @@
 
     @media (max-width: 600px) {
       .hero {
-        padding: 18px 14px 8px;
+        padding: 10px 14px 4px;
       }
 
-      main {
-        padding: 10px 14px 24px;
+      .hero h1 {
+        font-size: 1.45rem;
       }
 
-      .top {
-        padding: 14px;
+      .hero p {
+        display: none;
+      }
+
+      .filtersWrap {
+        margin-bottom: 10px;
+      }
+
+      .filters::before {
+        margin: -2px 4px 8px;
+      }
+
+      .grid {
+        margin-top: 10px;
+      }
+
+      .filters input,
+      .filters select {
+        padding: 10px 12px;
+        border-radius: 12px;
       }
 
       .filters {
-        padding: 16px;
-        border-radius: 18px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      .filters::before {
+        display: none;
+      }
+
+      .filters input,
+      .filters select,
+      #toggleFilters {
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
+      }
+
+      .btn {
+        padding: 11px 12px;
+        border-radius: 12px;
+      }
+
+      .filtersTop {
+        gap: 8px;
+      }
+
+      main {
+        padding: 6px 14px 24px;
       }
 
       .filtersTop {
@@ -510,11 +554,6 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
-      }
-
-      .btn {
-        padding: 14px;
-        font-size: 16px;
       }
 
       .filtersAdvanced::before {
