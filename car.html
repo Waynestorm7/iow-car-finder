@@ -3,17 +3,17 @@
 
 <head>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z69W9KDT7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z69W9KDT7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-2Z69W9KDT7');
-</script>
+    gtag('config', 'G-2Z69W9KDT7');
+  </script>
 
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Car Details | IOW Car Finder</title>
 
@@ -473,7 +473,7 @@
           <a id="callBtn" class="btn primary" href="#">Call</a>
           <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">Directions</a>
           <button id="shareBtn" class="btn ghost shareBtn" type="button">🔗 Share</button>
-          <a id="moreBtn" class="btn ghost" href="/cars-page">More from this garage</a>
+          <a id="moreBtn" class="btn ghost" href="/cars-page">View Garage</a>
         </div>
 
         <div class="small" id="callNote"></div>
@@ -764,7 +764,7 @@
         const moreBtn = document.getElementById("moreBtn");
         if (moreBtn) {
           if (car.garageId) {
-            moreBtn.href = "/cars-page?garageId=" + encodeURIComponent(car.garageId);
+            moreBtn.href = "/garage?id=" + encodeURIComponent(car.garageId);
             moreBtn.style.display = "inline-flex";
           } else {
             moreBtn.style.display = "none";
