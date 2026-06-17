@@ -188,20 +188,21 @@
                     return;
                 }
 
-                garageBox.innerHTML = `
-          <h2>${escapeHtml(garage.name)}</h2>
-          <p><strong>Town:</strong> ${escapeHtml(garage.town || "Isle of Wight")}</p>
-          ${garage.address ? `<p><strong>Address:</strong> ${escapeHtml(garage.address)}</p>` : ""}
-          ${garage.postcode ? `<p><strong>Postcode:</strong> ${escapeHtml(garage.postcode)}</p>` : ""}
-          ${garage.phone ? `<p><strong>Phone:</strong> ${escapeHtml(garage.phone)}</p>` : ""}
-          ${garage.email ? `<p><strong>Email:</strong> ${escapeHtml(garage.email)}</p>` : ""}
-          ${garage.website ? `<p><strong>Website:</strong> <a href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Visit website</a></p>` : ""}
-          ${garage.openingHours ? `<p><strong>Opening hours:</strong><br>${escapeHtml(garage.openingHours)}</p>` : ""}
-        `;
-
                 const garageCars = cars.filter(car =>
                     String(car.garageId || car.garage_id || "") === String(garageId)
                 );
+
+                garageBox.innerHTML = `
+  <h2>${escapeHtml(garage.name)}</h2>
+  <p><strong>🚗 ${garageCars.length}</strong> ${garageCars.length === 1 ? "car" : "cars"} in stock</p>
+  <p><strong>Town:</strong> ${escapeHtml(garage.town || "Isle of Wight")}</p>
+  ${garage.address ? `<p><strong>Address:</strong> ${escapeHtml(garage.address)}</p>` : ""}
+  ${garage.postcode ? `<p><strong>Postcode:</strong> ${escapeHtml(garage.postcode)}</p>` : ""}
+  ${garage.phone ? `<p><strong>Phone:</strong> ${escapeHtml(garage.phone)}</p>` : ""}
+  ${garage.email ? `<p><strong>Email:</strong> ${escapeHtml(garage.email)}</p>` : ""}
+  ${garage.website ? `<p><strong>Website:</strong> <a href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Visit website</a></p>` : ""}
+  ${garage.openingHours ? `<p><strong>Opening hours:</strong><br>${escapeHtml(garage.openingHours)}</p>` : ""}
+`;
 
                 if (!garageCars.length) {
                     carsBox.textContent = "No cars currently listed for this garage.";
@@ -209,17 +210,17 @@
                 }
 
                 carsBox.innerHTML = garageCars.map(car => `
-          <div class="carCard">
-            <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}">
+  <div class="carCard">
+    <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}">
 
-            <div class="carInfo">
-              <h3>${escapeHtml(car.name)}</h3>
-              <p class="price">${money(car.price)}</p>
-              <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
-              <a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}">View car →</a>
-            </div>
-          </div>
-        `).join("");
+    <div class="carInfo">
+      <h3>${escapeHtml(car.name)}</h3>
+      <p class="price">${money(car.price)}</p>
+      <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
+      <a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}">View car →</a>
+    </div>
+  </div>
+`).join("");
 
             } catch (e) {
                 garageBox.textContent = "Could not load garage.";
