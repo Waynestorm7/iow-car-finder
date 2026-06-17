@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garage | IOW Car Finder</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #111827;
+    }
+
+    header {
+      background: rgba(0, 0, 0, .75);
+      padding: 14px 16px;
+    }
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .carsGrid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .carCard {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+      border: 1px solid rgba(0, 0, 0, .08);
+    }
+
+    .carCard img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: #e5e7eb;
+    }
+
+    .carInfo {
+      padding: 14px;
+    }
+
+    .carInfo h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+
+    .price {
+      font-weight: 900;
+      font-size: 1.25rem;
+      margin: 0 0 8px;
+    }
+
+    .small {
+      color: #667085;
+      margin: 0 0 12px;
+    }
+
+    .viewBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #e67e22;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="/">IOW Car Finder</a>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Garage Profile</h1>
+      <div id="garageBox">Loading garage...</div>
+    </div>
+
+    <div class="card">
+      <h2>Cars in stock</h2>
+      <div id="carsBox" class="carsGrid">Loading cars...</div>
+    </div>
+  </main>
+
+  <script>
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function money(value) {
+      return "£" + Number(value || 0).toLocaleString("en-GB");
+    }
+
+    function getCarPhoto(car) {
+      if (!car) return "";
+      if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
+      if (car.photo) return car.photo;
+      return "/images/hero.png";
+    }
+
+    async function loadGarage() {
+      const params = new URLSearchParams(window.location.search);
+      const garageId = params.get("id");
+
+      const garageBox = document.getElementById("garageBox");
+      const carsBox = document.getElementById("carsBox");
+
+      if (!garageId) {
+        garageBox.textContent = "No garage ID provided.";
+        carsBox.textContent = "";
+        return;
+      }
+
+      try {
+        const garagesRes = await fetch("/garages.json", { cache: "no-store" });
+        const carsRes = await fetch("/cars.json", { cache: "no-store" });
+
+        const garages = await garagesRes.json();
+        const carsData = await carsRes.json();
+        const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
+
+        const garage = garages.find(g => String(g.id) === String(garageId));
+
+        if (!garage) {
+          garageBox.textContent = "Garage not found.";
+          carsBox.textContent = "";
+          return;
+        }
+
+        garageBox.innerHTML = `
+          <h2>${escapeHtml(garage.name)}</h2>
+          <p><strong>Town:</strong> ${escapeHtml(garage.town || "Isle of Wight")}</p>
+          ${garage.address ? `<p><strong>Address:</strong> ${escapeHtml(garage.address)}</p>` : ""}
+          ${garage.postcode ? `<p><strong>Postcode:</strong> ${escapeHtml(garage.postcode)}</p>` : ""}
+          ${garage.phone ? `<p><strong>Phone:</strong> ${escapeHtml(garage.phone)}</p>` : ""}
+          ${garage.email ? `<p><strong>Email:</strong> ${escapeHtml(garage.email)}</p>` : ""}
+          ${garage.website ? `<p><strong>Website:</strong> <a href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Visit website</a></p>` : ""}
+          ${garage.openingHours ? `<p><strong>Opening hours:</strong><br>${escapeHtml(garage.openingHours)}</p>` : ""}
+        `;
+
+        const garageCars = cars.filter(car =>
+          String(car.garageId || car.garage_id || "") === String(garageId)
+        );
+
+        if (!garageCars.length) {
+          carsBox.textContent = "No cars currently listed for this garage.";
+          return;
+        }
+
+        carsBox.innerHTML = garageCars.map(car => `
+          <div class="carCard">
+            <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}">
+
+            <div class="carInfo">
+              <h3>${escapeHtml(car.name)}</h3>
+              <p class="price">${money(car.price)}</p>
+              <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
+              <a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}">View car →</a>
+            </div>
+          </div>
+        `).join("");
+
+      } catch (e) {
+        garageBox.textContent = "Could not load garage.";
+        carsBox.textContent = "";
+      }
+    }
+
+    loadGarage();
+  </script>
+
+</body>
+
+</html>
