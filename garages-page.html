@@ -65,15 +65,6 @@
       background: #f3f4f6;
     }
 
-    .photoGrid img {
-      width: 100%;
-      height: 105px;
-      object-fit: cover;
-      display: block;
-      border-radius: 8px;
-      background: #e5e7eb;
-    }
-
     .noPhoto {
       height: 210px;
       display: flex;
@@ -81,6 +72,26 @@
       justify-content: center;
       font-size: 3rem;
       background: #f3f4f6;
+    }
+
+    .forecourtPhoto {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photoGrid a {
+      display: block;
+    }
+
+    .photoGrid a img {
+      width: 100%;
+      height: 105px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+      background: #e5e7eb;
     }
 
     .garageInfo {
@@ -132,7 +143,7 @@
         grid-template-columns: 1fr;
       }
 
-      .photoGrid img {
+      .photoGrid a img {
         height: 105px;
       }
     }
@@ -202,18 +213,24 @@
 
           return `
             <div class="garageCard">
-              ${
-                photos.length
-                  ? `
-                    <div class="photoGrid">
-                      ${photos.map(photo => `
-                        <img src="${escapeHtml(photo)}" alt="${escapeHtml(g.name)}">
-                      `).join("")}
-                    </div>
-                  `
-                  : `<div class="noPhoto">🏢</div>`
-              }
-
+${photos.length
+              ? `
+      <div class="photoGrid">
+        ${garageCars.slice(0, 4).map(car => `
+          <a href="/car?id=${encodeURIComponent(car.id)}">
+            <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name || g.name)}">
+          </a>
+        `).join("")}
+      </div>
+    `
+              : g.forecourtPhoto
+                ? `
+        <img class="forecourtPhoto"
+             src="${escapeHtml(g.forecourtPhoto)}"
+             alt="${escapeHtml(g.name)}">
+      `
+                : `<div class="noPhoto">🏢</div>`
+            }
               <div class="garageInfo">
                 <h2>${escapeHtml(g.name)}</h2>
                 <p>${escapeHtml(g.town || "Isle of Wight")}</p>
