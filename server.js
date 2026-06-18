@@ -204,6 +204,7 @@ function mapDbCar(row) {
 // =============================
 // SUPABASE DB FUNCTIONS (CARS)
 // =============================
+
 async function dbListCars() {
   const { data, error } = await supabase
     .from("cars")
@@ -220,10 +221,7 @@ async function dbListCars() {
 
   return (data || []).map(row => {
     const mapped = mapDbCar(row);
-
-    // ✅ attach friendly garage name
     mapped.garageName = row.garages?.name || null;
-
     return mapped;
   });
 }
@@ -254,40 +252,30 @@ async function dbGetCarByName(name) {
 
 async function dbInsertCar(payload) {
   const name = String(payload.name || "").trim();
-
-  // ✅ accept either garage_id (new) or garageId (old)
   const garage_id = String(payload.garage_id || payload.garageId || "").trim() || null;
 
   const row = {
     name,
     year: Number(payload.year),
     price: Number(payload.price),
-
-    // ✅ correct column name in Supabase
     garage_id,
-
     mileage: payload.mileage ?? null,
     fuel: payload.fuel ?? null,
     transmission: payload.transmission ?? null,
     engine: payload.engine ?? null,
     owners: payload.owners ?? null,
     colour: payload.colour ?? null,
-
     description: (payload.description && String(payload.description).trim())
       ? String(payload.description).trim()
       : null,
-
     photos: (Array.isArray(payload.photos) ? payload.photos : [])
       .map((x) => String(x).trim())
       .filter(Boolean),
-
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
       : null,
-
     sold: false,
     soldDate: null,
-
     updatedAt: new Date().toISOString(),
   };
 
@@ -313,7 +301,7 @@ async function dbMarkSoldByName(name) {
     .update({
       sold: true,
       soldDate,
-      updatedAt: new Date().toISOString(), // <-- keep if column is updatedAt
+      updatedAt: new Date().toISOString(),
     })
     .eq("name", name)
     .select("soldDate")
@@ -358,9 +346,31 @@ async function dbGetCarById(id) {
   return mapped;
 }
 
+
 // =============================
-// DB FUNCTION (GARAGES)
+// SUPABASE DB FUNCTIONS (GARAGES)
 // =============================
+
+async function dbListGarages() {
+  const { data, error } = await supabase
+    .from("garages")
+    .select(`
+      id,
+      name,
+      address,
+      town,
+      postcode,
+      phone,
+      email,
+      website,
+      opening_hours
+    `)
+    .order("name", { ascending: true });
+
+  if (error) throw error;
+  return data || [];
+}
+
 async function dbGetGarageById(id) {
   const cleanId = String(id || "").trim();
   if (!cleanId) return null;
@@ -398,9 +408,11 @@ async function dbGetGaragesByIds(ids) {
   return data || [];
 }
 
+
 // =============================
 // SERVER
 // =============================
+
 const server = http.createServer(async (req, res) => {
   const base = `http://${req.headers.host || "localhost"}`;
   const urlObj = new URL(req.url, base);
@@ -516,7 +528,13 @@ const server = http.createServer(async (req, res) => {
   // (Optional/legacy) GET /garages-data from file
   // -----------------------------
   if (req.method === "GET" && pathname === "/garages-data") {
-    return sendJson(res, 200, readGaragesFile());
+    try {
+      const garages = await dbListGarages();
+      return sendJson(res, 200, garages);
+    } catch (e) {
+      console.error("GET /garages-data error:", e);
+      return sendJson(res, 200, readGaragesFile());
+    }
   }
 
   // -----------------------------

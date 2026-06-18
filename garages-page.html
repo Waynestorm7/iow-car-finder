@@ -2,207 +2,238 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Garages | IOW Car Finder</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Garages | IOW Car Finder</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #111827;
-        }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #111827;
+    }
 
-        header {
-            background: rgba(0, 0, 0, .75);
-            color: #fff;
-            padding: 14px 16px;
-        }
+    header {
+      background: rgba(0, 0, 0, .75);
+      color: #fff;
+      padding: 14px 16px;
+    }
 
-        header a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 800;
-        }
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
 
-        main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 18px 14px 32px;
-        }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 14px 32px;
+    }
 
-        h1 {
-            margin: 0 0 6px;
-            font-size: 1.8rem;
-        }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+    }
 
-        .intro {
-            margin: 0 0 18px;
-            color: #667085;
-            line-height: 1.4;
-        }
+    .intro {
+      margin: 0 0 18px;
+      color: #667085;
+      line-height: 1.4;
+    }
 
-        #garageList {
-            display: grid;
-            gap: 14px;
-        }
+    #garageList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
 
-        .garageCard {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, .08);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
-        }
+    .garageCard {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+    }
 
-        .garagePhoto {
-            height: 170px;
-            background: linear-gradient(135deg, #111827, #374151);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            overflow: hidden;
-        }
+    .garagePhotoGrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      padding: 3px;
+      background: #f3f4f6;
+    }
 
-        .garagePhoto img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+    .garagePhotoGrid img {
+      width: 100%;
+      height: 115px;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
+      background: #e5e7eb;
+    }
 
-        .garageInfo {
-            padding: 14px;
-        }
+    .noPhoto {
+      height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: #f3f4f6;
+    }
 
-        .garageInfo h2 {
-            margin: 0 0 4px;
-            font-size: 1.25rem;
-        }
+    .garageInfo {
+      padding: 14px;
+    }
 
-        .garageInfo p {
-            margin: 0 0 10px;
-            color: #667085;
-        }
+    .garageInfo h2 {
+      margin: 0 0 4px;
+      font-size: 1.18rem;
+      color: #111827;
+    }
 
-        .count {
-            font-weight: 800;
-            color: #111827 !important;
-        }
+    .garageInfo p {
+      margin: 0 0 10px;
+      color: #667085;
+    }
 
-        .viewBtn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 11px 14px;
-            border-radius: 12px;
-            background: #e67e22;
-            color: #fff;
-            text-decoration: none;
-            font-weight: 800;
-        }
+    .count {
+      font-weight: 900;
+      color: #111827 !important;
+    }
 
-        .status {
-            background: #fff;
-            padding: 14px;
-            border-radius: 14px;
-            color: #667085;
-            border: 1px solid rgba(0, 0, 0, .08);
-        }
-    </style>
+    .viewBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      background: #e67e22;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .status {
+      background: #fff;
+      padding: 14px;
+      border-radius: 14px;
+      color: #667085;
+      border: 1px solid rgba(0, 0, 0, .08);
+    }
+
+    @media (max-width: 650px) {
+      main {
+        padding: 16px 12px 28px;
+      }
+
+      #garageList {
+        grid-template-columns: 1fr;
+      }
+
+      .garagePhotoGrid img {
+        height: 105px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <header>
-        <a href="/">IOW Car Finder</a>
-    </header>
+  <header>
+    <a href="/">IOW Car Finder</a>
+  </header>
 
-    <main>
-        <h1>Browse Garages</h1>
-        <p class="intro">Find local Isle of Wight garages and view their available stock.</p>
+  <main>
+    <h1>Browse Garages</h1>
+    <p class="intro">Find local Isle of Wight garages and view their available stock.</p>
 
-        <div id="garageList" class="status">Loading garages...</div>
-    </main>
+    <div id="garageList" class="status">Loading garages...</div>
+  </main>
 
-    <script>
-        function escapeHtml(value) {
-            return String(value || "").replace(/[&<>"']/g, ch => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-            }[ch]));
+  <script>
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function getCarPhoto(car) {
+      if (!car) return "";
+      if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
+      if (car.photo) return car.photo;
+      return "";
+    }
+
+    async function loadGarages() {
+      const garageList = document.getElementById("garageList");
+
+      try {
+        const garagesRes = await fetch("/garages-data", { cache: "no-store" });
+        const carsRes = await fetch("/cars", { cache: "no-store" });
+
+        const garages = await garagesRes.json();
+        const carsData = await carsRes.json();
+        const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
+
+        if (!Array.isArray(garages) || garages.length === 0) {
+          garageList.textContent = "No garages listed yet.";
+          return;
         }
 
-        function getCarPhoto(car) {
-            if (!car) return "";
-            if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
-            if (car.photo) return car.photo;
-            return "";
-        }
+        garageList.classList.remove("status");
 
-        async function loadGarages() {
-            const garageList = document.getElementById("garageList");
+        garageList.innerHTML = garages.map(g => {
+          const garageCars = Array.isArray(cars)
+            ? cars.filter(c => String(c.garageId || c.garage_id || "") === String(g.id || ""))
+            : [];
 
-            try {
-                const garagesRes = await fetch("/garages.json", { cache: "no-store" });
-                const carsRes = await fetch("/cars.json", { cache: "no-store" });
+          const photos = garageCars
+            .map(car => getCarPhoto(car))
+            .filter(Boolean)
+            .slice(0, 4);
 
-                const garages = await garagesRes.json();
-                const carsData = await carsRes.json();
-                const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
+          const carWord = garageCars.length === 1 ? "car" : "cars";
 
-                if (!Array.isArray(garages) || garages.length === 0) {
-                    garageList.textContent = "No garages listed yet.";
-                    return;
-                }
-
-                garageList.classList.remove("status");
-
-                garageList.innerHTML = garages.map(g => {
-                    const garageCars = Array.isArray(cars)
-                        ? cars.filter(c => String(c.garageId || c.garage_id || "") === String(g.id || ""))
-                        : [];
-
-                    const firstCar = garageCars[0];
-                    const photo = getCarPhoto(firstCar);
-
-                    const carWord = garageCars.length === 1 ? "car" : "cars";
-
-                    return `
+          return `
             <div class="garageCard">
-              <div class="garagePhoto">
-                ${photo
-                            ? `<img src="${escapeHtml(photo)}" alt="${escapeHtml(g.name)}" onerror="this.parentElement.textContent='🏢'">`
-                            : `🏢`
-                        }
-              </div>
+              ${
+                photos.length
+                  ? `
+                    <div class="garagePhotoGrid">
+                      ${photos.map(photo => `
+                        <img src="${escapeHtml(photo)}" alt="${escapeHtml(g.name)}">
+                      `).join("")}
+                    </div>
+                  `
+                  : `<div class="noPhoto">🏢</div>`
+              }
 
               <div class="garageInfo">
                 <h2>${escapeHtml(g.name)}</h2>
                 <p>${escapeHtml(g.town || "Isle of Wight")}</p>
                 <p class="count">${garageCars.length} ${carWord} in stock</p>
 
-                <a class="viewBtn" href="/cars-page?garageId=${encodeURIComponent(g.id)}">
+                <a class="viewBtn" href="/garage?id=${encodeURIComponent(g.id)}">
                   View Garage →
                 </a>
               </div>
             </div>
           `;
-                }).join("");
+        }).join("");
 
-            } catch (e) {
-                garageList.textContent = "Could not load garages.";
-            }
-        }
+      } catch (e) {
+        garageList.textContent = "Could not load garages.";
+      }
+    }
 
-        loadGarages();
-    </script>
+    loadGarages();
+  </script>
 
 </body>
 

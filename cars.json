@@ -1,5 +1,6 @@
 [
   {
+    "id": "demo-car-1",
     "name": "Volkswagen Golf GTI",
     "year": 2018,
     "price": 12995,
