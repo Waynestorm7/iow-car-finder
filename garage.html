@@ -173,8 +173,8 @@
             }
 
             try {
-                const garagesRes = await fetch("/garages.json", { cache: "no-store" });
-                const carsRes = await fetch("/cars.json", { cache: "no-store" });
+                const garagesRes = await fetch("/garages-data", { cache: "no-store" });
+                const carsRes = await fetch("/cars", { cache: "no-store" });
 
                 const garages = await garagesRes.json();
                 const carsData = await carsRes.json();
