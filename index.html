@@ -15,8 +15,8 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car Details | IOW Car Finder</title>
-  <link rel="preload" as="image" href="/images/hero.png">
+  <title>IOW Car Finder | Used Cars from Isle of Wight Garages</title>
+  <link rel="preload" as="image" href="/images/hero-desktop.webp">
 
 
   <style>
@@ -68,10 +68,10 @@
 
       background:
         linear-gradient(180deg,
-          rgba(0, 0, 0, .35) 0%,
-          rgba(0, 0, 0, .75) 55%,
-          rgba(0, 0, 0, .92) 100%),
-        url("/images/home-hero.png") center/cover no-repeat;
+          rgba(0, 0, 0, .18) 0%,
+          rgba(0, 0, 0, .45) 55%,
+          rgba(0, 0, 0, .70) 100%),
+        url("/images/hero-desktop.webp") center/cover no-repeat;
     }
 
     .wrap {
@@ -298,6 +298,18 @@
       justify-content: center;
     }
 
+    /* MOBILE HERO IMAGE */
+    @media (max-width: 768px) {
+      .hero::before {
+        background:
+          linear-gradient(180deg,
+            rgba(0, 0, 0, .18) 0%,
+            rgba(0, 0, 0, .45) 55%,
+            rgba(0, 0, 0, .70) 100%),
+          url("/images/hero-mobile.webp") center 45%/cover no-repeat;
+      }
+    }
+
     /* MOBILE */
     @media (max-width: 560px) {
       .wrap {
@@ -313,6 +325,7 @@
         box-shadow: 0 18px 55px rgba(0, 0, 0, .70),
           0 0 18px rgba(255, 140, 0, .25);
       }
+
 
       .icon {
         margin: 0;
