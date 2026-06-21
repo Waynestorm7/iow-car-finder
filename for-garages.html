@@ -1,243 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Z69W9KDT7"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-2Z69W9KDT7');
-  </script>
-
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>For Garages | IOW Car Finder</title>
 
   <style>
     :root {
-      --bg: #f4f6f8;
-      --card: #ffffff;
-      --text: #111827;
-      --muted: #667085;
-      --accent: #e67e22;
-      --brand: #2c3e50;
-      --border: rgba(0, 0, 0, .08);
-      --shadow: 0 10px 28px rgba(0, 0, 0, .07);
-      --radius: 18px;
+      --bg:#f4f6f8;
+      --card:#fff;
+      --text:#111827;
+      --muted:#667085;
+      --accent:#e67e22;
+      --green:#16a34a;
+      --dark:#101820;
+      --border:rgba(0,0,0,.08);
+      --shadow:0 12px 34px rgba(0,0,0,.08);
+      --radius:20px;
     }
 
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    header{
+      background:var(--dark);
+      color:#fff;
+      padding:14px 16px;
     }
 
-    header {
-      background: rgba(0, 0, 0, .75);
-      color: white;
-      padding: 12px 16px;
+    .top{
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
 
-    .top {
-      max-width: 960px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+    .brand, nav a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
     }
 
-    .brand {
-      color: white;
-      text-decoration: none;
-      font-weight: 900;
+    nav a{margin-left:16px}
+
+    main{
+      max-width:920px;
+      margin:0 auto;
+      padding:24px 14px 44px;
     }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 800;
-      margin-left: 14px;
+    .hero,.card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:26px;
+      margin-bottom:18px;
     }
 
-    main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 18px 14px 40px;
+    .tag{
+      display:inline-block;
+      background:rgba(230,126,34,.12);
+      color:#9a4d0e;
+      font-weight:900;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.84rem;
+      margin-bottom:14px;
     }
 
-    .hero,
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-      margin-bottom: 16px;
+    h1{
+      margin:0 0 12px;
+      font-size:clamp(2rem,5vw,3rem);
+      line-height:1.05;
+      color:var(--dark);
     }
 
-    .tag {
-      display: inline-block;
-      background: rgba(230, 126, 34, .12);
-      color: #9a4d0e;
-      font-weight: 900;
-      font-size: .82rem;
-      padding: 7px 10px;
-      border-radius: 999px;
-      margin-bottom: 12px;
+    h2{
+      margin:0 0 10px;
+      color:var(--dark);
     }
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(1.8rem, 5vw, 2.6rem);
-      line-height: 1.05;
-      color: var(--brand);
+    p{
+      color:var(--muted);
+      line-height:1.55;
+      margin:0 0 12px;
     }
 
-    h2 {
-      margin: 0 0 14px;
-      color: var(--brand);
-      font-size: 1.3rem;
+    .trust{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:18px;
     }
 
-    p {
-      color: var(--muted);
-      line-height: 1.55;
-      margin: 0 0 12px;
+    .trust span{
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      font-weight:800;
+      color:var(--dark);
+      text-align:center;
+      font-size:.92rem;
     }
 
-    .cta {
-      margin-top: 16px;
-      display: inline-flex;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      font-weight: 900;
-      padding: 12px 18px;
-      border-radius: 14px;
+    .actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+    .action{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
     }
 
-    .mini {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
+    .button{
+      display:inline-flex;
+      margin-top:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      background:var(--accent);
     }
 
-    .mini strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text);
+    .button.green{background:var(--green)}
+
+    .small{
+      font-size:.86rem;
+      color:var(--muted);
+      margin-top:8px;
     }
 
-    .steps {
-      display: grid;
-      gap: 10px;
+    .info{
+      border-left:5px solid var(--accent);
+      background:#fff7ed;
+      padding:16px;
+      border-radius:16px;
+      margin-bottom:18px;
+      color:#7c3f0b;
+      line-height:1.5;
     }
 
-    .step {
-      display: flex;
-      gap: 12px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
+    label{
+      display:block;
+      font-weight:800;
+      margin:13px 0 6px;
     }
 
-    .num {
-      flex: 0 0 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(230, 126, 34, .14);
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
+    input,select,textarea{
+      width:100%;
+      padding:13px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:16px;
+      font-family:inherit;
+      background:#fff;
     }
 
-    ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--muted);
-      line-height: 1.7;
+    textarea{
+      min-height:130px;
+      resize:vertical;
     }
 
-    label {
-      display: block;
-      font-weight: 800;
-      margin: 12px 0 6px;
+    button{
+      width:100%;
+      margin-top:16px;
+      padding:15px;
+      border:0;
+      border-radius:14px;
+      background:var(--accent);
+      color:#fff;
+      font-weight:900;
+      font-size:1rem;
+      cursor:pointer;
     }
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 13px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      font-size: 16px;
-      font-family: inherit;
+    footer{
+      text-align:center;
+      color:var(--muted);
+      padding:22px;
+      font-size:.85rem;
     }
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 14px;
-      padding: 14px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--accent);
-      color: white;
-      font-weight: 900;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .note {
-      background: #f8fafc;
-      border-left: 5px solid var(--brand);
-      padding: 14px;
-      border-radius: 14px;
-      margin-top: 14px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 20px;
-      font-size: .85rem;
-    }
-
-    @media (max-width: 650px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero,
-      .card {
-        padding: 18px;
-      }
+    @media(max-width:700px){
+      .actions,.trust{grid-template-columns:1fr}
+      .hero,.card,.action{padding:20px}
     }
   </style>
 </head>
@@ -256,121 +217,74 @@
   <main>
     <section class="hero">
       <div class="tag">For Isle of Wight garages</div>
-      <h1>List your stock and get direct enquiries</h1>
+      <h1>Join IOW Car Finder or add your vehicles</h1>
       <p>
-        Get your vehicles in front of local Isle of Wight buyers.
-        IOW Car Finder helps garages showcase their stock online and receive direct customer enquiries.
+        Register your garage or send us vehicles to list on IOW Car Finder.
+        Customers contact your garage directly — no marketplace, no middleman.
       </p>
-      <p>
-        No marketplace. No online payments. Customers contact your garage directly.
-      </p>
-      <a class="cta" href="#enquiry">Enquire about listing</a>
-    </section>
 
-    <section class="card">
-      <h2>Why list with IOW Car Finder?</h2>
-
-      <div class="grid">
-        <div class="mini">
-          <strong>Local buyers</strong>
-          <p>Reach people searching for used cars on the Isle of Wight.</p>
-        </div>
-
-        <div class="mini">
-          <strong>Direct enquiries</strong>
-          <p>Customers contact your garage directly by phone or email.</p>
-        </div>
-
-        <div class="mini">
-          <strong>Simple setup</strong>
-          <p>Send us your stock details and we’ll handle the listing side.</p>
-        </div>
-
-        <div class="mini">
-          <strong>Built for local garages</strong>
-          <p>A focused local platform, not a national marketplace.</p>
-        </div>
+      <div class="trust">
+        <span>✓ Free while we build the platform</span>
+        <span>✓ Customers contact you directly</span>
+        <span>✓ No long-term commitment</span>
       </div>
     </section>
 
-    <section class="card">
-      <h2>How it works</h2>
+    <section class="actions">
+      <div class="action">
+        <h2>Join IOW Car Finder</h2>
+        <p>Become one of our founding garages and start advertising your vehicles to local buyers.</p>
+        <a class="button" href="#contact">Join IOW Car Finder</a>
+      </div>
 
-      <div class="steps">
-        <div class="step">
-          <div class="num">1</div>
-          <div>
-            <strong>Send your stock</strong>
-            <p>Send vehicle details, photos and your garage information.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">2</div>
-          <div>
-            <strong>We publish your listings</strong>
-            <p>Your vehicles appear on IOW Car Finder for local buyers to browse.</p>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">3</div>
-          <div>
-            <strong>Customers contact you</strong>
-            <p>Phone and email enquiries go directly to your garage.</p>
-          </div>
-        </div>
+      <div class="action">
+        <h2>Add a vehicle</h2>
+        <p>Already spoken to us or received an invite? Send a vehicle through and we can add it for you.</p>
+        <a class="button green" href="#contact">Try it now</a>
+        <div class="small">For garages only</div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>What we’ll need</h2>
-      <ul>
-        <li>Vehicle make, model and year</li>
-        <li>Price and mileage</li>
-        <li>Multiple vehicle photos</li>
-        <li>Fuel type and transmission</li>
-        <li>A brief vehicle description</li>
-        <li>Garage name and contact details</li>
-      </ul>
-    </section>
+    <div class="info">
+      No payment is needed to send your details today. During early launch, we’re helping garages get listed while we build the platform.
+    </div>
 
-    <section class="card" id="enquiry">
-      <h2>Enquire about listing your vehicles</h2>
-      <p>
-        Complete the form below and we’ll get back to you with the next steps.
-      </p>
-      <form action="mailto:contact@iowcarfinder.co.uk?subject=Garage%20Listing%20Enquiry" method="post"
-        enctype="text/plain">
+    <section class="card" id="contact">
+      <h2>Send us your details</h2>
+      <p>Use this form to join IOW Car Finder, add a vehicle, or ask a question.</p>
+
+      <form action="https://formsubmit.co/contact@iowcarfinder.co.uk" method="POST">
+        <input type="hidden" name="_subject" value="Garage enquiry - IOW Car Finder">
+
+        <label for="type">What would you like to do?</label>
+        <select id="type" name="Request type" required>
+          <option value="">Please choose</option>
+          <option>Join IOW Car Finder</option>
+          <option>Add a vehicle</option>
+          <option>Both</option>
+          <option>General question</option>
+        </select>
+
         <label for="garage">Garage name</label>
         <input id="garage" name="Garage name" type="text" required>
 
         <label for="name">Your name</label>
         <input id="name" name="Your name" type="text" required>
 
-        <label for="phone">Phone number</label>
-        <input id="phone" name="Phone number" type="tel" required>
-
         <label for="email">Email</label>
         <input id="email" name="Email" type="email" required>
 
+        <label for="phone">Phone number</label>
+        <input id="phone" name="Phone number" type="tel">
+
         <label for="message">Message</label>
-        <textarea id="message" name="Message"
-          placeholder="Tell us about your garage, how many cars you usually have, and how you'd like to get started."></textarea>
+        <textarea id="message" name="Message" placeholder="Tell us about your garage, or paste vehicle details here if you want to add a car."></textarea>
 
-        <button type="submit">Send enquiry</button>
+        <button type="submit">Send details</button>
       </form>
-
-      <div class="note">
-        Simple local vehicle advertising for Isle of Wight garages.
-        We’ll discuss listing options clearly before anything goes live.
-      </div>
     </section>
   </main>
 
-  <footer>
-    © 2026 IOW Car Finder
-  </footer>
+  <footer>© 2026 IOW Car Finder</footer>
 </body>
-
 </html>
