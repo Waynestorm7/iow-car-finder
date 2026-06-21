@@ -57,9 +57,9 @@
     }
 
     main {
-      max-width: 920px;
+      max-width: 820px;
       margin: 0 auto;
-      padding: 24px 14px 44px;
+      padding: 32px 18px 56px;
     }
 
     .hero,
@@ -67,8 +67,8 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 26px;
+      box-shadow: 0 18px 45px rgba(16, 24, 32, .06);
+      padding: 34px;
       margin-bottom: 18px;
     }
 
@@ -122,26 +122,31 @@
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 18px;
     }
 
     .action {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
+      box-shadow: 0 18px 45px rgba(16, 24, 32, .06);
+      padding: 28px;
     }
 
     .button {
       display: inline-flex;
-      margin-top: 10px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 900;
-      background: var(--accent);
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-size: .95rem;
+      transition: .2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      opacity: .95;
     }
 
     .button.green {
@@ -207,6 +212,10 @@
       font-size: .85rem;
     }
 
+    .cardless {
+      margin-bottom: 18px;
+    }
+
     @media(max-width:700px) {
 
       .actions,
@@ -237,7 +246,7 @@
   <main>
     <section class="hero">
       <div class="tag">For Isle of Wight garages</div>
-      <h1>Join IOW Car Finder or add your vehicles</h1>
+      <h1>Advertise your vehicles to Isle of Wight buyers</h1>
       <p>
         Register your garage or send us vehicles to list on IOW Car Finder.
         Customers contact your garage directly — no marketplace, no middleman.
@@ -250,7 +259,7 @@
       </div>
     </section>
 
-    <section class="actions">
+    <section class="actions cardless">
       <div class="action">
         <h2>Join IOW Car Finder</h2>
         <p>Become one of our founding garages and start advertising your vehicles to local buyers.</p>
@@ -259,7 +268,7 @@
 
       <div class="action">
         <h2>Add a vehicle</h2>
-        <p>Already spoken to us or received an invite? Send a vehicle through and we can add it for you.</p>
+        <p>Want to try it first? Send us one vehicle and see it listed on IOW Car Finder.</p>
         <a class="button green" href="#contact">Try it now</a>
         <div class="small">For garages only</div>
       </div>
@@ -283,7 +292,6 @@
           <option value="">Please choose</option>
           <option>Join IOW Car Finder</option>
           <option>Add a vehicle</option>
-          <option>Both</option>
           <option>General question</option>
         </select>
 
