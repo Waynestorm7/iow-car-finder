@@ -164,7 +164,7 @@
 
     /* Cards: remove “big bar feel” by giving them their own glow instead */
     .panel {
-      margin: 28px auto 0;
+      margin: 20px auto 0;
       display: flex;
       gap: 18px;
       justify-content: center;
@@ -331,7 +331,7 @@
           linear-gradient(180deg,
             rgba(0, 0, 0, .18) 0%,
             rgba(0, 0, 0, .45) 55%,
-            rgba(0, 0, 0, .70) 100%),
+            rgba(0, 0, 0, .62) 100%),
           url("/images/hero-mobile.webp") center 45%/cover no-repeat;
       }
     }
@@ -406,7 +406,7 @@
         <div class="panel">
 
           <a class="cardlink" href="/cars-page" aria-label="Browse Cars">
-            <div class="card">
+            <div class="card primary">
               <div class="cardtext">
                 <p class="label">Browse Cars</p>
                 <p class="hint">Recently added</p>
@@ -415,26 +415,26 @@
           </a>
 
           <a class="cardlink" href="/garages" aria-label="Browse Garages">
-            <div class="card primary">
-              <div class="cardtext">
-                <p class="label">Browse Garages</p>
-                <p class="hint">View local dealers</p>
-              </div>
+            <div class="card">
+            <div class="cardtext">
+              <p class="label">Browse Garages</p>
+              <p class="hint">View local dealers</p>
             </div>
-          </a>
-
         </div>
-
-        <div class="trustline">
-          <span class="tick">✔ Island garages only</span>
-          <span class="tick">✔ No private sellers</span>
-        </div>
-
-        <div class="garage-mini">
-          <a class="garage-pill" href="/for-garages"><span>For garages: get listed →</span></a>
-        </div>
+        </a>
 
       </div>
+
+      <div class="trustline">
+        <span class="tick">✔ Island garages only</span>
+        <span class="tick">✔ No private sellers</span>
+      </div>
+
+      <div class="garage-mini">
+        <a class="garage-pill" href="/for-garages"><span>For garages: get listed →</span></a>
+      </div>
+
+    </div>
   </section>
 </body>
 
