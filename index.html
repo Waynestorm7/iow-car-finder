@@ -70,8 +70,8 @@
         linear-gradient(180deg,
           rgba(0, 0, 0, .18) 0%,
           rgba(0, 0, 0, .45) 55%,
-          rgba(0, 0, 0, .70) 100%),
-        url("/images/hero-desktop.webp") center/cover no-repeat;
+          rgba(0, 0, 0, .58) 100%),
+        url("/images/hero-desktop.webp") center 42%/cover no-repeat;
     }
 
     .wrap {
@@ -80,7 +80,7 @@
 
       width: min(980px, 92vw);
       margin: 0 auto;
-      padding: 52px 24px 64px;
+      padding: 30px 24px 40px;
     }
 
     .kicker {
@@ -121,7 +121,7 @@
     }
 
     .iow-shape {
-      width: 58px;
+      width: 72px;
       height: auto;
       display: block;
       margin-bottom: 12px;
@@ -141,9 +141,9 @@
     }
 
     .iow-shape {
-      width: 80px;
+      width: 95px;
       opacity: .85;
-      margin: 18px auto 20px;
+      margin: 8px auto 6px;
       display: block;
     }
 
@@ -178,8 +178,8 @@
     }
 
     .card {
-      width: 178px;
-      height: 105px;
+      width: 175px;
+      height: 88px;
       border-radius: 18px;
       background: var(--glass);
       border: 1px solid var(--border);
@@ -246,7 +246,7 @@
 
     /* ticks: slimmer, less chunky */
     .trustline {
-      margin-top: 16px;
+      margin-top: 6px;
       display: flex;
       gap: 10px;
       justify-content: center;
@@ -269,7 +269,7 @@
 
     /* “For garages” button: neutral glass with a tiny accent edge */
     .garage-mini {
-      margin-top: 16px;
+      margin-top: 4px;
       display: flex;
       justify-content: center;
     }
@@ -280,7 +280,7 @@
       gap: 10px;
       padding: 10px 16px;
       border-radius: 999px;
-      background: rgba(18, 20, 24, 0.55);
+      background: rgba(18, 20, 24, .42);
       border: 1px solid rgba(255, 255, 255, 0.14);
       color: var(--text);
       text-decoration: none;
@@ -325,25 +325,27 @@
     }
 
     /* MOBILE HERO IMAGE */
-    @media (max-width: 768px) {
+    @media (max-width:768px) {
       .hero::before {
         background:
           linear-gradient(180deg,
             rgba(0, 0, 0, .18) 0%,
             rgba(0, 0, 0, .45) 55%,
-            rgba(0, 0, 0, .62) 100%),
-          url("/images/hero-mobile.webp") center 45%/cover no-repeat;
+            rgba(0, 0, 0, .54) 100%),
+          url("/images/hero-mobile.webp") center 18%/cover no-repeat;
       }
     }
 
     /* MOBILE */
     @media (max-width: 560px) {
       .wrap {
-        padding: 34px 0 28px;
+        .wrap {
+          padding: 30px 0 18px;
+        }
       }
 
       .panel {
-        gap: 12px;
+        gap: 10px;
       }
 
       .card.primary {
@@ -365,6 +367,11 @@
 
       .hint {
         margin-top: 4px;
+      }
+
+      .trustline {
+        margin-top: 0px;
+        gap: 6px;
       }
 
       .tick {
@@ -401,28 +408,23 @@
       <img class="iow-shape" src="/images/iow-outline-glow.svg" alt="" aria-hidden="true">
 
       <div class="panel">
-
-
-        <div class="panel">
-
-          <a class="cardlink" href="/cars-page" aria-label="Browse Cars">
-            <div class="card primary">
-              <div class="cardtext">
-                <p class="label">Browse Cars</p>
-                <p class="hint">Recently added</p>
-              </div>
+        <a class="cardlink" href="/cars-page" aria-label="Browse Cars">
+          <div class="card primary">
+            <div class="cardtext">
+              <p class="label">Browse Cars</p>
+              <p class="hint">Recently added</p>
             </div>
-          </a>
+          </div>
+        </a>
 
-          <a class="cardlink" href="/garages" aria-label="Browse Garages">
-            <div class="card">
+        <a class="cardlink" href="/garages" aria-label="Browse Garages">
+          <div class="card">
             <div class="cardtext">
               <p class="label">Browse Garages</p>
               <p class="hint">View local dealers</p>
             </div>
-        </div>
+          </div>
         </a>
-
       </div>
 
       <div class="trustline">
@@ -431,7 +433,9 @@
       </div>
 
       <div class="garage-mini">
-        <a class="garage-pill" href="/for-garages"><span>For garages: get listed →</span></a>
+        <a class="garage-pill" href="/for-garages">
+          <span>For garages: get listed →</span>
+        </a>
       </div>
 
     </div>
