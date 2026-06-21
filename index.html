@@ -71,7 +71,7 @@
           rgba(0, 0, 0, .18) 0%,
           rgba(0, 0, 0, .45) 55%,
           rgba(0, 0, 0, .58) 100%),
-        url("/images/hero-desktop.webp") center 42%/cover no-repeat;
+        url("/images/hero-mobile.webp") center 20%/cover no-repeat;
     }
 
     .wrap {
@@ -178,7 +178,7 @@
     }
 
     .card {
-      width: 175px;
+      width: 170px;
       height: 88px;
       border-radius: 18px;
       background: var(--glass);
@@ -269,7 +269,7 @@
 
     /* “For garages” button: neutral glass with a tiny accent edge */
     .garage-mini {
-      margin-top: 4px;
+      margin-top: 6px;
       display: flex;
       justify-content: center;
     }
@@ -325,68 +325,72 @@
     }
 
     /* MOBILE HERO IMAGE */
-    @media (max-width:768px) {
-      .hero::before {
-        background:
-          linear-gradient(180deg,
-            rgba(0, 0, 0, .18) 0%,
-            rgba(0, 0, 0, .45) 55%,
-            rgba(0, 0, 0, .54) 100%),
-          url("/images/hero-mobile.webp") center 18%/cover no-repeat;
-      }
-    }
-
-    /* MOBILE */
     @media (max-width: 560px) {
       .wrap {
-        .wrap {
-          padding: 30px 0 18px;
-        }
+        padding: 28px 0 14px;
+      }
+
+      .brand {
+        font-size: 2.35rem;
+      }
+
+      .headline {
+        font-size: 1rem;
+        line-height: 1.45;
+        max-width: 320px;
+      }
+
+      .iow-shape {
+        width: 82px;
+        margin: 12px auto 18px;
+        opacity: .85;
       }
 
       .panel {
+        margin-top: 12px;
         gap: 10px;
+        flex-wrap: nowrap;
+      }
+
+      .card {
+        width: 150px;
+        height: 92px;
       }
 
       .card.primary {
         border: 2px solid rgba(255, 140, 0, 0.45);
-        box-shadow: 0 18px 55px rgba(0, 0, 0, .70),
+        box-shadow:
+          0 18px 55px rgba(0, 0, 0, .70),
           0 0 18px rgba(255, 140, 0, .25);
       }
 
-
-      .icon {
-        margin: 0;
-        font-size: 1.8rem;
-      }
-
-      .cardtext {
-        display: flex;
-        flex-direction: column;
+      .label {
+        font-size: 0.95rem;
       }
 
       .hint {
-        margin-top: 4px;
+        font-size: 0.78rem;
+        margin-top: 5px;
       }
 
       .trustline {
-        margin-top: 0px;
-        gap: 6px;
+        margin-top: 190px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: center;
       }
 
       .tick {
         width: auto;
-        min-width: 210px;
+        min-width: 230px;
         justify-content: center;
-
-        padding: 3px 12px;
-        font-size: 0.8rem;
+        padding: 6px 14px;
+        font-size: 0.86rem;
         gap: 6px;
       }
 
-      /* Hide Featured only */
-      .panel .cardlink:nth-child(3) {
-        display: none;
+      .garage-mini {
+        margin-top: 14px;
       }
 
     }
