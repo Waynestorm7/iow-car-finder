@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,17 +12,17 @@
 
   <style>
     :root {
-      --bg: #f6f7f9;
+      --bg: #f5f6f8;
       --card: #ffffff;
-      --text: #111827;
+      --text: #101828;
       --muted: #667085;
-      --accent: #e67e22;
-      --accentDark: #cf6413;
-      --green: #16803a;
       --dark: #07111d;
-      --border: rgba(16, 24, 32, .09);
-      --shadow: 0 18px 50px rgba(16, 24, 32, .07);
-      --radius: 24px;
+      --accent: #e67e22;
+      --accentDark: #c96513;
+      --border: rgba(16, 24, 40, .10);
+      --softBorder: rgba(16, 24, 40, .07);
+      --shadow: 0 18px 48px rgba(16, 24, 40, .07);
+      --radius: 22px;
     }
 
     * {
@@ -35,17 +36,15 @@
     body {
       margin: 0;
       font-family: Inter, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(230,126,34,.08), transparent 34%),
-        var(--bg);
+      background: var(--bg);
       color: var(--text);
     }
 
     header {
-      background: linear-gradient(180deg, #0b1521, #060b12);
+      background: #07111d;
       color: #fff;
       padding: 16px 18px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
 
     .top {
@@ -62,7 +61,7 @@
       text-decoration: none;
       font-weight: 900;
       letter-spacing: -.4px;
-      font-size: 1.08rem;
+      font-size: 1.05rem;
     }
 
     .brand span {
@@ -71,15 +70,14 @@
 
     nav {
       display: flex;
-      align-items: center;
       gap: 16px;
     }
 
     nav a {
-      color: rgba(255,255,255,.86);
+      color: rgba(255, 255, 255, .82);
       text-decoration: none;
+      font-size: .9rem;
       font-weight: 800;
-      font-size: .92rem;
     }
 
     nav a:hover {
@@ -87,77 +85,101 @@
     }
 
     main {
-      max-width: 920px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 34px 18px 58px;
     }
 
-    .hero,
-    .card,
-    .action,
-    .info {
+    .hero-split {
+      background: var(--card);
       border: 1px solid var(--border);
+      border-radius: 28px;
       box-shadow: var(--shadow);
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #fff 0%, #fff 62%, #f8fafc 100%);
-      border-radius: 30px;
-      padding: 38px;
-      margin-bottom: 20px;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -90px;
-      top: -90px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: rgba(230,126,34,.08);
-      pointer-events: none;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(230,126,34,.12);
-      color: #9a4d0e;
-      font-weight: 900;
-      padding: 8px 13px;
-      border-radius: 999px;
-      font-size: .84rem;
+      padding: 44px 38px;
       margin-bottom: 18px;
+
+      display: grid;
+      grid-template-columns: 1.5fr .8fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .hero-copy h1 {
+      max-width: 620px;
+    }
+
+    .island-box {
+      text-align: center;
+      color: var(--dark);
+    }
+
+    .island-box img {
+      width: 185px;
+      opacity: .95;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, .08));
+      margin-bottom: 18px;
+    }
+
+    .island-box p {
+      font-size: 1.05rem;
+      line-height: 1.45;
+      color: var(--dark);
+    }
+
+    @media(max-width: 760px) {
+      .hero-split {
+        grid-template-columns: 1fr;
+        padding: 28px 22px;
+      }
+
+      .island-box {
+        display: none;
+      }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 38px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--accentDark);
+      font-weight: 900;
+      font-size: .82rem;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
     }
 
     h1 {
       max-width: 760px;
-      margin: 0 0 14px;
-      font-size: clamp(2.15rem, 5vw, 3.45rem);
-      line-height: 1.02;
-      letter-spacing: -2px;
+      margin: 0 0 16px;
+      font-size: clamp(2.1rem, 5vw, 3.25rem);
+      line-height: 1.04;
+      letter-spacing: -1.9px;
       color: var(--dark);
     }
 
     h2 {
       margin: 0 0 10px;
       color: var(--dark);
-      font-size: 1.35rem;
-      letter-spacing: -.5px;
+      font-size: 1.28rem;
+      letter-spacing: -.4px;
     }
 
     p {
       color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.62;
       margin: 0 0 12px;
       font-size: .98rem;
     }
 
-    .hero p {
+    .lead {
       max-width: 720px;
       font-size: 1.02rem;
     }
@@ -166,18 +188,28 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 26px;
     }
 
-    .trust span {
-      background: rgba(248,250,252,.9);
-      border: 1px solid var(--border);
+    .trust-item {
+      border: 1px solid var(--softBorder);
+      background: #fafbfc;
       border-radius: 18px;
-      padding: 15px 14px;
-      font-weight: 800;
+      padding: 16px;
+    }
+
+    .trust-item strong {
+      display: block;
       color: var(--dark);
-      font-size: .9rem;
-      line-height: 1.35;
+      font-size: .94rem;
+      margin-bottom: 4px;
+    }
+
+    .trust-item span {
+      display: block;
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.45;
     }
 
     .actions {
@@ -189,83 +221,76 @@
 
     .action {
       background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding: 30px;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
     .action:hover {
       transform: translateY(-3px);
-      box-shadow: 0 24px 60px rgba(16, 24, 32, .09);
-    }
-
-    .action.join {
-      border-left: 4px solid var(--accent);
-      background: linear-gradient(135deg, #fff, #fff7ef);
-    }
-
-    .action.try {
-      border-left: 4px solid var(--green);
-      background: linear-gradient(135deg, #fff, #f3fbf5);
+      box-shadow: 0 24px 60px rgba(16, 24, 40, .09);
     }
 
     .button {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 16px;
-      padding: 13px 22px;
-      border-radius: 999px;
+      justify-content: space-between;
+      border: 0;
+      cursor: pointer;
+      margin: 22px -30px -30px;
+      padding: 18px 24px;
+      width: calc(100% + 60px);
+      border-radius: 0 0 var(--radius) var(--radius);
       color: #fff;
       text-decoration: none;
       font-weight: 900;
-      font-size: .95rem;
-      background: linear-gradient(180deg, var(--accent), var(--accentDark));
-      transition: transform .2s ease, opacity .2s ease;
-      box-shadow: 0 12px 26px rgba(230,126,34,.22);
+      font-size: .98rem;
+      background: var(--accent);
+      transition: background .18s ease;
     }
 
-    .button.green {
-      background: transparent;
-      color: var(--green);
-      border: 2px solid rgba(22,128,58,.5);
-      box-shadow: none;
+    .button::after {
+      content: "→";
+      font-size: 1.1rem;
     }
 
     .button:hover {
-      transform: translateY(-2px);
-      opacity: .96;
+      background: var(--accentDark);
+      transform: none;
+    }
+
+    .button.secondary {
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+    }
+
+    .button.secondary:hover {
+      background: var(--accentDark);
     }
 
     .small {
-      font-size: .86rem;
-      color: var(--muted);
       margin-top: 10px;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: .86rem;
     }
 
-    .info {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      background: #fffaf3;
-      padding: 18px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      color: #7c3f0b;
-      line-height: 1.55;
+    .note {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
     }
 
-    .info strong {
+    .note strong {
       display: block;
       color: var(--dark);
-      margin-bottom: 2px;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 34px;
+      margin-bottom: 6px;
     }
 
     .form-grid {
@@ -282,7 +307,7 @@
       display: block;
       font-weight: 800;
       margin: 14px 0 7px;
-      font-size: .92rem;
+      font-size: .9rem;
       color: var(--dark);
     }
 
@@ -291,20 +316,20 @@
     textarea {
       width: 100%;
       padding: 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(16,24,32,.12);
+      border-radius: 13px;
+      border: 1px solid rgba(16, 24, 40, .14);
       font-size: 16px;
       font-family: inherit;
       background: #fff;
       outline: none;
-      transition: border-color .2s ease, box-shadow .2s ease;
+      transition: border-color .18s ease, box-shadow .18s ease;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
-      border-color: rgba(230,126,34,.55);
-      box-shadow: 0 0 0 4px rgba(230,126,34,.12);
+      border-color: rgba(230, 126, 34, .6);
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
     }
 
     textarea {
@@ -318,24 +343,24 @@
       padding: 15px;
       border: 0;
       border-radius: 999px;
-      background: linear-gradient(180deg, var(--accent), var(--accentDark));
+      background: var(--accent);
       color: #fff;
       font-weight: 900;
       font-size: 1rem;
       cursor: pointer;
-      box-shadow: 0 14px 28px rgba(230,126,34,.22);
-      transition: transform .2s ease, opacity .2s ease;
+      transition: transform .18s ease, background .18s ease;
     }
 
     button:hover {
       transform: translateY(-2px);
-      opacity: .96;
+      background: var(--accentDark);
     }
 
     .privacy {
       margin-top: 14px;
       color: var(--muted);
-      font-size: .86rem;
+      font-size: .84rem;
+      text-align: center;
     }
 
     footer {
@@ -343,6 +368,19 @@
       color: var(--muted);
       padding: 26px 18px;
       font-size: .86rem;
+    }
+
+    .action {
+      cursor: pointer;
+    }
+
+
+    .vehicle-fields {
+      display: none;
+    }
+
+    .vehicle-fields.show {
+      display: contents;
     }
 
     @media(max-width: 760px) {
@@ -355,26 +393,23 @@
       }
 
       nav a {
-        font-size: .86rem;
+        font-size: .84rem;
       }
 
       main {
         padding: 20px 12px 44px;
       }
 
-      .hero,
-      .card,
-      .action {
+      .panel,
+      .action,
+      .note {
         padding: 22px;
-      }
-
-      .hero {
-        border-radius: 24px;
+        border-radius: 22px;
       }
 
       h1 {
-        font-size: clamp(2rem, 9vw, 2.75rem);
-        letter-spacing: -1.4px;
+        font-size: clamp(2rem, 9vw, 2.65rem);
+        letter-spacing: -1.3px;
       }
 
       .trust,
@@ -383,12 +418,9 @@
         grid-template-columns: 1fr;
       }
 
-      .trust span {
-        padding: 14px;
-      }
-
       .button {
-        width: 100%;
+        margin: 22px -22px -22px;
+        width: calc(100% + 44px);
       }
     }
   </style>
@@ -406,51 +438,57 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="tag">🏪 For Isle of Wight garages</div>
+    <section class="hero-split">
+      <div class="hero-copy">
+        <div class="eyebrow">For Isle of Wight garages</div>
 
-      <h1>Advertise your vehicles to Isle of Wight buyers</h1>
+        <h1>List your vehicles on IOW Car Finder</h1>
 
-      <p>
-        List your vehicles on IOW Car Finder and receive enquiries directly from local buyers.
-        No marketplace, no middleman — customers contact your garage directly.
-      </p>
+        <p class="lead">
+          Reach more local buyers and showcase your stock to car shoppers across the Island.
+        </p>
+      </div>
 
-      <div class="trust">
-        <span>🚗 Local Isle of Wight buyers</span>
-        <span>📞 Direct customer enquiries</span>
-        <span>⭐ Free during early launch</span>
+      <div class="island-box">
+        <img src="/images/iow-outline-glow.svg" alt="Isle of Wight outline">
+        <p>Supporting <strong>local garages</strong><br>across the Isle of Wight.</p>
       </div>
     </section>
 
     <section class="actions">
-      <div class="action join">
-        <h2>Join IOW Car Finder</h2>
-        <p>Get your garage in front of local buyers and become one of our founding dealerships.</p>
-        <a class="button" id="joinBtn" href="#contact">Join now →</a>
-        <div class="small">Free during early launch.</div>
+      <div class="action" id="joinCard">
+        <h2>Add your garage</h2>
+        <p>Register your garage and start advertising vehicles to local buyers.</p>
+        <div class="small">For Isle of Wight garages.</div>
+
+        <button type="button" class="button" id="joinBtn">
+          Add your garage
+        </button>
       </div>
 
-      <div class="action try">
+      <div class="action" id="addCard">
         <h2>Try listing a vehicle</h2>
-        <p>See how simple it is. Send us one vehicle and we’ll publish it on IOW Car Finder.</p>
-        <a class="button green" id="addBtn" href="#contact">Try it now →</a>
-        <div class="small">Garages only • No payment required.</div>
+        <p>Send us one vehicle first and see how simple it is to get listed.</p>
+        <div class="small">No payment needed to submit details today.</div>
+
+        <button type="button" class="button secondary" id="addBtn">
+          Try listing a vehicle
+        </button>
       </div>
     </section>
 
-    <div class="info">
-      <div>ⓘ</div>
-      <div>
-        <strong>Early launch offer</strong>
-        We’re currently inviting Isle of Wight garages to join while we grow the platform.
-        You can join or submit a vehicle today without any payment.
-      </div>
-    </div>
+    <section class="note">
+      <strong>Simple early access</strong>
+      <p>
+        We're currently working with local garages while we grow IOW Car Finder.
+        You can register your garage or submit a vehicle without any payment today.
+      </p>
+    </section>
 
-    <section class="card" id="contact">
-      <h2>Get started</h2>
-      <p>Complete the form below to join IOW Car Finder, try listing a vehicle or ask us a question.</p>
+    <section class="panel" id="contact">
+      <div class="eyebrow">Get started</div>
+      <h2>Send us your details</h2>
+      <p>Complete the form below to add your garage, try listing a vehicle, or ask us a question.</p>
 
       <form action="https://formsubmit.co/contact@iowcarfinder.co.uk" method="POST">
         <input type="hidden" name="_subject" value="Garage enquiry - IOW Car Finder">
@@ -461,8 +499,8 @@
             <label for="type">What would you like to do?</label>
             <select id="type" name="Request type" required>
               <option value="">Please choose</option>
-              <option>Join IOW Car Finder</option>
-              <option>Add a vehicle</option>
+              <option>Add your garage</option>
+              <option>Try listing a vehicle</option>
               <option>General question</option>
             </select>
           </div>
@@ -487,14 +525,57 @@
             <input id="phone" name="Phone number" type="tel">
           </div>
 
+          <div class="vehicle-fields" id="vehicleFields">
+            <div>
+              <label for="registration">Registration</label>
+              <input id="registration" name="Registration" type="text">
+            </div>
+
+            <div>
+              <label for="makeModel">Make and model</label>
+              <input id="makeModel" name="Make and model" type="text">
+            </div>
+
+            <div>
+              <label for="year">Year</label>
+              <input id="year" name="Year" type="text">
+            </div>
+
+            <div>
+              <label for="price">Price</label>
+              <input id="price" name="Price" type="text">
+            </div>
+
+            <div>
+              <label for="mileage">Mileage</label>
+              <input id="mileage" name="Mileage" type="text">
+            </div>
+
+            <div>
+              <label for="fuel">Fuel</label>
+              <input id="fuel" name="Fuel" type="text">
+            </div>
+
+            <div>
+              <label for="transmission">Transmission</label>
+              <input id="transmission" name="Transmission" type="text">
+            </div>
+
+            <div>
+              <label for="colour">Colour</label>
+              <input id="colour" name="Colour" type="text">
+            </div>
+          </div>
+
           <div class="full">
             <label for="message">Message</label>
-            <textarea id="message" name="Message" placeholder="Tell us about your garage, or paste vehicle details here if you want to add a car."></textarea>
+            <textarea id="message" name="Message"
+              placeholder="Tell us about your garage, or paste vehicle details here if you want to try listing a car."></textarea>
           </div>
         </div>
 
         <button type="submit">Send details</button>
-        <div class="privacy">🔒 We’ll only use your details to respond to your enquiry.</div>
+        <div class="privacy">We’ll only use your details to respond to your enquiry.</div>
       </form>
     </section>
   </main>
@@ -506,14 +587,38 @@
 
   <script>
     const typeSelect = document.getElementById("type");
+    const vehicleFields = document.getElementById("vehicleFields");
 
-    document.getElementById("joinBtn").addEventListener("click", () => {
-      typeSelect.value = "Join IOW Car Finder";
+    function setType(value) {
+      typeSelect.value = value;
+
+      if (value === "Try listing a vehicle") {
+        vehicleFields.classList.add("show");
+      } else {
+        vehicleFields.classList.remove("show");
+      }
+
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.getElementById("joinCard").addEventListener("click", (e) => {
+      e.preventDefault();
+      setType("Add your garage");
     });
 
-    document.getElementById("addBtn").addEventListener("click", () => {
-      typeSelect.value = "Add a vehicle";
+    document.getElementById("addCard").addEventListener("click", (e) => {
+      e.preventDefault();
+      setType("Try listing a vehicle");
+    });
+
+    typeSelect.addEventListener("change", () => {
+      if (typeSelect.value === "Try listing a vehicle") {
+        vehicleFields.classList.add("show");
+      } else {
+        vehicleFields.classList.remove("show");
+      }
     });
   </script>
 </body>
+
 </html>
