@@ -70,7 +70,7 @@
         linear-gradient(180deg,
           rgba(0, 0, 0, .18) 0%,
           rgba(0, 0, 0, .45) 55%,
-          rgba(0, 0, 0, .58) 100%),
+          rgba(0, 0, 0, .48) 100%),
         url("/images/hero-mobile.webp") center 20%/cover no-repeat;
     }
 
@@ -141,7 +141,7 @@
     }
 
     .iow-shape {
-      width: 95px;
+      width: 103px;
       opacity: .85;
       margin: 8px auto 6px;
       display: block;
@@ -341,7 +341,7 @@
       }
 
       .iow-shape {
-        width: 82px;
+        width: 95px;
         margin: 12px auto 18px;
         opacity: .85;
       }
@@ -364,6 +364,12 @@
           0 0 18px rgba(255, 140, 0, .25);
       }
 
+      .card:active,
+      .garage-pill:active,
+      .tick:active {
+        transform: scale(.98);
+      }
+
       .label {
         font-size: 0.95rem;
       }
@@ -374,7 +380,7 @@
       }
 
       .trustline {
-        margin-top: 190px;
+        margin-top: 200px;
         gap: 8px;
         flex-direction: column;
         align-items: center;
