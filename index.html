@@ -70,8 +70,8 @@
         linear-gradient(180deg,
           rgba(0, 0, 0, .18) 0%,
           rgba(0, 0, 0, .45) 55%,
-          rgba(0, 0, 0, .48) 100%),
-        url("/images/hero-mobile.webp") center 20%/cover no-repeat;
+          rgba(0, 0, 0, .54) 100%),
+        url("/images/hero-desktop.webp") center 42%/cover no-repeat;
     }
 
     .wrap {
@@ -326,6 +326,16 @@
 
     /* MOBILE HERO IMAGE */
     @media (max-width: 560px) {
+
+      .hero::before {
+        background:
+          linear-gradient(180deg,
+            rgba(0, 0, 0, .18) 0%,
+            rgba(0, 0, 0, .45) 55%,
+            rgba(0, 0, 0, .50) 100%),
+          url("/images/hero-mobile.webp") center 20%/cover no-repeat;
+      }
+
       .wrap {
         padding: 28px 0 14px;
       }
