@@ -175,7 +175,7 @@ function mapDbCar(row) {
     price: row.price ?? null,
 
     // supports both column styles
-    garageId: row.garageId ?? row.garage_id ?? null,
+    garageId: row.garage_id ?? null,
 
     // ✅ NEW: garageName (used by cars.html so you don’t show UUID)
     garageName: joinedGarage?.name ?? row.garageName ?? null,
@@ -252,7 +252,9 @@ async function dbGetCarByName(name) {
 
 async function dbInsertCar(payload) {
   const name = String(payload.name || "").trim();
-  const garage_id = String(payload.garage_id || payload.garageId || "").trim() || null;
+
+  const garage_id_raw = payload.garage_id ?? payload.garageId ?? null;
+  const garage_id = garage_id_raw ? String(garage_id_raw).trim() : null;
 
   const row = {
     name,

@@ -14,49 +14,49 @@
             color: #111827;
         }
 
-header {
-    background: #07111d;
-    color: #fff;
-    padding: 16px 18px;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-}
+        header {
+            background: #07111d;
+            color: #fff;
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
 
-.top {
-    max-width: 1040px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 18px;
-}
+        .top {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
 
-.brand {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 900;
-    letter-spacing: -.4px;
-    font-size: 1.05rem;
-}
+        .brand {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 900;
+            letter-spacing: -.4px;
+            font-size: 1.05rem;
+        }
 
-.brand span {
-    color: #e67e22;
-}
+        .brand span {
+            color: #e67e22;
+        }
 
-nav {
-    display: flex;
-    gap: 16px;
-}
+        nav {
+            display: flex;
+            gap: 16px;
+        }
 
-nav a {
-    color: rgba(255,255,255,.82);
-    text-decoration: none;
-    font-size: .9rem;
-    font-weight: 800;
-}
+        nav a {
+            color: rgba(255, 255, 255, .82);
+            text-decoration: none;
+            font-size: .9rem;
+            font-weight: 800;
+        }
 
-nav a:hover {
-    color: #fff;
-}
+        nav a:hover {
+            color: #fff;
+        }
 
         main {
             max-width: 1100px;
@@ -241,10 +241,26 @@ nav a:hover {
                     return;
                 }
 
-                const garageCars = cars.filter(car =>
-                    String(car.garageId || car.garage_id || "") === String(garageId)
-                );
+                const callBtn = document.getElementById("callBtn");
+                const mapBtn = document.getElementById("mapBtn");
+                const moreBtn = document.getElementById("moreBtn");
 
+                if (garage.phone) {
+                    callBtn.href = "tel:" + garage.phone.replace(/\s+/g, "");
+                } else {
+                    callBtn.style.display = "none";
+                }
+
+                if (garage.address) {
+                    mapBtn.href =
+                        "https://www.google.com/maps/search/?api=1&query=" +
+                        encodeURIComponent(garage.address);
+                } else {
+                    mapBtn.style.display = "none";
+                }
+
+                moreBtn.href = "/garage?id=" + encodeURIComponent(garage.id);
+                
                 garageBox.innerHTML = `
   <h2>${escapeHtml(garage.name)}</h2>
   <p><strong>🚗 ${garageCars.length}</strong> ${garageCars.length === 1 ? "car" : "cars"} in stock</p>
