@@ -440,20 +440,10 @@
 
     @media (max-width: 520px) {
       .actionButtons {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .btnRowTight {
-        display: grid;
         grid-template-columns: 1fr 1fr;
       }
-
-      #moreBtn {
-        grid-column: 1 / -1
-      }
     }
+
   </style>
 </head>
 
@@ -508,9 +498,12 @@
 
         <div class="btnRow btnRowTight actionButtons">
           <a id="callBtn" class="btn primary" href="#">📞 Call</a>
-          <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">📍 Directions</a>
-          <button id="shareBtn" class="btn ghost shareBtn" type="button">🔗 Share</button>
+
           <a id="moreBtn" class="btn ghost" href="/cars-page">🏢 View Garage</a>
+
+          <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">📍 Directions</a>
+
+          <button id="shareBtn" class="btn ghost shareBtn" type="button">🔗 Share</button>
         </div>
 
         <div class="small" id="callNote"></div>
