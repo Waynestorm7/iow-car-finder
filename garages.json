@@ -1,13 +1,13 @@
 [
   {
     "id": "demo-garage",
-    "name": "Island Garage",
+    "name": "IOW Car Finder Demo Garage",
     "phone": "01983 123456",
-    "email": "sales@islandgarage.co.uk",
+    "email": "contact@iowcarfinder.co.uk",
     "town": "Newport",
     "address": "1 High Street",
     "postcode": "PO30 1SS",
-    "website": "https://islandgarage.co.uk",
+    "website": "https://iowcarfinder.co.uk",
     "openingHours": "Mon–Fri 9am–5:30pm, Sat 9am–1pm"
   }
 ]
