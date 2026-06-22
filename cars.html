@@ -60,63 +60,51 @@
 
     /* ---------- Header ---------- */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      background: rgba(8, 10, 14, .78);
+      background: #07111d;
       color: #fff;
+      padding: 16px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, .08);
-      backdrop-filter: blur(10px);
     }
 
     .top {
-      max-width: 1120px;
+      max-width: 1040px;
       margin: 0 auto;
-      padding: 14px 18px;
       display: flex;
-      gap: 12px;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      gap: 18px;
     }
 
     .brand {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-
-    .brand strong {
-      font-size: 1.02rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -.4px;
+      font-size: 1.05rem;
     }
 
     .brand span {
-      font-size: .82rem;
-      opacity: .78;
-      margin-top: 2px;
+      color: #e67e22;
     }
 
     nav {
       display: flex;
-      gap: 10px;
-      align-items: center;
-      font-weight: 800;
+      gap: 16px;
     }
 
     nav a {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      transition: background .12s ease, border-color .12s ease;
+      color: rgba(255, 255, 255, .82);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 800;
+      padding: 0;
+      border: 0;
+      background: transparent;
     }
 
-    nav a:hover {
-      background: rgba(255, 255, 255, .08);
-      border-color: rgba(255, 255, 255, .12);
-    }
-
+    nav a:hover,
     nav a.active {
-      background: rgba(255, 255, 255, .14);
-      border-color: rgba(255, 255, 255, .18);
+      color: #fff;
     }
 
     /* ---------- Hero ---------- */
@@ -602,8 +590,7 @@
   <header>
     <div class="top">
       <a class="brand" href="/">
-        <strong>IOW Car Finder</strong>
-        <span>Isle of Wight · Used cars · Local garages</span>
+        <span>IOW</span> Car Finder
       </a>
 
       <nav>

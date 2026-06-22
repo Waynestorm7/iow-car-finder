@@ -7,23 +7,63 @@
   <title>Browse Garages | IOW Car Finder</title>
 
   <style>
+    
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f4f6f8;
       color: #111827;
     }
-
-    header {
-      background: rgba(0, 0, 0, .75);
-      color: #fff;
-      padding: 14px 16px;
-    }
+    
 
     header a {
       color: #fff;
       text-decoration: none;
       font-weight: 800;
+    }
+
+    header {
+      background: #07111d;
+      color: #fff;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .top {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -.4px;
+      font-size: 1.05rem;
+    }
+
+    .brand span {
+      color: #e67e22;
+    }
+
+    nav {
+      display: flex;
+      gap: 16px;
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, .82);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 800;
+    }
+
+    nav a:hover {
+      color: #fff;
     }
 
     main {
@@ -144,6 +184,23 @@
     }
 
     @media (max-width: 650px) {
+
+      header {
+        padding: 14px;
+      }
+
+      .top {
+        gap: 12px;
+      }
+
+      nav {
+        gap: 12px;
+      }
+
+      nav a {
+        font-size: .84rem;
+      }
+
       main {
         padding: 16px 12px 28px;
       }
@@ -162,7 +219,14 @@
 <body>
 
   <header>
-    <a href="/">IOW Car Finder</a>
+    <div class="top">
+      <a class="brand" href="/"><span>IOW</span> Car Finder</a>
+
+      <nav>
+        <a href="/">Home</a>
+        <a href="/cars-page">Cars</a>
+      </nav>
+    </div>
   </header>
 
   <main>
