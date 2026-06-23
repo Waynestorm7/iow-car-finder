@@ -233,6 +233,8 @@
                 const carsData = await carsRes.json();
                 const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
 
+
+
                 const garage = garages.find(g => String(g.id) === String(garageId));
 
                 if (!garage) {
@@ -241,6 +243,11 @@
                     return;
                 }
 
+                const garageCars = cars.filter(car =>
+                    String(car.garageId || car.garage_id || "") === String(garageId)
+                );
+
+                /*
                 const callBtn = document.getElementById("callBtn");
                 const mapBtn = document.getElementById("mapBtn");
                 const moreBtn = document.getElementById("moreBtn");
@@ -260,7 +267,8 @@
                 }
 
                 moreBtn.href = "/garage?id=" + encodeURIComponent(garage.id);
-                
+                */
+
                 garageBox.innerHTML = `
   <h2>${escapeHtml(garage.name)}</h2>
   <p><strong>🚗 ${garageCars.length}</strong> ${garageCars.length === 1 ? "car" : "cars"} in stock</p>
@@ -270,7 +278,7 @@
   ${garage.phone ? `<p><strong>Phone:</strong> ${escapeHtml(garage.phone)}</p>` : ""}
   ${garage.email ? `<p><strong>Email:</strong> ${escapeHtml(garage.email)}</p>` : ""}
   ${garage.website ? `<p><strong>Website:</strong> <a href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Visit website</a></p>` : ""}
-  ${garage.openingHours ? `<p><strong>Opening hours:</strong><br>${escapeHtml(garage.openingHours)}</p>` : ""}
+ ${(garage.opening_hours || garage.openingHours) ? `<p><strong>Opening hours:</strong><br>${escapeHtml(garage.opening_hours || garage.openingHours)}</p>` : ""}
 `;
 
                 if (!garageCars.length) {
