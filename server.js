@@ -555,6 +555,68 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // API: POST /garage-apply
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/garage-apply") {
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const garageName = String(data.garageName || "").trim();
+    const contactName = String(data.contactName || "").trim();
+    const email = String(data.email || "").trim();
+    const phone = String(data.phone || "").trim();
+    const website = String(data.website || "").trim();
+    const message = String(data.message || "").trim();
+
+    if (!garageName || !email) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Garage name and email are required."
+      });
+    }
+
+    try {
+      const { error } = await supabase
+        .from("garage_applications")
+        .insert({
+          garage_name: garageName,
+          contact_name: contactName || null,
+          email,
+          phone: phone || null,
+          website: website || null,
+          message: message || null,
+          status: "pending"
+        });
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (err) {
+      console.error("POST /garage-apply:", err);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not save application."
+      });
+    }
+  }
+
+  // -----------------------------
   // API: POST /cars
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars") {
