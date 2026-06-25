@@ -709,6 +709,14 @@ const server = http.createServer(async (req, res) => {
   // Admin: GET /garage-applications-data
   // -----------------------------
   if (req.method === "GET" && pathname === "/garage-applications-data") {
+
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
     try {
       const { data, error } = await supabase
         .from("garage_applications")
@@ -719,7 +727,7 @@ const server = http.createServer(async (req, res) => {
 
       return sendJson(res, 200, data || []);
     } catch (e) {
-      console.error("GET /garage-applications-data error:", e);
+      console.error("GET /garage-applications-data error", e);
       return sendJson(res, 500, {
         success: false,
         message: "Could not load applications"
@@ -740,6 +748,10 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/garage-applications") {
+    if (!isAdmin(req)) {
+      return send(res, 403, { "Content-Type": "text/plain; charset=utf-8" }, "Forbidden");
+    }
+
     return serveFile(res, path.join(__dirname, "garage-applications.html"));
   }
 
