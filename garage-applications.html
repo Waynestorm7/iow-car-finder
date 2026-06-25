@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garage Applications | IOW Car Finder</title>
+</head>
+
+<body>
+    <h1>Garage Applications</h1>
+
+    <div id="status">Loading applications...</div>
+    <div id="applications"></div>
+
+    <script>
+        async function loadApplications() {
+
+            const status = document.getElementById("status");
+            const container = document.getElementById("applications");
+
+            try {
+
+                const res = await fetch("/garage-applications-data");
+                const data = await res.json();
+
+                if (!res.ok) {
+                    status.textContent = "Could not load applications.";
+                    return;
+                }
+
+                status.textContent = "";
+
+                if (data.length === 0) {
+                    status.textContent = "No applications yet.";
+                    return;
+                }
+
+                data.forEach(app => {
+
+                    const div = document.createElement("div");
+
+                    div.innerHTML = `
+        <hr>
+        <h3>${app.garage_name}</h3>
+        <p><strong>Contact:</strong> ${app.contact_name}</p>
+        <p><strong>Email:</strong> ${app.email}</p>
+        <p><strong>Phone:</strong> ${app.phone || "-"}</p>
+        <p><strong>Status:</strong> ${app.status}</p>
+        <p>${app.message || ""}</p>
+      `;
+
+                    container.appendChild(div);
+
+                });
+
+            } catch (err) {
+                status.textContent = "Server error.";
+            }
+
+        }
+
+        loadApplications();
+    </script>
+</body>
+
+</html>

@@ -706,6 +706,28 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Admin: GET /garage-applications-data
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/garage-applications-data") {
+    try {
+      const { data, error } = await supabase
+        .from("garage_applications")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      return sendJson(res, 200, data || []);
+    } catch (e) {
+      console.error("GET /garage-applications-data error:", e);
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load applications"
+      });
+    }
+  }
+
+  // -----------------------------
   // PAGES
   // -----------------------------
 
@@ -717,6 +739,9 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/garage") return serveFile(res, path.join(__dirname, "garage.html"));
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
+  if (req.method === "GET" && pathname === "/garage-applications") {
+    return serveFile(res, path.join(__dirname, "garage-applications.html"));
+  }
 
   // -----------------------------
   // 404
