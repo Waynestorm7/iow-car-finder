@@ -500,6 +500,16 @@
 
     </div> <!-- myCarsSection -->
 
+    <div id="garageProfileSection" style="display:none;">
+      <div class="card">
+        <h2>Garage Profile</h2>
+
+        <p class="hint">
+          This information will appear on your public garage page.
+        </p>
+
+      </div>
+    </div>
   </main>
 
   <script>
@@ -958,15 +968,25 @@
     const showAddCarBtn = document.getElementById("show-add-car");
     const showMyCarsBtn = document.getElementById("show-my-cars");
     const myCarsSection = document.getElementById("myCarsSection");
+    const showGarageProfileBtn = document.getElementById("show-profile");
+    const garageProfileSection = document.getElementById("garageProfileSection");
 
     showAddCarBtn.addEventListener("click", () => {
       addCarSection.style.display = "grid";
       myCarsSection.style.display = "none";
+      garageProfileSection.style.display = "none";
     });
 
     showMyCarsBtn.addEventListener("click", () => {
       addCarSection.style.display = "none";
       myCarsSection.style.display = "block";
+      garageProfileSection.style.display = "none";
+    });
+
+    showGarageProfileBtn.addEventListener("click", () => {
+      addCarSection.style.display = "none";
+      myCarsSection.style.display = "none";
+      garageProfileSection.style.display = "block";
     });
     renderCars();
   </script>
