@@ -709,7 +709,6 @@ const server = http.createServer(async (req, res) => {
   // Admin: GET /garage-applications-data
   // -----------------------------
   if (req.method === "GET" && pathname === "/garage-applications-data") {
-
     if (!isAdmin(req)) {
       return sendJson(res, 403, {
         success: false,

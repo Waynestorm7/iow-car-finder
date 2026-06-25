@@ -320,6 +320,34 @@
       padding: 2px 6px;
       border-radius: 8px
     }
+
+    .dashboard-menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .dashboard-menu button {
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #1f3b57;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .dashboard-menu button:hover {
+      background: #2c5378;
+      transform: translateY(-2px);
+    }
+
+    #addCarSection {
+      display: none;
+    }
   </style>
 </head>
 
@@ -335,11 +363,19 @@
 
   <main>
     <h1>Garage Dashboard</h1>
+
+    <div class="dashboard-menu">
+      <button id="show-add-car">➕ Add Vehicle</button>
+      <button id="show-my-cars">🚗 My Cars</button>
+      <button id="show-profile">🏢 Garage Profile</button>
+      <button id="logout">🚪 Logout</button>
+    </div>
+
     <div class="hint">
       Upload photos (recommended). Optional details only show on the car page if you fill them in.
     </div>
 
-    <div class="grid">
+    <div class="grid" id="addCarSection">
       <!-- FORM CARD -->
       <div class="card">
         <h2>Add new car</h2>
@@ -454,12 +490,16 @@
       </div>
 
       <!-- LIST CARD -->
-      <div class="card">
-        <h2>Your cars</h2>
-        <div class="hint">Cars are filtered by the Garage ID above.</div>
-        <div id="cars" class="cars">Loading…</div>
+      <div id="myCarsSection">
+        <div class="card">
+          <h2>Your cars</h2>
+          <div class="hint">Cars are filtered by the Garage ID above.</div>
+          <div id="cars" class="cars">Loading…</div>
+        </div>
       </div>
-    </div>
+
+    </div> <!-- myCarsSection -->
+
   </main>
 
   <script>
@@ -914,6 +954,20 @@
       }
     });
 
+    const addCarSection = document.getElementById("addCarSection");
+    const showAddCarBtn = document.getElementById("show-add-car");
+    const showMyCarsBtn = document.getElementById("show-my-cars");
+    const myCarsSection = document.getElementById("myCarsSection");
+
+    showAddCarBtn.addEventListener("click", () => {
+      addCarSection.style.display = "grid";
+      myCarsSection.style.display = "none";
+    });
+
+    showMyCarsBtn.addEventListener("click", () => {
+      addCarSection.style.display = "none";
+      myCarsSection.style.display = "block";
+    });
     renderCars();
   </script>
 </body>
