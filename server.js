@@ -196,6 +196,7 @@ function mapDbCar(row) {
     createdAt: row.created_at ?? null,
     updatedAt: row.updatedAt ?? null,
 
+    status: row.status ?? "available",
     sold: row.sold ?? false,
     soldDate: row.soldDate ?? row.sold_date ?? null,
   };
@@ -276,6 +277,8 @@ async function dbInsertCar(payload) {
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
       : null,
+
+    status: "available",
     sold: false,
     soldDate: null,
     updatedAt: new Date().toISOString(),
@@ -688,20 +691,54 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // API: POST /cars-available?name=
+  // API: POST /cars-status
   // -----------------------------
-  if (req.method === "POST" && pathname === "/cars-available") {
+  if (req.method === "POST" && pathname === "/cars-status") {
     if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
 
-    const name = String(urlObj.searchParams.get("name") || "").trim();
+    let data;
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, { success: false, message: "Bad JSON" });
+    }
+
+    const name = String(data.name || "").trim();
+    const status = String(data.status || "").trim().toLowerCase();
+
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
+    if (!["available", "reserved", "sold"].includes(status)) {
+      return sendJson(res, 400, { success: false, message: "Invalid status" });
+    }
+
+    const update = {
+      status,
+      sold: status === "sold",
+      soldDate: status === "sold" ? todayUK() : null,
+      updatedAt: new Date().toISOString()
+    };
+
     try {
-      await dbMarkAvailableByName(name);
-      return sendJson(res, 200, { success: true });
+      const { error } = await supabase
+        .from("cars")
+        .update(update)
+        .eq("name", name);
+
+      if (error) throw error;
+
+      return sendJson(res, 200, {
+        success: true,
+        status,
+        soldDate: update.soldDate
+      });
     } catch (e) {
-      console.error("POST /cars-available error:", e);
-      return sendJson(res, 500, { success: false, message: "Database update failed" });
+      console.error("POST /cars-status error:", e);
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database update failed"
+      });
     }
   }
 
@@ -726,10 +763,10 @@ const server = http.createServer(async (req, res) => {
 
       return sendJson(res, 200, data || []);
     } catch (e) {
-      console.error("GET /garage-applications-data error", e);
+      console.error("POST /cars-status error:", e);
       return sendJson(res, 500, {
         success: false,
-        message: "Could not load applications"
+        message: "Database update failed"
       });
     }
   }

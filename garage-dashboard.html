@@ -489,16 +489,21 @@
         <div id="msg" class="msg"></div>
       </div>
 
-      <!-- LIST CARD -->
-      <div id="myCarsSection">
-        <div class="card">
-          <h2>Your cars</h2>
-          <div class="hint">Cars are filtered by the Garage ID above.</div>
-          <div id="cars" class="cars">Loading…</div>
+    </div> <!-- addCarSection -->
+
+    <div id="myCarsSection" style="display:none;">
+      <div class="card">
+        <h2>My Cars</h2>
+
+        <div class="hint">
+          Cars for this garage.
+        </div>
+
+        <div id="cars" class="cars">
+          Loading...
         </div>
       </div>
-
-    </div> <!-- myCarsSection -->
+    </div>
 
     <div id="garageProfileSection" style="display:none;">
       <div class="card">
@@ -716,90 +721,76 @@
             <div class="left">
               <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.png'">
               <div style="min-width:0;">
-                <div class="name">${escapeText(car.name || "Untitled")}${car.sold ? " ✅ SOLD" : ""}</div>
+                <div class="name">
+  ${escapeText(car.name || "Untitled")}
+  ${car.status === "reserved" ? " 🟠 RESERVED" : ""}
+  ${car.status === "sold" ? " 🔴 SOLD" : ""}
+</div>
                 <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
                 ${car.soldDate ? `<div class="meta">Sold date: ${escapeText(car.soldDate)}</div>` : ``}
               </div>
             </div>
 
-           <div style="display:flex; gap:10px; align-items:center; margin-left:auto;">
-  ${car.sold
-              ? `<button type="button" class="btnSold btnAvailable">Mark Available</button>`
-              : `<button type="button" class="btnSold">Mark Sold</button>`
+          <div style="display:flex; gap:10px; align-items:center; margin-left:auto; flex-wrap:wrap;">
+  ${car.status === "reserved"
+              ? `<button type="button" class="btnStatus" data-status="available">Make Available</button>`
+              : `<button type="button" class="btnStatus" data-status="reserved">Reserve</button>`
             }
-              <button type="button" class="danger">Delete</button>
-            </div>
+
+  ${car.status === "sold"
+              ? `<button type="button" class="btnStatus" data-status="available">Make Available</button>`
+              : `<button type="button" class="btnStatus" data-status="sold">Mark Sold</button>`
+            }
+
+  <button type="button" class="danger">Delete</button>
+</div>
           `;
 
-          const soldBtn = row.querySelector(".btnSold:not(.btnAvailable)");
+          const statusBtns = row.querySelectorAll(".btnStatus");
 
-          if (soldBtn) {
-            soldBtn.addEventListener("click", async () => {
-              if (!confirm(`Mark "${car.name}" as SOLD?`)) return;
+          statusBtns.forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const newStatus = btn.dataset.status;
 
-              soldBtn.disabled = true;
-              soldBtn.textContent = "Saving…";
+              if (!newStatus) return;
+
+              if (!confirm(`Change "${car.name}" to ${newStatus.toUpperCase()}?`)) return;
+
+              btn.disabled = true;
+              btn.textContent = "Saving…";
 
               try {
-                const resp = await fetch("/cars-sold?name=" + encodeURIComponent(car.name || ""), {
+                const resp = await fetch("/cars-status", {
                   method: "POST",
-                  headers: { "X-Garage-Key": secretInput.value.trim() }
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-Garage-Key": secretInput.value.trim()
+                  },
+                  body: JSON.stringify({
+                    name: car.name,
+                    status: newStatus
+                  })
                 });
 
                 const result = await resp.json().catch(() => null);
 
                 if (!resp.ok || !result || !result.success) {
-                  showMsg("error", (result && result.message) ? result.message : "Could not mark sold.");
-                  soldBtn.disabled = false;
-                  soldBtn.textContent = "Mark Sold";
+                  showMsg("error", result?.message || "Could not update status.");
+                  btn.disabled = false;
+                  btn.textContent = newStatus;
                   return;
                 }
 
-                showMsg("success", `Marked SOLD (${result.soldDate || "today"}).`);
+                showMsg("success", `Status updated to ${newStatus}.`);
                 renderCars();
 
               } catch {
                 showMsg("error", "Network error.");
-                soldBtn.disabled = false;
-                soldBtn.textContent = "Mark Sold";
+                btn.disabled = false;
+                btn.textContent = newStatus;
               }
             });
-          }
-
-          const availableBtn = row.querySelector(".btnAvailable");
-
-          if (availableBtn) {
-            availableBtn.addEventListener("click", async () => {
-              if (!confirm(`Mark "${car.name}" as AVAILABLE again?`)) return;
-
-              availableBtn.disabled = true;
-              availableBtn.textContent = "Saving…";
-
-              try {
-                const resp = await fetch("/cars-available?name=" + encodeURIComponent(car.name || ""), {
-                  method: "POST",
-                  headers: { "X-Garage-Key": secretInput.value.trim() }
-                });
-
-                const result = await resp.json().catch(() => null);
-
-                if (!resp.ok || !result || !result.success) {
-                  showMsg("error", (result && result.message) ? result.message : "Could not mark available.");
-                  availableBtn.disabled = false;
-                  availableBtn.textContent = "Mark Available";
-                  return;
-                }
-
-                showMsg("success", "Marked available again.");
-                renderCars();
-
-              } catch {
-                showMsg("error", "Network error.");
-                availableBtn.disabled = false;
-                availableBtn.textContent = "Mark Available";
-              }
-            });
-          }
+          });
 
           const delBtn = row.querySelector(".danger");
           delBtn.addEventListener("click", async () => {
