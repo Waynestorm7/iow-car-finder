@@ -517,7 +517,41 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+    const supabaseUrl = "https://mptyddctygpxmpvlqpgt.supabase.co";
+    const supabaseKey = "sb_publishable_PGPGeL1Ly2KfV8fgb6E15Q_zQpeHxCE";
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+    async function requireLogin() {
+      const { data } = await supabaseClient.auth.getSession();
+
+      if (!data.session) {
+        window.location.href = "/login";
+        return null;
+      }
+
+      return data.session.user;
+    }
+
+    async function getMyGarage(userId) {
+      const { data, error } = await supabaseClient
+        .from("garage_users")
+        .select("garage_id, role, status")
+        .eq("user_id", userId)
+        .single();
+
+      if (error || !data) {
+        console.error("Garage lookup failed:", error);
+        alert("No garage account found for this login.");
+        window.location.href = "/login";
+        return null;
+      }
+
+      console.log("Garage account:", data);
+      return data;
+    }
+
     const carsBox = document.getElementById("cars");
     const msgBox = document.getElementById("msg");
     const addBtn = document.getElementById("addBtn");
@@ -979,7 +1013,27 @@
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "block";
     });
-    renderCars();
+
+    (async () => {
+      const user = await requireLogin();
+
+      if (!user) return;
+
+      console.log("Logged in as:", user.email);
+
+      const garageAccount = await getMyGarage(user.id);
+
+      if (!garageAccount) return;
+
+      console.log("Garage ID:", garageAccount.garage_id);
+
+      garageIdInput.value = garageAccount.garage_id;
+
+      garageIdInput.readOnly = true;
+      garageIdInput.style.background = "#f3f4f6";
+
+      renderCars();
+    })();
   </script>
 </body>
 
