@@ -298,7 +298,9 @@ async function dbInsertCar(payload) {
     year: Number(payload.year),
     price: Number(payload.price),
     garage_id,
-    mileage: payload.mileage ?? null,
+    mileage: payload.mileage
+      ? Number(String(payload.mileage).replace(/[,\s.]/g, ""))
+      : null,
     fuel: payload.fuel ?? null,
     transmission: payload.transmission ?? null,
     engine: payload.engine ?? null,
@@ -308,7 +310,7 @@ async function dbInsertCar(payload) {
       ? String(payload.description).trim()
       : null,
     photos: (Array.isArray(payload.photos) ? payload.photos : [])
-      .map((x) => String(x).trim())
+      .map(x => String(x).trim())
       .filter(Boolean),
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
@@ -320,7 +322,10 @@ async function dbInsertCar(payload) {
     updatedAt: new Date().toISOString(),
   };
 
-  const { error } = await supabase.from("cars").insert(row);
+  const { error } = await supabase
+    .from("cars")
+    .insert(row);
+
   if (error) throw error;
 }
 
@@ -350,19 +355,6 @@ async function dbMarkSoldByName(name) {
 
   if (error) throw error;
   return data?.soldDate || soldDate;
-}
-
-async function dbMarkAvailableByName(name) {
-  const { error } = await supabase
-    .from("cars")
-    .update({
-      sold: false,
-      soldDate: null,
-      updatedAt: new Date().toISOString(),
-    })
-    .eq("name", name);
-
-  if (error) throw error;
 }
 
 async function dbGetCarById(id) {
@@ -465,7 +457,15 @@ const server = http.createServer(async (req, res) => {
   // Returns: { success: true, urls: [...] }
   // =============================
   if (req.method === "POST" && pathname === "/upload") {
-    if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
+
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
 
     return upload.array("photos", 12)(req, res, async (err) => {
       if (err) {
@@ -714,7 +714,8 @@ const server = http.createServer(async (req, res) => {
 
     const name = String(data.name || "").trim();
     const year = Number(data.year);
-    const price = Number(data.price);
+    const price = Number(String(data.price).replace(/[£,\s.]/g, ""));
+    data.price = price;
     const photos = Array.isArray(data.photos) ? data.photos.filter(Boolean) : [];
 
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
@@ -756,7 +757,8 @@ const server = http.createServer(async (req, res) => {
     const name = String(data.name || "").trim();
     const garageId = String(data.garageId || "").trim();
     const year = Number(data.year);
-    const price = Number(data.price);
+    const price = Number(String(data.price).replace(/[£,\s.]/g, ""));
+    data.price = price;
     const photos = Array.isArray(data.photos) ? data.photos.filter(Boolean) : [];
 
     if (!name || !garageId) return sendJson(res, 400, { success: false, message: "Missing name/garageId" });
@@ -774,21 +776,61 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // API: DELETE /cars?name=
+  // Auth: DELETE /my-cars?name=
   // -----------------------------
-  if (req.method === "DELETE" && pathname === "/cars") {
-    if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
+  if (req.method === "DELETE" && pathname === "/my-cars") {
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
 
     const name = String(urlObj.searchParams.get("name") || "").trim();
     if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
 
     try {
-      const deleted = await dbDeleteCarByName(name);
-      if (!deleted) return sendJson(res, 404, { success: false, message: "Not found" });
+      const car = await dbGetCarByName(name);
+
+      if (!car) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
+
+      if (String(car.garageId) !== String(auth.garageId)) {
+        return sendJson(res, 403, {
+          success: false,
+          message: "Forbidden"
+        });
+      }
+
+      const { error, count } = await supabase
+        .from("cars")
+        .delete({ count: "exact" })
+        .eq("name", name)
+        .eq("garage_id", auth.garageId);
+
+      if (error) throw error;
+
+      if (!count) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Not found"
+        });
+      }
+
       return sendJson(res, 200, { success: true });
+
     } catch (e) {
-      console.error("DELETE /cars error:", e);
-      return sendJson(res, 500, { success: false, message: "Database delete failed" });
+      console.error("DELETE /my-cars error:", e);
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database delete failed"
+      });
     }
   }
 

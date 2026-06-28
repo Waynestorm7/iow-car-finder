@@ -646,38 +646,34 @@
       }
     })();
 
-    async function uploadPhotos(files, adminKey) {
+    async function uploadPhotos(files) {
       const list = Array.from(files || []).slice(0, 12);
       if (!list.length) return [];
 
       const fd = new FormData();
-      list.forEach(f => fd.append("photos", f)); // MUST match multer field: photos
+      list.forEach(f => fd.append("photos", f));
+
+      const { data } = await supabaseClient.auth.getSession();
 
       const res = await fetch("/upload", {
         method: "POST",
-        headers: { "X-Garage-Key": adminKey },
+        headers: {
+          Authorization: `Bearer ${data.session.access_token}`
+        },
         body: fd
       });
 
-      const data = await res.json().catch(() => null);
+      const result = await res.json().catch(() => null);
 
-      if (!res.ok || !data || !data.success) {
-        throw new Error((data && data.message) ? data.message : "Photo upload failed");
+      if (!res.ok || !result || !result.success) {
+        throw new Error(result?.message || "Photo upload failed");
       }
 
-      return Array.isArray(data.urls) ? data.urls : [];
+      return Array.isArray(result.urls) ? result.urls : [];
     }
 
     photoFilesInput.addEventListener("change", async () => {
       clearMsg();
-
-      const adminKey = String(secretInput.value || "").trim();
-      if (!adminKey) {
-        uploadedPhotoUrls = [];
-        photoFilesInput.value = "";
-        showMsg("error", "Enter your Admin key first, then upload photos.");
-        return;
-      }
 
       if (!photoFilesInput.files || !photoFilesInput.files.length) return;
 
@@ -686,7 +682,7 @@
 
       try {
         showMsg("success", "Uploading photos…");
-        const urls = await uploadPhotos(photoFilesInput.files, adminKey);
+        const urls = await uploadPhotos(photoFilesInput.files);
         uploadedPhotoUrls = urls;
         showMsg("success", `${urls.length} photo(s) uploaded. Now click “Add car”.`);
       } catch (e) {
@@ -840,9 +836,13 @@
             delBtn.textContent = "Deleting…";
 
             try {
-              const resp = await fetch("/cars?name=" + encodeURIComponent(car.name || ""), {
+              const { data } = await supabaseClient.auth.getSession();
+
+              const resp = await fetch("/my-cars?name=" + encodeURIComponent(car.name || ""), {
                 method: "DELETE",
-                headers: { "X-Garage-Key": secretInput.value.trim() }
+                headers: {
+                  Authorization: `Bearer ${data.session.access_token}`
+                }
               });
 
               const result = await resp.json().catch(() => null);
@@ -880,7 +880,9 @@
 
       const name = optText(nameInput.value);
       const year = optNumber(yearInput.value);
-      const price = optNumber(priceInput.value);
+      const price = Number(
+        priceInput.value.replace(/[£,\s.]/g, "")
+      );
 
       // Prefer uploaded photos, fallback to pasted URLs
       const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
@@ -890,7 +892,7 @@
       if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
         try {
           showMsg("success", "Uploading photos…");
-          photos = await uploadPhotos(photoFilesInput.files, key);
+          photos = await uploadPhotos(photoFilesInput.files);
           uploadedPhotoUrls = photos;
         } catch (e) {
           return showMsg("error", e.message || "Photo upload failed.");
@@ -915,8 +917,13 @@
         photo: photos[0]
       };
 
-      const mileage = optNumber(mileageInput.value);
-      if (Number.isFinite(mileage) && mileage > 0) payload.mileage = Math.trunc(mileage);
+      const mileage = Number(
+        String(mileageInput.value).replace(/[,\s.]/g, "")
+      );
+
+      if (Number.isFinite(mileage) && mileage > 0) {
+        payload.mileage = mileage;
+      }
 
       const owners = optNumber(ownersInput.value);
       if (Number.isFinite(owners) && owners > 0) payload.owners = Math.trunc(owners);
@@ -942,6 +949,9 @@
       try {
 
         const { data } = await supabaseClient.auth.getSession();
+
+        console.log("Mileage being sent:", payload.mileage);
+        console.log(payload);
 
         const res = await fetch("/my-cars", {
           method: "POST",
