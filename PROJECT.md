@@ -1,87 +1,99 @@
-# Island Car Finder - Project Roadmap
+Island Car Finder - Project Roadmap
+✅ Completed
 
-### ✅ Completed
+Landing page
+Cars page
+Car details page
+Garages page
+Garage details page
+Garage dashboard
+Protected garage dashboard
+Photo uploads (Cloudinary)
+Supabase migration
+Authentication enabled
+Logout
+garage_users table created
+First garage account linked (SC Motors)
+GET /me authentication flow
+Garage applications
+Sold vehicles
+Reserved vehicles
+Status management
+Garage login
+Dashboard automatically loads logged-in garage
+Add car linked to logged-in garage
+Garage ID removed from Add Car
+Admin Key removed from Add Car
 
-- Landing page
-- Cars page
-- Car details page
-- Garages page
-- Garage details page
-- Garage dashboard
-- Protected garage dashboard
-- Photo uploads (Cloudinary)
-- Supabase migration
-- Sold vehicles
-- Reserved vehicles
-- Status management
-- Garage applications
-- Authentication enabled
-- garage_users table created
-- First garage account linked (SC Motors)
 
----
+🚧 Current Sprint
+Goal: Remove Admin Key from the remaining garage actions.
 
-## 🚧 Current Sprint
+[ ] Delete car uses authentication
+[ ] Reserve car uses authentication
+[ ] Mark sold uses authentication
+[ ] Photo upload uses authentication
 
-Goal: Remove Garage ID and Admin Key from the dashboard.
 
-- [x] User login page
-- [ ] Logout
-- [x] GET /me endpoint
-- [x] Link logged in user to garage
-- [x] Dashboard loads only that garage's cars
-- [ ] Add car uses logged-in garage
-- [ ] Remove Garage ID input
-- [ ] Remove Admin Key input
----
+🔜 Next Sprint
 
-## Next Sprint
+[ ] Garage profile editing
+[ ] Edit existing cars
+[ ] Better Add Car form
+[ ] Better image handling
+[ ] Reserved car styling
+[ ] Sold car styling
+[ ] Disable enquiries on sold/reserved cars
 
-- [ ] Garage profile editing
-- [ ] Better Add Car form
-- [ ] Better image handling
-- [ ] Reserved car styling
-- [ ] Sold car styling
-- [ ] Disable enquiry on sold/reserved cars
 
----
+🚀 Launch Checklist
+Accounts
 
-## Launch Checklist
+[ ] Garage signup
+[ ] Garage approval
+[ ] Email confirmation
+[ ] Password reset
 
-### Accounts
-- [ ] Garage signup
-- [ ] Garage approval
-- [ ] Email confirmation
-- [ ] Password reset
+Garage Features
 
-### Garage Features
-- [ ] Edit profile
-- [ ] Edit cars
-- [ ] Delete cars
-- [ ] Upload multiple photos
+[ ] Edit profile
+[ ] Edit cars
+[ ] Delete cars
+[ ] Upload multiple photos
 
-### Customer Features
-- [ ] Search
-- [ ] Filters
-- [ ] Saved cars
-- [ ] Contact garage
+Customer Features
 
-### Admin
-- [ ] Review garage applications
-- [ ] Approve garages
-- [ ] Reject garages
-- [ ] Manage garages
+[ ] Search improvements
+[ ] Advanced filters
+[ ] Saved cars
+[ ] Contact garage
+[ ] Enquiry forms
 
-### Polish
-- [ ] Mobile optimisation
-- [ ] Performance
-- [ ] SEO
-- [ ] Error pages
-- [ ] Terms & Privacy
+Admin
 
----
+[ ] Admin dashboard
+[ ] Review garage applications
+[ ] Approve garages
+[ ] Reject garages
+[ ] Manage garages
 
-## Launch
+Payments
 
-Target:
-A marketplace where Isle of Wight garages can sign up, log in, manage their own stock, and customers can browse and enquire about cars.
+[ ] Subscription plans
+[ ] Stripe integration
+[ ] Free trial
+[ ] Billing portal
+
+Polish
+
+[ ] Mobile optimisation
+[ ] Performance
+[ ] SEO
+[ ] Error pages
+[ ] Terms & Privacy Policy
+[ ] Cookie Policy
+[ ] Analytics
+
+
+🎯 Launch Goal
+A marketplace where Isle of Wight garages can register, be approved, subscribe, manage their own stock through a secure dashboard, and customers can easily browse, search and enquire about cars.

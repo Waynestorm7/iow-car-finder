@@ -688,6 +688,58 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Auth: POST /my-cars
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/my-cars") {
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const name = String(data.name || "").trim();
+    const year = Number(data.year);
+    const price = Number(data.price);
+    const photos = Array.isArray(data.photos) ? data.photos.filter(Boolean) : [];
+
+    if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
+    if (!Number.isInteger(year)) return sendJson(res, 400, { success: false, message: "Year must be integer" });
+    if (!Number.isFinite(price) || price <= 0) return sendJson(res, 400, { success: false, message: "Price must be > 0" });
+    if (!photos.length) return sendJson(res, 400, { success: false, message: "At least 1 photo required" });
+
+    data.garageId = auth.garageId;
+    data.garage_id = auth.garageId;
+
+    try {
+      await dbInsertCar(data);
+      return sendJson(res, 200, {
+        success: true
+      });
+    } catch (e) {
+      console.error("POST /my-cars error:", e);
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database insert failed"
+      });
+    }
+  }
+
+  // -----------------------------
   // API: POST /cars
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars") {

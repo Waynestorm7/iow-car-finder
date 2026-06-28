@@ -874,7 +874,6 @@
       clearMsg();
 
       const garageId = currentGarageId;
-      const key = String(secretInput.value || "").trim();
 
       const name = optText(nameInput.value);
       const year = optNumber(yearInput.value);
@@ -899,7 +898,6 @@
       const extras = optText(extrasInput.value);
 
       if (!garageId) return showMsg("error", "Garage ID required.");
-      if (!key) return showMsg("error", "Admin key required.");
       if (!name) return showMsg("error", "Car name required.");
       if (!Number.isFinite(year)) return showMsg("error", "Year must be a number.");
       if (!Number.isFinite(price) || price <= 0) return showMsg("error", "Price must be > 0.");
@@ -939,15 +937,22 @@
       addBtn.textContent = "Saving…";
 
       try {
-        const res = await fetch("/cars", {
+
+        const { data } = await supabaseClient.auth.getSession();
+
+        const res = await fetch("/my-cars", {
           method: "POST",
-          headers: { "Content-Type": "application/json", "X-Garage-Key": key },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.session.access_token}`
+          },
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json().catch(() => null);
-        if (!res.ok || !data || !data.success) {
-          showMsg("error", (data && data.message) ? data.message : "Save failed.");
+        const result = await res.json().catch(() => null);
+
+        if (!res.ok || !result || !result.success) {
+          showMsg("error", (result && result.message) ? result.message : "Save failed.");
           addBtn.disabled = false;
           addBtn.textContent = "Add car";
           return;
@@ -998,6 +1003,7 @@
     const myCarsSection = document.getElementById("myCarsSection");
     const showGarageProfileBtn = document.getElementById("show-profile");
     const garageProfileSection = document.getElementById("garageProfileSection");
+    const logoutBtn = document.getElementById("logout");
 
     showAddCarBtn.addEventListener("click", () => {
       addCarSection.style.display = "grid";
@@ -1015,6 +1021,11 @@
       addCarSection.style.display = "none";
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "block";
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = "/login";
     });
 
     (async () => {
