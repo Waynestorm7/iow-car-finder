@@ -709,14 +709,16 @@
         return;
       }
 
-      const adminKey = secretInput.value.trim();
-      if (!adminKey) {
-        carsBox.textContent = "Enter your Admin key to load cars.";
-        return;
-      }
 
       try {
-        const res = await fetch("/cars-admin", { headers: { "x-garage-key": adminKey } });
+        const { data } = await supabaseClient.auth.getSession();
+
+        const res = await fetch("/my-cars", {
+          headers: {
+            Authorization: `Bearer ${data.session.access_token}`
+          }
+        });
+
         if (!res.ok) {
           carsBox.textContent = "Could not load cars (wrong key?).";
           return;
@@ -728,19 +730,18 @@
           return;
         }
 
-        const cars = allCars
-          .filter(c => String(c.garageId || c.garage_id || "") === garageId)
-          .sort((a, b) => {
-            if (a.sold && !b.sold) return 1;
-            if (!a.sold && b.sold) return -1;
+        const cars = allCars.sort((a, b) => {
+          if (a.sold && !b.sold) return 1;
+          if (!a.sold && b.sold) return -1;
 
-            return (
-              (new Date(b.updatedAt || b.updated_at || 0).getTime() || 0) -
-              (new Date(a.updatedAt || a.updated_at || 0).getTime() || 0)
-            );
-          });
+          return (
+            (new Date(b.updatedAt || b.updated_at || 0).getTime() || 0) -
+            (new Date(a.updatedAt || a.updated_at || 0).getTime() || 0)
+          );
+        });
 
         carsBox.innerHTML = "";
+
         if (!cars.length) {
           carsBox.textContent = "No cars yet for this garage.";
           return;
@@ -872,7 +873,7 @@
     addBtn.addEventListener("click", async () => {
       clearMsg();
 
-      const garageId = getGarageId();
+      const garageId = currentGarageId;
       const key = String(secretInput.value || "").trim();
 
       const name = optText(nameInput.value);

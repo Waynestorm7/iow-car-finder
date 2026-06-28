@@ -144,6 +144,42 @@ function isAdmin(req) {
   return key === ADMIN_KEY;
 }
 
+async function getGarageFromAuth(req) {
+  const authHeader = String(req.headers.authorization || "").trim();
+
+  if (!authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+
+  const token = authHeader.replace("Bearer ", "").trim();
+
+  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+
+  if (userError || !userData || !userData.user) {
+    return null;
+  }
+
+  const userId = userData.user.id;
+
+  const { data, error } = await supabase
+    .from("garage_users")
+    .select("garage_id, role, status")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    userId,
+    garageId: data.garage_id,
+    role: data.role,
+    status: data.status
+  };
+}
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -539,6 +575,38 @@ const server = http.createServer(async (req, res) => {
     } catch (e) {
       console.error("GET /garages-data error:", e);
       return sendJson(res, 200, readGaragesFile());
+    }
+  }
+
+  // -----------------------------
+  // Auth: GET /my-cars
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/my-cars") {
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    try {
+      const cars = await dbListCars();
+
+      const myCars = cars.filter(
+        car => String(car.garageId) === String(auth.garageId)
+      );
+
+      return sendJson(res, 200, myCars);
+
+    } catch (e) {
+      console.error("GET /my-cars error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database error"
+      });
     }
   }
 
