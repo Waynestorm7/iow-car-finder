@@ -814,7 +814,14 @@ const server = http.createServer(async (req, res) => {
   // API: POST /cars-status
   // -----------------------------
   if (req.method === "POST" && pathname === "/cars-status") {
-    if (!isAdmin(req)) return sendJson(res, 403, { success: false, message: "Wrong key" });
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
 
     let data;
     try {
@@ -827,24 +834,43 @@ const server = http.createServer(async (req, res) => {
     const name = String(data.name || "").trim();
     const status = String(data.status || "").trim().toLowerCase();
 
-    if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
+    if (!name) {
+      return sendJson(res, 400, { success: false, message: "Missing name" });
+    }
 
     if (!["available", "reserved", "sold"].includes(status)) {
       return sendJson(res, 400, { success: false, message: "Invalid status" });
     }
 
-    const update = {
-      status,
-      sold: status === "sold",
-      soldDate: status === "sold" ? todayUK() : null,
-      updatedAt: new Date().toISOString()
-    };
-
     try {
+      const car = await dbGetCarByName(name);
+
+      if (!car) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
+
+      if (String(car.garageId) !== String(auth.garageId)) {
+        return sendJson(res, 403, {
+          success: false,
+          message: "Forbidden"
+        });
+      }
+
+      const update = {
+        status,
+        sold: status === "sold",
+        soldDate: status === "sold" ? todayUK() : null,
+        updatedAt: new Date().toISOString()
+      };
+
       const { error } = await supabase
         .from("cars")
         .update(update)
-        .eq("name", name);
+        .eq("name", name)
+        .eq("garage_id", auth.garageId);
 
       if (error) throw error;
 
@@ -853,6 +879,7 @@ const server = http.createServer(async (req, res) => {
         status,
         soldDate: update.soldDate
       });
+
     } catch (e) {
       console.error("POST /cars-status error:", e);
       return sendJson(res, 500, {

@@ -749,14 +749,14 @@
 
         cars.forEach(car => {
           const photos = Array.isArray(car.photos) ? car.photos : [];
-          const cover = photos[0] || car.photo || "/images/hero.png";
+          const cover = photos[0] || car.photo || "/images/garage-placeholder.webp";
 
           const row = document.createElement("div");
           row.className = "carRow";
 
           row.innerHTML = `
             <div class="left">
-              <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/hero.png'">
+              <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/garage-placeholder.webp'">
               <div style="min-width:0;">
                 <div class="name">
   ${escapeText(car.name || "Untitled")}
@@ -797,12 +797,15 @@
               btn.textContent = "Saving…";
 
               try {
+                const { data } = await supabaseClient.auth.getSession();
+
                 const resp = await fetch("/cars-status", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
-                    "X-Garage-Key": secretInput.value.trim()
+                    Authorization: `Bearer ${data.session.access_token}`
                   },
+
                   body: JSON.stringify({
                     name: car.name,
                     status: newStatus

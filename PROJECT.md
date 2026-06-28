@@ -26,14 +26,14 @@ Garage ID removed from Add Car
 Admin Key removed from Add Car
 
 
-🚧 Current Sprint
+## 🚧 Current Sprint
+
 Goal: Remove Admin Key from the remaining garage actions.
 
-[ ] Delete car uses authentication
-[ ] Reserve car uses authentication
-[ ] Mark sold uses authentication
-[ ] Photo upload uses authentication
-
+- [ ] Delete car uses authentication
+- [x] Reserve car uses authentication
+- [x] Mark sold uses authentication
+- [ ] Photo upload uses authentication
 
 🔜 Next Sprint
 
