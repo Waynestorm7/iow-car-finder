@@ -18,16 +18,19 @@
 - Authentication enabled
 - garage_users table created
 - First garage account linked (SC Motors)
+- Protected garage dashboard
 
 ---
 
 ## 🚧 Current Sprint
+
 Goal: Remove Garage ID and Admin Key from the dashboard.
 
-- [ ] User login page
+- [x] User login page
 - [ ] Logout
 - [ ] GET /me endpoint
-- [ ] Link logged in user to garage
+- [x] Link logged in user to garage
+- [x] Dashboard loads logged in garage account
 - [ ] Dashboard loads only that garage's cars
 - [ ] Remove Garage ID input
 - [ ] Remove Admin Key input

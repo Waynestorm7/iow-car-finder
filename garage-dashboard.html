@@ -580,6 +580,7 @@
 
     // holds uploaded URLs for this listing
     let uploadedPhotoUrls = [];
+    let currentGarageId = null;
 
     function showMsg(type, text) {
       msgBox.className = "msg " + type;
@@ -701,9 +702,10 @@
       clearMsg();
       carsBox.textContent = "Loading…";
 
-      const garageId = getGarageId();
+      const garageId = currentGarageId;
+
       if (!garageId) {
-        carsBox.textContent = "Enter a Garage ID to view cars.";
+        carsBox.textContent = "Loading garage...";
         return;
       }
 
@@ -1027,12 +1029,14 @@
 
       console.log("Garage ID:", garageAccount.garage_id);
 
-      garageIdInput.value = garageAccount.garage_id;
+      currentGarageId = garageAccount.garage_id;
 
+      garageIdInput.value = currentGarageId;
       garageIdInput.readOnly = true;
       garageIdInput.style.background = "#f3f4f6";
 
       renderCars();
+
     })();
   </script>
 </body>
