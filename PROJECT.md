@@ -1,14 +1,14 @@
 # Island Car Finder - Project Roadmap
 
-## Current Status
-
 ### ✅ Completed
+
 - Landing page
 - Cars page
 - Car details page
 - Garages page
 - Garage details page
 - Garage dashboard
+- Protected garage dashboard
 - Photo uploads (Cloudinary)
 - Supabase migration
 - Sold vehicles
@@ -18,7 +18,6 @@
 - Authentication enabled
 - garage_users table created
 - First garage account linked (SC Motors)
-- Protected garage dashboard
 
 ---
 
@@ -28,13 +27,12 @@ Goal: Remove Garage ID and Admin Key from the dashboard.
 
 - [x] User login page
 - [ ] Logout
-- [ ] GET /me endpoint
+- [x] GET /me endpoint
 - [x] Link logged in user to garage
-- [x] Dashboard loads logged in garage account
-- [ ] Dashboard loads only that garage's cars
+- [x] Dashboard loads only that garage's cars
+- [ ] Add car uses logged-in garage
 - [ ] Remove Garage ID input
 - [ ] Remove Admin Key input
-
 ---
 
 ## Next Sprint
