@@ -403,6 +403,7 @@
 
         <label for="photoFiles">Upload photos (recommended)</label>
         <input id="photoFiles" type="file" accept="image/*" multiple />
+        <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
         <div class="small">Select up to 12 photos. First photo becomes the cover image.</div>
 
         <div class="divider"></div>
@@ -506,14 +507,41 @@
     </div>
 
     <div id="garageProfileSection" style="display:none;">
+
       <div class="card">
+
         <h2>Garage Profile</h2>
 
         <p class="hint">
-          This information will appear on your public garage page.
+          This information appears on your public garage page.
         </p>
 
+        <label>Garage Name</label>
+        <input id="garageName" type="text">
+
+        <label>Phone Number</label>
+        <input id="garagePhone" type="tel">
+
+        <label>Email</label>
+        <input id="garageEmail" type="email">
+
+        <label>Website</label>
+        <input id="garageWebsite" type="url">
+
+        <label>Address</label>
+        <textarea id="garageAddress"></textarea>
+
+        <label>About your garage</label>
+        <textarea id="garageDescription"></textarea>
+
+        <div class="btnRow">
+          <button id="saveGarageBtn" class="btn primary">
+            Save Profile
+          </button>
+        </div>
+
       </div>
+
     </div>
   </main>
 
@@ -565,8 +593,18 @@
     const priceInput = document.getElementById("price");
     const photosInput = document.getElementById("photos");
     const photoFilesInput = document.getElementById("photoFiles");
+    const currentPhotos = document.getElementById("currentPhotos");
     const descriptionInput = document.getElementById("description");
     const extrasInput = document.getElementById("extras");
+
+    const garageNameInput = document.getElementById("garageName");
+    const garagePhoneInput = document.getElementById("garagePhone");
+    const garageEmailInput = document.getElementById("garageEmail");
+    const garageWebsiteInput = document.getElementById("garageWebsite");
+    const garageAddressInput = document.getElementById("garageAddress");
+    const garageDescriptionInput = document.getElementById("garageDescription");
+
+    const saveGarageBtn = document.getElementById("saveGarageBtn");
 
     const mileageInput = document.getElementById("mileage");
     const ownersInput = document.getElementById("owners");
@@ -852,6 +890,20 @@
             colourInput.value = car.colour || "";
             descriptionInput.value = car.description || "";
             extrasInput.value = car.extras || "";
+
+            currentPhotos.innerHTML = "";
+
+            (car.photos || []).forEach((url) => {
+              const img = document.createElement("img");
+              img.src = url;
+              img.alt = "Current car photo";
+              img.style.width = "86px";
+              img.style.height = "62px";
+              img.style.objectFit = "cover";
+              img.style.borderRadius = "10px";
+              img.style.border = "1px solid #e5e7eb";
+              currentPhotos.appendChild(img);
+            });
 
             addBtn.textContent = "Save Changes";
             cancelEditBtn.style.display = "inline-block";
@@ -1139,10 +1191,39 @@
       garageProfileSection.style.display = "none";
     });
 
-    showGarageProfileBtn.addEventListener("click", () => {
+    showGarageProfileBtn.addEventListener("click", async () => {
+
       addCarSection.style.display = "none";
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "block";
+
+      try {
+
+        const { data } = await supabaseClient.auth.getSession();
+
+        const res = await fetch("/my-garage", {
+          headers: {
+            Authorization: `Bearer ${data.session.access_token}`
+          }
+        });
+
+        const result = await res.json();
+
+        if (!result.success) return;
+
+        const g = result.garage;
+
+        garageNameInput.value = g.name || "";
+        garagePhoneInput.value = g.phone || "";
+        garageEmailInput.value = g.email || "";
+        garageWebsiteInput.value = g.website || "";
+        garageAddressInput.value = g.address || "";
+        garageDescriptionInput.value = g.description || "";
+
+      } catch (err) {
+        console.error(err);
+      }
+
     });
 
     logoutBtn.addEventListener("click", async () => {

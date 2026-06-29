@@ -607,6 +607,44 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Auth: GET /my-garage
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/my-garage") {
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    try {
+      const garage = await dbGetGarageById(auth.garageId);
+
+      if (!garage) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Garage not found"
+        });
+      }
+
+      return sendJson(res, 200, {
+        success: true,
+        garage
+      });
+
+    } catch (e) {
+      console.error("GET /my-garage error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database error"
+      });
+    }
+  }
+
+  // -----------------------------
   // Auth: GET /my-cars
   // -----------------------------
   if (req.method === "GET" && pathname === "/my-cars") {
