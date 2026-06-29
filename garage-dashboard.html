@@ -483,7 +483,7 @@
 
         <div class="btnRow">
           <button id="addBtn" class="btn primary" type="button">Add car</button>
-          <button id="refreshBtn" class="btn ghost" type="button">Refresh list</button>
+          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
         </div>
 
         <div id="msg" class="msg"></div>
@@ -555,7 +555,7 @@
     const carsBox = document.getElementById("cars");
     const msgBox = document.getElementById("msg");
     const addBtn = document.getElementById("addBtn");
-    const refreshBtn = document.getElementById("refreshBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
 
     const garageIdInput = document.getElementById("garageId");
     const secretInput = document.getElementById("secret");
@@ -581,6 +581,7 @@
     // holds uploaded URLs for this listing
     let uploadedPhotoUrls = [];
     let currentGarageId = null;
+    let editingCar = null;
 
     function showMsg(type, text) {
       msgBox.className = "msg " + type;
@@ -744,6 +745,7 @@
         }
 
         cars.forEach(car => {
+
           const photos = Array.isArray(car.photos) ? car.photos : [];
           const cover = photos[0] || car.photo || "/images/garage-placeholder.webp";
 
@@ -833,7 +835,28 @@
           const editBtn = row.querySelector(".btnEdit");
 
           editBtn.addEventListener("click", () => {
-            showMsg("success", `Edit coming next for "${car.name}".`);
+            editingCar = car;
+
+            addCarSection.style.display = "grid";
+            myCarsSection.style.display = "none";
+            garageProfileSection.style.display = "none";
+
+            nameInput.value = car.name || "";
+            yearInput.value = car.year || "";
+            priceInput.value = car.price || "";
+            mileageInput.value = car.mileage || "";
+            ownersInput.value = car.owners || "";
+            fuelInput.value = car.fuel || "";
+            transmissionInput.value = car.transmission || "";
+            engineInput.value = car.engine || "";
+            colourInput.value = car.colour || "";
+            descriptionInput.value = car.description || "";
+            extrasInput.value = car.extras || "";
+
+            addBtn.textContent = "Save Changes";
+            cancelEditBtn.style.display = "inline-block";
+
+            showMsg("success", `Editing "${car.name}".`);
           });
 
           delBtn.addEventListener("click", async () => {
@@ -878,7 +901,6 @@
     }
 
     garageIdInput.addEventListener("input", renderCars);
-    refreshBtn.addEventListener("click", renderCars);
 
     addBtn.addEventListener("click", async () => {
       clearMsg();
@@ -891,9 +913,14 @@
         priceInput.value.replace(/[£,\s.]/g, "")
       );
 
-      // Prefer uploaded photos, fallback to pasted URLs
+      // Prefer uploaded photos, then pasted URLs, then existing photos if editing
       const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
-      let photos = uploadedPhotoUrls.length ? uploadedPhotoUrls : pasted;
+
+      let photos = uploadedPhotoUrls.length
+        ? uploadedPhotoUrls
+        : pasted.length
+          ? pasted
+          : (editingCar?.photos || []);
 
       // If files are selected but not uploaded yet, upload them now
       if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
@@ -923,6 +950,10 @@
         photos,
         photo: photos[0]
       };
+
+      if (editingCar) {
+        payload.id = editingCar.id;
+      }
 
       const mileage = Number(
         String(mileageInput.value).replace(/[,\s.]/g, "")
@@ -958,7 +989,7 @@
         const { data } = await supabaseClient.auth.getSession();
 
         const res = await fetch("/my-cars", {
-          method: "POST",
+          method: editingCar ? "PUT" : "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${data.session.access_token}`
@@ -974,8 +1005,15 @@
           addBtn.textContent = "Add car";
           return;
         }
+        showMsg(
+          "success",
+          editingCar ? "Car updated successfully!" : "Car added successfully!"
+        );
 
-        showMsg("success", "Car added!");
+        // Leave edit mode
+        editingCar = null;
+        addBtn.textContent = "Add car";
+        cancelEditBtn.style.display = "none";
 
         // Clear form
         nameInput.value = "";
@@ -1004,13 +1042,15 @@
         autoGrow(extrasInput);
 
         addBtn.disabled = false;
-        addBtn.textContent = "Add car";
+
+        addCarSection.style.display = "none";
+        myCarsSection.style.display = "block";
 
         renderCars();
       } catch {
         showMsg("error", "Save failed (network error).");
         addBtn.disabled = false;
-        addBtn.textContent = "Add car";
+        addBtn.textContent = editingCar ? "Save Changes" : "Add car";
       }
     });
 
@@ -1021,11 +1061,76 @@
     const showGarageProfileBtn = document.getElementById("show-profile");
     const garageProfileSection = document.getElementById("garageProfileSection");
     const logoutBtn = document.getElementById("logout");
-
     showAddCarBtn.addEventListener("click", () => {
+      editingCar = null;
+
+      nameInput.value = "";
+      yearInput.value = "";
+      priceInput.value = "";
+      photosInput.value = "";
+      photoFilesInput.value = "";
+      descriptionInput.value = "";
+      extrasInput.value = "";
+
+      mileageInput.value = "";
+      ownersInput.value = "";
+      fuelInput.value = "";
+      transmissionInput.value = "";
+      engineInput.value = "";
+      colourInput.value = "";
+      serviceHistoryInput.value = "";
+      motMonth.value = "";
+      motYear.value = "";
+
+      uploadedPhotoUrls = [];
+
+      addBtn.textContent = "Add car";
+      cancelEditBtn.style.display = "none";
+      clearMsg();
+
       addCarSection.style.display = "grid";
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "none";
+
+      autoGrow(photosInput);
+      autoGrow(descriptionInput);
+      autoGrow(extrasInput);
+    });
+
+    cancelEditBtn.addEventListener("click", () => {
+      editingCar = null;
+
+      nameInput.value = "";
+      yearInput.value = "";
+      priceInput.value = "";
+      photosInput.value = "";
+      photoFilesInput.value = "";
+      descriptionInput.value = "";
+      extrasInput.value = "";
+
+      mileageInput.value = "";
+      ownersInput.value = "";
+      fuelInput.value = "";
+      transmissionInput.value = "";
+      engineInput.value = "";
+      colourInput.value = "";
+      serviceHistoryInput.value = "";
+      motMonth.value = "";
+      motYear.value = "";
+
+      uploadedPhotoUrls = [];
+
+      addBtn.textContent = "Add car";
+      cancelEditBtn.style.display = "none";
+
+      clearMsg();
+
+      addCarSection.style.display = "none";
+      myCarsSection.style.display = "block";
+
+      autoGrow(photosInput);
+      autoGrow(descriptionInput);
+      autoGrow(extrasInput);
     });
 
     showMyCarsBtn.addEventListener("click", () => {

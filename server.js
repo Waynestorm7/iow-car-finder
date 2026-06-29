@@ -329,6 +329,34 @@ async function dbInsertCar(payload) {
   if (error) throw error;
 }
 
+async function dbUpdateCar(payload) {
+
+  const row = {
+    name: payload.name,
+    year: Number(payload.year),
+    price: Number(payload.price),
+    mileage: payload.mileage
+      ? Number(String(payload.mileage).replace(/[,\s.]/g, ""))
+      : null,
+    fuel: payload.fuel ?? null,
+    transmission: payload.transmission ?? null,
+    engine: payload.engine ?? null,
+    owners: payload.owners ?? null,
+    colour: payload.colour ?? null,
+    description: payload.description ?? null,
+    photos: payload.photos ?? [],
+    extras: payload.extras ?? null,
+    updatedAt: new Date().toISOString()
+  };
+
+  const { error } = await supabase
+    .from("cars")
+    .update(row)
+    .eq("id", payload.id);
+
+  if (error) throw error;
+}
+
 async function dbDeleteCarByName(name) {
   const { error, count } = await supabase
     .from("cars")
@@ -738,6 +766,50 @@ const server = http.createServer(async (req, res) => {
         message: "Database insert failed"
       });
     }
+  }
+
+  // -----------------------------
+  // Auth: PUT /my-cars
+  // -----------------------------
+  if (req.method === "PUT" && pathname === "/my-cars") {
+
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    try {
+      await dbUpdateCar(data);
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("PUT /my-cars error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Database update failed"
+      });
+    }
+
   }
 
   // -----------------------------

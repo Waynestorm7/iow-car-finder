@@ -85,6 +85,8 @@ Goal: Remove Admin Key from the remaining garage actions.
 
 [ ] Better Add Car form
 
+[ ] Premium Add/Edit Car form redesign
+
 [ ] Better image handling
 
 [ ] Reserved car styling
