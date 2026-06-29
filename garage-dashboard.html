@@ -76,38 +76,99 @@
 
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 760px);
+      grid-template-columns: minmax(0, 1040px);
       justify-content: center;
-      gap: 14px;
-      margin-top: 18px;
+      gap: 18px;
+      margin-top: 22px;
     }
 
     .card {
       background: var(--card);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      padding: 16px
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+      padding: 24px;
+      border: 1px solid var(--line);
     }
 
     .formSection {
+      position: relative;
       border: 1px solid #e5e7eb;
-      border-radius: 20px;
-      padding: 22px;
-      margin-top: 20px;
-      background: #ffffff;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+      border-radius: 18px;
+      margin-top: 18px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+    }
+
+    .formSection::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--brand);
+    }
+
+    .sectionHeader {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 22px 20px 30px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+    }
+
+    .sectionIcon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #fff4e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
     }
 
     .formSection h3 {
-      margin: 0 0 8px;
-      font-size: 1.15rem;
+      margin: 0;
+      padding: 0;
+      color: #1f3b57;
+      font-size: 1.2rem;
       font-weight: 800;
     }
 
     .formSection .sectionHint {
+      margin-top: 4px;
+      padding: 0;
+      border: none;
       color: var(--muted);
-      font-size: .88rem;
-      margin-bottom: 12px;
+      font-size: .92rem;
+    }
+
+    .formSection>label,
+    .formSection>input,
+    .formSection>textarea,
+    .formSection>select,
+    .formSection>.row,
+    .formSection>.twoColMot,
+    .formSection>.small,
+    .formSection>.divider,
+    .formSection>#currentPhotos {
+      margin-left: 22px;
+      margin-right: 22px;
+    }
+
+    .formSection>label:first-of-type,
+    .formSection>.row:first-of-type {
+      margin-top: 16px;
+    }
+
+    .formSection>.small:last-child,
+    .formSection>textarea:last-child,
+    .formSection>input:last-child {
+      margin-bottom: 18px;
     }
 
     label {
@@ -402,8 +463,16 @@
         </p>
 
         <div class="formSection">
-          <h3>🚗 Basic Details</h3>
-          <div class="sectionHint">The main information customers see first.</div>
+          <div class="sectionHeader">
+            <div class="sectionIcon">🚗</div>
+
+            <div>
+              <h3>Basic Details</h3>
+              <div class="sectionHint">
+                The main information customers see first.
+              </div>
+            </div>
+          </div>
 
           <div class="row">
             <div>
@@ -422,9 +491,16 @@
 
         <div class="formSection">
 
-          <h3>📷 Photos</h3>
+          <div class="sectionHeader">
+            <div class="sectionIcon">📷</div>
 
-          <div class="sectionHint">Upload clear photos. The first image becomes the cover photo.</div>
+            <div>
+              <h3>Photos</h3>
+              <div class="sectionHint">
+                Upload clear photos. The first image becomes the cover photo.
+              </div>
+            </div>
+          </div>
 
           <label for="photoFiles">Upload photos</label>
 
@@ -445,9 +521,15 @@
         </div>
 
         <div class="formSection">
-          <h3>⚙ Vehicle Details</h3>
-          <div class="sectionHint">
-            Additional information to help customers learn more about the vehicle.
+          <div class="sectionHeader">
+            <div class="sectionIcon">⚙</div>
+
+            <div>
+              <h3>Vehicle Details</h3>
+              <div class="sectionHint">
+                Additional information to help customers learn more about the vehicle.
+              </div>
+            </div>
           </div>
 
           <div class="row">
@@ -503,101 +585,107 @@
               <option value="Nov">Nov</option>
               <option value="Dec">Dec</option>
             </select>
+
             <select id="motYear">
               <option value="">Year</option>
             </select>
           </div>
-          </details>
 
-          <div class="formSection">
+        </div> <!-- closes Vehicle Details -->
 
-            <h3>📝 Description & Features</h3>
+        <div class="formSection">
 
-            <div class="sectionHint">
-              Help customers understand why this vehicle stands out.
+          <div class="sectionHeader">
+            <div class="sectionIcon">📝</div>
+
+            <div>
+              <h3>Description & Features</h3>
+              <div class="sectionHint">
+                Help customers understand why this vehicle stands out.
+              </div>
             </div>
+          </div>
+          <label for="description">Vehicle Description</label>
 
-            <label for="description">Vehicle Description</label>
-
-            <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced.">
+          <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced.">
   </textarea>
 
-            <label for="extras">Key Features</label>
+          <label for="extras">Key Features</label>
 
-            <textarea id="extras"
-              placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control">
+          <textarea id="extras"
+            placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control">
   </textarea>
 
-            <div class="small">
-              Add one feature per line.
-            </div>
-
+          <div class="small">
+            Add one feature per line.
           </div>
 
-
-          <div class="btnRow">
-            <button id="addBtn" class="btn primary" type="button">
-              Add Vehicle
-            </button>
-            <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
-          </div>
-
-          <div id="msg" class="msg"></div>
         </div>
 
-      </div> <!-- addCarSection -->
 
-      <div id="myCarsSection" style="display:none;">
-        <div class="card">
-          <h2>My Cars</h2>
-
-          <div class="hint">
-            Cars for this garage.
-          </div>
-
-          <div id="cars" class="cars">
-            Loading...
-          </div>
+        <div class="btnRow">
+          <button id="addBtn" class="btn primary" type="button">
+            Add Vehicle
+          </button>
+          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
         </div>
+
+        <div id="msg" class="msg"></div>
       </div>
 
-      <div id="garageProfileSection" style="display:none;">
+    </div> <!-- addCarSection -->
 
-        <div class="card">
+    <div id="myCarsSection" style="display:none;">
+      <div class="card">
+        <h2>My Cars</h2>
 
-          <h2>Garage Profile</h2>
+        <div class="hint">
+          Cars for this garage.
+        </div>
 
-          <p class="hint">
-            This information appears on your public garage page.
-          </p>
+        <div id="cars" class="cars">
+          Loading...
+        </div>
+      </div>
+    </div>
 
-          <label>Garage Name</label>
-          <input id="garageName" type="text">
+    <div id="garageProfileSection" style="display:none;">
 
-          <label>Phone Number</label>
-          <input id="garagePhone" type="tel">
+      <div class="card">
 
-          <label>Email</label>
-          <input id="garageEmail" type="email">
+        <h2>Garage Profile</h2>
 
-          <label>Website</label>
-          <input id="garageWebsite" type="url">
+        <p class="hint">
+          This information appears on your public garage page.
+        </p>
 
-          <label>Address</label>
-          <textarea id="garageAddress"></textarea>
+        <label>Garage Name</label>
+        <input id="garageName" type="text">
 
-          <label>About your garage</label>
-          <textarea id="garageDescription"></textarea>
+        <label>Phone Number</label>
+        <input id="garagePhone" type="tel">
 
-          <div class="btnRow">
-            <button id="saveGarageBtn" class="btn primary">
-              Save Profile
-            </button>
-          </div>
+        <label>Email</label>
+        <input id="garageEmail" type="email">
 
+        <label>Website</label>
+        <input id="garageWebsite" type="url">
+
+        <label>Address</label>
+        <textarea id="garageAddress"></textarea>
+
+        <label>About your garage</label>
+        <textarea id="garageDescription"></textarea>
+
+        <div class="btnRow">
+          <button id="saveGarageBtn" class="btn primary">
+            Save Profile
+          </button>
         </div>
 
       </div>
+
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -640,8 +728,6 @@
     const addBtn = document.getElementById("addBtn");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-    const garageIdInput = document.getElementById("garageId");
-    const secretInput = document.getElementById("secret");
 
     const nameInput = document.getElementById("name");
     const yearInput = document.getElementById("year");
@@ -698,7 +784,6 @@
       }[ch]));
     }
 
-    function getGarageId() { return String(garageIdInput.value || "").trim(); }
 
     function parsePhotos(raw) {
       return String(raw || "").split(",").map(s => s.trim()).filter(Boolean);
@@ -1107,7 +1192,7 @@
         if (!res.ok || !result || !result.success) {
           showMsg("error", (result && result.message) ? result.message : "Save failed.");
           addBtn.disabled = false;
-          addBtn.textContent = "Add car";
+          addBtn.textContent = "Add Vehicle";
           return;
         }
         showMsg(
@@ -1117,7 +1202,7 @@
 
         // Leave edit mode
         editingCar = null;
-        addBtn.textContent = "Add car";
+        addBtn.textContent = "Add Vehicle";
         cancelEditBtn.style.display = "none";
 
         // Clear form
@@ -1189,7 +1274,7 @@
 
       uploadedPhotoUrls = [];
 
-      addBtn.textContent = "Add car";
+      addBtn.textContent = "Add Vehicle";
       cancelEditBtn.style.display = "none";
       clearMsg();
 
@@ -1225,7 +1310,7 @@
 
       uploadedPhotoUrls = [];
 
-      addBtn.textContent = "Add car";
+      addBtn.textContent = "Add Vehicle";
       cancelEditBtn.style.display = "none";
 
       clearMsg();
@@ -1349,10 +1434,6 @@
       console.log("Garage ID:", garageAccount.garage_id);
 
       currentGarageId = garageAccount.garage_id;
-
-      garageIdInput.value = currentGarageId;
-      garageIdInput.readOnly = true;
-      garageIdInput.style.background = "#f3f4f6";
 
       renderCars();
 
