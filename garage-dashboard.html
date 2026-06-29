@@ -1226,6 +1226,57 @@
 
     });
 
+    function formatUKPhone(value) {
+      const digits = String(value || "").replace(/\D/g, "");
+
+      if (digits.length === 11 && digits.startsWith("01983")) {
+        return digits.slice(0, 5) + " " + digits.slice(5);
+      }
+
+      return String(value || "").trim();
+    }
+
+    saveGarageBtn.addEventListener("click", async () => {
+      let website = garageWebsiteInput.value.trim();
+
+      if (website && !website.startsWith("http://") && !website.startsWith("https://")) {
+        website = "https://" + website;
+      }
+
+      const payload = {
+        name: garageNameInput.value.trim(),
+        phone: garagePhoneInput.value.trim(),
+        email: garageEmailInput.value.trim(),
+        website,
+        address: garageAddressInput.value.trim(),
+        description: garageDescriptionInput.value.trim()
+      };
+      
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+
+        const res = await fetch("/my-garage", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.session.access_token}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json().catch(() => null);
+
+        if (!res.ok || !result || !result.success) {
+          alert(result?.message || "Could not save profile.");
+          return;
+        }
+
+        alert("Garage profile saved.");
+      } catch {
+        alert("Network error saving profile.");
+      }
+    });
+
     logoutBtn.addEventListener("click", async () => {
       await supabaseClient.auth.signOut();
       window.location.href = "/login";

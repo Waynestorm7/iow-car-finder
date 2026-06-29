@@ -456,6 +456,30 @@ async function dbGetGarageById(id) {
   return data || null;
 }
 
+async function dbUpdateGarage(id, payload) {
+  const cleanId = String(id || "").trim();
+
+  if (!cleanId) {
+    throw new Error("Missing garage id");
+  }
+
+  const row = {
+    name: payload.name ? String(payload.name).trim() : null,
+    phone: payload.phone ? String(payload.phone).trim() : null,
+    email: payload.email ? String(payload.email).trim() : null,
+    website: payload.website ? String(payload.website).trim() : null,
+    address: payload.address ? String(payload.address).trim() : null,
+    description: payload.description ? String(payload.description).trim() : null,
+  };
+
+  const { error } = await supabase
+    .from("garages")
+    .update(row)
+    .eq("id", cleanId);
+
+  if (error) throw error;
+}
+
 async function dbGetGaragesByIds(ids) {
   const clean = [...new Set((ids || []).filter(Boolean))];
   if (!clean.length) return [];
@@ -640,6 +664,48 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 500, {
         success: false,
         message: "Database error"
+      });
+    }
+  }
+
+  // -----------------------------
+  // Auth: PUT /my-garage
+  // -----------------------------
+  if (req.method === "PUT" && pathname === "/my-garage") {
+    const auth = await getGarageFromAuth(req);
+
+    if (!auth) {
+      return sendJson(res, 401, {
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    try {
+      await dbUpdateGarage(auth.garageId, data);
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("PUT /my-garage error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Garage profile update failed"
       });
     }
   }

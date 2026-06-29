@@ -1,190 +1,158 @@
 Island Car Finder - Project Roadmap
 
+Rule: This is the single source of truth for the project.
+We do not rewrite this roadmap. We only tick off completed work or add new tasks when required.
+
+
 ✅ Completed
+Public Website
 
-Landing page
+[x] Landing page
+[x] Cars page
+[x] Car details page
+[x] Garages page
+[x] Garage details page
 
-Cars page
+Infrastructure
 
-Car details page
+[x] Supabase migration
+[x] Authentication enabled
+[x] Photo uploads (Cloudinary)
 
-Garages page
+Authentication
 
-Garage details page
+[x] Garage login
+[x] Protected garage dashboard
+[x] Logout
+[x] garage_users table created
+[x] First garage account linked (SC Motors)
+[x] GET /me authentication flow
+[x] Dashboard automatically loads logged-in garage
 
-Garage dashboard
+Garage Dashboard
 
-Protected garage dashboard
+[x] Add car
+[x] Edit existing cars
+[x] Delete cars
+[x] Upload multiple photos
+[x] Current photo preview while editing
+[x] Cancel edit mode
+[x] Sold vehicles
+[x] Reserved vehicles
+[x] Status management
+[x] Mileage parsing fixed
+[x] Garage names displayed instead of UUIDs
+[x] Garage profile management
 
-Photo uploads (Cloudinary)
+Dashboard Cleanup
 
-Supabase migration
-
-Authentication enabled
-
-Logout
-
-garage_users table created
-
-First garage account linked (SC Motors)
-
-GET /me authentication flow
-
-Garage applications
-
-Sold vehicles
-
-Reserved vehicles
-
-Status management
-
-Garage login
-
-Dashboard automatically loads logged-in garage
-
-Add car linked to logged-in garage
-
-Garage ID removed from Add Car
-
-Admin Key removed from Add Car
-
-Mileage parsing fixed
-
-Garage names displayed instead of UUIDs
+[x] Garage ID removed from Add Car
+[x] Admin Key removed from Add Car
+[x] Delete car uses authentication
+[x] Reserve car uses authentication
+[x] Mark sold uses authentication
+[x] Photo upload uses authentication
 
 
-## 🚧 Current Sprint
+🚧 Current Sprint
+Garage Profile
 
-Goal: Remove Admin Key from the remaining garage actions.
-
-- [x] Delete car uses authentication
-
-- [x] Reserve car uses authentication
-
-- [x] Mark sold uses authentication
-
-- [x] Photo upload uses authentication
-
-
-## 🔜 Authentication Complete
-
-- [ ] Remove Admin Key from the project completely
-
-- [ ] Add Login button to homepage
-
-- [ ] Add Sign Up button to homepage
-
-- [ ] Redirect logged-in garages straight to Dashboard
+[x] Garage Profile page
+[x] Load existing profile
+[x] Save profile changes
+[ ] Upload garage logo
+[ ] Upload garage banner
+[ ] Opening hours
+[ ] Public garage profile page
 
 
 🔜 Next Sprint
+Dashboard Improvements
 
-[ ] Garage profile editing
-
-[ ] Edit existing cars
-
-[ ] Better Add Car form
-
-[ ] Premium Add/Edit Car form redesign
-
+[ ] Premium Add/Edit Car redesign
 [ ] Better image handling
-
-[ ] Reserved car styling
-
-[ ] Sold car styling
-
+[ ] Reserved vehicle styling
+[ ] Sold vehicle styling
 [ ] Disable enquiries on sold/reserved cars
+
+Authentication Polish
+
+[ ] Remove Admin Key from project completely
+[ ] Homepage Login button
+[ ] Homepage Sign Up button
+[ ] Redirect logged-in garages directly to Dashboard
 
 
 🚀 Launch Checklist
-
 Accounts
 
 [ ] Garage signup
-
 [ ] Garage approval
-
 [ ] Email confirmation
-
 [ ] Password reset
-
 
 Garage Features
 
-[ ] Edit profile
-
-[ ] Edit cars
-
-[ ] Delete cars
-
+[x] Edit cars
+[x] Delete cars
 [x] Upload multiple photos
-
+[x] Save garage profile
+[ ] Garage logo
+[ ] Garage banner
+[ ] Opening hours
+[ ] Dealer branding
 
 Customer Features
 
 [ ] Search improvements
-
 [ ] Advanced filters
-
 [ ] Saved cars
-
 [ ] Contact garage
-
 [ ] Enquiry forms
-
 
 Admin
 
 [ ] Admin dashboard
-
 [ ] Review garage applications
-
 [ ] Approve garages
-
 [ ] Reject garages
-
 [ ] Manage garages
-
 
 Payments
 
 [ ] Subscription plans
-
 [ ] Stripe integration
-
 [ ] Free trial
-
 [ ] Billing portal
-
 
 Polish
 
+[ ] Premium dashboard UI
 [ ] Mobile optimisation
-
 [ ] Performance
-
 [ ] SEO
-
 [ ] Error pages
-
 [ ] Terms & Privacy Policy
-
 [ ] Cookie Policy
-
 [ ] Analytics
 
 
 🎉 Version 1.0
 
 [ ] First live garage registered
-
 [ ] First 100 cars listed
-
 [ ] First paying subscriber
-
 [ ] Public launch
 
 
-🎯 Launch Goal
+📜 Project Rules
 
-A marketplace where Isle of Wight garages can register, be approved, subscribe, manage their own stock through a secure dashboard, and customers can easily browse, search and enquire about cars.
+This roadmap is never rewritten.
+Completed work gets ticked off.
+New features are only added if genuinely required.
+We finish the current sprint before moving to unrelated features where practical.
+Every major feature is committed to Git before starting the next.
+
+
+🎯 Launch Goal
+Create the Isle of Wight's best online car marketplace, where approved local garages can securely manage their dealership, showcase their vehicles, and connect customers with trusted local stock through a fast, modern and professional platform.
