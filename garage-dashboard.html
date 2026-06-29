@@ -76,15 +76,10 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 760px);
+      justify-content: center;
       gap: 14px;
-      margin-top: 14px
-    }
-
-    @media (min-width:900px) {
-      .grid {
-        grid-template-columns: 1fr 1.2fr
-      }
+      margin-top: 18px;
     }
 
     .card {
@@ -92,6 +87,27 @@
       border-radius: var(--r);
       box-shadow: var(--shadow);
       padding: 16px
+    }
+
+    .formSection {
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 22px;
+      margin-top: 20px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+    }
+
+    .formSection h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .formSection .sectionHint {
+      color: var(--muted);
+      font-size: .88rem;
+      margin-bottom: 12px;
     }
 
     label {
@@ -378,43 +394,61 @@
     <div class="grid" id="addCarSection">
       <!-- FORM CARD -->
       <div class="card">
-        <h2>Add new car</h2>
+        <h2>🚗 Add Vehicle</h2>
 
-        <label for="garageId">Garage ID</label>
-        <input id="garageId" type="text" value="demo-garage" />
-        <div class="small">Example: <code>demo-garage</code> or <code>sandown-motors</code></div>
+        <p class="hint">
+          Create a new advert for your dealership. Complete the sections below, then click
+          <strong>Add Vehicle</strong>.
+        </p>
 
-        <label for="secret">Admin key</label>
-        <input id="secret" type="password" placeholder="Enter your key" inputmode="text" />
+        <div class="formSection">
+          <h3>🚗 Basic Details</h3>
+          <div class="sectionHint">The main information customers see first.</div>
 
-        <div class="row">
-          <div>
-            <label for="name">Car name</label>
-            <input id="name" type="text" placeholder="Volkswagen Golf GTI" />
+          <div class="row">
+            <div>
+              <label for="name">Make & Model</label>
+              <input id="name" type="text" placeholder="Volkswagen Golf GTI" />
+            </div>
+            <div>
+              <label for="year">Year</label>
+              <input id="year" type="number" placeholder="2018" />
+            </div>
           </div>
-          <div>
-            <label for="year">Year</label>
-            <input id="year" type="number" placeholder="2018" />
-          </div>
+
+          <label for="price">Price (£)</label>
+          <input id="price" type="number" placeholder="12995" />
         </div>
 
-        <label for="price">Price (£)</label>
-        <input id="price" type="number" placeholder="12995" />
+        <div class="formSection">
 
-        <label for="photoFiles">Upload photos (recommended)</label>
-        <input id="photoFiles" type="file" accept="image/*" multiple />
-        <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
-        <div class="small">Select up to 12 photos. First photo becomes the cover image.</div>
+          <h3>📷 Photos</h3>
 
-        <div class="divider"></div>
+          <div class="sectionHint">Upload clear photos. The first image becomes the cover photo.</div>
 
-        <label for="photos">Or paste photo links (comma separated)</label>
-        <textarea id="photos" placeholder="https://.../a.jpg, https://.../b.jpg"></textarea>
-        <div class="small">If you uploaded photos above, you can leave this empty.</div>
+          <label for="photoFiles">Upload photos</label>
 
-        <details>
-          <summary>More optional details</summary>
+          <input id="photoFiles" type="file" accept="image/*" multiple />
+
+          <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
+
+          <div class="small">Select up to 12 photos.</div>
+
           <div class="divider"></div>
+
+          <label for="photos">Or paste photo links</label>
+
+          <textarea id="photos" placeholder="https://.../a.jpg, https://.../b.jpg"></textarea>
+
+          <div class="small">If you uploaded photos above, you can leave this empty.</div>
+
+        </div>
+
+        <div class="formSection">
+          <h3>⚙ Vehicle Details</h3>
+          <div class="sectionHint">
+            Additional information to help customers learn more about the vehicle.
+          </div>
 
           <div class="row">
             <div>
@@ -473,76 +507,97 @@
               <option value="">Year</option>
             </select>
           </div>
-        </details>
+          </details>
 
-        <label for="description">Description (optional)</label>
-        <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
+          <div class="formSection">
 
-        <label for="extras">Key features / Extras (optional)</label>
-        <textarea id="extras" placeholder="One per line (e.g. Heated seats)"></textarea>
-        <div class="small">Tip: one feature per line</div>
+            <h3>📝 Description & Features</h3>
 
-        <div class="btnRow">
-          <button id="addBtn" class="btn primary" type="button">Add car</button>
-          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
+            <div class="sectionHint">
+              Help customers understand why this vehicle stands out.
+            </div>
+
+            <label for="description">Vehicle Description</label>
+
+            <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced.">
+  </textarea>
+
+            <label for="extras">Key Features</label>
+
+            <textarea id="extras"
+              placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control">
+  </textarea>
+
+            <div class="small">
+              Add one feature per line.
+            </div>
+
+          </div>
+
+
+          <div class="btnRow">
+            <button id="addBtn" class="btn primary" type="button">
+              Add Vehicle
+            </button>
+            <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
+          </div>
+
+          <div id="msg" class="msg"></div>
         </div>
 
-        <div id="msg" class="msg"></div>
+      </div> <!-- addCarSection -->
+
+      <div id="myCarsSection" style="display:none;">
+        <div class="card">
+          <h2>My Cars</h2>
+
+          <div class="hint">
+            Cars for this garage.
+          </div>
+
+          <div id="cars" class="cars">
+            Loading...
+          </div>
+        </div>
       </div>
 
-    </div> <!-- addCarSection -->
+      <div id="garageProfileSection" style="display:none;">
 
-    <div id="myCarsSection" style="display:none;">
-      <div class="card">
-        <h2>My Cars</h2>
+        <div class="card">
 
-        <div class="hint">
-          Cars for this garage.
-        </div>
+          <h2>Garage Profile</h2>
 
-        <div id="cars" class="cars">
-          Loading...
-        </div>
-      </div>
-    </div>
+          <p class="hint">
+            This information appears on your public garage page.
+          </p>
 
-    <div id="garageProfileSection" style="display:none;">
+          <label>Garage Name</label>
+          <input id="garageName" type="text">
 
-      <div class="card">
+          <label>Phone Number</label>
+          <input id="garagePhone" type="tel">
 
-        <h2>Garage Profile</h2>
+          <label>Email</label>
+          <input id="garageEmail" type="email">
 
-        <p class="hint">
-          This information appears on your public garage page.
-        </p>
+          <label>Website</label>
+          <input id="garageWebsite" type="url">
 
-        <label>Garage Name</label>
-        <input id="garageName" type="text">
+          <label>Address</label>
+          <textarea id="garageAddress"></textarea>
 
-        <label>Phone Number</label>
-        <input id="garagePhone" type="tel">
+          <label>About your garage</label>
+          <textarea id="garageDescription"></textarea>
 
-        <label>Email</label>
-        <input id="garageEmail" type="email">
+          <div class="btnRow">
+            <button id="saveGarageBtn" class="btn primary">
+              Save Profile
+            </button>
+          </div>
 
-        <label>Website</label>
-        <input id="garageWebsite" type="url">
-
-        <label>Address</label>
-        <textarea id="garageAddress"></textarea>
-
-        <label>About your garage</label>
-        <textarea id="garageDescription"></textarea>
-
-        <div class="btnRow">
-          <button id="saveGarageBtn" class="btn primary">
-            Save Profile
-          </button>
         </div>
 
       </div>
-
-    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -729,7 +784,7 @@
         showMsg("error", e.message || "Upload failed.");
       } finally {
         addBtn.disabled = false;
-        addBtn.textContent = "Add car";
+        addBtn.textContent = "Add Vehicle";
       }
     });
 
@@ -951,8 +1006,6 @@
         carsBox.textContent = "Could not load cars. Is the server running?";
       }
     }
-
-    garageIdInput.addEventListener("input", renderCars);
 
     addBtn.addEventListener("click", async () => {
       clearMsg();
@@ -1251,7 +1304,7 @@
         address: garageAddressInput.value.trim(),
         description: garageDescriptionInput.value.trim()
       };
-      
+
       try {
         const { data } = await supabaseClient.auth.getSession();
 
