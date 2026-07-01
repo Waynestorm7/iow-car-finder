@@ -33,13 +33,16 @@
     .siteHeader {
       background: #07111d;
       color: #fff;
-      min-height: 64px;
+      min-height: 56px;
     }
 
     .siteHeaderInner {
       width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
       padding: 0 28px;
       min-height: 64px;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -48,7 +51,7 @@
     .logo {
       color: #fff;
       text-decoration: none;
-      font-size: 1.55rem;
+      font-size: 1.35rem;
       font-weight: 800;
     }
 
@@ -56,16 +59,36 @@
       color: #e67e22;
     }
 
+    @media (max-width:700px) {
+
+      .siteHeaderInner {
+        padding: 0 18px;
+        min-height: 56px;
+      }
+
+      .logo {
+        font-size: 1.1rem;
+      }
+
+      .siteHeader nav {
+        gap: 18px;
+      }
+
+      .siteHeader nav a {
+        font-size: 1rem;
+      }
+    }
+
     .siteHeader nav {
       display: flex;
-      gap: 30px;
+      gap: 18px;
       align-items: center;
     }
 
     .siteHeader nav a {
       color: #fff;
       text-decoration: none;
-      font-size: 1.12rem;
+      font-size: 1rem;
       font-weight: 800;
     }
 
@@ -499,7 +522,7 @@
 
     .dashboard-menu button {
 
-      padding: 18px;
+      padding: 15px;
       border: 1px solid rgba(230, 126, 34, .15);
       border-radius: 12px;
       background: #1f3b57;
@@ -525,20 +548,7 @@
 </head>
 
 <body>
-  <header class="siteHeader">
-    <div class="siteHeaderInner">
-
-      <a href="/" class="logo">
-        <span>IOW</span> Car Finder
-      </a>
-
-      <nav>
-        <a href="/">Home</a>
-        <a href="/cars-page">Cars</a>
-      </nav>
-
-    </div>
-  </header>
+  <div id="siteHeader"></div>
 
   <main>
     <h1>Garage Dashboard</h1>
@@ -588,173 +598,181 @@
                 <input id="year" type="text" inputmode="numeric" placeholder="2018"
                   oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)">
               </div>
-
             </div>
 
-          </div> <!-- closes Basic Details -->
+          </div>
+        </div> <!-- closes Basic Details -->
 
 
-          <div class="formSection">
-            <div class="sectionHeader">
-              <h3>Photos</h3>
-              <div class="sectionHint">Upload clear photos. The first photo becomes the cover image.</div>
-            </div>
-
-            <label for="photoFiles">Upload photos</label>
-            <input id="photoFiles" type="file" accept="image/*" multiple />
-
-            <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
-
-            <div class="small">Select up to 12 photos.</div>
-
+        <div class="formSection">
+          <div class="sectionHeader">
+            <h3>Photos</h3>
+            <div class="sectionHint">Upload clear photos. The first photo becomes the cover image.</div>
           </div>
 
-          <div class="formSection">
-            <div class="sectionHeader">
-              <h3>Vehicle Details</h3>
-              <div class="sectionHint">Useful information for customers comparing vehicles.</div>
-            </div>
+          <label for="photoFiles">Upload photos</label>
+          <input id="photoFiles" type="file" accept="image/*" multiple />
 
-            <div class="fieldGrid vehicleDetailsGrid">
-              <div>
-                <label for="mileage">Mileage</label>
-                <input id="mileage" class="field-medium" type="text" inputmode="numeric" placeholder="42000"
-                  oninput="this.value=this.value.replace(/\D/g,'')">
-              </div>
+          <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
 
-              <div>
-                <label for="owners">Owners</label>
-                <input id="owners" class="field-small" type="text" inputmode="numeric" placeholder="2"
-                  oninput="this.value=this.value.replace(/\D/g,'').slice(0,2)">
-              </div>
-
-
-              <div>
-                <label for="fuel">Fuel</label>
-                <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
-              </div>
-
-              <div>
-                <label for="transmission">Transmission</label>
-                <input id="transmission" type="text" placeholder="Manual / Automatic" />
-              </div>
-
-              <div>
-                <label for="engine">Engine</label>
-                <input id="engine" type="text" placeholder="2.0L TSI" />
-              </div>
-
-              <div>
-                <label for="colour">Colour</label>
-                <input id="colour" type="text" placeholder="White" />
-              </div>
-            </div>
-
-            <label for="serviceHistory">Service history</label>
-            <input id="serviceHistory" class="field-large" type="text" placeholder="Full service history" />
-
-            <label>MOT until</label>
-            <div class="fieldGrid two motGrid">
-              <select id="motMonth">
-                <option value="">Month</option>
-                <option value="Jan">Jan</option>
-                <option value="Feb">Feb</option>
-                <option value="Mar">Mar</option>
-                <option value="Apr">Apr</option>
-                <option value="May">May</option>
-                <option value="Jun">Jun</option>
-                <option value="Jul">Jul</option>
-                <option value="Aug">Aug</option>
-                <option value="Sep">Sep</option>
-                <option value="Oct">Oct</option>
-                <option value="Nov">Nov</option>
-                <option value="Dec">Dec</option>
-              </select>
-
-              <select id="motYear">
-                <option value="">Year</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="formSection">
-            <div class="sectionHeader">
-              <h3>Description & Features</h3>
-              <div class="sectionHint">Add the advert text and key selling points.</div>
-            </div>
-
-            <label for="description">Vehicle Description</label>
-            <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
-
-            <label for="extras">Key Features</label>
-            <textarea id="extras"
-              placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control"></textarea>
-
-            <div class="small">Add one feature per line.</div>
-          </div>
-
-          <div class="formActions">
-            <button id="addBtn" class="btn primary" type="button">Add Vehicle</button>
-            <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
-          </div>
-
-          <div id="msg" class="msg"></div>
-
-        </div>
-      </div>
-
-      <div id="myCarsSection" style="display:none;">
-        <div class="card">
-          <h2>My Cars</h2>
-
-          <div class="hint">
-            Cars for this garage.
-          </div>
-
-          <div id="cars" class="cars">
-            Loading...
-          </div>
-        </div>
-      </div>
-
-      <div id="garageProfileSection" style="display:none;">
-
-        <div class="card">
-
-          <h2>Garage Profile</h2>
-
-          <p class="hint">
-            This information appears on your public garage page.
-          </p>
-
-          <label>Garage Name</label>
-          <input id="garageName" type="text">
-
-          <label>Phone Number</label>
-          <input id="garagePhone" type="tel">
-
-          <label>Email</label>
-          <input id="garageEmail" type="email">
-
-          <label>Website</label>
-          <input id="garageWebsite" type="url">
-
-          <label>Address</label>
-          <textarea id="garageAddress"></textarea>
-
-          <label>About your garage</label>
-          <textarea id="garageDescription"></textarea>
-
-          <div class="btnRow">
-            <button id="saveGarageBtn" class="btn primary">
-              Save Profile
-            </button>
-          </div>
+          <div class="small">Select up to 12 photos.</div>
 
         </div>
 
+        <div class="formSection">
+          <div class="sectionHeader">
+            <h3>Vehicle Details</h3>
+            <div class="sectionHint">Useful information for customers comparing vehicles.</div>
+          </div>
+
+          <div class="fieldGrid vehicleDetailsGrid">
+            <div>
+              <label for="mileage">Mileage</label>
+              <input id="mileage" class="field-medium" type="text" inputmode="numeric" placeholder="42000"
+                oninput="this.value=this.value.replace(/\D/g,'')">
+            </div>
+
+            <div>
+              <label for="owners">Owners</label>
+              <input id="owners" class="field-small" type="text" inputmode="numeric" placeholder="2"
+                oninput="this.value=this.value.replace(/\D/g,'').slice(0,2)">
+            </div>
+
+
+            <div>
+              <label for="fuel">Fuel</label>
+              <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
+            </div>
+
+            <div>
+              <label for="transmission">Transmission</label>
+              <input id="transmission" type="text" placeholder="Manual / Automatic" />
+            </div>
+
+            <div>
+              <label for="engine">Engine</label>
+              <input id="engine" type="text" placeholder="2.0L TSI" />
+            </div>
+
+            <div>
+              <label for="colour">Colour</label>
+              <input id="colour" type="text" placeholder="White" />
+            </div>
+          </div>
+
+          <label for="serviceHistory">Service history</label>
+          <input id="serviceHistory" class="field-large" type="text" placeholder="Full service history" />
+
+          <label>MOT until</label>
+          <div class="fieldGrid two motGrid">
+            <select id="motMonth">
+              <option value="">Month</option>
+              <option value="Jan">Jan</option>
+              <option value="Feb">Feb</option>
+              <option value="Mar">Mar</option>
+              <option value="Apr">Apr</option>
+              <option value="May">May</option>
+              <option value="Jun">Jun</option>
+              <option value="Jul">Jul</option>
+              <option value="Aug">Aug</option>
+              <option value="Sep">Sep</option>
+              <option value="Oct">Oct</option>
+              <option value="Nov">Nov</option>
+              <option value="Dec">Dec</option>
+            </select>
+
+            <select id="motYear">
+              <option value="">Year</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="formSection">
+          <div class="sectionHeader">
+            <h3>Description & Features</h3>
+            <div class="sectionHint">Add the advert text and key selling points.</div>
+          </div>
+
+          <label for="description">Vehicle Description</label>
+          <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
+
+          <label for="extras">Key Features</label>
+          <textarea id="extras"
+            placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control"></textarea>
+
+          <div class="small">Add one feature per line.</div>
+        </div>
+
+        <div class="formActions">
+          <button id="addBtn" class="btn primary" type="button">Add Vehicle</button>
+          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
+        </div>
+
+        <div id="msg" class="msg"></div>
+
       </div>
+    </div>
+
+    <div id="myCarsSection" style="display:none;">
+      <div class="card">
+        <h2>My Cars</h2>
+
+        <div class="hint">
+          Cars for this garage.
+        </div>
+
+        <div id="cars" class="cars">
+          Loading...
+        </div>
+      </div>
+    </div>
+
+    <div id="garageProfileSection" style="display:none;">
+
+      <div class="card">
+
+        <h2>Garage Profile</h2>
+
+        <p class="hint">
+          This information appears on your public garage page.
+        </p>
+
+        <label>Garage Name</label>
+        <input id="garageName" type="text">
+
+        <label>Phone Number</label>
+        <input id="garagePhone" type="tel">
+
+        <label>Email</label>
+        <input id="garageEmail" type="email">
+
+        <label>Website</label>
+        <input id="garageWebsite" type="url">
+
+        <label>Address</label>
+        <textarea id="garageAddress"></textarea>
+
+        <label>About your garage</label>
+        <textarea id="garageDescription"></textarea>
+
+        <div class="btnRow">
+          <button id="saveGarageBtn" class="btn primary">
+            Save Profile
+          </button>
+        </div>
+
+      </div>
+
+    </div>
   </main>
+
+  <script>
+    fetch("/header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("siteHeader").innerHTML = html;
+      });
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
