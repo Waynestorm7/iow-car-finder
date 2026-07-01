@@ -408,63 +408,65 @@
     }
 
     .cars {
-      margin-top: 10px
+      margin-top: 10px;
     }
 
     .carRow {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line)
+      gap: 18px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
     }
 
     .carRow:last-child {
-      border-bottom: none
+      border-bottom: none;
     }
 
     .left {
       display: flex;
-      gap: 12px;
       align-items: center;
-      min-width: 0
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
     }
 
     .preview {
-      width: 86px;
-      height: 62px;
+      width: 110px;
+      height: 80px;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid var(--line);
       background: #f3f4f6;
-      flex: 0 0 auto
+      flex-shrink: 0;
     }
 
     .name {
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 1rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 520px
     }
 
     .meta {
       color: var(--muted);
       font-size: .9rem;
-      margin-top: 4px
+      margin-top: 4px;
     }
 
     .danger {
       background: #fff;
-      border: 1px solid #f2b8b8;
-      color: #8a1f1f;
-      border-radius: 12px;
-      padding: 10px 12px;
+      border: 1px solid #ef4444;
+      color: #b91c1c;
+      border-radius: 999px;
+      padding: 10px 14px;
+      min-height: 42px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 15px;
-      white-space: nowrap
+      white-space: nowrap;
     }
 
     .danger:disabled {
@@ -543,6 +545,61 @@
 
     #addCarSection {
       display: none;
+    }
+
+    @media (max-width:700px) {
+
+      .carRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .left {
+        width: 100%;
+      }
+
+      .preview {
+        width: 120px;
+        height: 90px;
+      }
+
+      .name {
+        white-space: normal;
+      }
+
+      .carRow>div:last-child {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .carRow>div:last-child button {
+        width: 100%;
+        min-height: 42px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .btnStatus {
+        background: #1f3b57;
+        color: #fff;
+        border: none;
+      }
+
+      .btnEdit {
+        min-height: 36px;
+        font-size: 14px;
+      }
+
+      .danger {
+        min-height: 36px;
+        font-size: 14px;
+      }
+
     }
   </style>
 </head>
