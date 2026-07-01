@@ -30,29 +30,51 @@
       color: var(--text)
     }
 
-    header {
-      background: #2c3e50;
+    .siteHeader {
+      background: #07111d;
       color: #fff;
-      padding: 14px 16px
+      min-height: 64px;
     }
 
-    header .top {
-      max-width: 1100px;
-      margin: 0 auto;
+    .siteHeaderInner {
+      width: 100%;
+      padding: 0 28px;
+      min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px
     }
 
-    header a {
+    .logo {
       color: #fff;
       text-decoration: none;
-      font-weight: bold
+      font-size: 1.55rem;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: #e67e22;
+    }
+
+    .siteHeader nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .siteHeader nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .siteHeader nav a:hover {
+      color: #e67e22;
     }
 
     main {
-      max-width: 1100px;
+      max-width: 1300px;
       margin: 0 auto;
       padding: 18px 14px
     }
@@ -76,75 +98,143 @@
 
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 1040px);
+      grid-template-columns: minmax(0, 1240px);
       justify-content: center;
       gap: 18px;
       margin-top: 22px;
     }
 
     .card {
-      background: var(--card);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
-      padding: 24px;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, .08);
+      padding: 36px;
       border: 1px solid var(--line);
     }
 
     .formSection {
-      position: relative;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      margin-top: 18px;
-      background: #fff;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+      padding: 30px 0;
+      border-bottom: 1px solid var(--line);
     }
 
-    .formSection::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 6px;
-      height: 100%;
-      background: var(--brand);
+    .formSection:last-of-type {
+      border-bottom: none;
     }
 
     .sectionHeader {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 20px 22px 20px 30px;
-      border-bottom: 1px solid var(--line);
-      background: #fafafa;
+      margin-bottom: 22px;
     }
 
     .sectionIcon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: #fff4e8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
+      display: none;
     }
 
     .formSection h3 {
       margin: 0;
-      padding: 0;
-      color: #1f3b57;
-      font-size: 1.2rem;
+      color: #111827;
+      font-size: 1.35rem;
       font-weight: 800;
     }
 
     .formSection .sectionHint {
-      margin-top: 4px;
-      padding: 0;
-      border: none;
+      margin-top: 6px;
       color: var(--muted);
-      font-size: .92rem;
+      font-size: .95rem;
+    }
+
+    .formIntro {
+      margin-bottom: 10px;
+    }
+
+    .formIntro h2 {
+      font-size: 1.45rem;
+      margin: 0 0 6px;
+      color: #111827;
+    }
+
+    .formIntro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .fieldGrid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .fieldGrid.two {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .fieldGrid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .fieldGrid.two {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .field-small {
+      max-width: 180px;
+    }
+
+    .field-medium {
+      max-width: 320px;
+    }
+
+    .field-large {
+      max-width: 500px;
+    }
+
+    .motGrid {
+      max-width: 500px;
+    }
+
+    .basicDetailsGrid {
+      max-width: 520px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .vehicleDetailsGrid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width:700px) {
+
+      .basicDetailsGrid,
+      .vehicleDetailsGrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .formActions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 24px;
+    }
+
+    .formActions .btn {
+      min-width: 170px;
+      padding: 14px 18px;
+    }
+
+    @media (max-width:700px) {
+      .fieldGrid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .formActions {
+        flex-direction: column;
+      }
+
+      .formActions .btn {
+        width: 100%;
+      }
     }
 
     .formSection>label,
@@ -156,42 +246,55 @@
     .formSection>.small,
     .formSection>.divider,
     .formSection>#currentPhotos {
-      margin-left: 22px;
-      margin-right: 22px;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .formSection>label:first-of-type,
     .formSection>.row:first-of-type {
-      margin-top: 16px;
+      margin-top: 0;
     }
 
     .formSection>.small:last-child,
     .formSection>textarea:last-child,
     .formSection>input:last-child {
-      margin-bottom: 18px;
+      margin-bottom: 0;
     }
 
     label {
       display: block;
       font-weight: bold;
       font-size: .9rem;
-      margin: 12px 0 6px
+      margin: 16px 0 8px;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid var(--line);
+      padding: 13px 14px;
+      border: 2px solid #b8c4d2;
       border-radius: 12px;
       outline: none;
       background: #fff;
       font-size: 16px;
     }
 
+    input:hover,
+    textarea:hover,
+    select:hover {
+      border-color: #94a3b8;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #e67e22;
+      box-shadow: 0 0 0 3px rgba(230, 126, 34, .14);
+    }
+
     textarea {
-      min-height: 110px;
+      min-height: 85px;
       resize: vertical;
       line-height: 1.45
     }
@@ -199,7 +302,8 @@
     .row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px
+      gap: 22px;
+      margin-top: 14px;
     }
 
     @media (max-width:700px) {
@@ -208,18 +312,6 @@
       }
     }
 
-    details {
-      margin-top: 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: #fff
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: bold
-    }
 
     .divider {
       height: 1px;
@@ -377,7 +469,7 @@
     .twoColMot {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px
+      gap: 22px;
     }
 
     @media (max-width:520px) {
@@ -406,19 +498,23 @@
     }
 
     .dashboard-menu button {
+
       padding: 18px;
-      border: none;
+      border: 1px solid rgba(230, 126, 34, .15);
       border-radius: 12px;
       background: #1f3b57;
       color: #fff;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: .2s;
+      transition: .2s ease;
+      letter-spacing: .3px;
     }
 
     .dashboard-menu button:hover {
-      background: #2c5378;
+      background: #07111d;
+      border-color: #e67e22;
+      color: #fff;
       transform: translateY(-2px);
     }
 
@@ -429,12 +525,18 @@
 </head>
 
 <body>
-  <header>
-    <div class="top">
-      <a href="/">IOW Car Finder</a>
-      <nav style="display:flex; gap:14px; align-items:center;">
+  <header class="siteHeader">
+    <div class="siteHeaderInner">
+
+      <a href="/" class="logo">
+        <span>IOW</span> Car Finder
+      </a>
+
+      <nav>
+        <a href="/">Home</a>
         <a href="/cars-page">Cars</a>
       </nav>
+
     </div>
   </header>
 
@@ -451,241 +553,207 @@
     <div class="hint">
       Upload photos (recommended). Optional details only show on the car page if you fill them in.
     </div>
-
     <div class="grid" id="addCarSection">
-      <!-- FORM CARD -->
       <div class="card">
-        <h2>🚗 Add Vehicle</h2>
 
-        <p class="hint">
-          Create a new advert for your dealership. Complete the sections below, then click
-          <strong>Add Vehicle</strong>.
-        </p>
+        <div class="formIntro">
+          <h2>🚗 Add Vehicle</h2>
+          <p>
+            Add the main details, upload photos, then save the vehicle to your stock.
+          </p>
+        </div>
 
         <div class="formSection">
           <div class="sectionHeader">
-            <div class="sectionIcon">🚗</div>
-
-            <div>
-              <h3>Basic Details</h3>
-              <div class="sectionHint">
-                The main information customers see first.
-              </div>
-            </div>
+            <h3>Basic Details</h3>
+            <div class="sectionHint">The key information customers see first.</div>
           </div>
+          <div class="fieldGrid basicDetailsGrid">
 
-          <div class="row">
             <div>
               <label for="name">Make & Model</label>
-              <input id="name" type="text" placeholder="Volkswagen Golf GTI" />
+              <input id="name" type="text" placeholder="Volkswagen Golf GTI">
             </div>
-            <div>
-              <label for="year">Year</label>
-              <input id="year" type="number" placeholder="2018" />
+
+            <div class="fieldGrid two">
+
+              <div>
+                <label for="price">Price (£)</label>
+                <input id="price" type="text" inputmode="numeric" placeholder="12995"
+                  oninput="this.value=this.value.replace(/\D/g,'')">
+              </div>
+
+              <div>
+                <label for="year">Year</label>
+                <input id="year" type="text" inputmode="numeric" placeholder="2018"
+                  oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)">
+              </div>
+
             </div>
-          </div>
 
-          <label for="price">Price (£)</label>
-          <input id="price" type="number" placeholder="12995" />
-        </div>
+          </div> <!-- closes Basic Details -->
 
-        <div class="formSection">
 
-          <div class="sectionHeader">
-            <div class="sectionIcon">📷</div>
-
-            <div>
+          <div class="formSection">
+            <div class="sectionHeader">
               <h3>Photos</h3>
-              <div class="sectionHint">
-                Upload clear photos. The first image becomes the cover photo.
-              </div>
+              <div class="sectionHint">Upload clear photos. The first photo becomes the cover image.</div>
             </div>
+
+            <label for="photoFiles">Upload photos</label>
+            <input id="photoFiles" type="file" accept="image/*" multiple />
+
+            <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
+
+            <div class="small">Select up to 12 photos.</div>
+
           </div>
 
-          <label for="photoFiles">Upload photos</label>
-
-          <input id="photoFiles" type="file" accept="image/*" multiple />
-
-          <div id="currentPhotos" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;"></div>
-
-          <div class="small">Select up to 12 photos.</div>
-
-          <div class="divider"></div>
-
-          <label for="photos">Or paste photo links</label>
-
-          <textarea id="photos" placeholder="https://.../a.jpg, https://.../b.jpg"></textarea>
-
-          <div class="small">If you uploaded photos above, you can leave this empty.</div>
-
-        </div>
-
-        <div class="formSection">
-          <div class="sectionHeader">
-            <div class="sectionIcon">⚙</div>
-
-            <div>
+          <div class="formSection">
+            <div class="sectionHeader">
               <h3>Vehicle Details</h3>
-              <div class="sectionHint">
-                Additional information to help customers learn more about the vehicle.
+              <div class="sectionHint">Useful information for customers comparing vehicles.</div>
+            </div>
+
+            <div class="fieldGrid vehicleDetailsGrid">
+              <div>
+                <label for="mileage">Mileage</label>
+                <input id="mileage" class="field-medium" type="text" inputmode="numeric" placeholder="42000"
+                  oninput="this.value=this.value.replace(/\D/g,'')">
+              </div>
+
+              <div>
+                <label for="owners">Owners</label>
+                <input id="owners" class="field-small" type="text" inputmode="numeric" placeholder="2"
+                  oninput="this.value=this.value.replace(/\D/g,'').slice(0,2)">
+              </div>
+
+
+              <div>
+                <label for="fuel">Fuel</label>
+                <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
+              </div>
+
+              <div>
+                <label for="transmission">Transmission</label>
+                <input id="transmission" type="text" placeholder="Manual / Automatic" />
+              </div>
+
+              <div>
+                <label for="engine">Engine</label>
+                <input id="engine" type="text" placeholder="2.0L TSI" />
+              </div>
+
+              <div>
+                <label for="colour">Colour</label>
+                <input id="colour" type="text" placeholder="White" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div>
-              <label for="mileage">Mileage (miles)</label>
-              <input id="mileage" type="number" placeholder="42000" />
-            </div>
-            <div>
-              <label for="owners">Owners</label>
-              <input id="owners" type="number" placeholder="2" />
-            </div>
-          </div>
+            <label for="serviceHistory">Service history</label>
+            <input id="serviceHistory" class="field-large" type="text" placeholder="Full service history" />
 
-          <div class="row">
-            <div>
-              <label for="fuel">Fuel</label>
-              <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
-            </div>
-            <div>
-              <label for="transmission">Transmission</label>
-              <input id="transmission" type="text" placeholder="Manual / Automatic" />
-            </div>
-          </div>
+            <label>MOT until</label>
+            <div class="fieldGrid two motGrid">
+              <select id="motMonth">
+                <option value="">Month</option>
+                <option value="Jan">Jan</option>
+                <option value="Feb">Feb</option>
+                <option value="Mar">Mar</option>
+                <option value="Apr">Apr</option>
+                <option value="May">May</option>
+                <option value="Jun">Jun</option>
+                <option value="Jul">Jul</option>
+                <option value="Aug">Aug</option>
+                <option value="Sep">Sep</option>
+                <option value="Oct">Oct</option>
+                <option value="Nov">Nov</option>
+                <option value="Dec">Dec</option>
+              </select>
 
-          <div class="row">
-            <div>
-              <label for="engine">Engine</label>
-              <input id="engine" type="text" placeholder="2.0L TSI" />
-            </div>
-            <div>
-              <label for="colour">Colour</label>
-              <input id="colour" type="text" placeholder="White" />
+              <select id="motYear">
+                <option value="">Year</option>
+              </select>
             </div>
           </div>
 
-          <label for="serviceHistory">Service history</label>
-          <input id="serviceHistory" type="text" placeholder="Full service history" />
-
-          <label>MOT until (UK)</label>
-          <div class="twoColMot">
-            <select id="motMonth">
-              <option value="">Month</option>
-              <option value="Jan">Jan</option>
-              <option value="Feb">Feb</option>
-              <option value="Mar">Mar</option>
-              <option value="Apr">Apr</option>
-              <option value="May">May</option>
-              <option value="Jun">Jun</option>
-              <option value="Jul">Jul</option>
-              <option value="Aug">Aug</option>
-              <option value="Sep">Sep</option>
-              <option value="Oct">Oct</option>
-              <option value="Nov">Nov</option>
-              <option value="Dec">Dec</option>
-            </select>
-
-            <select id="motYear">
-              <option value="">Year</option>
-            </select>
-          </div>
-
-        </div> <!-- closes Vehicle Details -->
-
-        <div class="formSection">
-
-          <div class="sectionHeader">
-            <div class="sectionIcon">📝</div>
-
-            <div>
+          <div class="formSection">
+            <div class="sectionHeader">
               <h3>Description & Features</h3>
-              <div class="sectionHint">
-                Help customers understand why this vehicle stands out.
-              </div>
+              <div class="sectionHint">Add the advert text and key selling points.</div>
             </div>
-          </div>
-          <label for="description">Vehicle Description</label>
 
-          <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced.">
-  </textarea>
+            <label for="description">Vehicle Description</label>
+            <textarea id="description" placeholder="Clean example. Drives perfectly. Recently serviced."></textarea>
 
-          <label for="extras">Key Features</label>
+            <label for="extras">Key Features</label>
+            <textarea id="extras"
+              placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control"></textarea>
 
-          <textarea id="extras"
-            placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control">
-  </textarea>
-
-          <div class="small">
-            Add one feature per line.
+            <div class="small">Add one feature per line.</div>
           </div>
 
-        </div>
+          <div class="formActions">
+            <button id="addBtn" class="btn primary" type="button">Add Vehicle</button>
+            <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
+          </div>
 
+          <div id="msg" class="msg"></div>
 
-        <div class="btnRow">
-          <button id="addBtn" class="btn primary" type="button">
-            Add Vehicle
-          </button>
-          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel Edit</button>
-        </div>
-
-        <div id="msg" class="msg"></div>
-      </div>
-
-    </div> <!-- addCarSection -->
-
-    <div id="myCarsSection" style="display:none;">
-      <div class="card">
-        <h2>My Cars</h2>
-
-        <div class="hint">
-          Cars for this garage.
-        </div>
-
-        <div id="cars" class="cars">
-          Loading...
         </div>
       </div>
-    </div>
 
-    <div id="garageProfileSection" style="display:none;">
+      <div id="myCarsSection" style="display:none;">
+        <div class="card">
+          <h2>My Cars</h2>
 
-      <div class="card">
+          <div class="hint">
+            Cars for this garage.
+          </div>
 
-        <h2>Garage Profile</h2>
+          <div id="cars" class="cars">
+            Loading...
+          </div>
+        </div>
+      </div>
 
-        <p class="hint">
-          This information appears on your public garage page.
-        </p>
+      <div id="garageProfileSection" style="display:none;">
 
-        <label>Garage Name</label>
-        <input id="garageName" type="text">
+        <div class="card">
 
-        <label>Phone Number</label>
-        <input id="garagePhone" type="tel">
+          <h2>Garage Profile</h2>
 
-        <label>Email</label>
-        <input id="garageEmail" type="email">
+          <p class="hint">
+            This information appears on your public garage page.
+          </p>
 
-        <label>Website</label>
-        <input id="garageWebsite" type="url">
+          <label>Garage Name</label>
+          <input id="garageName" type="text">
 
-        <label>Address</label>
-        <textarea id="garageAddress"></textarea>
+          <label>Phone Number</label>
+          <input id="garagePhone" type="tel">
 
-        <label>About your garage</label>
-        <textarea id="garageDescription"></textarea>
+          <label>Email</label>
+          <input id="garageEmail" type="email">
 
-        <div class="btnRow">
-          <button id="saveGarageBtn" class="btn primary">
-            Save Profile
-          </button>
+          <label>Website</label>
+          <input id="garageWebsite" type="url">
+
+          <label>Address</label>
+          <textarea id="garageAddress"></textarea>
+
+          <label>About your garage</label>
+          <textarea id="garageDescription"></textarea>
+
+          <div class="btnRow">
+            <button id="saveGarageBtn" class="btn primary">
+              Save Profile
+            </button>
+          </div>
+
         </div>
 
       </div>
-
-    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -732,7 +800,6 @@
     const nameInput = document.getElementById("name");
     const yearInput = document.getElementById("year");
     const priceInput = document.getElementById("price");
-    const photosInput = document.getElementById("photos");
     const photoFilesInput = document.getElementById("photoFiles");
     const currentPhotos = document.getElementById("currentPhotos");
     const descriptionInput = document.getElementById("description");
@@ -785,16 +852,6 @@
     }
 
 
-    function parsePhotos(raw) {
-      return String(raw || "").split(",").map(s => s.trim()).filter(Boolean);
-    }
-
-    function safeUrl(u) {
-      const s = String(u || "").trim();
-      if (s.startsWith("https://") || s.startsWith("http://") || s.startsWith("/images/")) return s;
-      return "";
-    }
-
     function optText(val) {
       const s = String(val || "").trim();
       return s ? s : "";
@@ -810,7 +867,7 @@
       el.style.height = "auto";
       el.style.height = (el.scrollHeight + 2) + "px";
     }
-    [photosInput, descriptionInput, extrasInput].forEach(el => {
+    [descriptionInput, extrasInput].forEach(el => {
       el.addEventListener("input", () => autoGrow(el));
       autoGrow(el);
     });
@@ -863,7 +920,22 @@
         showMsg("success", "Uploading photos…");
         const urls = await uploadPhotos(photoFilesInput.files);
         uploadedPhotoUrls = urls;
-        showMsg("success", `${urls.length} photo(s) uploaded. Now click “Add car”.`);
+
+        currentPhotos.innerHTML = "";
+
+        urls.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.style.width = "86px";
+          img.style.height = "62px";
+          img.style.objectFit = "cover";
+          img.style.borderRadius = "10px";
+          img.style.border = "1px solid #e5e7eb";
+          currentPhotos.appendChild(img);
+        });
+
+        showMsg("success", `${urls.length} photo(s) uploaded.`);
+
       } catch (e) {
         uploadedPhotoUrls = [];
         showMsg("error", e.message || "Upload failed.");
@@ -1104,7 +1176,7 @@
       );
 
       // Prefer uploaded photos, then pasted URLs, then existing photos if editing
-      const pasted = parsePhotos(photosInput.value).map(safeUrl).filter(Boolean);
+      const pasted = [];
 
       let photos = uploadedPhotoUrls.length
         ? uploadedPhotoUrls
@@ -1130,7 +1202,7 @@
       if (!name) return showMsg("error", "Car name required.");
       if (!Number.isFinite(year)) return showMsg("error", "Year must be a number.");
       if (!Number.isFinite(price) || price <= 0) return showMsg("error", "Price must be > 0.");
-      if (!photos.length) return showMsg("error", "Upload photos (or paste at least 1 photo URL).");
+      if (!photos.length) return showMsg("error", "Upload at least 1 photo.");
 
       const payload = {
         name,
@@ -1209,7 +1281,8 @@
         nameInput.value = "";
         yearInput.value = "";
         priceInput.value = "";
-        photosInput.value = "";
+        photoFilesInput.value = "";
+        currentPhotos.innerHTML = "";
         descriptionInput.value = "";
         extrasInput.value = "";
 
@@ -1225,9 +1298,7 @@
 
         // Clear upload state
         uploadedPhotoUrls = [];
-        photoFilesInput.value = "";
 
-        autoGrow(photosInput);
         autoGrow(descriptionInput);
         autoGrow(extrasInput);
 
@@ -1240,7 +1311,7 @@
       } catch {
         showMsg("error", "Save failed (network error).");
         addBtn.disabled = false;
-        addBtn.textContent = editingCar ? "Save Changes" : "Add car";
+        addBtn.textContent = editingCar ? "Save Changes" : "Add Vehicle";
       }
     });
 
@@ -1257,8 +1328,8 @@
       nameInput.value = "";
       yearInput.value = "";
       priceInput.value = "";
-      photosInput.value = "";
       photoFilesInput.value = "";
+      currentPhotos.innerHTML = "";
       descriptionInput.value = "";
       extrasInput.value = "";
 
@@ -1282,7 +1353,6 @@
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "none";
 
-      autoGrow(photosInput);
       autoGrow(descriptionInput);
       autoGrow(extrasInput);
     });
@@ -1293,8 +1363,8 @@
       nameInput.value = "";
       yearInput.value = "";
       priceInput.value = "";
-      photosInput.value = "";
       photoFilesInput.value = "";
+      currentPhotos.innerHTML = "";
       descriptionInput.value = "";
       extrasInput.value = "";
 
@@ -1318,7 +1388,6 @@
       addCarSection.style.display = "none";
       myCarsSection.style.display = "block";
 
-      autoGrow(photosInput);
       autoGrow(descriptionInput);
       autoGrow(extrasInput);
     });

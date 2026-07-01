@@ -631,12 +631,12 @@
     if (lbPrev) lbPrev.addEventListener("click", prevPhoto);
     if (lightbox) lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
 
-    document.addEventListener("keydown", (e) => {
+    /*document.addEventListener("keydown", (e) => {
       if (!lightbox || !lightbox.classList.contains("open")) return;
       if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowRight") nextPhoto();
       if (e.key === "ArrowLeft") prevPhoto();
-    });
+    });*/
 
     (async function init() {
       const loading = document.getElementById("loading");
