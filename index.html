@@ -333,89 +333,97 @@
     /* MOBILE HERO IMAGE */
     @media (max-width: 560px) {
 
+      .hero {
+        min-height: 100vh;
+        align-items: flex-start;
+      }
+
       .hero::before {
         background:
           linear-gradient(180deg,
-            rgba(0, 0, 0, .04) 0%,
-            rgba(0, 0, 0, .22) 55%,
-            rgba(0, 0, 0, .32) 100%),
-          url("/images/hero-mobile.webp") center 32%/cover no-repeat;
+            rgba(0, 0, 0, .08) 0%,
+            rgba(0, 0, 0, .20) 55%,
+            rgba(0, 0, 0, .35) 100%),
+          url("/images/hero-mobile.webp") center top / cover no-repeat;
       }
 
       .wrap {
-        padding: 16px 0 60px;
-        transform: translateY(-35px);
+        padding-top: 40px;
+        padding-bottom: 20px;
+        transform: none;
       }
 
       .brand {
-        font-size: 2.35rem;
+        font-size: 2.15rem;
       }
 
       .headline {
         font-size: 1rem;
-        line-height: 1.45;
-        max-width: 320px;
+        line-height: 1.42;
+        max-width: 330px;
       }
 
       .iow-shape {
-        width: 95px;
-        margin: 12px auto 18px;
-        opacity: .85;
+        width: 92px;
+        margin: 10px auto 22px;
+        opacity: .65;
       }
 
       .panel {
-        margin-top: 12px;
-        gap: 10px;
+        margin-top: 28px;
+        gap: 12px;
         flex-wrap: nowrap;
       }
 
       .card {
         width: 150px;
-        height: 92px;
+        height: 96px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, .18);
+        border: 1px solid rgba(255, 255, 255, .38);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, .28);
       }
 
       .card.primary {
-        border: 2px solid rgba(255, 140, 0, 0.45);
-        box-shadow:
-          0 18px 55px rgba(0, 0, 0, .70),
-          0 0 18px rgba(255, 140, 0, .25);
-      }
-
-      .card:active,
-      .garage-pill:active,
-      .tick:active {
-        transform: scale(.98);
+        border: 2px solid rgba(255, 140, 0, .55);
       }
 
       .label {
-        font-size: 0.95rem;
+        font-size: .95rem;
       }
 
       .hint {
-        font-size: 0.78rem;
+        font-size: .78rem;
         margin-top: 5px;
       }
 
       .trustline {
-        margin-top: 28px;
+        margin-top: 120px;
         gap: 8px;
         flex-direction: column;
         align-items: center;
       }
 
       .tick {
-        width: auto;
-        min-width: 230px;
+        min-width: 250px;
         justify-content: center;
-        padding: 6px 14px;
-        font-size: 0.86rem;
-        gap: 6px;
+        padding: 7px 16px;
+        font-size: .88rem;
+        background: rgba(6, 17, 31, .48);
+        border: 1px solid rgba(255, 255, 255, .18);
       }
 
       .garage-mini {
-        margin-top: 16px;
+        margin-top: 12px;
       }
 
+      .garage-pill {
+        min-width: 260px;
+        justify-content: center;
+        padding: 12px 18px;
+        background: rgba(6, 17, 31, .72);
+        border: 1px solid rgba(255, 255, 255, .20);
+      }
     }
   </style>
 </head>
