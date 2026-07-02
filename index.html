@@ -16,7 +16,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IOW Car Finder | Used Cars from Isle of Wight Garages</title>
-  <link rel="preload" as="image" href="/images/hero-desktop.webp">
+  <link rel="preload" as="image" href="/images/hero-mobile.webp" media="(max-width: 560px)">
+  <link rel="preload" as="image" href="/images/hero-desktop.webp" media="(min-width: 561px)">
 
 
   <style>
@@ -146,9 +147,10 @@
 
     .iow-shape {
       width: 103px;
-      opacity: .95;
+      opacity: .65;
       margin: 8px auto 6px;
       display: block;
+      filter: drop-shadow(0 0 6px rgba(255, 140, 0, .35));
     }
 
     .brand {
@@ -341,8 +343,8 @@
       }
 
       .wrap {
-        padding: 28px 0 14px;
-        transform: none;
+        padding: 16px 0 60px;
+        transform: translateY(-35px);
       }
 
       .brand {
@@ -395,7 +397,7 @@
       }
 
       .trustline {
-        margin-top: 260px;
+        margin-top: 28px;
         gap: 8px;
         flex-direction: column;
         align-items: center;
@@ -410,9 +412,9 @@
         gap: 6px;
       }
 
-     .garage-mini {
-  margin-top: 20px;
-}
+      .garage-mini {
+        margin-top: 16px;
+      }
 
     }
   </style>
