@@ -1177,6 +1177,12 @@
 
         <div id="msg" class="msg"></div>
 
+        <div id="viewAdvertBox" style="display:none; margin-top:12px;">
+          <a id="viewAdvertLink" class="btn ghost" href="#" target="_blank" rel="noopener">
+            View advert
+          </a>
+        </div>
+
       </div>
     </div>
 
@@ -1278,6 +1284,8 @@
 
     const carsBox = document.getElementById("cars");
     const msgBox = document.getElementById("msg");
+    const viewAdvertBox = document.getElementById("viewAdvertBox");
+    const viewAdvertLink = document.getElementById("viewAdvertLink");
     const addBtn = document.getElementById("addBtn");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
 
@@ -1319,10 +1327,14 @@
       msgBox.textContent = text;
       msgBox.style.display = "block";
     }
+
     function clearMsg() {
       msgBox.className = "msg";
       msgBox.textContent = "";
       msgBox.style.display = "none";
+
+      viewAdvertBox.style.display = "none";
+      viewAdvertLink.href = "#";
     }
 
     function money(n) {
@@ -1530,8 +1542,11 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
               : `<button type="button" class="btnStatus" data-status="sold">Mark Sold</button>`
             }
 
-  <button type="button" class="btnSold btnEdit">Edit</button>
-  <button type="button" class="danger">Delete</button>
+<button type="button" class="btnSold btnEdit">Edit</button>
+<a class="btnSold" href="/car?id=${encodeURIComponent(car.id)}" target="_blank" rel="noopener" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+  Preview Advert
+</a>
+<button type="button" class="danger">Delete</button>
 </div>
           `;
 
@@ -1765,6 +1780,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
           "success",
           editingCar ? "Car updated successfully!" : "Car added successfully!"
         );
+
 
         // Leave edit mode
         editingCar = null;
