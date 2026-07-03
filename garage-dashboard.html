@@ -560,6 +560,42 @@
       margin-top: 6px
     }
 
+    .photoThumb {
+      position: relative;
+      width: 86px;
+      height: 62px;
+    }
+
+    .photoThumb img {
+      width: 86px;
+      height: 62px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      display: block;
+    }
+
+    .removePhotoBtn {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: none;
+      background: #07111d;
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    }
+
+    .removePhotoBtn:hover {
+      background: #e67e22;
+    }
+
     code {
       background: #f3f4f6;
       padding: 2px 6px;
@@ -1260,6 +1296,35 @@
       el.style.height = "auto";
       el.style.height = (el.scrollHeight + 2) + "px";
     }
+
+    function renderEditablePhotos() {
+      currentPhotos.innerHTML = "";
+
+      uploadedPhotoUrls.forEach((url, index) => {
+        const wrap = document.createElement("div");
+        wrap.className = "photoThumb";
+
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Car photo";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "removePhotoBtn";
+        removeBtn.textContent = "×";
+        removeBtn.setAttribute("aria-label", "Remove photo");
+
+        removeBtn.addEventListener("click", () => {
+          uploadedPhotoUrls.splice(index, 1);
+          renderEditablePhotos();
+        });
+
+        wrap.appendChild(img);
+        wrap.appendChild(removeBtn);
+        currentPhotos.appendChild(wrap);
+      });
+    }
+
     [descriptionInput, extrasInput].forEach(el => {
       el.addEventListener("input", () => autoGrow(el));
       autoGrow(el);
@@ -1314,18 +1379,7 @@
         const urls = await uploadPhotos(photoFilesInput.files);
         uploadedPhotoUrls = urls;
 
-        currentPhotos.innerHTML = "";
-
-        urls.forEach(url => {
-          const img = document.createElement("img");
-          img.src = url;
-          img.style.width = "86px";
-          img.style.height = "62px";
-          img.style.objectFit = "cover";
-          img.style.borderRadius = "10px";
-          img.style.border = "1px solid #e5e7eb";
-          currentPhotos.appendChild(img);
-        });
+        renderEditablePhotos();
 
         showMsg("success", `${urls.length} photo(s) uploaded.`);
 
@@ -1496,19 +1550,8 @@
             descriptionInput.value = car.description || "";
             extrasInput.value = car.extras || "";
 
-            currentPhotos.innerHTML = "";
-
-            (car.photos || []).forEach((url) => {
-              const img = document.createElement("img");
-              img.src = url;
-              img.alt = "Current car photo";
-              img.style.width = "86px";
-              img.style.height = "62px";
-              img.style.objectFit = "cover";
-              img.style.borderRadius = "10px";
-              img.style.border = "1px solid #e5e7eb";
-              currentPhotos.appendChild(img);
-            });
+            uploadedPhotoUrls = Array.isArray(car.photos) ? [...car.photos] : [];
+            renderEditablePhotos();
 
             addBtn.textContent = "Save Changes";
             cancelEditBtn.style.display = "inline-block";
@@ -1571,11 +1614,13 @@
       // Prefer uploaded photos, then pasted URLs, then existing photos if editing
       const pasted = [];
 
-      let photos = uploadedPhotoUrls.length
+      let photos = editingCar
         ? uploadedPhotoUrls
-        : pasted.length
-          ? pasted
-          : (editingCar?.photos || []);
+        : uploadedPhotoUrls.length
+          ? uploadedPhotoUrls
+          : pasted.length
+            ? pasted
+            : [];
 
       // If files are selected but not uploaded yet, upload them now
       if (!photos.length && photoFilesInput.files && photoFilesInput.files.length) {
