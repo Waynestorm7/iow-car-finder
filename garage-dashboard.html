@@ -119,6 +119,17 @@
       margin-top: 6px
     }
 
+    .dashboard-note {
+      background: #fff7ed;
+      border: 1px solid rgba(230, 126, 34, .28);
+      color: #7a3f00;
+      border-radius: 16px;
+      padding: 14px 16px;
+      line-height: 1.45;
+      margin: 0 0 22px;
+      font-size: .96rem;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: minmax(0, 1240px);
@@ -156,7 +167,19 @@
       margin: 0;
       color: #111827;
       font-size: 1.35rem;
-      font-weight: 800;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .formSection h3::before {
+      content: "";
+      width: 6px;
+      height: 24px;
+      border-radius: 999px;
+      background: var(--brand);
+      display: inline-block;
     }
 
     .formSection .sectionHint {
@@ -179,6 +202,34 @@
       margin: 0;
       color: var(--muted);
       font-size: .95rem;
+    }
+
+    .dashboard-form-hero {
+      background:
+        radial-gradient(circle at top left, rgba(230, 126, 34, .16), transparent 34%),
+        linear-gradient(135deg, #07111d, #10263d);
+      color: #fff;
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 8px;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, .18);
+    }
+
+    .dashboard-form-hero h2 {
+      color: #fff;
+      font-size: 1.9rem;
+      margin: 0 0 8px;
+    }
+
+    .dashboard-form-hero p {
+      color: rgba(255, 255, 255, .76);
+      max-width: 620px;
+      line-height: 1.5;
+    }
+
+    .dashboard-form-hero .welcome-kicker {
+      color: var(--brand);
+      margin-bottom: 8px;
     }
 
     .fieldGrid {
@@ -467,7 +518,7 @@
       font-weight: 700;
       font-size: 15px;
       white-space: nowrap;
-    }         
+    }
 
     .danger:disabled {
       opacity: .6;
@@ -517,23 +568,36 @@
 
     .dashboard-menu {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 22px 0 24px;
     }
 
     .dashboard-menu button {
-
-      padding: 15px;
-      border: 1px solid rgba(230, 126, 34, .15);
-      border-radius: 12px;
-      background: #1f3b57;
+      min-height: 74px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1f3b57, #142b43);
       color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 1.05rem;
+      font-weight: 800;
       cursor: pointer;
-      transition: .2s ease;
-      letter-spacing: .3px;
+      transition: .18s ease;
+      letter-spacing: .2px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, .12);
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-menu {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .dashboard-menu button {
+        min-height: 64px;
+        font-size: 1rem;
+      }
     }
 
     .dashboard-menu button:hover {
@@ -541,6 +605,170 @@
       border-color: #e67e22;
       color: #fff;
       transform: translateY(-2px);
+    }
+
+    .dashboard-welcome {
+      margin-top: 26px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, .08);
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .welcome-kicker {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: .82rem;
+    }
+
+    .dashboard-welcome h2 {
+      margin: 0 0 10px;
+      font-size: 1.8rem;
+      color: var(--text);
+    }
+
+    .dashboard-welcome p {
+      margin: 0;
+      max-width: 620px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .welcome-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .welcome-actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    #welcomeAddBtn {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    #welcomeCarsBtn {
+      background: #07111d;
+      color: #fff;
+    }
+
+    .dashboard-welcome {
+      margin-top: 26px;
+      background:
+        radial-gradient(circle at top left, rgba(230, 126, 34, .18), transparent 32%),
+        linear-gradient(135deg, #07111d, #10263d);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, .22);
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .welcome-kicker {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .82rem;
+    }
+
+    .dashboard-welcome h2 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      color: #fff;
+    }
+
+    .dashboard-welcome p {
+      margin: 0;
+      max-width: 620px;
+      color: rgba(255, 255, 255, .76);
+      line-height: 1.5;
+    }
+
+    .welcome-trust {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .welcome-trust span {
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: rgba(255, 255, 255, .84);
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .welcome-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .welcome-actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    #welcomeAddBtn {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    #welcomeCarsBtn {
+      background: rgba(255, 255, 255, .1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .18);
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-welcome {
+        padding: 24px;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .dashboard-welcome h2 {
+        font-size: 1.55rem;
+      }
+
+      .welcome-actions {
+        justify-content: stretch;
+        flex-direction: column;
+      }
+
+      .welcome-actions button {
+        width: 100%;
+      }
     }
 
     #addCarSection {
@@ -617,17 +845,45 @@
       <button id="logout">🚪 Logout</button>
     </div>
 
-    <div class="hint">
-      Upload photos (recommended). Optional details only show on the car page if you fill them in.
+    <div class="dashboard-welcome" id="dashboardWelcome">
+      <div>
+        <p class="welcome-kicker">IOW Car Finder</p>
+
+        <h2>Manage your stock</h2>
+
+        <p>
+          Add vehicles, manage your stock, and keep your garage profile up to date.
+        </p>
+
+        <div class="welcome-trust">
+          <span>✔ Island garages only</span>
+          <span>✔ No private sellers</span>
+          <span>✔ Direct customer contact</span>
+        </div>
+      </div>
+
+      <div class="welcome-actions">
+        <button type="button" id="welcomeAddBtn">Add vehicle</button>
+        <button type="button" id="welcomeCarsBtn">View stock</button>
+      </div>
     </div>
+
     <div class="grid" id="addCarSection">
       <div class="card">
 
-        <div class="formIntro">
-          <h2>🚗 Add Vehicle</h2>
+        <div class="formIntro dashboard-form-hero">
+          <p class="welcome-kicker">IOW Car Finder</p>
+
+          <h2>Add Vehicle</h2>
+
           <p>
-            Add the main details, upload photos, then save the vehicle to your stock.
+            Add the details buyers need. Clear photos and a fair description help your car stand out.
           </p>
+        </div>
+
+        <div class="dashboard-note">
+          <strong>Tip:</strong> Upload clear photos first. Optional details only show on the car advert if you fill them
+          in.
         </div>
 
         <div class="formSection">
@@ -1397,6 +1653,16 @@
     const showGarageProfileBtn = document.getElementById("show-profile");
     const garageProfileSection = document.getElementById("garageProfileSection");
     const logoutBtn = document.getElementById("logout");
+    const dashboardWelcome = document.getElementById("dashboardWelcome");
+    const welcomeAddBtn = document.getElementById("welcomeAddBtn");
+    const welcomeCarsBtn = document.getElementById("welcomeCarsBtn");
+    welcomeAddBtn.addEventListener("click", () => {
+      showAddCarBtn.click();
+    });
+
+    welcomeCarsBtn.addEventListener("click", () => {
+      showMyCarsBtn.click();
+    });
     showAddCarBtn.addEventListener("click", () => {
       editingCar = null;
 
@@ -1424,6 +1690,7 @@
       cancelEditBtn.style.display = "none";
       clearMsg();
 
+      dashboardWelcome.style.display = "none";
       addCarSection.style.display = "grid";
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "none";
@@ -1468,6 +1735,7 @@
     });
 
     showMyCarsBtn.addEventListener("click", () => {
+      dashboardWelcome.style.display = "none";
       addCarSection.style.display = "none";
       myCarsSection.style.display = "block";
       garageProfileSection.style.display = "none";
@@ -1475,6 +1743,7 @@
 
     showGarageProfileBtn.addEventListener("click", async () => {
 
+      dashboardWelcome.style.display = "none";
       addCarSection.style.display = "none";
       myCarsSection.style.display = "none";
       garageProfileSection.style.display = "block";
