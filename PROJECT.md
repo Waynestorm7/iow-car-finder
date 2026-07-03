@@ -73,7 +73,7 @@ Garage / Dashboard Improvements
 
 [ ] Premium Add/Edit Car redesign
 [ ] Premium dashboard UI
-[ ] Polish My Cars section
+[x] Polish My Cars section
 [ ] Mobile optimisation
 [ ] Upload garage logo
 [ ] Upload garage banner
