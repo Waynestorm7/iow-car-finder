@@ -54,23 +54,36 @@ Dashboard Cleanup
 [x] Photo upload uses authentication
 
 
-🚧 Current Sprint
-Garage Profile
+Garage Profile & Features
 
 [x] Garage Profile page
 [x] Load existing profile
 [x] Save profile changes
+[x] Public garage profile page
+[x] Edit cars
+[x] Delete cars
+[x] Upload multiple photos
+[x] Save garage profile
+
+
+🚧 Current Sprint
+Garage / Dashboard Improvements
+
+
+[ ] Better image handling
+[ ] Premium Add/Edit Car redesign
+[ ] Premium dashboard UI
+[ ] Mobile optimisation
 [ ] Upload garage logo
 [ ] Upload garage banner
 [ ] Opening hours
-[ ] Public garage profile page
+[ ] Improve public garage profile design
 
 
 🔜 Next Sprint
 Dashboard Improvements
 
-[ ] Premium Add/Edit Car redesign
-[ ] Better image handling
+
 [ ] Reserved vehicle styling
 [ ] Sold vehicle styling
 [ ] Disable enquiries on sold/reserved cars
@@ -93,10 +106,7 @@ Accounts
 
 Garage Features
 
-[x] Edit cars
-[x] Delete cars
-[x] Upload multiple photos
-[x] Save garage profile
+
 [ ] Garage logo
 [ ] Garage banner
 [ ] Opening hours
@@ -124,11 +134,18 @@ Payments
 [ ] Stripe integration
 [ ] Free trial
 [ ] Billing portal
+[ ] Trial expiry reminders
+
+Launch Strategy
+
+[ ] Offer 3-month free trial for early garages
+[ ] Onboard first garages manually
+[ ] Help garages upload first listings
+[ ] Collect feedback from garages
+[ ] Convert free trial garages to paid subscribers
 
 Polish
 
-[ ] Premium dashboard UI
-[ ] Mobile optimisation
 [ ] Performance
 [ ] SEO
 [ ] Error pages
@@ -155,4 +172,4 @@ Every major feature is committed to Git before starting the next.
 
 
 🎯 Launch Goal
-Create the Isle of Wight's best online car marketplace, where approved local garages can securely manage their dealership, showcase their vehicles, and connect customers with trusted local stock through a fast, modern and professional platform.
+Create the Isle of Wight's best dedicated used car website, where approved local garages can securely manage their stock, showcase their vehicles, and connect customers with trusted local garages through a fast, modern and professional platform.
