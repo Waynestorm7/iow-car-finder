@@ -88,7 +88,7 @@ Dashboard Improvements
 [ ] Reserved vehicle styling
 [ ] Sold vehicle styling
 [ ] Disable enquiries on sold/reserved cars
-[ ] Add “View advert” button after editing a car
+[x] Add “View advert” button after editing a car
 
 Authentication Polish
 
