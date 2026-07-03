@@ -64,15 +64,16 @@ Garage Profile & Features
 [x] Delete cars
 [x] Upload multiple photos
 [x] Save garage profile
+[x] Better image handling
 
 
 🚧 Current Sprint
+
 Garage / Dashboard Improvements
 
-
-[ ] Better image handling
 [ ] Premium Add/Edit Car redesign
 [ ] Premium dashboard UI
+[ ] Polish My Cars section
 [ ] Mobile optimisation
 [ ] Upload garage logo
 [ ] Upload garage banner
@@ -87,7 +88,7 @@ Dashboard Improvements
 [ ] Reserved vehicle styling
 [ ] Sold vehicle styling
 [ ] Disable enquiries on sold/reserved cars
-[ ] After editing a car, add a “View advert” button/link
+[ ] Add “View advert” button after editing a car
 
 Authentication Polish
 

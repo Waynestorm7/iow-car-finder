@@ -467,12 +467,16 @@
       justify-content: space-between;
       align-items: center;
       gap: 18px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, .06);
     }
 
     .carRow:last-child {
-      border-bottom: none;
+      margin-bottom: 0;
     }
 
     .left {
@@ -484,18 +488,20 @@
     }
 
     .preview {
-      width: 110px;
-      height: 80px;
+      width: 132px;
+      height: 92px;
       object-fit: cover;
-      border-radius: 14px;
+      border-radius: 16px;
       border: 1px solid var(--line);
       background: #f3f4f6;
       flex-shrink: 0;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .08);
     }
 
     .name {
-      font-weight: 700;
-      font-size: 1rem;
+      font-weight: 900;
+      font-size: 1.08rem;
+      color: #111827;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -505,6 +511,31 @@
       color: var(--muted);
       font-size: .9rem;
       margin-top: 4px;
+    }
+
+    .statusBadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      vertical-align: middle;
+    }
+
+    .statusBadge.sold {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .statusBadge.reserved {
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
     }
 
     .danger {
@@ -529,12 +560,37 @@
       background: #fff;
       border: 1px solid var(--line);
       color: #111827;
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 999px;
+      padding: 10px 16px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 800;
       font-size: 15px;
-      white-space: nowrap
+      white-space: nowrap;
+      min-height: 42px;
+    }
+
+    .btnSold:hover {
+      border-color: #e67e22;
+      color: #e67e22;
+    }
+
+    .btnStatus {
+      background: #07111d;
+      border: 1px solid #07111d;
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 15px;
+      white-space: nowrap;
+      min-height: 42px;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, .12);
+    }
+
+    .btnStatus:hover {
+      background: #10263d;
+      border-color: #10263d;
     }
 
     .btnSold:disabled {
@@ -1129,7 +1185,7 @@
         <h2>My Cars</h2>
 
         <div class="hint">
-          Cars for this garage.
+          Manage your vehicles. Sold vehicles are shown at the bottom of your stock list.
         </div>
 
         <div id="cars" class="cars">
@@ -1454,16 +1510,16 @@
               <img class="preview" src="${escapeText(cover)}" alt="car" onerror="this.src='/images/garage-placeholder.webp'">
               <div style="min-width:0;">
                 <div class="name">
-  ${escapeText(car.name || "Untitled")}
-  ${car.status === "reserved" ? " 🟠 RESERVED" : ""}
-  ${car.status === "sold" ? " 🔴 SOLD" : ""}
+ ${escapeText(car.name || "Untitled")}
+${car.status === "reserved" ? `<span class="statusBadge reserved">Reserved</span>` : ""}
+${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 </div>
                 <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
                 ${car.soldDate ? `<div class="meta">Sold date: ${escapeText(car.soldDate)}</div>` : ``}
               </div>
             </div>
 
-<div style="display:flex; gap:10px; align-items:center; margin-left:auto; flex-wrap:wrap;">
+            <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-left:24px; flex-wrap:wrap;">
   ${car.status === "reserved"
               ? `<button type="button" class="btnStatus" data-status="available">Make Available</button>`
               : `<button type="button" class="btnStatus" data-status="reserved">Reserve</button>`
