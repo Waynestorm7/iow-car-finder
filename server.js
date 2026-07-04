@@ -775,19 +775,51 @@ const server = http.createServer(async (req, res) => {
 
     const garageName = String(data.garageName || "").trim();
     const contactName = String(data.contactName || "").trim();
-    const email = String(data.email || "").trim();
+    const email = String(data.email || "").trim().toLowerCase();
     const phone = String(data.phone || "").trim();
     const website = String(data.website || "").trim();
     const message = String(data.message || "").trim();
+    const password = String(data.password || "").trim();
 
-    if (!garageName || !email) {
+    if (!garageName || !email || !password) {
       return sendJson(res, 400, {
         success: false,
-        message: "Garage name and email are required."
+        message: "Garage name, email and password are required."
+      });
+    }
+
+    if (password.length < 8) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Password must be at least 8 characters."
       });
     }
 
     try {
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true
+      });
+
+      if (authError) {
+        console.error("Create auth user error:", authError);
+
+        return sendJson(res, 400, {
+          success: false,
+          message: authError.message || "Could not create login account."
+        });
+      }
+
+      const userId = authData?.user?.id;
+
+      if (!userId) {
+        return sendJson(res, 500, {
+          success: false,
+          message: "Login account was not created correctly."
+        });
+      }
+
       const { error } = await supabase
         .from("garage_applications")
         .insert({
@@ -797,11 +829,12 @@ const server = http.createServer(async (req, res) => {
           phone: phone || null,
           website: website || null,
           message: message || null,
+          user_id: userId,
           status: "pending"
         });
 
       if (error) {
-        console.error(error);
+        console.error("Create garage application error:", error);
         throw error;
       }
 
@@ -1143,7 +1176,6 @@ const server = http.createServer(async (req, res) => {
     return serveFile(res, path.join(__dirname, "public", "header.html"));
   }
 
-  if (req.method === "GET" && pathname === "/") return serveFile(res, path.join(__dirname, "index.html"));
   if (req.method === "GET" && pathname === "/") return serveFile(res, path.join(__dirname, "index.html"));
   if (req.method === "GET" && pathname === "/cars-page") return serveFile(res, path.join(__dirname, "cars.html"));
   if (req.method === "GET" && pathname === "/garages") return serveFile(res, path.join(__dirname, "garages-page.html"));

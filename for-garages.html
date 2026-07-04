@@ -457,122 +457,87 @@
 
     <section class="actions">
       <div class="action" id="joinCard">
-        <h2>Add your garage</h2>
-        <p>Register your garage and start advertising vehicles to local buyers.</p>
-        <div class="small">For Isle of Wight garages.</div>
+        <h2>Apply to get listed</h2>
+        <p>
+          Apply for your garage account and, once approved, manage your own stock
+          through the IOW Car Finder dashboard.
+        </p>
+        <div class="small">For approved Isle of Wight garages only.</div>
 
         <button type="button" class="button" id="joinBtn">
-          Add your garage
+          Apply to get listed
         </button>
       </div>
 
-      <div class="action" id="addCard">
-        <h2>Try listing a vehicle</h2>
-        <p>Send us one vehicle first and see how simple it is to get listed.</p>
-        <div class="small">No payment needed to submit details today.</div>
+      <div class="action">
+        <h2>Already approved?</h2>
+        <p>
+          Log in to your garage dashboard to add vehicles, update prices,
+          upload photos, and manage your stock.
+        </p>
+        <div class="small">For garages with an approved account.</div>
 
-        <button type="button" class="button secondary" id="addBtn">
-          Try listing a vehicle
-        </button>
+        <a class="button secondary" href="/login">
+          Garage login
+        </a>
       </div>
     </section>
 
     <section class="note">
-      <strong>Simple early access</strong>
+      <strong>What approved garages get</strong>
       <p>
-        We're currently working with local garages while we grow IOW Car Finder.
-        You can register your garage or submit a vehicle without any payment today.
+        Approved garages get their own dashboard to add and edit vehicles,
+        upload photos, mark cars as reserved or sold, and keep their public
+        garage profile up to date.
       </p>
     </section>
 
     <section class="panel" id="contact">
-      <div class="eyebrow">Get started</div>
-      <h2>Send us your details</h2>
-      <p>Complete the form below to add your garage, try listing a vehicle, or ask us a question.</p>
+      <div class="eyebrow">Apply now</div>
+      <h2>Apply for a garage account</h2>
+      <p>
+        Complete the form below to request access. Once approved, you’ll be able to
+        log in and manage your own vehicles through the garage dashboard.
+      </p>
       <form id="garageForm">
 
-      <div class="form-grid">
-        <div class="full">
-          <label for="type">What would you like to do?</label>
-          <select id="type" name="Request type" required>
-            <option value="">Please choose</option>
-            <option>Add your garage</option>
-            <option>Try listing a vehicle</option>
-            <option>General question</option>
-          </select>
-        </div>
+        <div class="form-grid">
 
-        <div>
-          <label for="garage">Garage name</label>
-          <input id="garage" name="Garage name" type="text" required>
-        </div>
-
-        <div>
-          <label for="name">Your name</label>
-          <input id="name" name="Your name" type="text" required>
-        </div>
-
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="Email" type="email" required>
-        </div>
-
-        <div>
-          <label for="phone">Phone number</label>
-          <input id="phone" name="Phone number" type="tel">
-        </div>
-
-        <div class="vehicle-fields" id="vehicleFields">
           <div>
-            <label for="registration">Registration</label>
-            <input id="registration" name="Registration" type="text">
+            <label for="garage">Garage name</label>
+            <input id="garage" name="Garage name" type="text" required>
           </div>
 
           <div>
-            <label for="makeModel">Make and model</label>
-            <input id="makeModel" name="Make and model" type="text">
+            <label for="name">Your name</label>
+            <input id="name" name="Your name" type="text" required>
           </div>
 
           <div>
-            <label for="year">Year</label>
-            <input id="year" name="Year" type="text">
+            <label for="email">Email</label>
+            <input id="email" name="Email" type="email" required>
           </div>
 
           <div>
-            <label for="price">Price</label>
-            <input id="price" name="Price" type="text">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="Phone number" type="tel">
           </div>
 
-          <div>
-            <label for="mileage">Mileage</label>
-            <input id="mileage" name="Mileage" type="text">
+          <div class="full">
+            <label for="password">Create a password</label>
+            <input id="password" name="Password" type="password" required minlength="8">
+            <div class="small">You’ll use this to log in once your garage is approved.</div>
           </div>
 
-          <div>
-            <label for="fuel">Fuel</label>
-            <input id="fuel" name="Fuel" type="text">
-          </div>
-
-          <div>
-            <label for="transmission">Transmission</label>
-            <input id="transmission" name="Transmission" type="text">
-          </div>
-
-          <div>
-            <label for="colour">Colour</label>
-            <input id="colour" name="Colour" type="text">
+          <div class="full">
+            <label for="message">Tell us about your garage</label>
+            <textarea id="message" name="Message"
+              placeholder="Tell us briefly about your garage, where you are based, and the type of vehicles you usually stock."></textarea>
           </div>
         </div>
 
-        <div class="full">
-          <label for="message">Message</label>
-          <textarea id="message" name="Message"
-            placeholder="Tell us about your garage, or paste vehicle details here if you want to try listing a car."></textarea>
-        </div>
-      </div>
-
-      <button type="submit">Send details</button>
-      <div class="privacy">We’ll only use your details to respond to your enquiry.</div>
+        <button type="submit">Send details</button>
+        <div class="privacy">We’ll only use your details to respond to your enquiry.</div>
       </form>
     </section>
   </main>
@@ -583,38 +548,11 @@
   </footer>
 
   <script>
-    const typeSelect = document.getElementById("type");
-    const vehicleFields = document.getElementById("vehicleFields");
     const garageForm = document.getElementById("garageForm");
-
-    function setType(value) {
-      typeSelect.value = value;
-
-      if (value === "Try listing a vehicle") {
-        vehicleFields.classList.add("show");
-      } else {
-        vehicleFields.classList.remove("show");
-      }
-
-      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
-    }
 
     document.getElementById("joinCard").addEventListener("click", (e) => {
       e.preventDefault();
-      setType("Add your garage");
-    });
-
-    document.getElementById("addCard").addEventListener("click", (e) => {
-      e.preventDefault();
-      setType("Try listing a vehicle");
-    });
-
-    typeSelect.addEventListener("change", () => {
-      if (typeSelect.value === "Try listing a vehicle") {
-        vehicleFields.classList.add("show");
-      } else {
-        vehicleFields.classList.remove("show");
-      }
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
     });
 
     garageForm.addEventListener("submit", async (e) => {
@@ -629,10 +567,11 @@
         contactName: document.getElementById("name").value,
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
+        password: document.getElementById("password").value,
         website: "",
         message: document.getElementById("message").value
       };
-
+      
       try {
         const res = await fetch("/garage-apply", {
           method: "POST",
@@ -651,7 +590,6 @@
 
         alert("Thanks — your application has been received.");
         garageForm.reset();
-        vehicleFields.classList.remove("show");
 
       } catch (err) {
         alert("Could not send application. Please try again.");
