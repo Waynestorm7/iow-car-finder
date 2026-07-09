@@ -141,10 +141,12 @@ Customer Features
 
 Admin
 
+Admin
+
+[x] Review garage applications
+[x] Approve garages
+[x] Reject garages
 [ ] Admin dashboard
-[ ] Review garage applications
-[ ] Approve garages
-[ ] Reject garages
 [ ] Manage garages
 
 Payments
