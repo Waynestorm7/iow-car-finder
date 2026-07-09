@@ -1170,6 +1170,177 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Admin: POST /garage-applications-approve
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/garage-applications-approve") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const applicationId = String(data.applicationId || "").trim();
+
+    if (!applicationId) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing application id."
+      });
+    }
+
+    try {
+      const { data: application, error: appError } = await supabase
+        .from("garage_applications")
+        .select("*")
+        .eq("id", applicationId)
+        .single();
+
+      if (appError || !application) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Application not found."
+        });
+      }
+
+      if (!application.user_id) {
+        return sendJson(res, 400, {
+          success: false,
+          message: "This application has no user_id, so it cannot be approved automatically."
+        });
+      }
+
+      const { data: garage, error: garageError } = await supabase
+        .from("garages")
+        .insert({
+          name: application.garage_name || "Unnamed garage",
+          phone: application.phone || null,
+          email: application.email || null,
+          website: application.website || null,
+          description: application.message || null
+        })
+        .select("id")
+        .single();
+
+      if (garageError || !garage) {
+        console.error("Create garage error:", garageError);
+        throw garageError;
+      }
+
+      const { error: linkError } = await supabase
+        .from("garage_users")
+        .insert({
+          user_id: application.user_id,
+          garage_id: garage.id,
+          role: "owner",
+          status: "active",
+          subscription_status: "trial"
+        });
+
+      if (linkError) {
+        console.error("Create garage user link error:", linkError);
+        throw linkError;
+      }
+
+      const { error: updateError } = await supabase
+        .from("garage_applications")
+        .update({
+          status: "approved"
+        })
+        .eq("id", applicationId);
+
+      if (updateError) {
+        console.error("Update application error:", updateError);
+        throw updateError;
+      }
+
+      return sendJson(res, 200, {
+        success: true,
+        garageId: garage.id
+      });
+
+    } catch (e) {
+      console.error("POST /garage-applications-approve error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not approve application."
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: POST /garage-applications-reject
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/garage-applications-reject") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const applicationId = String(data.applicationId || "").trim();
+
+    if (!applicationId) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing application id."
+      });
+    }
+
+    try {
+      const { error } = await supabase
+        .from("garage_applications")
+        .update({
+          status: "rejected"
+        })
+        .eq("id", applicationId);
+
+      if (error) {
+        console.error("Reject application error:", error);
+        throw error;
+      }
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("POST /garage-applications-reject error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not reject application."
+      });
+    }
+  }
+
+  // -----------------------------
   // PAGES
   // -----------------------------
   if (req.method === "GET" && pathname === "/header.html") {
