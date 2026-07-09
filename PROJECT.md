@@ -7,11 +7,13 @@ We do not rewrite this roadmap. We only tick off completed work or add new tasks
 ✅ Completed
 Public Website
 
+
 [x] Landing page
 [x] Cars page
 [x] Car details page
 [x] Garages page
 [x] Garage details page
+[x] For Garages page refreshed for garage account applications
 
 Infrastructure
 
@@ -21,13 +23,21 @@ Infrastructure
 
 Authentication
 
+
 [x] Garage login
+
 [x] Protected garage dashboard
+
 [x] Logout
 [x] garage_users table created
 [x] First garage account linked (SC Motors)
 [x] GET /me authentication flow
 [x] Dashboard automatically loads logged-in garage
+[x] Garage application form creates Supabase Auth user
+[x] Garage applications saved as pending
+[x] Pending garages blocked from dashboard
+[x] Approved garages can access dashboard
+
 
 Garage Dashboard
 
@@ -92,16 +102,22 @@ Dashboard Improvements
 
 Authentication Polish
 
-[ ] Remove Admin Key from project completely
-[ ] Homepage Login button
-[ ] Homepage Sign Up button
-[ ] Redirect logged-in garages directly to Dashboard
 
+[x] Remove old garage dashboard admin-key flow
+[ ] Verify no old `adminKey` references remain in public/dashboard code
+[x] Keep temporary `ADMIN_KEY` only for private admin routes
+[ ] Homepage Login button
+[ ] Homepage Sign Up / For Garages button
+[ ] Redirect logged-in garages directly to Dashboard
+[ ] Later replace `ADMIN_KEY` with proper admin login
 
 🚀 Launch Checklist
 Accounts
 
-[ ] Garage signup
+Accounts
+
+
+[x] Garage signup application flow
 [ ] Garage approval
 [ ] Email confirmation
 [ ] Password reset
