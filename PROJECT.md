@@ -14,7 +14,9 @@ Public Website
 [x] Garages page
 [x] Garage details page
 [x] For Garages page refreshed for garage account applications
-
+[x] Buyer page headers simplified to Home / Cars / Garages
+[x] Garage login removed from buyer-facing headers
+[ ] Check For Garages page has clear approved garage login link
 Infrastructure
 
 
@@ -108,16 +110,11 @@ Authentication Polish
 [x] Remove old garage dashboard admin-key flow
 [ ] Verify no old `adminKey` references remain in public/dashboard code
 [x] Keep temporary `ADMIN_KEY` only for private admin routes
-[ ] Homepage Login button
-[ ] Homepage Sign Up / For Garages button
+[ ] Keep garage login/apply journey inside For Garages page
 [ ] Redirect logged-in garages directly to Dashboard
 [ ] Later replace `ADMIN_KEY` with proper admin login
 
 🚀 Launch Checklist
-Accounts
-
-Accounts
-
 
 Accounts
 
