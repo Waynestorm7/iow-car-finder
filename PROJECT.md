@@ -17,6 +17,7 @@ Public Website
 
 Infrastructure
 
+
 [x] Supabase migration
 [x] Authentication enabled
 [x] Photo uploads (Cloudinary)
@@ -25,9 +26,7 @@ Authentication
 
 
 [x] Garage login
-
 [x] Protected garage dashboard
-
 [x] Logout
 [x] garage_users table created
 [x] First garage account linked (SC Motors)
@@ -37,6 +36,9 @@ Authentication
 [x] Garage applications saved as pending
 [x] Pending garages blocked from dashboard
 [x] Approved garages can access dashboard
+[x] Admin can approve garage applications
+[x] Admin can reject garage applications
+[x] Approved garage is automatically linked to a garage account
 
 
 Garage Dashboard
@@ -117,8 +119,10 @@ Accounts
 Accounts
 
 
+Accounts
+
 [x] Garage signup application flow
-[ ] Garage approval
+[x] Garage approval
 [ ] Email confirmation
 [ ] Password reset
 
