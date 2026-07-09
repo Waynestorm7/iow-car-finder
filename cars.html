@@ -89,7 +89,8 @@
 
     nav {
       display: flex;
-      gap: 16px;
+      align-items: center;
+      gap: 18px;
     }
 
     nav a {
@@ -97,14 +98,26 @@
       text-decoration: none;
       font-size: .9rem;
       font-weight: 800;
-      padding: 0;
+      padding: 8px 2px;
       border: 0;
       background: transparent;
     }
 
-    nav a:hover,
-    nav a.active {
+    nav a:hover {
       color: #fff;
+    }
+
+    nav a[href="/login"] {
+      color: #fff;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    nav a[href="/login"]:hover {
+      background: rgba(255, 255, 255, .16);
+      border-color: rgba(255, 255, 255, .45);
     }
 
     /* ---------- Hero ---------- */
@@ -616,7 +629,7 @@
         <a class="active" href="/cars-page" aria-label="Cars">Cars</a>
         <a href="/garages" aria-label="Garages">Garages</a>
         <a href="/login" aria-label="Garage Login">Garage Login</a>
-      </nav>1.
+      </nav>
     </div>
   </header>
 
