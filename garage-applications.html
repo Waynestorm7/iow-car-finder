@@ -2,66 +2,431 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garage Applications | IOW Car Finder</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garage Applications | IOW Car Finder</title>
+
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --dark: #07111d;
+      --accent: #e67e22;
+      --green: #166534;
+      --orange: #9a3412;
+      --red: #991b1b;
+      --shadow: 0 14px 40px rgba(15, 23, 42, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--dark);
+      color: #fff;
+      padding: 18px;
+    }
+
+    .top {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top left, rgba(230, 126, 34, .16), transparent 32%),
+        linear-gradient(135deg, #07111d, #10263d);
+      color: #fff;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, .18);
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, .76);
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .admin-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
+    }
+
+    button {
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c96513;
+    }
+
+    .status {
+      margin: 14px 0;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .applications {
+      display: grid;
+      gap: 16px;
+    }
+
+    .app-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .app-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .app-head h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+    }
+
+    .created {
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge.pending {
+      background: #fff7ed;
+      color: var(--orange);
+      border: 1px solid #fed7aa;
+    }
+
+    .badge.approved {
+      background: #dcfce7;
+      color: var(--green);
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge.rejected {
+      background: #fee2e2;
+      color: var(--red);
+      border: 1px solid #fecaca;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .detail {
+      background: #fafafa;
+      border: 1px solid #eef0f3;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .detail strong {
+      display: block;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .detail span {
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .message {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      color: #374151;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .hint {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding: 24px 20px;
+      }
+
+      .hero h1 {
+        font-size: 1.55rem;
+      }
+
+      .app-head {
+        flex-direction: column;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <h1>Garage Applications</h1>
+  <header>
+    <div class="top">
+      <a class="brand" href="/"><span>IOW</span> Car Finder</a>
+    </div>
+  </header>
 
-    <div id="status">Loading applications...</div>
-    <div id="applications"></div>
+  <main>
+    <section class="hero">
+      <h1>Garage Applications</h1>
+      <p>
+        Review garage account applications. Pending garages can log in, but they cannot access the dashboard until they
+        are approved and linked to a garage account.
+      </p>
+    </section>
 
-    <script>
-        async function loadApplications() {
+    <section class="admin-box">
+      <label for="adminKey">Admin key</label>
+      <input id="adminKey" type="password" placeholder="Enter admin key">
 
-            const status = document.getElementById("status");
-            const container = document.getElementById("applications");
+      <button type="button" id="loadBtn">Load applications</button>
 
-            try {
+      <div class="hint">
+        This key is only temporary until we build a proper admin login.
+      </div>
+    </section>
 
-                const res = await fetch("/garage-applications-data");
-                const data = await res.json();
+    <div id="status" class="status">Enter your admin key and load applications.</div>
 
-                if (!res.ok) {
-                    status.textContent = "Could not load applications.";
-                    return;
-                }
+    <section id="applications" class="applications"></section>
+  </main>
 
-                status.textContent = "";
+  <script>
+    const adminKeyInput = document.getElementById("adminKey");
+    const loadBtn = document.getElementById("loadBtn");
+    const statusBox = document.getElementById("status");
+    const container = document.getElementById("applications");
 
-                if (data.length === 0) {
-                    status.textContent = "No applications yet.";
-                    return;
-                }
+    adminKeyInput.value = sessionStorage.getItem("iow_admin_key") || "";
 
-                data.forEach(app => {
+    function escapeText(value) {
+      return String(value || "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
 
-                    const div = document.createElement("div");
+    function formatDate(value) {
+      if (!value) return "-";
 
-                    div.innerHTML = `
-        <hr>
-        <h3>${app.garage_name}</h3>
-        <p><strong>Contact:</strong> ${app.contact_name}</p>
-        <p><strong>Email:</strong> ${app.email}</p>
-        <p><strong>Phone:</strong> ${app.phone || "-"}</p>
-        <p><strong>Status:</strong> ${app.status}</p>
-        <p>${app.message || ""}</p>
-      `;
+      const date = new Date(value);
 
-                    container.appendChild(div);
+      if (Number.isNaN(date.getTime())) {
+        return "-";
+      }
 
-                });
+      return date.toLocaleString("en-GB", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+    }
 
-            } catch (err) {
-                status.textContent = "Server error.";
-            }
+    function badgeClass(status) {
+      const clean = String(status || "pending").toLowerCase();
 
+      if (clean === "approved") return "approved";
+      if (clean === "rejected") return "rejected";
+
+      return "pending";
+    }
+
+    async function loadApplications() {
+      const adminKey = adminKeyInput.value.trim();
+
+      if (!adminKey) {
+        alert("Enter your admin key first.");
+        return;
+      }
+
+      sessionStorage.setItem("iow_admin_key", adminKey);
+
+      statusBox.textContent = "Loading applications...";
+      container.innerHTML = "";
+
+      try {
+        const res = await fetch("/garage-applications-data", {
+          headers: {
+            "x-garage-key": adminKey
+          }
+        });
+
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok || !Array.isArray(data)) {
+          statusBox.textContent = "Could not load applications. Check your admin key.";
+          return;
         }
 
-        loadApplications();
-    </script>
+        if (!data.length) {
+          statusBox.textContent = "No applications yet.";
+          return;
+        }
+
+        statusBox.textContent = `${data.length} application(s) found.`;
+
+        data.forEach(app => {
+          const card = document.createElement("article");
+          card.className = "app-card";
+
+          const status = app.status || "pending";
+
+          card.innerHTML = `
+            <div class="app-head">
+              <div>
+                <h2>${escapeText(app.garage_name || "Unnamed garage")}</h2>
+                <div class="created">Applied: ${escapeText(formatDate(app.created_at))}</div>
+              </div>
+
+              <span class="badge ${badgeClass(status)}">${escapeText(status)}</span>
+            </div>
+
+            <div class="details">
+              <div class="detail">
+                <strong>Contact</strong>
+                <span>${escapeText(app.contact_name || "-")}</span>
+              </div>
+
+              <div class="detail">
+                <strong>Email</strong>
+                <span>${escapeText(app.email || "-")}</span>
+              </div>
+
+              <div class="detail">
+                <strong>Phone</strong>
+                <span>${escapeText(app.phone || "-")}</span>
+              </div>
+
+              <div class="detail">
+                <strong>User ID</strong>
+                <span>${escapeText(app.user_id || "-")}</span>
+              </div>
+            </div>
+
+            <div class="message">${escapeText(app.message || "No message provided.")}</div>
+
+            <div class="hint">
+              Approval is still manual for now. Next step will be adding Approve and Reject buttons.
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+        statusBox.textContent = "Server error loading applications.";
+      }
+    }
+
+    loadBtn.addEventListener("click", loadApplications);
+  </script>
 </body>
 
 </html>
