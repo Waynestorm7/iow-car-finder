@@ -42,6 +42,21 @@
         const form = document.getElementById("loginForm");
         const message = document.getElementById("message");
 
+        async function redirectIfAlreadyLoggedIn() {
+            const { data, error } = await supabaseClient.auth.getSession();
+
+            if (error) {
+                console.error("Session check error:", error);
+                return;
+            }
+
+            if (data.session) {
+                window.location.href = "/garage-dashboard";
+            }
+        }
+
+        redirectIfAlreadyLoggedIn();
+
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 

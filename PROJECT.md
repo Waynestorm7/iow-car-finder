@@ -111,7 +111,7 @@ Authentication Polish
 [x] Verify no old `adminKey` references remain in public/dashboard code
 [x] Keep temporary `ADMIN_KEY` only for private admin routes
 [x] Keep garage login/apply journey inside For Garages page
-[ ] Redirect logged-in garages directly to Dashboard
+[x] Redirect logged-in garages directly to Dashboard
 [ ] Later replace `ADMIN_KEY` with proper admin login
 
 🚀 Launch Checklist
