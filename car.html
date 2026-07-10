@@ -245,6 +245,35 @@
       font-weight: 700;
     }
 
+    .availabilityNotice {
+      display: none;
+      margin: 10px 0 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .availabilityNotice strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: .98rem;
+    }
+
+    .availabilityNotice.reserved {
+      display: block;
+      background: #fff7ed;
+      border: 1px solid rgba(230, 126, 34, .35);
+      color: #7a3f00;
+    }
+
+    .availabilityNotice.sold {
+      display: block;
+      background: #f3f4f6;
+      border: 1px solid rgba(17, 24, 39, .18);
+      color: #111827;
+    }
+
     .sectionTitle {
       margin: 12px 0 8px;
       font-size: 1.05rem;
@@ -518,6 +547,7 @@
           <h1 id="carTitle"></h1>
           <div class="price" id="carPrice"></div>
           <div id="listedDate" class="listedDate"></div>
+          <div id="availabilityNotice" class="availabilityNotice"></div>
 
           <div id="specsWrap" style="display:none;">
             <div class="sectionTitle">Key specs</div>
@@ -703,6 +733,10 @@
         const car = json.car;
         const garage = json.garage;
 
+        const carStatus = String(car.status || "").toLowerCase();
+        const isReserved = carStatus === "reserved";
+        const isSold = carStatus === "sold" || car.sold === true;
+
         if (loading) loading.style.display = "none";
         if (content) content.style.display = "grid";
 
@@ -719,6 +753,27 @@
 
         if (listedDate) {
           listedDate.textContent = dateText ? "Listed: " + dateText : "";
+        }
+
+        const availabilityNotice = document.getElementById("availabilityNotice");
+
+        if (availabilityNotice) {
+          if (isSold) {
+            availabilityNotice.className = "availabilityNotice sold";
+            availabilityNotice.innerHTML = `
+      <strong>Sold vehicle</strong>
+      This vehicle has been marked as sold.
+    `;
+          } else if (isReserved) {
+            availabilityNotice.className = "availabilityNotice reserved";
+            availabilityNotice.innerHTML = `
+      <strong>Reserved vehicle</strong>
+      This vehicle is currently reserved. Please contact the garage to check availability.
+    `;
+          } else {
+            availabilityNotice.className = "availabilityNotice";
+            availabilityNotice.innerHTML = "";
+          }
         }
 
         const reportLink = document.getElementById("reportLink");
@@ -802,9 +857,15 @@
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
         if (callBtn) {
-          if (phone) {
+          if (isSold) {
+            callBtn.href = "#";
+            callBtn.classList.add("disabled");
+            callBtn.textContent = "Sold";
+            if (callNote) callNote.textContent = "This vehicle has been marked as sold.";
+          } else if (phone) {
             callBtn.href = "tel:" + phone.replace(/\s/g, "");
             callBtn.classList.remove("disabled");
+            callBtn.textContent = "📞 Call garage";
             if (callNote) callNote.textContent = "";
           } else {
             callBtn.href = "#";
