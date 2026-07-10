@@ -271,6 +271,29 @@
       background: var(--accentDark);
     }
 
+    .loginAction {
+      background: var(--dark);
+      border-color: rgba(255, 255, 255, .08);
+    }
+
+    .loginAction h2 {
+      color: #fff;
+    }
+
+    .loginAction p,
+    .loginAction .small {
+      color: rgba(255, 255, 255, .72);
+    }
+
+    .loginAction .button.secondary {
+      background: #10263d;
+      color: #fff;
+    }
+
+    .loginAction .button.secondary:hover {
+      background: #183b5f;
+    }
+
     .small {
       margin-top: 10px;
       margin-bottom: 4px;
@@ -469,16 +492,13 @@
         </button>
       </div>
 
-      <div class="action">
-        <h2>Already approved?</h2>
-        <p>
-          Log in to your garage dashboard to add vehicles, update prices,
-          upload photos, and manage your stock.
-        </p>
-        <div class="small">For garages with an approved account.</div>
+      <div class="action loginAction">
+        <h2>Garage dashboard login</h2>
+        <p>Already approved? Log in to manage your vehicles, prices, photos and garage profile.</p>
+        <p class="small">For approved garages only.</p>
 
         <a class="button secondary" href="/login">
-          Garage login
+          Log in to dashboard
         </a>
       </div>
     </section>
@@ -571,7 +591,7 @@
         website: "",
         message: document.getElementById("message").value
       };
-      
+
       try {
         const res = await fetch("/garage-apply", {
           method: "POST",
