@@ -1226,6 +1226,9 @@
         <label>Address</label>
         <textarea id="garageAddress"></textarea>
 
+        <label>Opening Hours</label>
+        <textarea id="garageOpeningHours" placeholder="Example: Mon-Fri 9am-5pm, Sat 9am-1pm, Sun closed"></textarea>
+
         <label>About your garage</label>
         <textarea id="garageDescription"></textarea>
 
@@ -1307,6 +1310,9 @@
     const garageEmailInput = document.getElementById("garageEmail");
     const garageWebsiteInput = document.getElementById("garageWebsite");
     const garageAddressInput = document.getElementById("garageAddress");
+
+    const garageOpeningHoursInput = document.getElementById("garageOpeningHours");
+
     const garageDescriptionInput = document.getElementById("garageDescription");
 
     const saveGarageBtn = document.getElementById("saveGarageBtn");
@@ -1949,6 +1955,9 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         garageEmailInput.value = g.email || "";
         garageWebsiteInput.value = g.website || "";
         garageAddressInput.value = g.address || "";
+
+        garageOpeningHoursInput.value = g.opening_hours || g.openingHours || "";
+
         garageDescriptionInput.value = g.description || "";
 
       } catch (err) {
@@ -1980,6 +1989,9 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         email: garageEmailInput.value.trim(),
         website,
         address: garageAddressInput.value.trim(),
+
+        opening_hours: garageOpeningHoursInput.value.trim(),
+
         description: garageDescriptionInput.value.trim()
       };
 

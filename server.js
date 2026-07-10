@@ -469,6 +469,7 @@ async function dbUpdateGarage(id, payload) {
     email: payload.email ? String(payload.email).trim() : null,
     website: payload.website ? String(payload.website).trim() : null,
     address: payload.address ? String(payload.address).trim() : null,
+    opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
     description: payload.description ? String(payload.description).trim() : null,
   };
 

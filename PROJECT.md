@@ -92,7 +92,7 @@ Garage / Dashboard Improvements
 [ ] Upload garage logo
 [ ] Upload garage banner
 [ ] Opening hours
-[ ] Improve public garage profile design
+[x] Improve public garage profile design
 
 
 🔜 Next Sprint
