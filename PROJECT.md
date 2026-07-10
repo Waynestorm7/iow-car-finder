@@ -89,8 +89,8 @@ Garage / Dashboard Improvements
 [ ] Premium dashboard UI
 [x] Polish My Cars section
 [ ] Mobile optimisation
-[ ] Upload garage logo
-[ ] Upload garage banner
+[x] Upload garage logo
+[x] Upload garage banner
 [x] Opening hours
 [x] Improve public garage profile design
 
@@ -128,8 +128,8 @@ Accounts
 Garage Features
 
 
-[ ] Garage logo
-[ ] Garage banner
+[x] Garage logo
+[x] Garage banner
 [x] Opening hours
 [ ] Dealer branding
 
