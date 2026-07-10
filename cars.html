@@ -783,7 +783,7 @@
         card.href = href;
 
         const garageLink = garageId
-          ? `<a class="garageValue garageLink" href="/cars-page?garageId=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">${escapeHtml(garageName || "Garage")}</a>`
+          ? `<a class="garageValue garageLink" href="/garage?id=${encodeURIComponent(garageId)}" data-gid="${escapeAttr(garageId)}">${escapeHtml(garageName || "Garage")}</a>`
           : `<span class="garageValue">${escapeHtml(garageName || "—")}</span>`;
 
         const listedDate =
