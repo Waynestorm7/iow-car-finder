@@ -113,10 +113,12 @@ Authentication Polish
 [x] Keep garage login/apply journey inside For Garages page
 [x] Redirect logged-in garages directly to Dashboard
 [ ] Later replace `ADMIN_KEY` with proper admin login
+[ ] Improve Garage Login page design
 
 🚀 Launch Checklist
 
 Accounts
+
 
 [x] Garage signup application flow
 [x] Garage approval

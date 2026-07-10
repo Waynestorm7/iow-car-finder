@@ -5,33 +5,321 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garage Login | IOW Car Finder</title>
+
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --card: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --dark: #07111d;
+            --accent: #e67e22;
+            --accentDark: #c96513;
+            --line: #e5e7eb;
+            --shadow: 0 18px 48px rgba(15, 23, 42, .10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(230, 126, 34, .16), transparent 34%),
+                linear-gradient(180deg, #f7f8fa 0%, var(--bg) 100%);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--dark);
+            color: #fff;
+            padding: 20px 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .top {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 900;
+            letter-spacing: -.5px;
+            font-size: 1.15rem;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, .84);
+            text-decoration: none;
+            font-size: .96rem;
+            font-weight: 900;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 48px 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 26px;
+            align-items: center;
+        }
+
+        .intro {
+            background:
+                radial-gradient(circle at top left, rgba(230, 126, 34, .18), transparent 32%),
+                linear-gradient(135deg, #07111d, #10263d);
+            color: #fff;
+            border-radius: 28px;
+            padding: 34px;
+            box-shadow: var(--shadow);
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eyebrow {
+            color: rgba(255, 255, 255, .72);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-size: .78rem;
+            margin-bottom: 12px;
+        }
+
+        .intro h1 {
+            margin: 0 0 14px;
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.02;
+            letter-spacing: -1.6px;
+        }
+
+        .intro p {
+            margin: 0;
+            color: rgba(255, 255, 255, .78);
+            line-height: 1.55;
+            max-width: 38ch;
+        }
+
+        .pillRow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .pill {
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .13);
+            color: rgba(255, 255, 255, .88);
+            font-size: .86rem;
+            font-weight: 800;
+        }
+
+        .loginCard {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .loginCard h2 {
+            margin: 0 0 8px;
+            font-size: 1.65rem;
+            letter-spacing: -.5px;
+            color: var(--dark);
+        }
+
+        .loginCard p {
+            margin: 0 0 22px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            font-weight: 900;
+            color: var(--dark);
+            margin: 14px 0 7px;
+            font-size: .9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            font-size: 16px;
+            outline: none;
+            transition: border-color .16s ease, box-shadow .16s ease;
+        }
+
+        input:focus {
+            border-color: rgba(230, 126, 34, .58);
+            box-shadow: 0 0 0 4px rgba(230, 126, 34, .13);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            border: 0;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform .16s ease, background .16s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            background: var(--accentDark);
+        }
+
+        button:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: .9rem;
+            min-height: 20px;
+        }
+
+        .helper {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: .9rem;
+            line-height: 1.5;
+        }
+
+        .helper a {
+            color: var(--accentDark);
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        .helper a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 760px) {
+            main {
+                grid-template-columns: 1fr;
+                padding: 22px 12px 42px;
+            }
+
+            .intro {
+                min-height: auto;
+                padding: 26px 22px;
+                border-radius: 24px;
+            }
+
+            .loginCard {
+                padding: 26px 22px;
+                border-radius: 24px;
+            }
+
+            nav {
+                gap: 12px;
+            }
+
+            nav a {
+                font-size: .84rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <header>
+        <div class="top">
+            <a class="brand" href="/">
+                <span>IOW</span> Car Finder
+            </a>
 
-    <h1>Garage Login</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/cars-page">Cars</a>
+                <a href="/garages">Garages</a>
+            </nav>
+        </div>
+    </header>
 
-    <p>Sign in to manage your dealership.</p>
+    <main>
+        <section class="intro">
+            <div class="eyebrow">Garage dashboard</div>
+            <h1>Manage your stock on IOW Car Finder</h1>
+            <p>
+                Approved Isle of Wight garages can sign in to add vehicles, update prices,
+                upload photos, and keep listings up to date.
+            </p>
 
-    <form id="loginForm">
+            <div class="pillRow">
+                <div class="pill">Approved garages only</div>
+                <div class="pill">Manage vehicles</div>
+                <div class="pill">Update stock anytime</div>
+            </div>
+        </section>
 
-        <label>Email</label><br>
-        <input type="email" id="email" required>
+        <section class="loginCard">
+            <h2>Garage login</h2>
+            <p>Sign in with the email and password used for your approved garage account.</p>
 
-        <br><br>
+            <form id="loginForm">
+                <label for="email">Email</label>
+                <input type="email" id="email" autocomplete="email" required>
 
-        <label>Password</label><br>
-        <input type="password" id="password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password" required>
 
-        <br><br>
+                <button id="loginBtn" type="submit">
+                    Login to dashboard
+                </button>
+            </form>
 
-        <button type="submit">
-            Login
-        </button>
+            <p id="message" class="message"></p>
 
-    </form>
-
-    <p id="message"></p>
+            <div class="helper">
+                Not approved yet?
+                <a href="/for-garages">Apply to get listed</a>.
+            </div>
+        </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -41,6 +329,7 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
         const form = document.getElementById("loginForm");
         const message = document.getElementById("message");
+        const loginBtn = document.getElementById("loginBtn");
 
         async function redirectIfAlreadyLoggedIn() {
             const { data, error } = await supabaseClient.auth.getSession();
@@ -60,25 +349,29 @@
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
+            message.textContent = "";
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Logging in...";
+
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
+            const { error } = await supabaseClient.auth.signInWithPassword({
                 email,
                 password
             });
 
             if (error) {
                 message.textContent = error.message;
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Login to dashboard";
                 return;
             }
 
             message.textContent = "Login successful!";
             window.location.href = "/garage-dashboard";
         });
-
     </script>
-
 </body>
 
 </html>
