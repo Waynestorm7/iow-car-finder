@@ -631,6 +631,21 @@
       display: block;
     }
 
+    .logoPreview {
+      margin-top: 10px;
+    }
+
+    .logoPreview img {
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 8px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .08);
+    }
+
     .removePhotoBtn {
       position: absolute;
       top: -7px;
@@ -1223,6 +1238,12 @@
         <label>Website</label>
         <input id="garageWebsite" type="url">
 
+        <label>Garage Logo</label>
+        <input id="garageLogoFile" type="file" accept="image/*">
+        <input id="garageLogoUrl" type="hidden">
+        <div id="garageLogoPreview" class="logoPreview"></div>
+        <div class="small">Square logos work best. JPG, PNG or WebP.</div>
+
         <label>Address</label>
         <textarea id="garageAddress"></textarea>
 
@@ -1309,6 +1330,9 @@
     const garagePhoneInput = document.getElementById("garagePhone");
     const garageEmailInput = document.getElementById("garageEmail");
     const garageWebsiteInput = document.getElementById("garageWebsite");
+    const garageLogoFileInput = document.getElementById("garageLogoFile");
+    const garageLogoUrlInput = document.getElementById("garageLogoUrl");
+    const garageLogoPreview = document.getElementById("garageLogoPreview");
     const garageAddressInput = document.getElementById("garageAddress");
 
     const garageOpeningHoursInput = document.getElementById("garageOpeningHours");
@@ -1370,6 +1394,21 @@
       if (!el) return;
       el.style.height = "auto";
       el.style.height = (el.scrollHeight + 2) + "px";
+    }
+
+    function renderGarageLogoPreview() {
+      const url = garageLogoUrlInput.value.trim();
+
+      if (!garageLogoPreview) return;
+
+      if (!url) {
+        garageLogoPreview.innerHTML = "";
+        return;
+      }
+
+      garageLogoPreview.innerHTML = `
+    <img src="${escapeText(url)}" alt="Garage logo">
+  `;
     }
 
     function renderEditablePhotos() {
@@ -1464,6 +1503,32 @@
       } finally {
         addBtn.disabled = false;
         addBtn.textContent = "Add Vehicle";
+      }
+    });
+
+    garageLogoFileInput.addEventListener("change", async () => {
+      if (!garageLogoFileInput.files || !garageLogoFileInput.files.length) return;
+
+      saveGarageBtn.disabled = true;
+      saveGarageBtn.textContent = "Uploading logo...";
+
+      try {
+        const urls = await uploadPhotos(garageLogoFileInput.files);
+        const logoUrl = urls[0];
+
+        if (!logoUrl) {
+          throw new Error("Logo upload failed.");
+        }
+
+        garageLogoUrlInput.value = logoUrl;
+        renderGarageLogoPreview();
+
+        alert("Logo uploaded. Click Save Profile to save it.");
+      } catch (e) {
+        alert(e.message || "Logo upload failed.");
+      } finally {
+        saveGarageBtn.disabled = false;
+        saveGarageBtn.textContent = "Save Profile";
       }
     });
 
@@ -1954,6 +2019,8 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         garagePhoneInput.value = g.phone || "";
         garageEmailInput.value = g.email || "";
         garageWebsiteInput.value = g.website || "";
+        garageLogoUrlInput.value = g.logo_url || g.logoUrl || "";
+        renderGarageLogoPreview();
         garageAddressInput.value = g.address || "";
 
         garageOpeningHoursInput.value = g.opening_hours || g.openingHours || "";
@@ -1988,6 +2055,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         phone: garagePhoneInput.value.trim(),
         email: garageEmailInput.value.trim(),
         website,
+        logo_url: garageLogoUrlInput.value.trim(),
         address: garageAddressInput.value.trim(),
 
         opening_hours: garageOpeningHoursInput.value.trim(),

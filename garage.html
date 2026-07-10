@@ -79,6 +79,24 @@
             margin-bottom: 18px;
         }
 
+        .garageLogoBox {
+            width: 104px;
+            height: 104px;
+            margin-bottom: 18px;
+            border-radius: 22px;
+            background: #fff;
+            border: 1px solid rgba(255, 255, 255, .22);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
+            padding: 10px;
+        }
+
+        .garageLogoBox img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
         .eyebrow {
             color: rgba(255, 255, 255, .68);
             font-weight: 900;
@@ -336,6 +354,7 @@
     <main>
         <section class="garageHero">
             <div>
+                <div id="garageLogoBox" class="garageLogoBox" style="display:none;"></div>
                 <div class="eyebrow">Island garage</div>
                 <h1 id="garageName">Loading garage...</h1>
                 <p id="garageIntro" class="garageIntro"></p>
@@ -391,6 +410,7 @@
             const garageId = params.get("id");
 
             const garageName = document.getElementById("garageName");
+            const garageLogoBox = document.getElementById("garageLogoBox");
             const garageIntro = document.getElementById("garageIntro");
             const garageMeta = document.getElementById("garageMeta");
             const garageActions = document.getElementById("garageActions");
@@ -450,6 +470,18 @@
                 */
 
                 garageName.textContent = garage.name || "Garage";
+                
+                const logoUrl = garage.logo_url || garage.logoUrl || "";
+
+                if (garageLogoBox) {
+                    if (logoUrl) {
+                        garageLogoBox.style.display = "block";
+                        garageLogoBox.innerHTML = `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(garage.name || "Garage")} logo">`;
+                    } else {
+                        garageLogoBox.style.display = "none";
+                        garageLogoBox.innerHTML = "";
+                    }
+                }
 
                 garageIntro.textContent = garage.description
                     ? garage.description
