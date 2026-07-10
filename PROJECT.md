@@ -99,8 +99,8 @@ Garage / Dashboard Improvements
 Dashboard Improvements
 
 
-[ ] Reserved vehicle styling
-[ ] Sold vehicle styling
+[x] Reserved vehicle styling
+[x] Sold vehicle styling
 [ ] Disable enquiries on sold/reserved cars
 [x] Add “View advert” button after editing a car
 
