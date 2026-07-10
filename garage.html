@@ -59,66 +59,161 @@
         }
 
         main {
-            max-width: 1100px;
-            margin: auto;
-            padding: 18px;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 28px 18px 54px;
         }
 
-        .card {
+        .garageHero {
+            background:
+                radial-gradient(circle at top left, rgba(230, 126, 34, .16), transparent 32%),
+                linear-gradient(135deg, #07111d, #10263d);
+            color: #fff;
+            border-radius: 28px;
+            padding: 34px;
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 28px;
+            align-items: center;
+            box-shadow: 0 18px 48px rgba(15, 23, 42, .16);
+            margin-bottom: 18px;
+        }
+
+        .eyebrow {
+            color: rgba(255, 255, 255, .68);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-size: .78rem;
+            margin-bottom: 10px;
+        }
+
+        .garageHero h1 {
+            margin: 0 0 12px;
+            font-size: clamp(2rem, 5vw, 3.15rem);
+            line-height: 1.02;
+            letter-spacing: -1.5px;
+        }
+
+        .garageIntro {
+            margin: 0 0 18px;
+            color: rgba(255, 255, 255, .78);
+            line-height: 1.55;
+            max-width: 60ch;
+        }
+
+        .garageMeta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .metaPill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .13);
+            color: rgba(255, 255, 255, .9);
+            font-size: .88rem;
+            font-weight: 800;
+        }
+
+        .garageActions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .actionBtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 15px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 900;
+            background: #e67e22;
+            color: #fff;
+        }
+
+        .actionBtn.secondary {
+            background: rgba(255, 255, 255, .12);
+            border: 1px solid rgba(255, 255, 255, .16);
+        }
+
+        .stockBox {
+            background: rgba(255, 255, 255, .10);
+            border: 1px solid rgba(255, 255, 255, .14);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stockCount {
+            font-size: 3rem;
+            line-height: 1;
+            font-weight: 950;
+            color: #e67e22;
+        }
+
+        .stockLabel {
+            margin-top: 8px;
+            color: rgba(255, 255, 255, .72);
+            font-weight: 800;
+        }
+
+        .stockLink {
+            display: inline-flex;
+            margin-top: 18px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 900;
+        }
+
+        .stockSection {
             background: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
-            margin-bottom: 16px;
+            border: 1px solid rgba(17, 24, 39, .08);
+            border-radius: 26px;
+            box-shadow: 0 14px 40px rgba(15, 23, 42, .07);
+            padding: 24px;
         }
 
-        h1 {
-            margin-top: 0;
+        .sectionHead {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .sectionHead .eyebrow {
+            color: #c96513;
+            margin-bottom: 6px;
+        }
+
+        .sectionHead h2 {
+            margin: 0;
+            font-size: 1.45rem;
+            color: #07111d;
         }
 
         .carsGrid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        @media (max-width: 900px) {
-            .carsGrid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .carsGrid {
-                grid-template-columns: 1fr;
-            }
+            gap: 18px;
         }
 
         .carCard {
             background: #fff;
-            border-radius: 16px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
-            border: 1px solid rgba(0, 0, 0, .08);
-            max-width: 360px;
-        }
-
-        .carCard img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            display: block;
-            background: #e5e7eb;
-        }
-
-        @media (max-width: 700px) {
-            .carsGrid {
-                grid-template-columns: 1fr;
-            }
-
-            .carCard {
-                max-width: 100%;
-            }
+            box-shadow: 0 10px 26px rgba(15, 23, 42, .08);
+            border: 1px solid rgba(17, 24, 39, .08);
         }
 
         .carCard img {
@@ -130,23 +225,27 @@
         }
 
         .carInfo {
-            padding: 14px;
+            padding: 15px;
         }
 
         .carInfo h3 {
-            margin: 0 0 6px;
-            font-size: 1.15rem;
+            margin: 0 0 7px;
+            font-size: 1.05rem;
+            line-height: 1.25;
+            color: #111827;
         }
 
         .price {
-            font-weight: 900;
-            font-size: 1.25rem;
+            font-weight: 950;
+            font-size: 1.45rem;
             margin: 0 0 8px;
+            color: #07111d;
         }
 
         .small {
             color: #667085;
-            margin: 0 0 12px;
+            margin: 0 0 13px;
+            line-height: 1.45;
         }
 
         .viewBtn {
@@ -154,11 +253,66 @@
             align-items: center;
             justify-content: center;
             padding: 10px 14px;
-            border-radius: 12px;
+            border-radius: 999px;
             background: #e67e22;
             color: #fff;
             text-decoration: none;
-            font-weight: 800;
+            font-weight: 900;
+        }
+
+        .emptyState {
+            color: #667085;
+            background: #f8fafc;
+            border: 1px dashed rgba(17, 24, 39, .16);
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        @media (max-width: 900px) {
+            .garageHero {
+                grid-template-columns: 1fr;
+            }
+
+            .stockBox {
+                text-align: left;
+            }
+
+            .carsGrid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 18px 12px 42px;
+            }
+
+            .garageHero {
+                padding: 26px 22px;
+                border-radius: 24px;
+            }
+
+            .garageActions {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .actionBtn {
+                width: 100%;
+            }
+
+            .stockSection {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .carsGrid {
+                grid-template-columns: 1fr;
+            }
+
+            .carCard img {
+                height: 220px;
+            }
         }
     </style>
 </head>
@@ -180,15 +334,34 @@
     </header>
 
     <main>
-        <div class="card">
-            <h1>Garage Profile</h1>
-            <div id="garageBox">Loading garage...</div>
-        </div>
+        <section class="garageHero">
+            <div>
+                <div class="eyebrow">Island garage</div>
+                <h1 id="garageName">Loading garage...</h1>
+                <p id="garageIntro" class="garageIntro"></p>
 
-        <div class="card">
-            <h2>Cars in stock</h2>
+                <div id="garageMeta" class="garageMeta"></div>
+
+                <div id="garageActions" class="garageActions"></div>
+            </div>
+
+            <aside class="stockBox">
+                <div id="stockCount" class="stockCount">—</div>
+                <div class="stockLabel">cars in stock</div>
+                <a href="#stock" class="stockLink">View stock</a>
+            </aside>
+        </section>
+
+        <section id="stock" class="stockSection">
+            <div class="sectionHead">
+                <div>
+                    <div class="eyebrow">Current stock</div>
+                    <h2>Cars from this garage</h2>
+                </div>
+            </div>
+
             <div id="carsBox" class="carsGrid">Loading cars...</div>
-        </div>
+        </section>
     </main>
 
     <script>
@@ -217,12 +390,17 @@
             const params = new URLSearchParams(window.location.search);
             const garageId = params.get("id");
 
-            const garageBox = document.getElementById("garageBox");
+            const garageName = document.getElementById("garageName");
+            const garageIntro = document.getElementById("garageIntro");
+            const garageMeta = document.getElementById("garageMeta");
+            const garageActions = document.getElementById("garageActions");
+            const stockCount = document.getElementById("stockCount");
             const carsBox = document.getElementById("carsBox");
 
             if (!garageId) {
-                garageBox.textContent = "No garage ID provided.";
-                carsBox.textContent = "";
+                garageName.textContent = "Garage not found";
+                garageIntro.textContent = "No garage ID was provided.";
+                carsBox.innerHTML = "";
                 return;
             }
 
@@ -239,8 +417,9 @@
                 const garage = garages.find(g => String(g.id) === String(garageId));
 
                 if (!garage) {
-                    garageBox.textContent = "Garage not found.";
-                    carsBox.textContent = "";
+                    garageName.textContent = "Garage not found";
+                    garageIntro.textContent = "We could not find this garage.";
+                    carsBox.innerHTML = "";
                     return;
                 }
 
@@ -270,56 +449,70 @@
                 moreBtn.href = "/garage?id=" + encodeURIComponent(garage.id);
                 */
 
-                garageBox.innerHTML = `
-  <h2>${escapeHtml(garage.name)}</h2>
+                garageName.textContent = garage.name || "Garage";
 
-  <p><strong>🚗 ${garageCars.length}</strong> ${garageCars.length === 1 ? "car" : "cars"} in stock</p>
+                garageIntro.textContent = garage.description
+                    ? garage.description
+                    : "Approved Isle of Wight garage listing vehicles on IOW Car Finder.";
 
-  <p><strong>Town:</strong> ${escapeHtml(garage.town || "Isle of Wight")}</p>
+                stockCount.textContent = garageCars.length;
 
-  ${garage.address ? `
-    <p><strong>Address:</strong> ${escapeHtml(garage.address)}</p>
-  ` : ""}
+                const metaItems = [];
 
-  ${garage.postcode ? `
-    <p><strong>Postcode:</strong> ${escapeHtml(garage.postcode)}</p>
-  ` : ""}
+                metaItems.push(`📍 ${escapeHtml(garage.town || "Isle of Wight")}`);
 
-  ${garage.phone ? `
-    <p><strong>Phone:</strong> ${escapeHtml(garage.phone)}</p>
-  ` : ""}
+                if (garage.phone) {
+                    metaItems.push(`📞 ${escapeHtml(garage.phone)}`);
+                }
 
-  ${garage.email ? `
-    <p><strong>Email:</strong> ${escapeHtml(garage.email)}</p>
-  ` : ""}
+                if (garage.email) {
+                    metaItems.push(`✉️ ${escapeHtml(garage.email)}`);
+                }
 
-  ${garage.website ? `
-    <p>
-      <strong>Website:</strong>
-      <a href="${garage.website}" target="_blank" rel="noopener">
-        ${garage.website.replace(/^https?:\/\//, "")}
-      </a>
-    </p>
-  ` : ""}
+                if (garage.opening_hours || garage.openingHours) {
+                    metaItems.push(`🕒 ${escapeHtml(garage.opening_hours || garage.openingHours)}`);
+                }
 
-  ${garage.description ? `
-    <hr>
+                garageMeta.innerHTML = metaItems
+                    .map(item => `<span class="metaPill">${item}</span>`)
+                    .join("");
 
-    <h3>About</h3>
+                const actions = [];
 
-    <p>${escapeHtml(garage.description)}</p>
-  ` : ""}
+                if (garage.phone) {
+                    actions.push(`
+    <a class="actionBtn" href="tel:${escapeHtml(garage.phone).replace(/\s+/g, "")}">
+      Call garage
+    </a>
+  `);
+                }
 
-  ${(garage.opening_hours || garage.openingHours) ? `
-    <p>
-      <strong>Opening Hours:</strong><br>
-      ${escapeHtml(garage.opening_hours || garage.openingHours)}
-    </p>
-  ` : ""}
-`;
+                const mapQuery = garage.postcode || garage.address || garage.town || "";
+
+                if (mapQuery) {
+                    actions.push(`
+    <a class="actionBtn secondary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener">
+      Directions
+    </a>
+  `);
+                }
+
+                if (garage.website) {
+                    actions.push(`
+    <a class="actionBtn secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">
+      Website
+    </a>
+  `);
+                }
+
+                garageActions.innerHTML = actions.join("");
 
                 if (!garageCars.length) {
-                    carsBox.textContent = "No cars currently listed for this garage.";
+                    carsBox.innerHTML = `
+    <div class="emptyState">
+      No cars currently listed for this garage.
+    </div>
+  `;
                     return;
                 }
 
@@ -337,8 +530,10 @@
 `).join("");
 
             } catch (e) {
-                garageBox.textContent = "Could not load garage.";
-                carsBox.textContent = "";
+                console.error(e);
+                garageName.textContent = "Could not load garage";
+                garageIntro.textContent = "Something went wrong while loading this garage profile.";
+                carsBox.innerHTML = "";
             }
         }
 
