@@ -635,6 +635,21 @@
       margin-top: 10px;
     }
 
+    .bannerPreview {
+      margin-top: 10px;
+    }
+
+    .bannerPreview img {
+      width: 100%;
+      max-width: 520px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .08);
+    }
+
     .logoPreview img {
       width: 96px;
       height: 96px;
@@ -1244,6 +1259,12 @@
         <div id="garageLogoPreview" class="logoPreview"></div>
         <div class="small">Square logos work best. JPG, PNG or WebP.</div>
 
+        <label>Garage Banner</label>
+        <input id="garageBannerFile" type="file" accept="image/*">
+        <input id="garageBannerUrl" type="hidden">
+        <div id="garageBannerPreview" class="bannerPreview"></div>
+        <div class="small">Wide images work best. This will appear subtly on your public garage profile.</div>
+
         <label>Address</label>
         <textarea id="garageAddress"></textarea>
 
@@ -1333,6 +1354,9 @@
     const garageLogoFileInput = document.getElementById("garageLogoFile");
     const garageLogoUrlInput = document.getElementById("garageLogoUrl");
     const garageLogoPreview = document.getElementById("garageLogoPreview");
+    const garageBannerFileInput = document.getElementById("garageBannerFile");
+    const garageBannerUrlInput = document.getElementById("garageBannerUrl");
+    const garageBannerPreview = document.getElementById("garageBannerPreview");
     const garageAddressInput = document.getElementById("garageAddress");
 
     const garageOpeningHoursInput = document.getElementById("garageOpeningHours");
@@ -1408,6 +1432,21 @@
 
       garageLogoPreview.innerHTML = `
     <img src="${escapeText(url)}" alt="Garage logo">
+  `;
+    }
+
+    function renderGarageBannerPreview() {
+      const url = garageBannerUrlInput.value.trim();
+
+      if (!garageBannerPreview) return;
+
+      if (!url) {
+        garageBannerPreview.innerHTML = "";
+        return;
+      }
+
+      garageBannerPreview.innerHTML = `
+    <img src="${escapeText(url)}" alt="Garage banner">
   `;
     }
 
@@ -1526,6 +1565,32 @@
         alert("Logo uploaded. Click Save Profile to save it.");
       } catch (e) {
         alert(e.message || "Logo upload failed.");
+      } finally {
+        saveGarageBtn.disabled = false;
+        saveGarageBtn.textContent = "Save Profile";
+      }
+    });
+
+    garageBannerFileInput.addEventListener("change", async () => {
+      if (!garageBannerFileInput.files || !garageBannerFileInput.files.length) return;
+
+      saveGarageBtn.disabled = true;
+      saveGarageBtn.textContent = "Uploading banner...";
+
+      try {
+        const urls = await uploadPhotos(garageBannerFileInput.files);
+        const bannerUrl = urls[0];
+
+        if (!bannerUrl) {
+          throw new Error("Banner upload failed.");
+        }
+
+        garageBannerUrlInput.value = bannerUrl;
+        renderGarageBannerPreview();
+
+        alert("Banner uploaded. Click Save Profile to save it.");
+      } catch (e) {
+        alert(e.message || "Banner upload failed.");
       } finally {
         saveGarageBtn.disabled = false;
         saveGarageBtn.textContent = "Save Profile";
@@ -2021,10 +2086,10 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         garageWebsiteInput.value = g.website || "";
         garageLogoUrlInput.value = g.logo_url || g.logoUrl || "";
         renderGarageLogoPreview();
+        garageBannerUrlInput.value = g.banner_url || g.bannerUrl || "";
+        renderGarageBannerPreview();
         garageAddressInput.value = g.address || "";
-
         garageOpeningHoursInput.value = g.opening_hours || g.openingHours || "";
-
         garageDescriptionInput.value = g.description || "";
 
       } catch (err) {
@@ -2056,6 +2121,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
         email: garageEmailInput.value.trim(),
         website,
         logo_url: garageLogoUrlInput.value.trim(),
+        banner_url: garageBannerUrlInput.value.trim(),
         address: garageAddressInput.value.trim(),
 
         opening_hours: garageOpeningHoursInput.value.trim(),

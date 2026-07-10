@@ -422,10 +422,11 @@ async function dbListGarages() {
       town,
       postcode,
       phone,
-      email,
-website,
-logo_url,
-opening_hours
+         email,
+      website,
+      logo_url,
+      banner_url,
+      opening_hours
     `)
     .order("name", { ascending: true });
 
@@ -447,10 +448,10 @@ async function dbGetGarageById(id) {
       postcode,
       phone,
       email,
- website,
+website,
 logo_url,
-opening_hours
-    `)
+banner_url,
+opening_hours    `)
     .eq("id", cleanId)
     .single();
 
@@ -471,6 +472,7 @@ async function dbUpdateGarage(id, payload) {
     email: payload.email ? String(payload.email).trim() : null,
     website: payload.website ? String(payload.website).trim() : null,
     logo_url: payload.logo_url ? String(payload.logo_url).trim() : null,
+    banner_url: payload.banner_url ? String(payload.banner_url).trim() : null,
     address: payload.address ? String(payload.address).trim() : null,
     opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
     description: payload.description ? String(payload.description).trim() : null,
