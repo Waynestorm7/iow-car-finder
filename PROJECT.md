@@ -16,7 +16,7 @@ Public Website
 [x] For Garages page refreshed for garage account applications
 [x] Buyer page headers simplified to Home / Cars / Garages
 [x] Garage login removed from buyer-facing headers
-[ ] Check For Garages page has clear approved garage login link
+[x] Check For Garages page has clear approved garage login link
 Infrastructure
 
 
@@ -108,9 +108,9 @@ Authentication Polish
 
 
 [x] Remove old garage dashboard admin-key flow
-[ ] Verify no old `adminKey` references remain in public/dashboard code
+[x] Verify no old `adminKey` references remain in public/dashboard code
 [x] Keep temporary `ADMIN_KEY` only for private admin routes
-[ ] Keep garage login/apply journey inside For Garages page
+[x] Keep garage login/apply journey inside For Garages page
 [ ] Redirect logged-in garages directly to Dashboard
 [ ] Later replace `ADMIN_KEY` with proper admin login
 
@@ -138,8 +138,6 @@ Customer Features
 [ ] Saved cars
 [ ] Contact garage
 [ ] Enquiry forms
-
-Admin
 
 Admin
 
