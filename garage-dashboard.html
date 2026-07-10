@@ -1549,14 +1549,13 @@
       try {
         showMsg("success", "Uploading photos…");
         const urls = await uploadPhotos(photoFilesInput.files);
-        uploadedPhotoUrls = urls;
+        uploadedPhotoUrls = [...uploadedPhotoUrls, ...urls].slice(0, 12);
 
         renderEditablePhotos();
 
-        showMsg("success", `${urls.length} photo(s) uploaded.`);
+        showMsg("success", `${urls.length} photo(s) uploaded. ${uploadedPhotoUrls.length} photo(s) on this advert.`);
 
       } catch (e) {
-        uploadedPhotoUrls = [];
         showMsg("error", e.message || "Upload failed.");
       } finally {
         addBtn.disabled = false;
