@@ -343,7 +343,7 @@
       top: 14px;
       padding: 8px 13px;
       border-radius: 999px;
-      background: rgba(245, 158, 11, .95);
+      background: rgba(230, 126, 34, .96);
       color: #fff;
       font-weight: 950;
       font-size: .82rem;
@@ -774,8 +774,12 @@
         const garageId = safeText(car.garageId);
         const garageName = safeText(car.garageName) || "";
 
+        const status = String(car.status || "").toLowerCase();
+        const isReserved = status === "reserved";
+        const isSold = status === "sold" || car.sold === true;
+
         const card = document.createElement("a");
-        card.className = "carCard" + (car.sold ? " sold" : "");
+        card.className = "carCard" + (isSold ? " sold" : "");
         card.href = href;
 
         const garageLink = garageId
@@ -795,9 +799,6 @@
             year: "numeric"
           })
           : "";
-        const status = String(car.status || "").toLowerCase();
-        const isReserved = status === "reserved";
-        const isSold = status === "sold" || car.sold === true;
 
         card.innerHTML = `
       <div class="imgWrap">
@@ -895,9 +896,16 @@ ${listedText ? `
       }
 
       filtered.sort((a, b) => {
-        if (a.sold && !b.sold) return 1;
-        if (!a.sold && b.sold) return -1;
-        return 0;
+        function statusRank(car) {
+          const status = String(car.status || "").toLowerCase();
+
+          if (status === "sold" || car.sold === true) return 2;
+          if (status === "reserved") return 1;
+
+          return 0;
+        }
+
+        return statusRank(a) - statusRank(b);
       });
 
 
