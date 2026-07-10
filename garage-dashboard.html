@@ -1065,9 +1065,9 @@
         <div class="formIntro dashboard-form-hero">
           <p class="welcome-kicker">IOW Car Finder</p>
 
-          <h2>Add Vehicle</h2>
+          <h2 id="vehicleFormTitle">Add Vehicle</h2>
 
-          <p>
+          <p id="vehicleFormSubtitle">
             Add the details buyers need. Clear photos and a fair description help your car stand out.
           </p>
         </div>
@@ -1337,6 +1337,8 @@
     const msgBox = document.getElementById("msg");
     const addBtn = document.getElementById("addBtn");
     const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const vehicleFormTitle = document.getElementById("vehicleFormTitle");
+    const vehicleFormSubtitle = document.getElementById("vehicleFormSubtitle");
 
 
     const nameInput = document.getElementById("name");
@@ -1390,6 +1392,23 @@
       msgBox.className = "msg";
       msgBox.textContent = "";
       msgBox.style.display = "none";
+    }
+
+    function setVehicleFormMode(mode, carName = "") {
+      if (mode === "edit") {
+        vehicleFormTitle.textContent = "Edit Vehicle";
+        vehicleFormSubtitle.textContent = carName
+          ? `Editing ${carName}. Update the details below and save your changes.`
+          : "Update the vehicle details below and save your changes.";
+        addBtn.textContent = "Save Changes";
+        cancelEditBtn.style.display = "inline-block";
+        return;
+      }
+
+      vehicleFormTitle.textContent = "Add Vehicle";
+      vehicleFormSubtitle.textContent = "Add the details buyers need. Clear photos and a fair description help your car stand out.";
+      addBtn.textContent = "Add Vehicle";
+      cancelEditBtn.style.display = "none";
     }
 
     function money(n) {
@@ -1541,7 +1560,7 @@
         showMsg("error", e.message || "Upload failed.");
       } finally {
         addBtn.disabled = false;
-        addBtn.textContent = "Add Vehicle";
+        setVehicleFormMode(editingCar ? "edit" : "add", editingCar ? editingCar.name : "");
       }
     });
 
@@ -1761,8 +1780,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
             uploadedPhotoUrls = Array.isArray(car.photos) ? [...car.photos] : [];
             renderEditablePhotos();
 
-            addBtn.textContent = "Save Changes";
-            cancelEditBtn.style.display = "inline-block";
+            setVehicleFormMode("edit", car.name);
 
             showMsg("success", `Editing "${car.name}".`);
           });
@@ -1921,8 +1939,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 
         // Leave edit mode
         editingCar = null;
-        addBtn.textContent = "Add Vehicle";
-        cancelEditBtn.style.display = "none";
+        setVehicleFormMode("add");
 
         // Clear form
         nameInput.value = "";
@@ -2002,8 +2019,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 
       uploadedPhotoUrls = [];
 
-      addBtn.textContent = "Add Vehicle";
-      cancelEditBtn.style.display = "none";
+      setVehicleFormMode("add");
       clearMsg();
 
       dashboardWelcome.style.display = "none";
@@ -2038,8 +2054,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 
       uploadedPhotoUrls = [];
 
-      addBtn.textContent = "Add Vehicle";
-      cancelEditBtn.style.display = "none";
+      setVehicleFormMode("add");
 
       clearMsg();
 
