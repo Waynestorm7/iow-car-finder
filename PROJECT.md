@@ -91,7 +91,7 @@ Garage / Dashboard Improvements
 [ ] Mobile optimisation
 [ ] Upload garage logo
 [ ] Upload garage banner
-[ ] Opening hours
+[x] Opening hours
 [x] Improve public garage profile design
 
 
@@ -113,7 +113,7 @@ Authentication Polish
 [x] Keep garage login/apply journey inside For Garages page
 [x] Redirect logged-in garages directly to Dashboard
 [ ] Later replace `ADMIN_KEY` with proper admin login
-[ ] Improve Garage Login page design
+[x] Improve Garage Login page design
 
 🚀 Launch Checklist
 
@@ -130,7 +130,7 @@ Garage Features
 
 [ ] Garage logo
 [ ] Garage banner
-[ ] Opening hours
+[x] Opening hours
 [ ] Dealer branding
 
 Customer Features
