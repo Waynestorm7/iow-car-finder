@@ -43,13 +43,14 @@
     header {
       background: #07111d;
       color: #fff;
-      padding: 16px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
 
     .top {
-      max-width: 1040px;
+      max-width: 1120px;
       margin: 0 auto;
+      padding: 0 18px;
+      min-height: 64px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -61,7 +62,8 @@
       text-decoration: none;
       font-weight: 900;
       letter-spacing: -.4px;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
+      white-space: nowrap;
     }
 
     .brand span {
@@ -70,14 +72,42 @@
 
     nav {
       display: flex;
-      gap: 16px;
+      align-items: center;
+      gap: 18px;
     }
 
     nav a {
-      color: rgba(255, 255, 255, .82);
+      color: rgba(255, 255, 255, .84);
       text-decoration: none;
-      font-size: .9rem;
-      font-weight: 800;
+      font-size: .92rem;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .top {
+        min-height: 58px;
+        padding: 0 12px;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: .96rem;
+        letter-spacing: -.5px;
+      }
+
+      nav {
+        gap: 10px;
+      }
+
+      nav a {
+        font-size: .78rem;
+        font-weight: 850;
+      }
     }
 
     nav a:hover {
