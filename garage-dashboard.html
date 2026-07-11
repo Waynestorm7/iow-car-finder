@@ -53,31 +53,14 @@
       text-decoration: none;
       font-size: 1.35rem;
       font-weight: 800;
+      white-space: nowrap;
     }
 
     .logo span {
       color: #e67e22;
     }
 
-    @media (max-width:700px) {
 
-      .siteHeaderInner {
-        padding: 0 18px;
-        min-height: 56px;
-      }
-
-      .logo {
-        font-size: 1.1rem;
-      }
-
-      .siteHeader nav {
-        gap: 18px;
-      }
-
-      .siteHeader nav a {
-        font-size: 1rem;
-      }
-    }
 
     .siteHeader nav {
       display: flex;
@@ -94,6 +77,28 @@
 
     .siteHeader nav a:hover {
       color: #e67e22;
+    }
+
+    @media (max-width:700px) {
+
+      .siteHeaderInner {
+        padding: 0 12px;
+        min-height: 58px;
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: .95rem;
+        white-space: nowrap;
+      }
+
+      .siteHeader nav {
+        gap: 11px;
+      }
+
+      .siteHeader nav a {
+        font-size: .82rem;
+      }
     }
 
     main {
@@ -1311,6 +1316,11 @@
       .then(res => res.text())
       .then(html => {
         document.getElementById("siteHeader").innerHTML = html;
+
+        const garageLoginLink = document.querySelector('#siteHeader a[href="/login"]');
+        if (garageLoginLink) {
+          garageLoginLink.remove();
+        }
       });
   </script>
 
