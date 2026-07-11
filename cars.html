@@ -624,44 +624,6 @@
       }
     }
 
-    .backToTop {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      width: 76px;
-      height: 44px;
-      border: 0;
-      border-radius: 999px;
-      background: #07111d;
-      color: #fff;
-      font-size: 1.25rem;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, .25);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .backToTop.show {
-      display: flex;
-    }
-
-    .backToTop:hover {
-      background: #e67e22;
-    }
-
-    @media (max-width:700px) {
-      .backToTop {
-        left: 14px;
-        right: auto;
-        bottom: 82px;
-        width: 64px;
-        height: 38px;
-        font-size: .86rem;
-      }
-    }
   </style>
 </head>
 
@@ -1077,28 +1039,6 @@ ${listedText ? `
     })();
   </script>
 
-  <button id="backToTop" class="backToTop" type="button" aria-label="Back to top">
-    ↑ Top
-  </button>
-
-  <script>
-    const backToTopBtn = document.getElementById("backToTop");
-
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 500) {
-        backToTopBtn.classList.add("show");
-      } else {
-        backToTopBtn.classList.remove("show");
-      }
-    });
-
-    backToTopBtn.addEventListener("click", () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    });
-  </script>
 </body>
 
 </html>
