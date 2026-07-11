@@ -177,6 +177,7 @@ Polish
 [ ] Cookie Policy
 [ ] Analytics
 [ ] Move public pages to one shared master header file
+[ ] Review mobile back-to-top / floating scroll button behaviour
 
 
 🎉 Version 1.0

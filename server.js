@@ -1362,6 +1362,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/login") return serveFile(res, path.join(__dirname, "login.html"));
+  if (req.method === "GET" && pathname === "/reset-password") return serveFile(res, path.join(__dirname, "reset-password.html"));
 
   if (req.method === "GET" && pathname === "/garage-applications") {
     return serveFile(res, path.join(__dirname, "garage-applications.html"));
@@ -1371,6 +1372,7 @@ const server = http.createServer(async (req, res) => {
   // 404
   // -----------------------------
   return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
+
 });
 
 server.listen(PORT, () => {

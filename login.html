@@ -244,6 +244,22 @@
             min-height: 20px;
         }
 
+        .forgotPassword {
+            margin-top: 14px;
+            text-align: center;
+        }
+
+        .forgotPassword a {
+            color: var(--accentDark);
+            font-weight: 900;
+            text-decoration: none;
+            font-size: .92rem;
+        }
+
+        .forgotPassword a:hover {
+            text-decoration: underline;
+        }
+
         .helper {
             margin-top: 18px;
             padding-top: 18px;
@@ -329,6 +345,10 @@
                     Login to dashboard
                 </button>
             </form>
+
+            <div class="forgotPassword">
+                <a href="/reset-password">Forgot your password?</a>
+            </div>
 
             <p id="message" class="message"></p>
 
