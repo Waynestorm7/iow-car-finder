@@ -107,6 +107,16 @@ Dashboard Improvements
 [ ] Disable enquiries on sold/reserved cars
 [x] Add “View advert” button after editing a car
 
+
+## Legal / Trust
+
+
+[x] Privacy Policy page
+[x] Terms page
+[x] Cookie Policy page
+[x] Homepage footer legal links
+[ ] Cookie consent banner
+
 Authentication Polish
 
 
@@ -173,11 +183,11 @@ Polish
 [ ] Performance
 [ ] SEO
 [ ] Error pages
-[ ] Terms & Privacy Policy
-[ ] Cookie Policy
+[x] Terms & Privacy Policy
+[x] Cookie Policy
 [ ] Analytics
 [ ] Move public pages to one shared master header file
-[ ] Review mobile back-to-top / floating scroll button behaviour
+[x] Review mobile back-to-top / floating scroll button behaviour
 
 
 🎉 Version 1.0
