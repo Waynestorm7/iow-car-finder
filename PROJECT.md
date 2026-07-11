@@ -8,6 +8,8 @@ We do not rewrite this roadmap. We only tick off completed work or add new tasks
 Public Website
 
 
+Public Website
+
 [x] Landing page
 [x] Cars page
 [x] Car details page
@@ -17,7 +19,8 @@ Public Website
 [x] Buyer page headers simplified to Home / Cars / Garages
 [x] Garage login removed from buyer-facing headers
 [x] Check For Garages page has clear approved garage login link
-Infrastructure
+[x] Public page headers standardised across main pages
+[x] Real mobile check completed across public pages
 
 
 [x] Supabase migration
@@ -88,7 +91,7 @@ Garage / Dashboard Improvements
 [ ] Premium Add/Edit Car redesign
 [ ] Premium dashboard UI
 [x] Polish My Cars section
-[ ] Mobile optimisation
+[x] Mobile optimisation
 [x] Upload garage logo
 [x] Upload garage banner
 [x] Opening hours
@@ -173,6 +176,7 @@ Polish
 [ ] Terms & Privacy Policy
 [ ] Cookie Policy
 [ ] Analytics
+[ ] Move public pages to one shared master header file
 
 
 🎉 Version 1.0
