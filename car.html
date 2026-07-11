@@ -580,6 +580,8 @@
         <div class="btnRow btnRowTight actionButtons">
           <a id="callBtn" class="btn primary" href="#">📞 Call</a>
 
+          <a id="emailBtn" class="btn ghost" href="#" style="display:none;">✉️ Email garage</a>
+
           <a id="moreBtn" class="btn ghost" href="/cars-page">🏢 View Garage</a>
 
           <a id="mapBtn" class="btn ghost" href="#" target="_blank" rel="noopener">📍 Directions</a>
@@ -862,6 +864,33 @@
           if (website) html += `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`;
           if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
           garageBox.innerHTML = html;
+        }
+
+        const emailBtn = document.getElementById("emailBtn");
+
+        if (emailBtn) {
+          const cleanEmail = String(email || "").trim();
+
+          if (cleanEmail && !isSold) {
+            const subject = `Enquiry about ${car.name || "vehicle"} on IOW Car Finder`;
+
+            const body = `Hi ${garageName},
+
+I'm interested in the ${car.name || "vehicle"} listed on IOW Car Finder.
+
+Please could you let me know if it is still available?
+
+Thanks`;
+
+            emailBtn.href =
+              "mailto:" + cleanEmail +
+              "?subject=" + encodeURIComponent(subject) +
+              "&body=" + encodeURIComponent(body);
+
+            emailBtn.style.display = "inline-flex";
+          } else {
+            emailBtn.style.display = "none";
+          }
         }
 
         const callBtn = document.getElementById("callBtn");
