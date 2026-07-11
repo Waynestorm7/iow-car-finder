@@ -1363,6 +1363,9 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/login") return serveFile(res, path.join(__dirname, "login.html"));
   if (req.method === "GET" && pathname === "/reset-password") return serveFile(res, path.join(__dirname, "reset-password.html"));
+  if (req.method === "GET" && pathname === "/privacy") return serveFile(res, path.join(__dirname, "privacy.html"));
+  if (req.method === "GET" && pathname === "/terms") return serveFile(res, path.join(__dirname, "terms.html"));
+  if (req.method === "GET" && pathname === "/cookie-policy") return serveFile(res, path.join(__dirname, "cookie-policy.html"));
 
   if (req.method === "GET" && pathname === "/garage-applications") {
     return serveFile(res, path.join(__dirname, "garage-applications.html"));
