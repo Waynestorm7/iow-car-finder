@@ -7,6 +7,10 @@
   <title>Garages | IOW Car Finder</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -14,35 +18,38 @@
       color: #111827;
     }
 
-
     header a {
       color: #fff;
       text-decoration: none;
       font-weight: 800;
     }
 
+    /* ---------- Header ---------- */
     header {
       background: #07111d;
       color: #fff;
-      padding: 16px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
 
     .top {
-      max-width: 1040px;
+      width: 100%;
+      max-width: 1300px;
       margin: 0 auto;
+      padding: 0 28px;
+      min-height: 64px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 18px;
     }
 
     .brand {
       color: #fff;
       text-decoration: none;
-      font-weight: 900;
+      font-size: 1.35rem;
+      font-weight: 800;
       letter-spacing: -.4px;
-      font-size: 1.05rem;
+      white-space: nowrap;
     }
 
     .brand span {
@@ -51,19 +58,43 @@
 
     nav {
       display: flex;
-      gap: 16px;
+      align-items: center;
+      gap: 18px;
     }
 
     nav a {
-      color: rgba(255, 255, 255, .82);
+      color: rgba(255, 255, 255, .86);
       text-decoration: none;
-      font-size: .9rem;
+      font-size: 1rem;
       font-weight: 800;
+      line-height: 1;
     }
 
     nav a:hover {
       color: #fff;
     }
+
+    @media (max-width:700px) {
+      .top {
+        padding: 0 12px;
+        min-height: 58px;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: .95rem;
+        white-space: nowrap;
+      }
+
+      nav {
+        gap: 11px;
+      }
+
+      nav a {
+        font-size: .82rem;
+      }
+    }
+
 
     main {
       max-width: 1100px;
@@ -184,22 +215,6 @@
 
     @media (max-width: 650px) {
 
-      header {
-        padding: 14px;
-      }
-
-      .top {
-        gap: 12px;
-      }
-
-      nav {
-        gap: 12px;
-      }
-
-      nav a {
-        font-size: .84rem;
-      }
-
       main {
         padding: 16px 12px 28px;
       }
@@ -211,6 +226,7 @@
       .photoGrid a img {
         height: 105px;
       }
+
     }
   </style>
 </head>

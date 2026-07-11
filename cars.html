@@ -107,6 +107,77 @@
       color: #fff;
     }
 
+    /* ---------- Header ---------- */
+    header {
+      background: #07111d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .top {
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 28px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -.4px;
+      white-space: nowrap;
+    }
+
+    .brand span {
+      color: #e67e22;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, .86);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    @media (max-width:700px) {
+      .top {
+        padding: 0 12px;
+        min-height: 58px;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: .95rem;
+        white-space: nowrap;
+      }
+
+      nav {
+        gap: 11px;
+      }
+
+      nav a {
+        font-size: .82rem;
+      }
+    }
+
     /* ---------- Hero ---------- */
     .hero {
       max-width: 1120px;

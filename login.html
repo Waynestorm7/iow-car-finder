@@ -33,53 +33,75 @@
             color: var(--text);
         }
 
+        /* ---------- Header ---------- */
         header {
-            background: var(--dark);
+            background: #07111d;
             color: #fff;
-            padding: 24px 34px;
             border-bottom: 1px solid rgba(255, 255, 255, .08);
-            box-shadow: 0 8px 24px rgba(7, 17, 29, .18);
         }
 
         .top {
-            max-width: 1280px;
+            width: 100%;
+            max-width: 1300px;
             margin: 0 auto;
+            padding: 0 28px;
+            min-height: 64px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 24px;
+            justify-content: space-between;
+            gap: 18px;
         }
 
         .brand {
             color: #fff;
             text-decoration: none;
-            font-weight: 950;
-            letter-spacing: -.7px;
             font-size: 1.35rem;
-            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -.4px;
+            white-space: nowrap;
         }
 
         .brand span {
-            color: var(--accent);
-            font-size: 1.5rem;
-            letter-spacing: -.9px;
+            color: #e67e22;
         }
 
         nav {
             display: flex;
             align-items: center;
-            gap: 26px;
+            gap: 18px;
         }
 
         nav a {
-            color: rgba(255, 255, 255, .84);
+            color: rgba(255, 255, 255, .86);
             text-decoration: none;
-            font-size: .96rem;
-            font-weight: 900;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1;
         }
 
         nav a:hover {
             color: #fff;
+        }
+
+        @media (max-width:700px) {
+            .top {
+                padding: 0 12px;
+                min-height: 58px;
+                gap: 10px;
+            }
+
+            .brand {
+                font-size: .95rem;
+                white-space: nowrap;
+            }
+
+            nav {
+                gap: 11px;
+            }
+
+            nav a {
+                font-size: .82rem;
+            }
         }
 
         main {
@@ -256,14 +278,6 @@
             .loginCard {
                 padding: 26px 22px;
                 border-radius: 24px;
-            }
-
-            nav {
-                gap: 12px;
-            }
-
-            nav a {
-                font-size: .84rem;
             }
         }
     </style>
