@@ -126,7 +126,7 @@ Accounts
 [x] Garage signup application flow
 [x] Garage approval
 [ ] Email confirmation
-[ ] Password reset
+[x] Password reset
 
 Garage Features
 
