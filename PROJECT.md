@@ -141,7 +141,7 @@ Customer Features
 [ ] Search improvements
 [ ] Advanced filters
 [ ] Saved cars
-[ ] Contact garage
+[x] Contact garage
 [ ] Enquiry forms
 
 Admin
