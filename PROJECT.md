@@ -133,8 +133,11 @@ Authentication Polish
 Accounts
 
 
+Accounts
+
 [x] Garage signup application flow
 [x] Garage approval
+[x] Full garage onboarding flow tested
 [ ] Email confirmation
 [x] Password reset
 
