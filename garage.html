@@ -287,12 +287,43 @@
             border: 1px solid rgba(17, 24, 39, .08);
         }
 
-        .carCard img {
+        .carImgWrap {
+            position: relative;
+            background: #e5e7eb;
+        }
+
+        .carImgWrap img {
             width: 100%;
             height: 190px;
             object-fit: cover;
             display: block;
             background: #e5e7eb;
+        }
+
+        .carCard.sold .carImgWrap img {
+            filter: grayscale(100%);
+            opacity: .72;
+        }
+
+        .stockBadge {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            color: #fff;
+            font-weight: 950;
+            font-size: .78rem;
+            letter-spacing: .04em;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+        }
+
+        .stockBadge.sold {
+            background: rgba(17, 24, 39, .92);
+        }
+
+        .stockBadge.reserved {
+            background: rgba(230, 126, 34, .96);
         }
 
         .carInfo {
@@ -391,7 +422,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .carCard img {
+            .carImgWrap img {
                 height: 220px;
             }
         }
@@ -429,15 +460,15 @@
 
             <aside class="stockBox">
                 <div id="stockCount" class="stockCount">—</div>
-                <div class="stockLabel">cars in stock</div>
-                <a href="#stock" class="stockLink">View stock</a>
+                <div class="stockLabel">available now</div>
+                <a href="#stock" class="stockLink">View cars</a>
             </aside>
         </section>
 
         <section id="stock" class="stockSection">
             <div class="sectionHead">
                 <div>
-                    <div class="eyebrow">Current stock</div>
+                    <div class="eyebrow">Garage listings</div>
                     <h2>Cars from this garage</h2>
                 </div>
             </div>
@@ -512,8 +543,6 @@
                 const carsData = await carsRes.json();
                 const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
 
-
-
                 const garage = garages.find(g => String(g.id) === String(garageId));
 
                 if (!garage) {
@@ -526,6 +555,35 @@
                 const garageCars = cars.filter(car =>
                     String(car.garageId || car.garage_id || "") === String(garageId)
                 );
+
+                const sortedGarageCars = [...garageCars].sort((a, b) => {
+
+                    function statusRank(car) {
+                        const status = String(car.status || "").toLowerCase();
+
+                        if (status === "sold" || car.sold === true) return 2;
+                        if (status === "reserved") return 1;
+
+                        return 0;
+                    }
+
+                    const rankDiff = statusRank(a) - statusRank(b);
+                    if (rankDiff !== 0) return rankDiff;
+
+                    const ta = new Date(a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime() || 0;
+                    const tb = new Date(b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime() || 0;
+
+                    return tb - ta;
+                });
+
+                const availableCount = garageCars.filter(car => {
+                    const status = String(car.status || "").toLowerCase();
+
+                    if (status === "sold" || car.sold === true) return false;
+                    if (status === "reserved") return false;
+
+                    return true;
+                }).length;
 
                 /*
                 const callBtn = document.getElementById("callBtn");
@@ -576,7 +634,7 @@
                     ? garage.description
                     : "Approved Isle of Wight garage listing vehicles on IOW Car Finder.";
 
-                stockCount.textContent = garageCars.length;
+                stockCount.textContent = availableCount;
 
                 const metaItems = [];
 
@@ -637,9 +695,18 @@
                     return;
                 }
 
-                carsBox.innerHTML = garageCars.map(car => `
-  <div class="carCard">
-  <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
+                carsBox.innerHTML = sortedGarageCars.map(car => {
+                    const status = String(car.status || "").toLowerCase();
+                    const isSold = status === "sold" || car.sold === true;
+                    const isReserved = status === "reserved";
+
+                    return `
+  <div class="carCard ${isSold ? "sold" : ""}">
+    <div class="carImgWrap">
+      <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
+      ${isSold ? `<span class="stockBadge sold">SOLD</span>` : ""}
+      ${isReserved ? `<span class="stockBadge reserved">RESERVED</span>` : ""}
+    </div>
 
     <div class="carInfo">
       <h3>${escapeHtml(car.name)}</h3>
@@ -648,7 +715,8 @@
       <a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}">View car →</a>
     </div>
   </div>
-`).join("");
+`;
+                }).join("");
 
             } catch (e) {
                 console.error(e);
