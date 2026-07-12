@@ -132,9 +132,6 @@ Authentication Polish
 
 Accounts
 
-
-Accounts
-
 [x] Garage signup application flow
 [x] Garage approval
 [x] Full garage onboarding flow tested
@@ -175,6 +172,7 @@ Payments
 
 Launch Strategy
 
+[ ] Switch SEO robots tags from noindex/nofollow to index/follow at launch
 [ ] Offer 3-month free trial for early garages
 [ ] Onboard first garages manually
 [ ] Help garages upload first listings
