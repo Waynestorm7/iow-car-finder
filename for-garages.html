@@ -480,6 +480,26 @@
         width: calc(100% + 44px);
       }
     }
+
+    .applyNote {
+      margin: 18px 0 20px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background:
+        radial-gradient(420px 140px at 0% 0%, rgba(230, 126, 34, .10), transparent 58%),
+        #fff;
+      border: 1px solid var(--softBorder);
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .94rem;
+    }
+
+    .applyNote strong {
+      display: block;
+      color: var(--dark);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 
@@ -554,9 +574,14 @@
       <div class="eyebrow">Apply now</div>
       <h2>Apply for a garage account</h2>
       <p>
-        Complete the form below to request access. Once approved, you’ll be able to
-        log in and manage your own vehicles through the garage dashboard.
+        Complete the short form below to request access.
       </p>
+
+      <div class="applyNote">
+        <strong>Apply in around 2 minutes.</strong>
+        Provide your garage name, contact details, location, and a brief overview of the vehicles you usually stock. No
+        payment is taken when you apply.
+      </div>
       <form id="garageForm">
 
         <div class="form-grid">
@@ -584,13 +609,13 @@
           <div class="full">
             <label for="password">Create a password</label>
             <input id="password" name="Password" type="password" required minlength="8">
-            <div class="small">You’ll use this to log in once your garage is approved.</div>
+            <div class="small">Create a password now — you’ll use it to log in once your garage is approved.</div>
           </div>
 
           <div class="full">
-            <label for="message">Tell us about your garage</label>
+            <label for="message">Garage details</label>
             <textarea id="message" name="Message"
-              placeholder="Tell us briefly about your garage, where you are based, and the type of vehicles you usually stock."></textarea>
+              placeholder="Example: We are a used car garage based in Newport. We usually stock small cars, family cars and vans. We currently have around 15 vehicles in stock."></textarea>
           </div>
         </div>
 
@@ -646,7 +671,7 @@
           return;
         }
 
-        alert("Thanks — your application has been received.");
+        alert("Thanks — your application has been received. We’ll review it and contact you once your garage account is approved.");
         garageForm.reset();
 
       } catch (err) {
