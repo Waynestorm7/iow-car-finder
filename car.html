@@ -382,13 +382,22 @@
 
     .trust {
       margin-top: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      background: #fff;
-      border: var(--border);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
-      border-left: 6px solid var(--brand);
-      line-height: 1.55
+      padding: 15px 16px;
+      border-radius: 16px;
+      background:
+        radial-gradient(420px 140px at 0% 0%, rgba(230, 126, 34, .13), transparent 58%),
+        #fff;
+      border: 1px solid rgba(17, 24, 39, .08);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .07);
+      line-height: 1.55;
+      color: #344054;
+    }
+
+    .trust strong {
+      display: block;
+      color: #07111d;
+      font-size: .98rem;
+      margin-bottom: 4px;
     }
 
     .trust a {
@@ -592,8 +601,10 @@
         </div>
 
         <div class="trust">
-          <strong>Not a marketplace.</strong> We don’t sell cars and we don’t take payments.
-          To enquire, contact the garage directly.
+          <strong>Dealer-direct listing.</strong>
+          IOW Car Finder connects buyers with approved Island garages. We do not sell cars or take payments.
+          Please confirm price, mileage, specification and availability with the garage before travelling.
+
           <div class="small">
             See something wrong?
             <a id="reportLink" href="mailto:contact@iowcarfinder.co.uk?subject=Report%20listing">
