@@ -4,7 +4,7 @@
 <head>
 
   <script src="/cookie-consent.js" defer></script>
-  
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Garages | IOW Car Finder</title>
@@ -266,11 +266,28 @@
       }[ch]));
     }
 
+    function cloudinaryOptimise(url, transform = "f_auto,q_auto,c_fill,w_520,h_292") {
+      const u = String(url || "");
+
+      if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) {
+        return u;
+      }
+
+      return u.replace("/image/upload/", `/image/upload/${transform}/`);
+    }
+
     function getCarPhoto(car) {
-      if (!car) return "";
-      if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
-      if (car.photo) return car.photo;
-      return "";
+      let photo = "";
+
+      if (car && Array.isArray(car.photos) && car.photos.length) {
+        photo = car.photos[0];
+      } else if (car && car.photo) {
+        photo = car.photo;
+      }
+
+      if (!photo) return "";
+
+      return cloudinaryOptimise(photo, "f_auto,q_auto,c_fill,w_520,h_292");
     }
 
     async function loadGarages() {
@@ -310,16 +327,18 @@ ${photos.length
       <div class="photoGrid">
         ${garageCars.slice(0, 4).map(car => `
           <a href="/car?id=${encodeURIComponent(car.id)}">
-            <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name || g.name)}">
+       <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name || g.name)}" loading="lazy" decoding="async">
           </a>
         `).join("")}
       </div>
     `
               : g.forecourtPhoto
                 ? `
-        <img class="forecourtPhoto"
-             src="${escapeHtml(g.forecourtPhoto)}"
-             alt="${escapeHtml(g.name)}">
+ <img class="forecourtPhoto"
+     src="${escapeHtml(cloudinaryOptimise(g.forecourtPhoto, "f_auto,q_auto,c_fill,w_900,h_420"))}"
+     alt="${escapeHtml(g.name)}"
+     loading="lazy"
+     decoding="async">
       `
                 : `<div class="noPhoto">
     <img src="/images/garage-placeholder.webp" alt="Garage">
