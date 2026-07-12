@@ -115,7 +115,7 @@ Dashboard Improvements
 [x] Terms page
 [x] Cookie Policy page
 [x] Homepage footer legal links
-[ ] Cookie consent banner
+[x] Cookie consent banner
 
 Authentication Polish
 
