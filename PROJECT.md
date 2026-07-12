@@ -148,8 +148,8 @@ Garage Features
 
 Customer Features
 
-[ ] Search improvements
-[ ] Advanced filters
+[x] Search improvements
+[x] Advanced filters
 [ ] Saved cars
 [x] Contact garage
 [ ] Enquiry forms
@@ -185,7 +185,7 @@ Polish
 [ ] Error pages
 [x] Terms & Privacy Policy
 [x] Cookie Policy
-[ ] Analytics
+[x] Analytics
 [ ] Move public pages to one shared master header file
 [x] Review mobile back-to-top / floating scroll button behaviour
 
