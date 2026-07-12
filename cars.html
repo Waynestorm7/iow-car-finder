@@ -837,7 +837,7 @@
 
         card.innerHTML = `
       <div class="imgWrap">
-<img class="carImg ${isSold ? "soldImg" : ""}" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" onerror="this.src='/images/hero.png'">
+<img class="carImg ${isSold ? "soldImg" : ""}" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" loading="lazy" decoding="async" onerror="this.src='/images/hero.png'">
 ${isReserved ? `<div class="reservedBadge">RESERVED</div>` : ""}
 ${isSold ? `<div class="soldBadge">SOLD</div>` : ""}
       </div>
