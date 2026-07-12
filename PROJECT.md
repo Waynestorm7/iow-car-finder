@@ -183,7 +183,7 @@ Launch Strategy
 
 Polish
 
-[ ] Performance
+[x] Performance
 [ ] SEO
 [ ] Error pages
 [x] Terms & Privacy Policy
