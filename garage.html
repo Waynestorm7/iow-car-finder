@@ -457,15 +457,32 @@
             }[ch]));
         }
 
+        function cloudinaryOptimise(url, transform = "f_auto,q_auto,c_limit,w_1200") {
+            const u = String(url || "");
+
+            if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) {
+                return u;
+            }
+
+            return u.replace("/image/upload/", `/image/upload/${transform}/`);
+        }
+
         function money(value) {
             return "£" + Number(value || 0).toLocaleString("en-GB");
         }
 
         function getCarPhoto(car) {
-            if (!car) return "";
-            if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
-            if (car.photo) return car.photo;
-            return "/images/hero.png";
+            let photo = "";
+
+            if (car && Array.isArray(car.photos) && car.photos.length) {
+                photo = car.photos[0];
+            } else if (car && car.photo) {
+                photo = car.photo;
+            }
+
+            if (!photo) return "/images/hero.png";
+
+            return cloudinaryOptimise(photo, "f_auto,q_auto,c_fill,w_700,h_438");
         }
 
         async function loadGarage() {
@@ -534,14 +551,16 @@
 
                 garageName.textContent = garage.name || "Garage";
 
-                const bannerUrl = garage.banner_url || garage.bannerUrl || "";
+                const rawBannerUrl = garage.banner_url || garage.bannerUrl || "";
+                const bannerUrl = cloudinaryOptimise(rawBannerUrl, "f_auto,q_auto,c_fill,w_1400,h_420");
 
                 if (garageHero) {
                     const safeBannerUrl = String(bannerUrl).replace(/"/g, "%22");
                     garageHero.style.setProperty("--garage-banner", safeBannerUrl ? `url("${safeBannerUrl}")` : "none");
                 }
 
-                const logoUrl = garage.logo_url || garage.logoUrl || "";
+                const rawLogoUrl = garage.logo_url || garage.logoUrl || "";
+                const logoUrl = cloudinaryOptimise(rawLogoUrl, "f_auto,q_auto,c_limit,w_300");
 
                 if (garageLogoBox) {
                     if (logoUrl) {
@@ -620,7 +639,7 @@
 
                 carsBox.innerHTML = garageCars.map(car => `
   <div class="carCard">
-    <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}">
+  <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
 
     <div class="carInfo">
       <h3>${escapeHtml(car.name)}</h3>
