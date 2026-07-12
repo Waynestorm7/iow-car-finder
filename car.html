@@ -799,24 +799,29 @@
         }
 
         const MAX_PHOTOS = 20;
-        photos = (Array.isArray(car.photos) ? car.photos : [])
-          .map(p => cloudinaryOptimise(String(p).trim(), 1400))
+
+        let rawPhotos = (Array.isArray(car.photos) ? car.photos : [])
+          .map(p => String(p || "").trim())
           .filter(Boolean)
           .slice(0, MAX_PHOTOS);
 
-        if (!photos.length && car.photo) {
-          photos = [cloudinaryOptimise(String(car.photo).trim(), 1400)];
+        if (!rawPhotos.length && car.photo) {
+          rawPhotos = [String(car.photo || "").trim()].filter(Boolean);
         }
 
-        if (!photos.length) {
-          photos = ["/images/hero.png"];
+        if (!rawPhotos.length) {
+          rawPhotos = ["/images/hero.png"];
         }
+
+        photos = rawPhotos.map(p => cloudinaryOptimise(p, 1400));
+        const thumbPhotos = rawPhotos.map(p => cloudinaryOptimise(p, 260));
 
         const mainImg = document.getElementById("mainImg");
         const thumbs = document.getElementById("thumbs");
 
         function setMain(index) {
           if (mainImg) mainImg.src = photos[index];
+
           if (thumbs) {
             [...thumbs.querySelectorAll("img")].forEach((el, i) => {
               el.classList.toggle("active", i === index);
@@ -826,11 +831,14 @@
 
         if (thumbs) {
           thumbs.innerHTML = "";
+
           photos.forEach((src, i) => {
             const t = document.createElement("img");
-            t.src = src;
+            t.src = thumbPhotos[i] || src;
             t.alt = "Car photo";
             t.className = "thumb" + (i === 0 ? " active" : "");
+            t.loading = "lazy";
+            t.decoding = "async";
             t.addEventListener("click", () => setMain(i));
             thumbs.appendChild(t);
           });

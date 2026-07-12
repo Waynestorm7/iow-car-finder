@@ -720,10 +720,31 @@
       return num.toLocaleString("en-GB") + " miles";
     }
 
+    function cloudinaryOptimise(url, width = 900) {
+      const u = String(url || "");
+
+      if (!u.includes("res.cloudinary.com") || !u.includes("/image/upload/")) {
+        return u;
+      }
+
+      return u.replace(
+        "/image/upload/",
+        `/image/upload/f_auto,q_auto,c_fill,w_${width},h_${Math.round(width * 0.625)}/`
+      );
+    }
+
     function pickPhoto(car) {
-      if (Array.isArray(car.photos) && car.photos.length) return car.photos[0];
-      if (car.photo) return car.photo;
-      return "/images/hero.png";
+      let photo = "";
+
+      if (Array.isArray(car.photos) && car.photos.length) {
+        photo = car.photos[0];
+      } else if (car.photo) {
+        photo = car.photo;
+      }
+
+      if (!photo) return "/images/hero.png";
+
+      return cloudinaryOptimise(photo, 900);
     }
 
     async function fetchCars() {
