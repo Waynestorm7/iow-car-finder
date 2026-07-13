@@ -1364,6 +1364,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/garage") return serveFile(res, path.join(__dirname, "garage.html"));
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
+  if (req.method === "GET" && pathname === "/admin-dashboard") return serveFile(res, path.join(__dirname, "admin-dashboard.html"));
   if (req.method === "GET" && pathname === "/login") return serveFile(res, path.join(__dirname, "login.html"));
   if (req.method === "GET" && pathname === "/reset-password") return serveFile(res, path.join(__dirname, "reset-password.html"));
   if (req.method === "GET" && pathname === "/privacy") return serveFile(res, path.join(__dirname, "privacy.html"));
@@ -1374,16 +1375,16 @@ const server = http.createServer(async (req, res) => {
     return serveFile(res, path.join(__dirname, "garage-applications.html"));
   }
 
-// -----------------------------
-// 404
-// -----------------------------
-return fs.readFile(path.join(__dirname, "404.html"), (err, data) => {
-  if (err) {
-    return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
-  }
+  // -----------------------------
+  // 404
+  // -----------------------------
+  return fs.readFile(path.join(__dirname, "404.html"), (err, data) => {
+    if (err) {
+      return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
+    }
 
-  return send(res, 404, { "Content-Type": "text/html; charset=utf-8" }, data);
-});
+    return send(res, 404, { "Content-Type": "text/html; charset=utf-8" }, data);
+  });
 
 });
 
