@@ -249,6 +249,47 @@
       text-decoration: underline;
     }
 
+    .heroActions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .heroBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      font-size: .95rem;
+    }
+
+    .heroBtn.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(230, 126, 34, .22);
+    }
+
+    .heroBtn.primary:hover {
+      background: var(--accentDark);
+    }
+
+    .heroBtn.secondary {
+      background: #fff;
+      color: var(--dark);
+      border: 1px solid rgba(16, 24, 40, .14);
+    }
+
+    .heroBtn.secondary:hover {
+      border-color: rgba(230, 126, 34, .45);
+      color: var(--accentDark);
+    }
+
     .trust {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -334,25 +375,6 @@
 
     .button.secondary:hover {
       background: var(--accentDark);
-    }
-
-    .loginAction {
-      background: var(--dark);
-      border-color: rgba(255, 255, 255, .08);
-    }
-
-    .loginAction h2 {
-      color: #fff;
-    }
-
-    .loginAction p,
-    .loginAction .small {
-      color: rgba(255, 255, 255, .72);
-    }
-
-    .loginAction .button.secondary {
-      background: #10263d;
-      color: #fff;
     }
 
     .loginAction .button.secondary:hover {
@@ -544,39 +566,15 @@
         <p class="lead">
           Reach more local buyers and showcase your stock to car shoppers across the Island.
         </p>
-        <p class="heroLogin">
-          Already approved? <a href="/login">Dashboard login →</a>
-        </p>
+        <div class="heroActions">
+          <a class="heroBtn primary" href="#contact">Apply to get listed</a>
+          <a class="heroBtn secondary" href="/login">Garage login</a>
+        </div>
       </div>
 
       <div class="island-box">
         <img src="/images/iow-outline-glow.svg" alt="Isle of Wight outline">
         <p>Supporting <strong>local garages</strong><br>across the Isle of Wight.</p>
-      </div>
-    </section>
-
-    <section class="actions">
-      <div class="action" id="joinCard">
-        <h2>Apply to get listed</h2>
-        <p>
-          Apply for your garage account and, once approved, manage your own stock
-          through the IOW Car Finder dashboard.
-        </p>
-        <div class="small">For approved Isle of Wight garages only.</div>
-
-        <button type="button" class="button" id="joinBtn">
-          Apply to get listed
-        </button>
-      </div>
-
-      <div class="action loginAction">
-        <h2>Garage dashboard login</h2>
-        <p>Already approved? Log in to manage your vehicles, prices, photos and garage profile.</p>
-        <p class="small">For approved garages only.</p>
-
-        <a class="button secondary" href="/login">
-          Log in to dashboard
-        </a>
       </div>
     </section>
 
@@ -650,11 +648,6 @@
 
   <script>
     const garageForm = document.getElementById("garageForm");
-
-    document.getElementById("joinCard").addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
-    });
 
     garageForm.addEventListener("submit", async (e) => {
       e.preventDefault();
