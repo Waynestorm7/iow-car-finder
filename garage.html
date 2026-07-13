@@ -548,9 +548,7 @@
             const carsBox = document.getElementById("carsBox");
 
             if (!garageId) {
-                garageName.textContent = "Garage not found";
-                garageIntro.textContent = "No garage ID was provided.";
-                carsBox.innerHTML = "";
+                window.location.href = "/garages";
                 return;
             }
 
