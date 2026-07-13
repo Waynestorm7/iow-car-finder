@@ -1,634 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<title>Used Cars Isle of Wight | IOW Car Finder</title>
+<head>
 
-<meta name="description"
-  content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
-<meta name="robots" content="noindex, nofollow">
+  <script src="/cookie-consent.js" defer></script>
 
-<link rel="canonical" href="https://www.iowcarfinder.co.uk/cars-page">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Used Cars Isle of Wight | IOW Car Finder">
-<meta property="og:description"
-  content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
-<meta property="og:url" content="https://www.iowcarfinder.co.uk/cars-page">
-<meta property="og:image" content="https://www.iowcarfinder.co.uk/images/hero-desktop.webp">
+  <title>Used Cars Isle of Wight | IOW Car Finder</title>
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Used Cars Isle of Wight | IOW Car Finder">
-<meta name="twitter:description"
-  content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
-<meta name="twitter:image" content="https://www.iowcarfinder.co.uk/images/hero-desktop.webp">
+  <meta name="description"
+    content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
+  <meta name="robots" content="noindex, nofollow">
 
-<style>
-  :root {
-    --bg0: #f6f7f9;
-    --bg1: #eef2f6;
-    --card: #ffffff;
-    --text: #0b1220;
-    --muted: #667085;
-    --accent: #e67e22;
-    --accent-soft: rgba(230, 126, 34, .12);
-    --stroke: rgba(17, 24, 39, .10);
-    --stroke-soft: rgba(17, 24, 39, .08);
-    --radius: 16px;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, .06);
-    --shadow-card: 0 8px 28px rgba(0, 0, 0, .06);
-  }
+  <link rel="canonical" href="https://www.iowcarfinder.co.uk/cars-page">
 
-  * {
-    box-sizing: border-box;
-  }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Used Cars Isle of Wight | IOW Car Finder">
+  <meta property="og:description"
+    content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
+  <meta property="og:url" content="https://www.iowcarfinder.co.uk/cars-page">
+  <meta property="og:image" content="https://www.iowcarfinder.co.uk/images/hero-desktop.webp">
 
-  html {
-    scroll-behavior: smooth;
-  }
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Used Cars Isle of Wight | IOW Car Finder">
+  <meta name="twitter:description"
+    content="Browse used cars for sale from approved Isle of Wight garages. Filter by price, fuel, transmission and more. No private sellers.">
+  <meta name="twitter:image" content="https://www.iowcarfinder.co.uk/images/hero-desktop.webp">
 
-  body {
-    margin: 0;
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    color: var(--text);
-    background:
-      radial-gradient(900px 480px at 10% -10%, rgba(230, 126, 34, .12), transparent 60%),
-      radial-gradient(900px 480px at 90% -10%, rgba(17, 24, 39, .07), transparent 60%),
-      linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  <style>
+    :root {
+      --bg0: #f6f7f9;
+      --bg1: #eef2f6;
+      --card: #ffffff;
+      --text: #0b1220;
+      --muted: #667085;
+      --accent: #e67e22;
+      --accent-soft: rgba(230, 126, 34, .12);
+      --stroke: rgba(17, 24, 39, .10);
+      --stroke-soft: rgba(17, 24, 39, .08);
+      --radius: 16px;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, .06);
+      --shadow-card: 0 8px 28px rgba(0, 0, 0, .06);
+    }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  /* ---------- Header ---------- */
-  header {
-    background: #07111d;
-    color: #fff;
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
-  }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  .top {
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 28px;
-    min-height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-  }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 480px at 10% -10%, rgba(230, 126, 34, .12), transparent 60%),
+        radial-gradient(900px 480px at 90% -10%, rgba(17, 24, 39, .07), transparent 60%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-  .brand {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.35rem;
-    font-weight: 800;
-    letter-spacing: -.4px;
-    white-space: nowrap;
-  }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-  .brand span {
-    color: #e67e22;
-  }
+    /* ---------- Header ---------- */
+    header {
+      background: #07111d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
 
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  nav a {
-    color: rgba(255, 255, 255, .86);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 800;
-    line-height: 1;
-  }
-
-  nav a:hover {
-    color: #fff;
-  }
-
-  @media (max-width:700px) {
     .top {
-      padding: 0 12px;
-      min-height: 58px;
-      gap: 10px;
+      width: 100%;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 28px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
     }
 
     .brand {
-      font-size: .95rem;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -.4px;
       white-space: nowrap;
     }
 
+    .brand span {
+      color: #e67e22;
+    }
+
     nav {
-      gap: 11px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
     }
 
     nav a {
-      font-size: .82rem;
-    }
-  }
-
-  /* ---------- Hero ---------- */
-  .hero {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 22px 18px 10px;
-    display: grid;
-    gap: 8px;
-  }
-
-  .hero h1 {
-    margin: 0;
-    font-size: clamp(1.6rem, 2.6vw, 2.25rem);
-    font-weight: 900;
-    letter-spacing: -.02em;
-  }
-
-  .hero p {
-    margin: 0;
-    color: var(--muted);
-    max-width: 70ch;
-    line-height: 1.45;
-  }
-
-  /* ---------- Main + filters ---------- */
-  main {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 12px 18px 32px;
-  }
-
-  .filtersWrap {
-    margin-bottom: 16px;
-  }
-
-  .filters {
-    position: relative;
-    background: rgba(255, 255, 255, .95);
-    border: 1px solid var(--stroke);
-    border-radius: 22px;
-    padding: 14px;
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(10px);
-  }
-
-  .filters::before {
-    content: "";
-    display: block;
-    height: 2px;
-    border-radius: 999px;
-    background: linear-gradient(90deg,
-        rgba(230, 126, 34, 0),
-        rgba(230, 126, 34, .55),
-        rgba(230, 126, 34, 0));
-    margin: -4px 4px 12px;
-  }
-
-  .filtersTop {
-    display: grid;
-    grid-template-columns: 1.45fr 1fr auto;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .filtersAdvanced {
-    display: grid;
-    grid-template-columns: .95fr .95fr .95fr auto;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px;
-  }
-
-  .filters input,
-  .filters select {
-    width: 100%;
-    padding: 13px 14px;
-    font-size: 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(17, 24, 39, .12);
-    background: #fff;
-    color: var(--text);
-    outline: none;
-    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-
-  .filters input::placeholder {
-    color: #8a94a6;
-  }
-
-  .filters input:hover,
-  .filters select:hover {
-    border-color: rgba(17, 24, 39, .18);
-  }
-
-  .filters input:focus,
-  .filters select:focus {
-    box-shadow: 0 0 0 4px var(--accent-soft);
-    border-color: rgba(230, 126, 34, .48);
-  }
-
-  .btnRow {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: flex-end;
-  }
-
-  .btn {
-    border-radius: 14px;
-    padding: 12px 16px;
-    cursor: pointer;
-    border: 1px solid rgba(17, 24, 39, .10);
-    background: #fff;
-    color: var(--text);
-    font-weight: 850;
-    transition: transform .12s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease;
-  }
-
-  .btn:hover {
-    transform: translateY(-1px);
-    border-color: rgba(17, 24, 39, .16);
-    background: #fafafa;
-  }
-
-  .btn.primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: rgba(230, 126, 34, .45);
-    box-shadow: 0 10px 22px rgba(230, 126, 34, .20);
-  }
-
-  .btn.primary:hover {
-    background: #de781f;
-    border-color: rgba(230, 126, 34, .55);
-  }
-
-  .btn.ghost {
-    background: rgba(17, 24, 39, .04);
-    border: 1px solid rgba(17, 24, 39, .12);
-  }
-
-  .btn:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
-
-  .hint {
-    grid-column: 1 / -1;
-    color: var(--muted);
-    font-size: .92rem;
-    margin-top: 8px;
-    padding-left: 2px;
-  }
-
-  /* ---------- Grid / cards ---------- */
-  .status {
-    background: var(--card);
-    padding: 14px;
-    border-radius: 14px;
-    border: 1px solid var(--stroke-soft);
-    color: var(--muted);
-  }
-
-  .grid {
-    margin-top: 14px;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .carCard {
-    display: block;
-    background: var(--card);
-    border-radius: 18px;
-    overflow: hidden;
-    border: 1px solid rgba(17, 24, 39, .08);
-    box-shadow: 0 10px 26px rgba(15, 23, 42, .08);
-    transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .carCard:hover {
-    transform: translateY(-4px);
-    border-color: rgba(230, 126, 34, .28);
-    box-shadow: 0 16px 36px rgba(15, 23, 42, .14);
-  }
-
-  .carCard.sold .carImg {
-    filter: grayscale(100%);
-    opacity: .72;
-  }
-
-  .imgWrap {
-    position: relative;
-    background: #eef1f5;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-  }
-
-  .carImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform .18s ease;
-  }
-
-  .carCard:hover .carImg {
-    transform: scale(1.025);
-  }
-
-  .soldBadge {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    padding: 8px 13px;
-    border-radius: 999px;
-    background: rgba(17, 24, 39, .9);
-    color: #fff;
-    font-weight: 950;
-    font-size: .82rem;
-    letter-spacing: .04em;
-    border: 1px solid rgba(255, 255, 255, .22);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
-  }
-
-  .reservedBadge {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    padding: 8px 13px;
-    border-radius: 999px;
-    background: rgba(230, 126, 34, .96);
-    color: #fff;
-    font-weight: 950;
-    font-size: .82rem;
-    letter-spacing: .04em;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
-  }
-
-  .soldImg {
-    filter: grayscale(100%);
-  }
-
-  .body {
-    padding: 16px 16px 15px;
-  }
-
-  .name {
-    margin: 0 0 7px;
-    font-size: 1.05rem;
-    font-weight: 850;
-    line-height: 1.25;
-    color: var(--text);
-    letter-spacing: -.01em;
-  }
-
-  .price {
-    margin: 0 0 8px;
-    font-size: 1.75rem;
-    font-weight: 950;
-    color: #071025;
-    letter-spacing: -.04em;
-    line-height: 1.05;
-  }
-
-  .listedText {
-    font-size: .86rem;
-    color: var(--muted);
-    margin: 0 0 13px;
-  }
-
-  .specGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
-    margin-bottom: 12px;
-  }
-
-  .spec {
-    padding: 9px 11px;
-    border-radius: 14px;
-    background: linear-gradient(180deg, #f7f8fa, #eef1f5);
-    border: 1px solid rgba(17, 24, 39, .07);
-  }
-
-  .specLabel {
-    font-size: .72rem;
-    color: var(--muted);
-    line-height: 1.1;
-    margin-bottom: 2px;
-  }
-
-  .specValue {
-    font-size: .94rem;
-    font-weight: 800;
-    color: #111827;
-    line-height: 1.15;
-  }
-
-  /* ---------- Garage row ---------- */
-  .garageRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px solid rgba(17, 24, 39, .06);
-  }
-
-  .garageText {
-    min-width: 0;
-    display: flex;
-    gap: 8px;
-    align-items: baseline;
-    flex: 1;
-  }
-
-  .garageLabel {
-    font-size: .78rem;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  .garageValue {
-    font-size: .98rem;
-    font-weight: 600;
-    color: var(--text);
-    overflow-wrap: anywhere;
-  }
-
-  .garageBtnWrap {
-    flex: 0 0 auto;
-  }
-
-  .garageLink {
-    font-size: inherit;
-    color: #2563eb;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .garageLink:hover {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  /* ---------- Responsive ---------- */
-  @media (min-width: 981px) {
-    #toggleFilters {
-      display: none;
-    }
-  }
-
-  @media (max-width: 980px) {
-    .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      color: rgba(255, 255, 255, .86);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
     }
 
-    .filtersTop {
-      grid-template-columns: 1fr 1fr auto;
+    nav a:hover {
+      color: #fff;
     }
 
-    .filtersAdvanced {
-      display: none;
-      grid-template-columns: 1fr 1fr;
+    @media (max-width:700px) {
+      .top {
+        padding: 0 12px;
+        min-height: 58px;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: .95rem;
+        white-space: nowrap;
+      }
+
+      nav {
+        gap: 11px;
+      }
+
+      nav a {
+        font-size: .82rem;
+      }
     }
 
-    #filtersBar.is-open .filtersAdvanced {
-      display: grid;
-    }
-  }
-
-  @media (max-width: 600px) {
+    /* ---------- Hero ---------- */
     .hero {
-      padding: 10px 14px 4px;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 18px 10px;
+      display: grid;
+      gap: 8px;
     }
 
     .hero h1 {
-      font-size: 1.45rem;
+      margin: 0;
+      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+      font-weight: 900;
+      letter-spacing: -.02em;
     }
 
     .hero p {
-      display: none;
+      margin: 0;
+      color: var(--muted);
+      max-width: 70ch;
+      line-height: 1.45;
+    }
+
+    /* ---------- Main + filters ---------- */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 18px 32px;
     }
 
     .filtersWrap {
-      margin-bottom: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filters {
+      position: relative;
+      background: rgba(255, 255, 255, .95);
+      border: 1px solid var(--stroke);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
     }
 
     .filters::before {
-      margin: -2px 4px 8px;
+      content: "";
+      display: block;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg,
+          rgba(230, 126, 34, 0),
+          rgba(230, 126, 34, .55),
+          rgba(230, 126, 34, 0));
+      margin: -4px 4px 12px;
     }
 
-    .grid {
+    .filtersTop {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filtersAdvanced {
+      display: grid;
+      grid-template-columns: .95fr .95fr .95fr auto;
+      gap: 10px;
+      align-items: center;
       margin-top: 10px;
     }
 
     .filters input,
     .filters select {
-      padding: 10px 12px;
-      border-radius: 12px;
-    }
-
-    .filters {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      padding: 0;
-    }
-
-    .filters::before {
-      display: none;
-    }
-
-    .filters input,
-    .filters select,
-    #toggleFilters {
+      width: 100%;
+      padding: 13px 14px;
+      font-size: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(17, 24, 39, .12);
       background: #fff;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
-    .btn {
-      padding: 11px 12px;
-      border-radius: 12px;
+    .filters input::placeholder {
+      color: #8a94a6;
     }
 
-    .filtersTop {
-      gap: 8px;
+    .filters input:hover,
+    .filters select:hover {
+      border-color: rgba(17, 24, 39, .18);
     }
 
-    .hero {
-      display: none;
-    }
-
-    main {
-      padding: 6px 14px 24px;
-    }
-
-    .filtersTop {
-      grid-template-columns: 1fr;
-    }
-
-    .filtersAdvanced {
-      grid-template-columns: 1fr;
-      gap: 12px;
+    .filters input:focus,
+    .filters select:focus {
+      box-shadow: 0 0 0 4px var(--accent-soft);
+      border-color: rgba(230, 126, 34, .48);
     }
 
     .btnRow {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
       gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
     }
 
-    .filtersAdvanced::before {
-      content: "Filters";
-      font-weight: 800;
-      font-size: .92rem;
+    .btn {
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border: 1px solid rgba(17, 24, 39, .10);
+      background: #fff;
+      color: var(--text);
+      font-weight: 850;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(17, 24, 39, .16);
+      background: #fafafa;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: rgba(230, 126, 34, .45);
+      box-shadow: 0 10px 22px rgba(230, 126, 34, .20);
+    }
+
+    .btn.primary:hover {
+      background: #de781f;
+      border-color: rgba(230, 126, 34, .55);
+    }
+
+    .btn.ghost {
+      background: rgba(17, 24, 39, .04);
+      border: 1px solid rgba(17, 24, 39, .12);
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .hint {
+      grid-column: 1 / -1;
       color: var(--muted);
-      margin: 2px 0 2px;
-      display: block;
+      font-size: .92rem;
+      margin-top: 8px;
+      padding-left: 2px;
+    }
+
+    /* ---------- Grid / cards ---------- */
+    .status {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke-soft);
+      color: var(--muted);
     }
 
     .grid {
-      grid-template-columns: 1fr;
-      gap: 14px;
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .carCard {
+      display: block;
+      background: var(--card);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(17, 24, 39, .08);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, .08);
+      transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .carCard:hover {
+      transform: translateY(-4px);
+      border-color: rgba(230, 126, 34, .28);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, .14);
+    }
+
+    .carCard.sold .carImg {
+      filter: grayscale(100%);
+      opacity: .72;
+    }
+
+    .imgWrap {
+      position: relative;
+      background: #eef1f5;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
     }
 
     .carImg {
-      height: 250px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .18s ease;
     }
-  }
 
-  @media (max-width: 520px) {
+    .carCard:hover .carImg {
+      transform: scale(1.025);
+    }
+
+    .soldBadge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, .9);
+      color: #fff;
+      font-weight: 950;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      border: 1px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
+    .reservedBadge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(230, 126, 34, .96);
+      color: #fff;
+      font-weight: 950;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
+    .soldImg {
+      filter: grayscale(100%);
+    }
+
+    .body {
+      padding: 16px 16px 15px;
+    }
+
+    .name {
+      margin: 0 0 7px;
+      font-size: 1.05rem;
+      font-weight: 850;
+      line-height: 1.25;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+
+    .price {
+      margin: 0 0 8px;
+      font-size: 1.75rem;
+      font-weight: 950;
+      color: #071025;
+      letter-spacing: -.04em;
+      line-height: 1.05;
+    }
+
+    .listedText {
+      font-size: .86rem;
+      color: var(--muted);
+      margin: 0 0 13px;
+    }
+
+    .specGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .spec {
+      padding: 9px 11px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f7f8fa, #eef1f5);
+      border: 1px solid rgba(17, 24, 39, .07);
+    }
+
+    .specLabel {
+      font-size: .72rem;
+      color: var(--muted);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .specValue {
+      font-size: .94rem;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.15;
+    }
+
+    /* ---------- Garage row ---------- */
     .garageRow {
-      flex-direction: column;
-      align-items: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(17, 24, 39, .06);
+    }
+
+    .garageText {
+      min-width: 0;
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      flex: 1;
+    }
+
+    .garageLabel {
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .garageValue {
+      font-size: .98rem;
+      font-weight: 600;
+      color: var(--text);
+      overflow-wrap: anywhere;
     }
 
     .garageBtnWrap {
-      width: 100%;
+      flex: 0 0 auto;
     }
 
     .garageLink {
-      width: 100%;
-      text-align: center;
-      white-space: normal;
+      font-size: inherit;
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
     }
-  }
-</style>
+
+    .garageLink:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (min-width: 981px) {
+      #toggleFilters {
+        display: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filtersTop {
+        grid-template-columns: 1fr 1fr auto;
+      }
+
+      .filtersAdvanced {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #filtersBar.is-open .filtersAdvanced {
+        display: grid;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding: 10px 14px 4px;
+      }
+
+      .hero h1 {
+        font-size: 1.45rem;
+      }
+
+      .hero p {
+        display: none;
+      }
+
+      .filtersWrap {
+        margin-bottom: 10px;
+      }
+
+      .filters::before {
+        margin: -2px 4px 8px;
+      }
+
+      .grid {
+        margin-top: 10px;
+      }
+
+      .filters input,
+      .filters select {
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
+
+      .filters {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      .filters::before {
+        display: none;
+      }
+
+      .filters input,
+      .filters select,
+      #toggleFilters {
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, .06);
+      }
+
+      .btn {
+        padding: 11px 12px;
+        border-radius: 12px;
+      }
+
+      .filtersTop {
+        gap: 8px;
+      }
+
+      .hero {
+        display: none;
+      }
+
+      main {
+        padding: 6px 14px 24px;
+      }
+
+      .filtersTop {
+        grid-template-columns: 1fr;
+      }
+
+      .filtersAdvanced {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .btnRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .filtersAdvanced::before {
+        content: "Filters";
+        font-weight: 800;
+        font-size: .92rem;
+        color: var(--muted);
+        margin: 2px 0 2px;
+        display: block;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .carImg {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .garageRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .garageBtnWrap {
+        width: 100%;
+      }
+
+      .garageLink {
+        width: 100%;
+        text-align: center;
+        white-space: normal;
+      }
+    }
+  </style>
 </head>
 
 <body>
