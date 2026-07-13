@@ -1147,6 +1147,92 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Admin: GET /admin-garages-data
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/admin-garages-data") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    try {
+      const { data: garages, error: garageError } = await supabase
+        .from("garages")
+        .select(`
+          id,
+          name,
+          town,
+          phone,
+          email,
+          website
+        `)
+        .order("name", { ascending: true });
+
+      if (garageError) throw garageError;
+
+      const { data: cars, error: carError } = await supabase
+        .from("cars")
+        .select("id, garage_id, status, sold");
+
+      if (carError) throw carError;
+
+      const counts = new Map();
+
+      (cars || []).forEach((car) => {
+        const garageId = car.garage_id;
+        if (!garageId) return;
+
+        if (!counts.has(garageId)) {
+          counts.set(garageId, {
+            total: 0,
+            available: 0,
+            reserved: 0,
+            sold: 0
+          });
+        }
+
+        const item = counts.get(garageId);
+        const status = String(car.status || "available").toLowerCase();
+
+        item.total += 1;
+
+        if (status === "reserved") {
+          item.reserved += 1;
+        } else if (status === "sold" || car.sold === true) {
+          item.sold += 1;
+        } else {
+          item.available += 1;
+        }
+      });
+
+      const result = (garages || []).map((garage) => ({
+        ...garage,
+        counts: counts.get(garage.id) || {
+          total: 0,
+          available: 0,
+          reserved: 0,
+          sold: 0
+        }
+      }));
+
+      return sendJson(res, 200, {
+        success: true,
+        garages: result
+      });
+
+    } catch (e) {
+      console.error("GET /admin-garages-data error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load garages."
+      });
+    }
+  }
+
+  // -----------------------------
   // Admin: GET /garage-applications-data
   // -----------------------------
   if (req.method === "GET" && pathname === "/garage-applications-data") {
@@ -1365,6 +1451,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/admin-dashboard") return serveFile(res, path.join(__dirname, "admin-dashboard.html"));
+  if (req.method === "GET" && pathname === "/admin-garages") return serveFile(res, path.join(__dirname, "admin-garages.html"));
   if (req.method === "GET" && pathname === "/login") return serveFile(res, path.join(__dirname, "login.html"));
   if (req.method === "GET" && pathname === "/reset-password") return serveFile(res, path.join(__dirname, "reset-password.html"));
   if (req.method === "GET" && pathname === "/privacy") return serveFile(res, path.join(__dirname, "privacy.html"));

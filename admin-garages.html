@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="/cookie-consent.js" defer></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Manage Garages | IOW Car Finder</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --card: #ffffff;
+      --text: #101828;
+      --muted: #667085;
+      --dark: #07111d;
+      --accent: #e67e22;
+      --accentDark: #c96513;
+      --border: rgba(16, 24, 40, .10);
+      --shadow: 0 18px 48px rgba(16, 24, 40, .07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--dark);
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .top {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 22px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -.4px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .adminTag {
+      color: rgba(255, 255, 255, .68);
+      font-weight: 800;
+      font-size: .9rem;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 34px 18px 58px;
+    }
+
+    .hero {
+      padding: 34px;
+      border-radius: 28px;
+      background:
+        radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .20), transparent 62%),
+        linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
+      color: #fff;
+      box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
+      border: 1px solid rgba(255, 255, 255, .10);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: #f4a261;
+      font-size: .78rem;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: -.06em;
+      font-weight: 950;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 62ch;
+      color: rgba(255, 255, 255, .78);
+      font-size: 1.02rem;
+      line-height: 1.55;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 900;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 13px;
+      border: 1px solid rgba(16, 24, 40, .14);
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: rgba(230, 126, 34, .6);
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
+    }
+
+    button,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 900;
+      font-size: .92rem;
+      text-decoration: none;
+      margin-top: 14px;
+    }
+
+    button:hover,
+    .button:hover {
+      background: var(--accentDark);
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+
+    .button.secondary:hover {
+      color: var(--accentDark);
+      border-color: rgba(230, 126, 34, .45);
+    }
+
+    .status {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .94rem;
+      margin-top: 12px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--dark);
+      font-size: 1.8rem;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: .84rem;
+    }
+
+    .garageList {
+      display: grid;
+      gap: 14px;
+    }
+
+    .garageCard {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .garageTop {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .garageCard h2 {
+      margin: 0 0 6px;
+      color: var(--dark);
+      font-size: 1.25rem;
+      letter-spacing: -.03em;
+    }
+
+    .garageMeta {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    .countPill {
+      flex: 0 0 auto;
+      min-width: 92px;
+      text-align: center;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      color: var(--dark);
+      font-weight: 900;
+    }
+
+    .countPill strong {
+      display: block;
+      color: var(--accent);
+      font-size: 1.55rem;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .counts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 14px 0 16px;
+    }
+
+    .mini {
+      border: 1px solid rgba(16, 24, 40, .08);
+      background: #fafbfc;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .mini strong {
+      display: block;
+      color: var(--dark);
+      font-size: 1.1rem;
+      margin-bottom: 3px;
+    }
+
+    .mini span {
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .empty {
+      background: #fff;
+      border: 1px dashed rgba(16, 24, 40, .22);
+      color: var(--muted);
+      border-radius: 22px;
+      padding: 24px;
+      text-align: center;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 700px) {
+      .top {
+        padding: 0 12px;
+        min-height: 58px;
+      }
+
+      .brand {
+        font-size: .95rem;
+      }
+
+      .adminTag {
+        font-size: .78rem;
+      }
+
+      main {
+        padding: 20px 12px 44px;
+      }
+
+      .hero {
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .panel,
+      .garageCard {
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .summary,
+      .counts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .garageTop {
+        display: block;
+      }
+
+      .countPill {
+        margin-top: 14px;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <a class="brand" href="/admin-dashboard"><span>IOW</span> Car Finder</a>
+      <div class="adminTag">Admin</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Private admin area</div>
+      <h1>Manage garages</h1>
+      <p>
+        View approved garages, check stock counts and quickly open each public garage profile.
+      </p>
+    </section>
+
+    <section class="panel">
+      <form id="keyForm">
+        <label for="adminKey">Private admin key</label>
+        <input id="adminKey" type="password" autocomplete="off" required>
+        <button type="submit">Load garages</button>
+        <a class="button secondary" href="/admin-dashboard">Back to admin dashboard</a>
+      </form>
+      <div id="status" class="status">Enter the admin key to load approved garages.</div>
+    </section>
+
+    <section id="summary" class="summary" style="display:none;"></section>
+
+    <section id="garageList" class="garageList"></section>
+  </main>
+
+  <script>
+    const keyForm = document.getElementById("keyForm");
+    const adminKey = document.getElementById("adminKey");
+    const statusEl = document.getElementById("status");
+    const summaryEl = document.getElementById("summary");
+    const garageList = document.getElementById("garageList");
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function renderSummary(garages) {
+      const totals = garages.reduce((acc, garage) => {
+        const c = garage.counts || {};
+        acc.garages += 1;
+        acc.total += Number(c.total || 0);
+        acc.available += Number(c.available || 0);
+        acc.reserved += Number(c.reserved || 0);
+        acc.sold += Number(c.sold || 0);
+        return acc;
+      }, {
+        garages: 0,
+        total: 0,
+        available: 0,
+        reserved: 0,
+        sold: 0
+      });
+
+      summaryEl.style.display = "grid";
+      summaryEl.innerHTML = `
+        <div class="stat">
+          <strong>${totals.garages}</strong>
+          <span>Garages</span>
+        </div>
+        <div class="stat">
+          <strong>${totals.available}</strong>
+          <span>Available cars</span>
+        </div>
+        <div class="stat">
+          <strong>${totals.reserved}</strong>
+          <span>Reserved cars</span>
+        </div>
+        <div class="stat">
+          <strong>${totals.sold}</strong>
+          <span>Sold cars</span>
+        </div>
+      `;
+    }
+
+    function renderGarages(garages) {
+      if (!garages.length) {
+        garageList.innerHTML = `<div class="empty">No garages found.</div>`;
+        return;
+      }
+
+      garageList.innerHTML = garages.map((garage) => {
+        const counts = garage.counts || {};
+        const publicUrl = `/garage?id=${encodeURIComponent(garage.id)}`;
+
+        return `
+          <article class="garageCard">
+            <div class="garageTop">
+              <div>
+                <h2>${escapeHtml(garage.name || "Unnamed garage")}</h2>
+                <div class="garageMeta">
+                  ${escapeHtml(garage.town || "Town not set")}<br>
+                  ${escapeHtml(garage.email || "Email not set")}<br>
+                  ${escapeHtml(garage.phone || "Phone not set")}
+                </div>
+              </div>
+
+              <div class="countPill">
+                <strong>${Number(counts.total || 0)}</strong>
+                cars total
+              </div>
+            </div>
+
+            <div class="counts">
+              <div class="mini">
+                <strong>${Number(counts.available || 0)}</strong>
+                <span>Available</span>
+              </div>
+              <div class="mini">
+                <strong>${Number(counts.reserved || 0)}</strong>
+                <span>Reserved</span>
+              </div>
+              <div class="mini">
+                <strong>${Number(counts.sold || 0)}</strong>
+                <span>Sold</span>
+              </div>
+              <div class="mini">
+                <strong>${Number(counts.total || 0)}</strong>
+                <span>Total</span>
+              </div>
+            </div>
+
+            <div class="actions">
+              <a class="button" href="${publicUrl}" target="_blank" rel="noopener">View public garage →</a>
+              ${garage.website ? `<a class="button secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Garage website</a>` : ""}
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    keyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const key = adminKey.value.trim();
+
+      if (!key) {
+        statusEl.textContent = "Enter the admin key.";
+        return;
+      }
+
+      statusEl.textContent = "Loading garages...";
+      garageList.innerHTML = "";
+      summaryEl.style.display = "none";
+      summaryEl.innerHTML = "";
+
+      try {
+        const res = await fetch("/admin-garages-data", {
+          headers: {
+            "x-garage-key": key
+          }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          statusEl.textContent = data.message || "Could not load garages.";
+          return;
+        }
+
+        const garages = Array.isArray(data.garages) ? data.garages : [];
+
+        statusEl.textContent = `${garages.length} garage(s) found.`;
+        renderSummary(garages);
+        renderGarages(garages);
+
+      } catch (err) {
+        statusEl.textContent = "Could not load garages.";
+      }
+    });
+  </script>
+</body>
+
+</html>

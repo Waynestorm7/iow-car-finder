@@ -1,261 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <script src="/cookie-consent.js" defer></script>
+    <script src="/cookie-consent.js" defer></script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Admin Dashboard | IOW Car Finder</title>
-  <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard | IOW Car Finder</title>
+    <meta name="robots" content="noindex, nofollow">
 
-  <style>
-    :root {
-      --bg: #f5f6f8;
-      --card: #ffffff;
-      --text: #101828;
-      --muted: #667085;
-      --dark: #07111d;
-      --accent: #e67e22;
-      --accentDark: #c96513;
-      --border: rgba(16, 24, 40, .10);
-      --shadow: 0 18px 48px rgba(16, 24, 40, .07);
-    }
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --card: #ffffff;
+            --text: #101828;
+            --muted: #667085;
+            --dark: #07111d;
+            --accent: #e67e22;
+            --accentDark: #c96513;
+            --border: rgba(16, 24, 40, .10);
+            --shadow: 0 18px 48px rgba(16, 24, 40, .07);
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      font-family: Inter, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
 
-    header {
-      background: var(--dark);
-      color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
+        header {
+            background: var(--dark);
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
 
-    .top {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 22px;
-      min-height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
+        .top {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 22px;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
 
-    .brand {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1.25rem;
-      font-weight: 900;
-      letter-spacing: -.4px;
-    }
+        .brand {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -.4px;
+        }
 
-    .brand span {
-      color: var(--accent);
-    }
+        .brand span {
+            color: var(--accent);
+        }
 
-    .adminTag {
-      color: rgba(255,255,255,.68);
-      font-weight: 800;
-      font-size: .9rem;
-    }
+        .adminTag {
+            color: rgba(255, 255, 255, .68);
+            font-weight: 800;
+            font-size: .9rem;
+        }
 
-    main {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 34px 18px 58px;
-    }
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 34px 18px 58px;
+        }
 
-    .hero {
-      padding: 34px;
-      border-radius: 28px;
-      background:
-        radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .20), transparent 62%),
-        linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
-      color: #fff;
-      box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
-      border: 1px solid rgba(255,255,255,.10);
-      margin-bottom: 18px;
-    }
+        .hero {
+            padding: 34px;
+            border-radius: 28px;
+            background:
+                radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .20), transparent 62%),
+                linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
+            color: #fff;
+            box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
+            border: 1px solid rgba(255, 255, 255, .10);
+            margin-bottom: 18px;
+        }
 
-    .eyebrow {
-      color: #f4a261;
-      font-size: .78rem;
-      font-weight: 950;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
+        .eyebrow {
+            color: #f4a261;
+            font-size: .78rem;
+            font-weight: 950;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1;
-      letter-spacing: -.06em;
-      font-weight: 950;
-    }
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1;
+            letter-spacing: -.06em;
+            font-weight: 950;
+        }
 
-    .hero p {
-      margin: 14px 0 0;
-      max-width: 62ch;
-      color: rgba(255,255,255,.78);
-      font-size: 1.02rem;
-      line-height: 1.55;
-    }
+        .hero p {
+            margin: 14px 0 0;
+            max-width: 62ch;
+            color: rgba(255, 255, 255, .78);
+            font-size: 1.02rem;
+            line-height: 1.55;
+        }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      padding: 26px;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
 
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 24px 60px rgba(16, 24, 40, .10);
-    }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 60px rgba(16, 24, 40, .10);
+        }
 
-    .card h2 {
-      margin: 0 0 8px;
-      color: var(--dark);
-      font-size: 1.25rem;
-      letter-spacing: -.03em;
-    }
+        .card h2 {
+            margin: 0 0 8px;
+            color: var(--dark);
+            font-size: 1.25rem;
+            letter-spacing: -.03em;
+        }
 
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: .96rem;
-    }
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: .96rem;
+        }
 
-    .card .action {
-      margin-top: 20px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 11px 16px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 900;
-      font-size: .9rem;
-    }
+        .card .action {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 16px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 900;
+            font-size: .9rem;
+        }
 
-    .card.disabled {
-      opacity: .62;
-      cursor: default;
-    }
+        .card.disabled {
+            opacity: .62;
+            cursor: default;
+        }
 
-    .card.disabled:hover {
-      transform: none;
-      box-shadow: var(--shadow);
-    }
+        .card.disabled:hover {
+            transform: none;
+            box-shadow: var(--shadow);
+        }
 
-    .card.disabled .action {
-      background: #e4e7ec;
-      color: #475467;
-    }
+        .card.disabled .action {
+            background: #e4e7ec;
+            color: #475467;
+        }
 
-    .note {
-      margin-top: 18px;
-      padding: 18px 20px;
-      border-radius: 20px;
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: .94rem;
-    }
+        .note {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: .94rem;
+        }
 
-    @media (max-width: 700px) {
-      .top {
-        padding: 0 12px;
-        min-height: 58px;
-      }
+        @media (max-width: 700px) {
+            .top {
+                padding: 0 12px;
+                min-height: 58px;
+            }
 
-      .brand {
-        font-size: .95rem;
-      }
+            .brand {
+                font-size: .95rem;
+            }
 
-      .adminTag {
-        font-size: .78rem;
-      }
+            .adminTag {
+                font-size: .78rem;
+            }
 
-      main {
-        padding: 20px 12px 44px;
-      }
+            main {
+                padding: 20px 12px 44px;
+            }
 
-      .hero {
-        padding: 22px;
-        border-radius: 22px;
-      }
+            .hero {
+                padding: 22px;
+                border-radius: 22px;
+            }
 
-      .grid {
-        grid-template-columns: 1fr;
-      }
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-      .card {
-        padding: 22px;
-        border-radius: 22px;
-      }
-    }
-  </style>
+            .card {
+                padding: 22px;
+                border-radius: 22px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <header>
-    <div class="top">
-      <a class="brand" href="/"><span>IOW</span> Car Finder</a>
-      <div class="adminTag">Admin</div>
-    </div>
-  </header>
+    <header>
+        <div class="top">
+            <a class="brand" href="/"><span>IOW</span> Car Finder</a>
+            <div class="adminTag">Admin</div>
+        </div>
+    </header>
 
-  <main>
-    <section class="hero">
-      <div class="eyebrow">Private admin area</div>
-      <h1>Admin Dashboard</h1>
-      <p>
-        Manage garage onboarding, review applications and keep track of launch progress before the site goes public.
-      </p>
-    </section>
+    <main>
+        <section class="hero">
+            <div class="eyebrow">Private admin area</div>
+            <h1>Admin Dashboard</h1>
+            <p>
+                Manage garage onboarding, review applications and keep track of launch progress before the site goes
+                public.
+            </p>
+        </section>
 
-    <section class="grid">
-      <a class="card" href="/garage-applications">
-        <h2>Garage applications</h2>
-        <p>Review pending garage applications and approve or reject new garages.</p>
-        <div class="action">Open applications →</div>
-      </a>
+        <section class="grid">
+            <a class="card" href="/garage-applications">
+                <h2>Garage applications</h2>
+                <p>Review pending garage applications and approve or reject new garages.</p>
+                <div class="action">Open applications →</div>
+            </a>
 
-      <div class="card disabled">
-        <h2>Manage garages</h2>
-        <p>View approved garages, check stock counts and track which garages still need help.</p>
-        <div class="action">Coming next</div>
-      </div>
-    </section>
+            <a class="card" href="/admin-garages">
+                <h2>Manage garages</h2>
+                <p>View approved garages, check stock counts and track which garages still need help.</p>
+                <div class="action">Open garages →</div>
+            </a>
+        </section>
 
-    <div class="note">
-      This page is not linked from the public navigation. Keep using the existing admin key flow for sensitive admin actions until we replace it with a proper admin login later.
-    </div>
-  </main>
-</body>
-</html>
+        <div class="note">
+            This page is not linked from the public navigation. Keep using the existing admin key flow for sensitive
+            admin actions until we replace it with a proper admin login later.
+        </div>
