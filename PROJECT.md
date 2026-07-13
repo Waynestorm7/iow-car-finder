@@ -159,7 +159,7 @@ Admin
 [x] Review garage applications
 [x] Approve garages
 [x] Reject garages
-[ ] Admin dashboard
+[x] Admin dashboard
 [ ] Manage garages
 
 Payments
