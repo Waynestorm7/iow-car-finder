@@ -1374,10 +1374,16 @@ const server = http.createServer(async (req, res) => {
     return serveFile(res, path.join(__dirname, "garage-applications.html"));
   }
 
-  // -----------------------------
-  // 404
-  // -----------------------------
-  return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
+// -----------------------------
+// 404
+// -----------------------------
+return fs.readFile(path.join(__dirname, "404.html"), (err, data) => {
+  if (err) {
+    return send(res, 404, { "Content-Type": "text/plain; charset=utf-8" }, "Not found");
+  }
+
+  return send(res, 404, { "Content-Type": "text/html; charset=utf-8" }, data);
+});
 
 });
 
