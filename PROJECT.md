@@ -178,8 +178,8 @@ Launch Strategy
 [ ] Help garages upload first listings
 [ ] Collect feedback from garages
 [ ] Convert free trial garages to paid subscribers
-[ ] Upgrade Render service to paid Starter plan before showing garages
-[ ] Connect iowcarfinder.co.uk domain
+[x] Upgrade Render service to paid Starter plan before showing garages
+[x] Connect iowcarfinder.co.uk domain
 [ ] Redirect iowcarfinder.com to iowcarfinder.co.uk
 
 
@@ -187,7 +187,7 @@ Polish
 
 [x] Performance
 [ ] SEO
-[ ] Error pages
+[x] Error pages
 [x] Terms & Privacy Policy
 [x] Cookie Policy
 [x] Analytics
