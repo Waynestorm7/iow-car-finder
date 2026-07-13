@@ -180,7 +180,7 @@ Launch Strategy
 [ ] Convert free trial garages to paid subscribers
 [x] Upgrade Render service to paid Starter plan before showing garages
 [x] Connect iowcarfinder.co.uk domain
-[ ] Redirect iowcarfinder.com to iowcarfinder.co.uk
+[x] Redirect iowcarfinder.com to iowcarfinder.co.uk
 
 
 Polish
