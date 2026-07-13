@@ -117,6 +117,63 @@
       }
     }
 
+    .garageHero {
+      max-width: 1084px;
+      margin: 18px auto 0;
+      padding: 24px;
+      border-radius: 28px;
+      background:
+        radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .22), transparent 62%),
+        linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
+      color: #fff;
+      box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
+      border: 1px solid rgba(255, 255, 255, .10);
+    }
+
+    .garageHero .eyebrow {
+      color: #f4a261;
+      font-size: .78rem;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .garageHero h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-weight: 950;
+    }
+
+    .garageHero p {
+      margin: 14px 0 0;
+      max-width: 62ch;
+      color: rgba(255, 255, 255, .78);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .garageHeroPills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .garageHeroPills span {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .13);
+      color: rgba(255, 255, 255, .92);
+      font-weight: 850;
+      font-size: .86rem;
+    }
 
     main {
       max-width: 1100px;
@@ -139,6 +196,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 18px;
+      align-items: start;
     }
 
     .garageCard {
@@ -237,6 +295,21 @@
 
     @media (max-width: 650px) {
 
+      .garageHero {
+        margin: 12px 12px 0;
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .garageHero h1 {
+        font-size: 2rem;
+        line-height: 1.02;
+      }
+
+      .garageHero p {
+        font-size: .98rem;
+      }
+
       main {
         padding: 16px 12px 28px;
       }
@@ -267,10 +340,15 @@
     </div>
   </header>
 
-  <main>
-    <h1>Browse Garages</h1>
-    <p class="intro">Find local Isle of Wight garages and view their available stock.</p>
+  <section class="garageHero">
+    <div class="eyebrow">Local garage directory</div>
+    <h1>Approved Island garages</h1>
+    <p>
+      Browse trusted Isle of Wight garages and view their current used-car stock in one place.
+    </p>
+  </section>
 
+  <main>
     <div id="garageList" class="status">Loading garages...</div>
   </main>
 
@@ -378,7 +456,7 @@ ${photos.length
                 <p class="count">${garageCars.length} ${carWord} in stock</p>
 
                 <a class="viewBtn" href="/garage?id=${encodeURIComponent(g.id)}">
-                  View Garage →
+                  View stock →
                 </a>
               </div>
             </div>
