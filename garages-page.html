@@ -339,6 +339,15 @@
 
           const carWord = garageCars.length === 1 ? "car" : "cars";
 
+          const garageName = String(g.name || "").toLowerCase();
+          const isTestOrDemoGarage =
+            garageName.includes("test") ||
+            garageName.includes("demo");
+
+          if (garageCars.length === 0 && isTestOrDemoGarage) {
+            return "";
+          }
+
           return `
             <div class="garageCard">
 ${photos.length
