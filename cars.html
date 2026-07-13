@@ -141,27 +141,97 @@
       }
     }
 
-    /* ---------- Hero ---------- */
-    .hero {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 22px 18px 10px;
+    /* ---------- Premium stock intro ---------- */
+    .stockHero {
+      max-width: 1084px;
+      margin: 18px auto 0;
+      padding: 24px;
+      border-radius: 28px;
+      background:
+        radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .25), transparent 62%),
+        linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
+      color: #fff;
+      box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
+      border: 1px solid rgba(255, 255, 255, .10);
       display: grid;
-      gap: 8px;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
     }
 
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
-      font-weight: 900;
-      letter-spacing: -.02em;
+    .stockHero .eyebrow {
+      color: #f4a261;
+      font-size: .78rem;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
-    .hero p {
+    .stockHero h1 {
       margin: 0;
-      color: var(--muted);
-      max-width: 70ch;
-      line-height: 1.45;
+      max-width: 780px;
+      font-size: clamp(2rem, 4vw, 3.7rem);
+      line-height: .98;
+      letter-spacing: -.06em;
+      font-weight: 950;
+    }
+
+    .stockHero p {
+      margin: 14px 0 0;
+      max-width: 62ch;
+      color: rgba(255, 255, 255, .78);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .trustPills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .trustPills span {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .13);
+      color: rgba(255, 255, 255, .92);
+      font-weight: 850;
+      font-size: .86rem;
+    }
+
+    .stockHeroCard {
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 22px;
+      padding: 18px;
+      backdrop-filter: blur(10px);
+    }
+
+    .stockHeroCard span {
+      display: block;
+      color: #f4a261;
+      font-size: .78rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 9px;
+    }
+
+    .stockHeroCard strong {
+      display: block;
+      font-size: 1.45rem;
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .stockHeroCard p {
+      margin-top: 10px;
+      font-size: .95rem;
     }
 
     /* ---------- Main + filters ---------- */
@@ -528,6 +598,38 @@
     }
 
     @media (max-width: 760px) {
+
+      .stockHero {
+        margin: 12px 14px 0;
+        padding: 18px;
+        border-radius: 22px;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .stockHero h1 {
+        font-size: 2rem;
+        line-height: 1.02;
+      }
+
+      .stockHero p {
+        font-size: .98rem;
+      }
+
+      .stockHeroCard {
+        display: none;
+      }
+
+      .trustPills {
+        gap: 7px;
+        margin-top: 14px;
+      }
+
+      .trustPills span {
+        font-size: .78rem;
+        padding: 7px 9px;
+      }
+
       .hero {
         padding: 10px 14px 4px;
       }
@@ -633,14 +735,20 @@
 
     @media (max-width: 520px) {
       .garageRow {
-        flex-direction: column;
-        align-items: stretch;
+        gap: 10px;
+        padding: 11px;
       }
 
       .garageLink {
-        width: 100%;
-        text-align: center;
-        white-space: normal;
+        flex: 0 0 auto;
+        width: auto;
+        padding: 8px 11px;
+        font-size: .78rem;
+        white-space: nowrap;
+      }
+
+      .garageValue {
+        font-size: .95rem;
       }
     }
   </style>
@@ -660,9 +768,21 @@
     </div>
   </header>
 
-  <section class="hero">
-    <h1>Cars</h1>
-    <p>Browse listings — filter by fuel, transmission, price and more.</p>
+  <section class="stockHero">
+    <div>
+      <div class="eyebrow">Dealer-direct stock</div>
+      <h1>Used cars from approved Island garages</h1>
+      <p>
+        Browse used-car listings from trusted Isle of Wight garages. No private sellers —
+        contact the dealer directly.
+      </p>
+
+      <div class="trustPills">
+        <span>Island garages only</span>
+        <span>No private sellers</span>
+      </div>
+    </div>
+
   </section>
 
   <main>
@@ -889,7 +1009,7 @@ ${listedText ? `
 
 <div class="garageRow">
   <div class="garageText">
-  <span class="garageLabel">Approved garage</span>
+    <span class="garageLabel">Approved garage</span>
     <span class="garageValue">${escapeHtml(garageName || "Local garage")}</span>
   </div>
   ${garageLink}
