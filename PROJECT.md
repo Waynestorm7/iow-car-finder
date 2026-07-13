@@ -173,7 +173,7 @@ Payments
 Launch Strategy
 
 [ ] Switch SEO robots tags from noindex/nofollow to index/follow at launch
-[ ] Offer 3-month free trial for early garages
+[x] Offer 3-month free trial for early garages
 [ ] Onboard first garages manually
 [ ] Help garages upload first listings
 [ ] Collect feedback from garages
