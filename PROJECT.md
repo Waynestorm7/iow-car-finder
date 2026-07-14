@@ -245,6 +245,7 @@ Polish
 [x] Analytics
 [ ] Move public pages to one shared master header file
 [x] Review mobile back-to-top / floating scroll button behaviour
+[ ] Review tablet layout across main pages
 
 
 🎉 Version 1.0
