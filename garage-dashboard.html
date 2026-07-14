@@ -854,23 +854,6 @@
       line-height: 1.5;
     }
 
-    .welcome-trust {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .welcome-trust span {
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .12);
-      border-radius: 999px;
-      padding: 8px 12px;
-      color: rgba(255, 255, 255, .84);
-      font-size: .88rem;
-      font-weight: 700;
-    }
-
     .welcome-actions {
       display: flex;
       gap: 12px;
@@ -919,8 +902,118 @@
       }
     }
 
+    @media (max-width: 800px) {
+      .dashboard-welcome {
+        align-items: stretch;
+      }
+    }
+
     #addCarSection {
       display: none;
+    }
+
+    /* ---------- Dashboard home polish ---------- */
+
+    .dashboard-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: .96rem;
+      line-height: 1.45;
+    }
+
+    .dashboard-menu {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0 22px;
+    }
+
+    .dashboard-menu button {
+      min-height: 58px;
+      padding: 12px 14px;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 18px;
+      background: #fff;
+      color: #07111d;
+      font-size: .98rem;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: -.01em;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, .07);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    }
+
+    .dashboard-menu button:hover {
+      background: #07111d;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, .12);
+    }
+
+    #show-add-car {
+      background: var(--brand);
+      color: #fff;
+      border-color: rgba(230, 126, 34, .35);
+    }
+
+    #show-add-car:hover {
+      background: #c96513;
+    }
+
+    #logout {
+      color: #b91c1c;
+    }
+
+    #logout:hover {
+      background: #b91c1c;
+      color: #fff;
+    }
+
+    .dashboard-welcome {
+      margin-top: 22px;
+      padding: 28px;
+      border-radius: 24px;
+      align-items: flex-end;
+    }
+
+    .dashboard-welcome h2 {
+      font-size: 1.85rem;
+    }
+
+    .dashboard-welcome p {
+      font-size: 1rem;
+    }
+
+    .welcome-actions button {
+      min-width: 170px;
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin: 16px 0 20px;
+      }
+
+      .dashboard-menu button {
+        min-height: 54px;
+        padding: 11px 10px;
+        border-radius: 16px;
+        font-size: .92rem;
+      }
+
+      .dashboard-welcome {
+        padding: 22px 20px;
+        gap: 22px;
+      }
+
+      .dashboard-welcome h2 {
+        font-size: 1.65rem;
+      }
+
+      .dashboard-welcome p {
+        font-size: .96rem;
+      }
     }
 
     @media (max-width:700px) {
@@ -1045,6 +1138,19 @@
         }
       }
 
+      .welcome-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        justify-content: stretch;
+      }
+
+      .welcome-actions button {
+        width: 100%;
+        min-width: 0;
+      }
+
     }
   </style>
 </head>
@@ -1054,12 +1160,15 @@
 
   <main id="dashboardMain" style="display:none;">
     <h1>Garage Dashboard</h1>
+    <p class="dashboard-subtitle">
+      Manage listings, stock status and your public garage profile.
+    </p>
 
     <div class="dashboard-menu">
-      <button id="show-add-car">➕ Add Vehicle</button>
-      <button id="show-my-cars">🚗 My Cars</button>
-      <button id="show-profile">🏢 Garage Profile</button>
-      <button id="logout">🚪 Logout</button>
+      <button id="show-add-car">Add vehicle</button>
+      <button id="show-my-cars">My stock</button>
+      <button id="show-profile">Garage profile</button>
+      <button id="logout">Logout</button>
     </div>
 
     <div class="dashboard-welcome" id="dashboardWelcome">
@@ -1069,14 +1178,9 @@
         <h2>Manage your stock</h2>
 
         <p>
-          Add vehicles, manage your stock, and keep your garage profile up to date.
+          Add vehicles, update listings and keep your public garage profile accurate.
         </p>
 
-        <div class="welcome-trust">
-          <span>✔ Island garages only</span>
-          <span>✔ No private sellers</span>
-          <span>✔ Direct customer contact</span>
-        </div>
       </div>
 
       <div class="welcome-actions">
