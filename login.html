@@ -111,7 +111,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 26px;
-            align-items: center;
+            align-items: start;
         }
 
         .intro {
@@ -122,10 +122,45 @@
             border-radius: 28px;
             padding: 34px;
             box-shadow: var(--shadow);
-            min-height: 360px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .featureList {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .featureList li {
+            color: rgba(255, 255, 255, .86);
+            font-size: .94rem;
+            font-weight: 800;
+            line-height: 1.35;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .featureList li::before {
+            content: "✓";
+            flex: 0 0 auto;
+            width: 21px;
+            height: 21px;
+            border-radius: 999px;
+            background: rgba(230, 126, 34, .18);
+            border: 1px solid rgba(230, 126, 34, .35);
+            color: #f4a261;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .78rem;
+            font-weight: 900;
+            margin-top: -1px;
         }
 
         .eyebrow {
@@ -151,29 +186,15 @@
             max-width: 38ch;
         }
 
-        .pillRow {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 24px;
-        }
-
-        .pill {
-            padding: 9px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .10);
-            border: 1px solid rgba(255, 255, 255, .13);
-            color: rgba(255, 255, 255, .88);
-            font-size: .86rem;
-            font-weight: 800;
-        }
-
         .loginCard {
             background: var(--card);
             border: 1px solid var(--line);
             border-radius: 28px;
             box-shadow: var(--shadow);
             padding: 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .loginCard h2 {
@@ -316,18 +337,17 @@
 
     <main>
         <section class="intro">
-            <div class="eyebrow">Garage dashboard</div>
-            <h1>Manage your stock on IOW Car Finder</h1>
+            <div class="eyebrow">Approved garages</div>
+            <h1>Garage dashboard</h1>
             <p>
-                Approved Isle of Wight garages can sign in to add vehicles, update prices,
-                upload photos, and keep listings up to date.
+                Access your IOW Car Finder account to manage vehicles, prices, photos and stock status.
             </p>
 
-            <div class="pillRow">
-                <div class="pill">Approved garages only</div>
-                <div class="pill">Manage vehicles</div>
-                <div class="pill">Update stock anytime</div>
-            </div>
+            <ul class="featureList">
+                <li>Add and edit listings</li>
+                <li>Update prices and photos</li>
+                <li>Mark vehicles reserved or sold</li>
+            </ul>
         </section>
 
         <section class="loginCard">
