@@ -19,7 +19,7 @@ Goal: good enough to show selected garages privately and get the first real gara
 - [x] Garage applications working
 - [x] Admin dashboard working
 - [x] Admin manage garages working
-- [ ] For Garages page final CTA layout
+- [x] For Garages page final CTA layout
 - [ ] Final test of applying as a garage
 - [ ] Final test of approving a garage
 - [ ] Final test of garage login and adding a car
