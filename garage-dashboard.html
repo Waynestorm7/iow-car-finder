@@ -754,11 +754,17 @@
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
     }
 
-    .dashboard-menu button:hover {
-      background: #07111d;
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 18px 38px rgba(15, 23, 42, .12);
+    @media (hover: hover) and (pointer: fine) {
+      .dashboard-menu button:hover {
+        background: #07111d;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 18px 38px rgba(15, 23, 42, .12);
+      }
+    }
+
+    .dashboard-menu button:focus {
+      outline: none;
     }
 
     .dashboard-menu button.active {
@@ -767,9 +773,11 @@
       border-color: rgba(230, 126, 34, .35);
     }
 
-    .dashboard-menu button.active:hover {
-      background: #c96513;
-      color: #fff;
+    @media (hover: hover) and (pointer: fine) {
+      .dashboard-menu button.active:hover {
+        background: #c96513;
+        color: #fff;
+      }
     }
 
     #logout {
@@ -922,6 +930,7 @@
       .carRow {
         flex-direction: column;
         align-items: stretch;
+        padding: 14px;
       }
 
       .left {
@@ -935,8 +944,8 @@
 
       .preview {
         width: 100%;
-        height: 165px;
-        border-radius: 18px;
+        height: 145px;
+        border-radius: 16px;
       }
 
       .name {
@@ -947,8 +956,8 @@
         width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 18px;
+        gap: 8px;
+        margin-top: 14px;
         margin-left: 0 !important;
         justify-content: stretch !important;
       }
@@ -957,10 +966,10 @@
       .carActions a {
         width: 100%;
         margin: 0;
-        min-height: 44px;
-        padding: 10px 12px;
+        min-height: 40px;
+        padding: 9px 10px;
         border-radius: 999px;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 800;
       }
 
