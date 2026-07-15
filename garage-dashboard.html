@@ -484,6 +484,15 @@
       margin-bottom: 0;
     }
 
+    .carActions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      margin-left: 24px;
+      flex-wrap: wrap;
+    }
+
     .left {
       display: flex;
       align-items: center;
@@ -886,7 +895,29 @@
       display: none;
     }
 
-    @media (max-width:1050px) {
+    @media (min-width:701px) and (max-width:1100px) {
+      .carRow {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .left {
+        width: 100%;
+      }
+
+      .carActions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+      }
+
+      .carActions button,
+      .carActions a {
+        min-height: 42px;
+      }
+    }
+
+    @media (max-width:700px) {
 
       .carRow {
         flex-direction: column;
@@ -898,9 +929,13 @@
         display: block;
       }
 
+      .left>div {
+        margin-top: 12px;
+      }
+
       .preview {
         width: 100%;
-        height: 210px;
+        height: 165px;
         border-radius: 18px;
       }
 
@@ -908,119 +943,110 @@
         white-space: normal;
       }
 
-      .carRow>div:last-child {
+      .carActions {
         width: 100%;
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 10px;
         margin-top: 18px;
         margin-left: 0 !important;
         justify-content: stretch !important;
       }
 
-      .carRow>div:last-child button,
-      .carRow>div:last-child a {
-        width: calc(100% - 22px);
-        margin-left: auto;
-        margin-right: auto;
-        min-height: 46px;
-        padding: 10px 14px;
-        border-radius: 999px;
-        font-size: 15px;
-        font-weight: 700;
-      }
-
-      .btnStatus {
-        background: #1f3b57;
-        color: #fff;
-        border: none;
-      }
-
-      .btnEdit {
-        min-height: 36px;
-        font-size: 14px;
-      }
-
-      .danger {
-        min-height: 36px;
-        font-size: 14px;
-      }
-
-      @media (max-width: 520px) {
-        main {
-          padding: 14px 8px;
-        }
-
-        .card {
-          padding: 18px;
-          border-radius: 18px;
-        }
-
-        .dashboard-form-hero {
-          padding: 22px 18px;
-          border-radius: 18px;
-        }
-
-        .dashboard-form-hero h2 {
-          font-size: 1.55rem;
-        }
-
-        .dashboard-form-hero p {
-          font-size: .92rem;
-        }
-
-        .dashboard-note {
-          font-size: .9rem;
-          padding: 12px 13px;
-        }
-
-        .formSection {
-          padding: 24px 0;
-        }
-
-        .formSection h3 {
-          font-size: 1.15rem;
-        }
-
-        .formSection .sectionHint {
-          font-size: .88rem;
-        }
-
-        label {
-          font-size: .86rem;
-        }
-
-        input,
-        textarea,
-        select {
-          font-size: 16px;
-          padding: 12px 13px;
-          border-radius: 11px;
-        }
-
-        .formActions {
-          padding-top: 18px;
-        }
-
-        .formActions .btn {
-          width: 100%;
-          min-width: 0;
-        }
-      }
-
-      .welcome-actions {
+      .carActions button,
+      .carActions a {
         width: 100%;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-        justify-content: stretch;
+        margin: 0;
+        min-height: 44px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
       }
 
-      .welcome-actions button {
+      .carActions .danger {
+        grid-column: 1 / -1;
+        max-width: 100%;
+        margin-top: 4px;
+      }
+    }
+
+    .btnStatus {
+      background: #1f3b57;
+      color: #fff;
+      border: none;
+    }
+
+    .btnEdit {
+      min-height: 36px;
+      font-size: 14px;
+    }
+
+    .danger {
+      min-height: 36px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 14px 8px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 18px;
+      }
+
+      .dashboard-form-hero {
+        padding: 22px 18px;
+        border-radius: 18px;
+      }
+
+      .dashboard-form-hero h2 {
+        font-size: 1.55rem;
+      }
+
+      .dashboard-form-hero p {
+        font-size: .92rem;
+      }
+
+      .dashboard-note {
+        font-size: .9rem;
+        padding: 12px 13px;
+      }
+
+      .formSection {
+        padding: 24px 0;
+      }
+
+      .formSection h3 {
+        font-size: 1.15rem;
+      }
+
+      .formSection .sectionHint {
+        font-size: .88rem;
+      }
+
+      label {
+        font-size: .86rem;
+      }
+
+      input,
+      textarea,
+      select {
+        font-size: 16px;
+        padding: 12px 13px;
+        border-radius: 11px;
+      }
+
+      .formActions {
+        padding-top: 18px;
+      }
+
+      .formActions .btn {
         width: 100%;
         min-width: 0;
       }
-
     }
   </style>
 </head>
@@ -1219,7 +1245,7 @@
 
     <div id="myCarsSection" style="display:none;">
       <div class="card">
-        <h2>My Cars</h2>
+        <h2>My stock</h2>
 
         <div class="hint">
           Manage your vehicles. Sold vehicles are shown at the bottom of your stock list.
@@ -1698,7 +1724,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
               </div>
             </div>
 
-            <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-left:24px; flex-wrap:wrap;">
+           <div class="carActions">
   ${car.status === "reserved"
               ? `<button type="button" class="btnStatus" data-status="available">Make Available</button>`
               : `<button type="button" class="btnStatus" data-status="reserved">Reserve</button>`
