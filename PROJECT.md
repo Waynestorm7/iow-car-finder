@@ -73,7 +73,7 @@ Public Website
 [x] Check For Garages page has clear approved garage login link
 [x] Public page headers standardised across main pages
 [x] Real mobile check completed across public pages
-
+[x] Homepage garage owner CTA improved
 
 [x] Supabase migration
 [x] Authentication enabled
@@ -141,7 +141,7 @@ Garage Profile & Features
 Garage / Dashboard Improvements
 
 [ ] Premium Add/Edit Car redesign
-[ ] Premium dashboard UI
+[x] Premium dashboard UI
 [x] Polish My Cars section
 [x] Mobile optimisation
 [x] Upload garage logo
