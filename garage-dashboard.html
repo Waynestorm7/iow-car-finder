@@ -935,21 +935,30 @@
 
       .left {
         width: 100%;
-        display: block;
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 14px;
+        align-items: center;
       }
 
       .left>div {
-        margin-top: 12px;
+        margin-top: 0;
       }
 
       .preview {
-        width: 100%;
-        height: 145px;
-        border-radius: 16px;
+        width: 150px;
+        height: 105px;
+        border-radius: 15px;
       }
 
       .name {
+        font-size: 1rem;
+        line-height: 1.2;
         white-space: normal;
+      }
+
+      .meta {
+        font-size: .86rem;
       }
 
       .carActions {
@@ -957,7 +966,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
-        margin-top: 14px;
+        margin-top: 12px;
         margin-left: 0 !important;
         justify-content: stretch !important;
       }
@@ -1728,7 +1737,17 @@
 ${car.status === "reserved" ? `<span class="statusBadge reserved">Reserved</span>` : ""}
 ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 </div>
-                <div class="meta">${escapeText(money(car.price))} • ${escapeText(car.year || "")}</div>
+               <div class="meta">
+  ${escapeText(money(car.price))} • ${escapeText(car.year || "")}
+</div>
+
+${car.mileage || car.colour ? `
+  <div class="meta">
+    ${car.mileage ? `${Number(car.mileage).toLocaleString("en-GB")} miles` : ""}
+    ${car.mileage && car.colour ? " • " : ""}
+    ${car.colour ? escapeText(car.colour) : ""}
+  </div>
+` : ""}
                 ${car.soldDate ? `<div class="meta">Sold date: ${escapeText(car.soldDate)}</div>` : ``}
               </div>
             </div>
