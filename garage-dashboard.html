@@ -714,205 +714,7 @@
       border-radius: 8px
     }
 
-    .dashboard-menu {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin: 22px 0 24px;
-    }
-
-    .dashboard-menu button {
-      min-height: 74px;
-      padding: 14px 16px;
-      border: 1px solid rgba(255, 255, 255, .12);
-      border-radius: 18px;
-      background: linear-gradient(135deg, #1f3b57, #142b43);
-      color: #fff;
-      font-size: 1.05rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: .18s ease;
-      letter-spacing: .2px;
-      box-shadow: 0 10px 26px rgba(15, 23, 42, .12);
-    }
-
-    @media (max-width: 800px) {
-      .dashboard-menu {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-
-      .dashboard-menu button {
-        min-height: 64px;
-        font-size: 1rem;
-      }
-    }
-
-    .dashboard-menu button:hover {
-      background: #07111d;
-      border-color: #e67e22;
-      color: #fff;
-      transform: translateY(-2px);
-    }
-
-    .dashboard-welcome {
-      margin-top: 26px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 0 14px 40px rgba(15, 23, 42, .08);
-      display: flex;
-      justify-content: space-between;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .welcome-kicker {
-      margin: 0 0 8px;
-      color: var(--brand);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      font-size: .82rem;
-    }
-
-    .dashboard-welcome h2 {
-      margin: 0 0 10px;
-      font-size: 1.8rem;
-      color: var(--text);
-    }
-
-    .dashboard-welcome p {
-      margin: 0;
-      max-width: 620px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .welcome-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .welcome-actions button {
-      border: none;
-      border-radius: 999px;
-      padding: 13px 18px;
-      font-weight: 800;
-      cursor: pointer;
-      font-size: .95rem;
-    }
-
-    #welcomeAddBtn {
-      background: var(--brand);
-      color: #fff;
-    }
-
-    #welcomeCarsBtn {
-      background: #07111d;
-      color: #fff;
-    }
-
-    .dashboard-welcome {
-      margin-top: 26px;
-      background:
-        radial-gradient(circle at top left, rgba(230, 126, 34, .18), transparent 32%),
-        linear-gradient(135deg, #07111d, #10263d);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, .12);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, .22);
-      display: flex;
-      justify-content: space-between;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .welcome-kicker {
-      margin: 0 0 8px;
-      color: var(--brand);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-size: .82rem;
-    }
-
-    .dashboard-welcome h2 {
-      margin: 0 0 10px;
-      font-size: 2rem;
-      color: #fff;
-    }
-
-    .dashboard-welcome p {
-      margin: 0;
-      max-width: 620px;
-      color: rgba(255, 255, 255, .76);
-      line-height: 1.5;
-    }
-
-    .welcome-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .welcome-actions button {
-      border: none;
-      border-radius: 999px;
-      padding: 13px 18px;
-      font-weight: 900;
-      cursor: pointer;
-      font-size: .95rem;
-    }
-
-    #welcomeAddBtn {
-      background: var(--brand);
-      color: #fff;
-    }
-
-    #welcomeCarsBtn {
-      background: rgba(255, 255, 255, .1);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, .18);
-    }
-
-    @media (max-width: 800px) {
-      .dashboard-welcome {
-        padding: 24px;
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .dashboard-welcome h2 {
-        font-size: 1.55rem;
-      }
-
-      .welcome-actions {
-        justify-content: stretch;
-        flex-direction: column;
-      }
-
-      .welcome-actions button {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 800px) {
-      .dashboard-welcome {
-        align-items: stretch;
-      }
-    }
-
-    #addCarSection {
-      display: none;
-    }
-
-    /* ---------- Dashboard home polish ---------- */
+    /* ---------- Dashboard home ---------- */
 
     .dashboard-subtitle {
       margin: 8px 0 0;
@@ -925,7 +727,7 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
-      margin: 18px 0 22px;
+      margin: 18px 0 12px;
     }
 
     .dashboard-menu button {
@@ -950,14 +752,15 @@
       box-shadow: 0 18px 38px rgba(15, 23, 42, .12);
     }
 
-    #show-add-car {
+    .dashboard-menu button.active {
       background: var(--brand);
       color: #fff;
       border-color: rgba(230, 126, 34, .35);
     }
 
-    #show-add-car:hover {
+    .dashboard-menu button.active:hover {
       background: #c96513;
+      color: #fff;
     }
 
     #logout {
@@ -970,29 +773,77 @@
     }
 
     .dashboard-welcome {
-      margin-top: 22px;
-      padding: 28px;
+      margin-top: 0;
+      background:
+        radial-gradient(circle at top left, rgba(230, 126, 34, .18), transparent 32%),
+        linear-gradient(135deg, #07111d, #10263d);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .12);
       border-radius: 24px;
-      align-items: flex-end;
+      padding: 28px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, .22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .welcome-kicker {
+      margin: 0 0 8px;
+      color: var(--brand);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .82rem;
     }
 
     .dashboard-welcome h2 {
+      margin: 0 0 10px;
       font-size: 1.85rem;
+      color: #fff;
     }
 
     .dashboard-welcome p {
+      margin: 0;
+      max-width: 620px;
+      color: rgba(255, 255, 255, .76);
+      line-height: 1.5;
       font-size: 1rem;
     }
 
+    .welcome-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+    }
+
     .welcome-actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 18px;
       min-width: 170px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: .95rem;
+    }
+
+    #welcomeAddBtn {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    #welcomeCarsBtn {
+      background: rgba(255, 255, 255, .1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .18);
     }
 
     @media (max-width: 800px) {
       .dashboard-menu {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
-        margin: 16px 0 20px;
+        margin: 16px 0 12px;
       }
 
       .dashboard-menu button {
@@ -1003,6 +854,8 @@
       }
 
       .dashboard-welcome {
+        flex-direction: column;
+        align-items: stretch;
         padding: 22px 20px;
         gap: 22px;
       }
@@ -1014,9 +867,26 @@
       .dashboard-welcome p {
         font-size: .96rem;
       }
+
+      .welcome-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        justify-content: stretch;
+      }
+
+      .welcome-actions button {
+        width: 100%;
+        min-width: 0;
+      }
     }
 
-    @media (max-width:700px) {
+    #addCarSection {
+      display: none;
+    }
+
+    @media (max-width:1050px) {
 
       .carRow {
         flex-direction: column;
@@ -1900,6 +1770,8 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
           const editBtn = row.querySelector(".btnEdit");
 
           editBtn.addEventListener("click", () => {
+            setActiveDashboardButton(showAddCarBtn);
+
             editingCar = car;
 
             addCarSection.style.display = "grid";
@@ -2111,6 +1983,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 
         addCarSection.style.display = "none";
         myCarsSection.style.display = "block";
+        setActiveDashboardButton(showMyCarsBtn);
 
         renderCars();
       } catch {
@@ -2130,6 +2003,17 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
     const dashboardWelcome = document.getElementById("dashboardWelcome");
     const welcomeAddBtn = document.getElementById("welcomeAddBtn");
     const welcomeCarsBtn = document.getElementById("welcomeCarsBtn");
+
+    function setActiveDashboardButton(activeButton) {
+      [showAddCarBtn, showMyCarsBtn, showGarageProfileBtn].forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      if (activeButton) {
+        activeButton.classList.add("active");
+      }
+    }
+
     welcomeAddBtn.addEventListener("click", () => {
       showAddCarBtn.click();
     });
@@ -2138,6 +2022,8 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
       showMyCarsBtn.click();
     });
     showAddCarBtn.addEventListener("click", () => {
+      setActiveDashboardButton(showAddCarBtn);
+
       editingCar = null;
 
       nameInput.value = "";
@@ -2201,12 +2087,15 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
 
       addCarSection.style.display = "none";
       myCarsSection.style.display = "block";
+      setActiveDashboardButton(showMyCarsBtn);
 
       autoGrow(descriptionInput);
       autoGrow(extrasInput);
     });
 
     showMyCarsBtn.addEventListener("click", () => {
+      setActiveDashboardButton(showMyCarsBtn);
+
       dashboardWelcome.style.display = "none";
       addCarSection.style.display = "none";
       myCarsSection.style.display = "block";
@@ -2214,6 +2103,7 @@ ${car.status === "sold" ? `<span class="statusBadge sold">Sold</span>` : ""}
     });
 
     showGarageProfileBtn.addEventListener("click", async () => {
+      setActiveDashboardButton(showGarageProfileBtn);
 
       dashboardWelcome.style.display = "none";
       addCarSection.style.display = "none";
