@@ -647,9 +647,13 @@
                     }
                 }
 
-                garageIntro.textContent = garage.description
-                    ? garage.description
-                    : "Approved Isle of Wight garage listing vehicles on IOW Car Finder.";
+                if (garage.description && garage.description.trim()) {
+                    garageIntro.textContent = garage.description;
+                    garageIntro.style.display = "block";
+                } else {
+                    garageIntro.textContent = "";
+                    garageIntro.style.display = "none";
+                }
 
                 stockCount.textContent = availableCount;
 
