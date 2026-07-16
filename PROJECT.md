@@ -9,51 +9,51 @@ We do not rewrite this roadmap. We only tick off completed work or add new tasks
 
 Goal: good enough to show selected garages privately and get the first real garages onboarded.
 
-- [x] Live website on main domain
-- [x] Home page usable
-- [x] Cars page usable
-- [x] Car detail page usable
-- [x] Garages page usable
-- [x] Garage profile page usable
-- [x] Garage dashboard working
-- [x] Garage applications working
-- [x] Admin dashboard working
-- [x] Admin manage garages working
-- [x] For Garages page final CTA layout
-- [ ] Final test of applying as a garage
-- [ ] Final test of approving a garage
-- [ ] Final test of garage login and adding a car
-- [ ] Remove or hide obvious test/demo content
+[x] Live website on main domain
+[x] Home page usable
+[x] Cars page usable
+[x] Car detail page usable
+[x] Garages page usable
+[x] Garage profile page usable
+[x] Garage dashboard working
+[x] Garage applications working
+[x] Admin dashboard working
+[x] Admin manage garages working
+[x] For Garages page final CTA layout
+[x] Final test of applying as a garage
+[x] Final test of approving a garage
+[x] Final test of garage login and adding a car
+[ ] Remove or hide obvious test/demo content
 
 ### Stage 2 — Public Push Ready
 
 Goal: good enough to push hard on Facebook, Instagram and local groups.
 
-- [ ] At least 3 real garages onboarded
-- [ ] Real garage stock uploaded
-- [ ] No obvious test/demo cars visible
-- [ ] Buyer journey tested on mobile
-- [ ] Home → Cars → Car detail → Contact garage tested
-- [ ] Home → Garages → Garage profile → View car tested
-- [ ] Call, email, directions and website buttons tested
-- [ ] Facebook page ready
-- [ ] Instagram page ready
-- [ ] First launch posts written
-- [ ] SEO switched from noindex/nofollow to index/follow
-- [ ] Final live site check complete
+[ ] At least 3 real garages onboarded
+[ ] Real garage stock uploaded
+[ ] No obvious test/demo cars visible
+[ ] Buyer journey tested on mobile
+[ ] Home → Cars → Car detail → Contact garage tested
+[ ] Home → Garages → Garage profile → View car tested
+[ ] Call, email, directions and website buttons tested
+[ ] Facebook page ready
+[ ] Instagram page ready
+[ ] First launch posts written
+[ ] SEO switched from noindex/nofollow to index/follow
+[ ] Final live site check complete
 
 ### Stage 3 — Paid Subscription Ready
 
 Goal: ready to charge garages after the free launch period.
 
-- [ ] Stripe account ready
-- [ ] Stripe subscription product created
-- [ ] £50/month plan created
-- [ ] 3-month free trial flow decided
-- [ ] Stripe Checkout added
-- [ ] Stripe billing portal added
-- [ ] Subscription status saved in Supabase
-- [ ] Trial expiry reminders planned
+[ ] Stripe account ready
+[ ] Stripe subscription product created
+[ ] £50/month plan created
+[ ] 3-month free trial flow decided
+[ ] Stripe Checkout added
+[ ] Stripe billing portal added
+[ ] Subscription status saved in Supabase
+[ ] Trial expiry reminders planned
 
 
 ✅ Completed
