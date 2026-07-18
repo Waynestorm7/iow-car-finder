@@ -159,14 +159,24 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      gap: 14px;
-      align-items: start
+      grid-template-columns: minmax(0, 1.15fr) minmax(380px, .95fr);
+      gap: 18px;
+      align-items: start;
     }
 
-    @media (max-width:900px) {
+    .layout>* {
+      min-width: 0;
+    }
+
+    .gallery,
+    .thumbStrip,
+    .thumbs {
+      min-width: 0;
+    }
+
+    @media (max-width:1050px) {
       .layout {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
       }
     }
 
@@ -229,28 +239,89 @@
 
     .thumbs {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap
+      gap: 12px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      padding: 3px 44px 12px;
+      scroll-padding-left: 44px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .thumbs {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .thumbs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .thumbStrip {
+      position: relative;
+    }
+
+    .thumbNav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(7, 17, 29, .9);
+      color: #fff;
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, .22);
+    }
+
+    .thumbNav:hover {
+      background: var(--accent);
+    }
+
+    .thumbNav:disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .thumbNavPrev {
+      left: 5px;
+    }
+
+    .thumbNavNext {
+      right: 5px;
     }
 
     .thumb {
-      width: 86px;
-      height: 62px;
-      object-fit: contain;
-      background: #f3f4f6;
-      border-radius: 12px;
-      border: 2px solid transparent;
+      flex: 0 0 108px;
+      width: 108px;
+      height: 78px;
+      object-fit: cover;
+      background: #f8fafc;
+      border-radius: 15px;
+      border: 2px solid rgba(17, 24, 39, .08);
       cursor: pointer;
-      padding: 4px;
-      transition: transform .08s ease
+      padding: 3px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .08);
+      scroll-snap-align: start;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
 
     .thumb:hover {
-      transform: translateY(-1px)
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, .12);
     }
 
     .thumb.active {
-      border-color: var(--accent)
+      border-color: var(--accent);
+      box-shadow:
+        0 0 0 3px rgba(230, 126, 34, .18),
+        0 12px 26px rgba(15, 23, 42, .14);
     }
 
     @media(max-width:900px) {
@@ -260,13 +331,37 @@
     }
 
     @media(max-width:600px) {
+      .gallery {
+        padding: 14px;
+        gap: 14px;
+      }
+
       .main-img {
-        height: 280px
+        height: 300px;
+      }
+
+      .thumbs {
+        gap: 12px;
+        padding: 3px 3px 10px;
       }
 
       .thumb {
-        width: 72px;
-        height: 54px
+        flex: 0 0 104px;
+        width: 104px;
+        height: 76px;
+        border-radius: 16px;
+      }
+
+      .thumbNav {
+        display: none;
+      }
+    }
+
+    @media(max-width:380px) {
+      .thumb {
+        flex-basis: 96px;
+        width: 96px;
+        height: 70px;
       }
     }
 
@@ -614,7 +709,13 @@
             <div id="mainStatusBadge" class="mainStatusBadge" style="display:none;"></div>
           </div>
 
-          <div id="thumbs" class="thumbs"></div>
+          <div class="thumbStrip">
+            <button id="thumbPrev" class="thumbNav thumbNavPrev" type="button" aria-label="Previous photos">‹</button>
+
+            <div id="thumbs" class="thumbs"></div>
+
+            <button id="thumbNext" class="thumbNav thumbNavNext" type="button" aria-label="More photos">›</button>
+          </div>
         </div>
       </div>
 
@@ -904,6 +1005,8 @@
 
         const mainImg = document.getElementById("mainImg");
         const thumbs = document.getElementById("thumbs");
+        const thumbPrev = document.getElementById("thumbPrev");
+        const thumbNext = document.getElementById("thumbNext");
 
         function setMain(index) {
           if (mainImg) mainImg.src = photos[index];
@@ -914,6 +1017,39 @@
             });
           }
         }
+
+        function updateThumbNav() {
+          if (!thumbs || !thumbPrev || !thumbNext) return;
+
+          const maxScroll = thumbs.scrollWidth - thumbs.clientWidth;
+          const hasOverflow = maxScroll > 8;
+
+          thumbPrev.disabled = !hasOverflow || thumbs.scrollLeft <= 8;
+          thumbNext.disabled = !hasOverflow || thumbs.scrollLeft >= maxScroll - 8;
+        }
+
+        function scrollThumbs(direction) {
+          if (!thumbs) return;
+
+          thumbs.scrollBy({
+            left: direction * 260,
+            behavior: "smooth"
+          });
+        }
+
+        if (thumbPrev) {
+          thumbPrev.addEventListener("click", () => scrollThumbs(-1));
+        }
+
+        if (thumbNext) {
+          thumbNext.addEventListener("click", () => scrollThumbs(1));
+        }
+
+        if (thumbs) {
+          thumbs.addEventListener("scroll", updateThumbNav);
+        }
+
+        window.addEventListener("resize", updateThumbNav);
 
         if (thumbs) {
           thumbs.innerHTML = "";
@@ -931,6 +1067,8 @@
         }
 
         setMain(0);
+
+        requestAnimationFrame(updateThumbNav);
 
         if (mainImg) {
           mainImg.addEventListener("click", () => {
