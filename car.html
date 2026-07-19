@@ -827,6 +827,21 @@
       return num.toLocaleString("en-GB") + " miles";
     }
 
+    function cleanServiceHistory(value) {
+      const text = String(value || "").trim();
+      const lower = text.toLowerCase();
+
+      if (!text) return "";
+
+      if (lower === "yes") return "Full service history";
+      if (lower === "no") return "No service history";
+      if (lower === "full") return "Full service history";
+      if (lower === "part") return "Part service history";
+      if (lower === "none") return "No service history";
+
+      return text;
+    }
+
     function addSpec(specGrid, label, value) {
       const v = String(value ?? "").trim();
       if (!v) return;
@@ -1180,12 +1195,18 @@ Thanks`;
         const specGrid = document.getElementById("specGrid");
         if (specGrid) {
           specGrid.innerHTML = "";
+
           if (car.year) addSpec(specGrid, "Year", car.year);
           addSpec(specGrid, "Mileage", miles(car.mileage));
           if (car.engine) addSpec(specGrid, "Engine", car.engine);
           if (car.fuel) addSpec(specGrid, "Fuel", car.fuel);
           if (car.transmission) addSpec(specGrid, "Transmission", car.transmission);
           if (car.colour) addSpec(specGrid, "Colour", car.colour);
+
+          const serviceHistoryText = cleanServiceHistory(car.serviceHistory || car.service_history || "");
+          if (serviceHistoryText) {
+            addSpec(specGrid, "Service history", serviceHistoryText);
+          }
 
           const specsWrap = document.getElementById("specsWrap");
           if (specsWrap) specsWrap.style.display = specGrid.children.length ? "block" : "none";

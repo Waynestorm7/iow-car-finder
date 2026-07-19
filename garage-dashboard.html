@@ -630,6 +630,31 @@
       margin-top: 6px
     }
 
+    .quickChips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 9px;
+    }
+
+    .quickChip {
+      border: 1px solid #d7dee8;
+      background: #f8fafc;
+      color: #111827;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: .84rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, .05);
+    }
+
+    .quickChip:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: #fff7ed;
+    }
+
     .photoGrid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -1133,16 +1158,15 @@
           <div class="fieldGrid basicDetailsGrid">
 
             <div>
-              <label for="name">Make & Model</label>
-              <input id="name" type="text" placeholder="Volkswagen Golf GTI">
+              <label for="name">Vehicle title</label>
+              <input id="name" type="text" placeholder="Volkswagen Golf GTI 2.0 TSI DSG">
             </div>
 
             <div class="fieldGrid two">
 
               <div>
                 <label for="price">Price (£)</label>
-                <input id="price" type="text" inputmode="numeric" placeholder="12995"
-                  oninput="this.value=this.value.replace(/\D/g,'')">
+                <input id="price" type="text" inputmode="numeric" placeholder="12,995" autocomplete="off">
               </div>
 
               <div>
@@ -1180,25 +1204,44 @@
           <div class="fieldGrid vehicleDetailsGrid">
             <div>
               <label for="mileage">Mileage</label>
-              <input id="mileage" class="field-medium" type="text" inputmode="numeric" placeholder="42000"
-                oninput="this.value=this.value.replace(/\D/g,'')">
+              <input id="mileage" class="field-medium" type="text" inputmode="numeric" placeholder="90,140"
+                autocomplete="off">
             </div>
 
             <div>
               <label for="owners">Owners</label>
               <input id="owners" class="field-small" type="text" inputmode="numeric" placeholder="2"
                 oninput="this.value=this.value.replace(/\D/g,'').slice(0,2)">
+
+              <div class="quickChips" data-target="owners">
+                <button class="quickChip" type="button" data-value="1">1</button>
+                <button class="quickChip" type="button" data-value="2">2</button>
+                <button class="quickChip" type="button" data-value="3">3</button>
+                <button class="quickChip" type="button" data-value="4">4</button>
+              </div>
             </div>
 
 
             <div>
               <label for="fuel">Fuel</label>
               <input id="fuel" type="text" placeholder="Petrol / Diesel / Hybrid / Electric" />
+
+              <div class="quickChips" data-target="fuel">
+                <button class="quickChip" type="button" data-value="Petrol">Petrol</button>
+                <button class="quickChip" type="button" data-value="Diesel">Diesel</button>
+                <button class="quickChip" type="button" data-value="Hybrid">Hybrid</button>
+                <button class="quickChip" type="button" data-value="Electric">Electric</button>
+              </div>
             </div>
 
             <div>
               <label for="transmission">Transmission</label>
               <input id="transmission" type="text" placeholder="Manual / Automatic" />
+
+              <div class="quickChips" data-target="transmission">
+                <button class="quickChip" type="button" data-value="Manual">Manual</button>
+                <button class="quickChip" type="button" data-value="Automatic">Automatic</button>
+              </div>
             </div>
 
             <div>
@@ -1214,6 +1257,12 @@
 
           <label for="serviceHistory">Service history</label>
           <input id="serviceHistory" class="field-large" type="text" placeholder="Full service history" />
+
+          <div class="quickChips" data-target="serviceHistory">
+            <button class="quickChip" type="button" data-value="Full service history">Full</button>
+            <button class="quickChip" type="button" data-value="Part service history">Part</button>
+            <button class="quickChip" type="button" data-value="No service history">None</button>
+          </div>
 
           <label>MOT until</label>
           <div class="fieldGrid two motGrid">
@@ -1293,7 +1342,7 @@
         <input id="garageName" type="text">
 
         <label>Phone Number</label>
-        <input id="garagePhone" type="tel">
+        <input id="garagePhone" type="tel" inputmode="numeric" autocomplete="off" placeholder="01983123456">
 
         <label>Email</label>
         <input id="garageEmail" type="email">
@@ -1484,6 +1533,21 @@
     function optNumber(val) {
       const n = Number(val);
       return Number.isFinite(n) ? n : null;
+    }
+
+    function cleanServiceHistory(value) {
+      const text = String(value || "").trim();
+      const lower = text.toLowerCase();
+
+      if (!text) return "";
+
+      if (lower === "yes") return "Full service history";
+      if (lower === "no") return "No service history";
+      if (lower === "full") return "Full service history";
+      if (lower === "part") return "Part service history";
+      if (lower === "none") return "No service history";
+
+      return text;
     }
 
     function autoGrow(el) {
@@ -1839,12 +1903,13 @@ ${car.mileage || car.colour ? `
             nameInput.value = car.name || "";
             yearInput.value = car.year || "";
             priceInput.value = car.price || "";
-            mileageInput.value = car.mileage || "";
+            mileageInput.value = car.mileage ? Number(car.mileage).toLocaleString("en-GB") : "";
             ownersInput.value = car.owners || "";
             fuelInput.value = car.fuel || "";
             transmissionInput.value = car.transmission || "";
             engineInput.value = car.engine || "";
             colourInput.value = car.colour || "";
+            serviceHistoryInput.value = cleanServiceHistory(car.serviceHistory || car.service_history || "");
             descriptionInput.value = car.description || "";
             extrasInput.value = car.extras || "";
 
@@ -1968,8 +2033,12 @@ ${car.mileage || car.colour ? `
       const engine = optText(engineInput.value); if (engine) payload.engine = engine;
       const colour = optText(colourInput.value); if (colour) payload.colour = colour;
 
-      const serviceHistory = optText(serviceHistoryInput.value);
-      if (serviceHistory) payload.serviceHistory = serviceHistory;
+      const serviceHistory = cleanServiceHistory(serviceHistoryInput.value);
+
+      if (serviceHistory) {
+        payload.serviceHistory = serviceHistory;
+        payload.service_history = serviceHistory;
+      }
 
       const mm = optText(motMonth.value);
       const yy = optText(motYear.value);
@@ -2202,16 +2271,6 @@ ${car.mileage || car.colour ? `
 
     });
 
-    function formatUKPhone(value) {
-      const digits = String(value || "").replace(/\D/g, "");
-
-      if (digits.length === 11 && digits.startsWith("01983")) {
-        return digits.slice(0, 5) + " " + digits.slice(5);
-      }
-
-      return String(value || "").trim();
-    }
-
     saveGarageBtn.addEventListener("click", async () => {
       let website = garageWebsiteInput.value.trim();
 
@@ -2283,6 +2342,149 @@ ${car.mileage || car.colour ? `
       renderCars();
 
     })();
+
+    function smartFormatText(value) {
+      const specialWords = {
+        gti: "GTI",
+        gtd: "GTD",
+        tsi: "TSI",
+        tfsi: "TFSI",
+        tdi: "TDI",
+        cdi: "CDI",
+        hdi: "HDI",
+        dci: "DCI",
+        dsg: "DSG",
+        cvt: "CVT",
+        suv: "SUV",
+        mpv: "MPV",
+        ev: "EV",
+        phev: "PHEV",
+        mhev: "MHEV",
+        mot: "MOT",
+        ulez: "ULEZ",
+        fsh: "FSH",
+        bmw: "BMW",
+        vw: "VW",
+        mg: "MG",
+        ds: "DS",
+        rs: "RS",
+        st: "ST",
+        amg: "AMG",
+        vxr: "VXR",
+        fr: "FR",
+        se: "SE",
+        sel: "SEL",
+        sri: "SRi",
+        ecoboost: "EcoBoost",
+        bluehdi: "BlueHDi",
+        cdti: "CDTi"
+      };
+
+      return String(value || "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .split(/(\s+|-|\/)/)
+        .map(part => {
+          const lower = part.toLowerCase();
+
+          if (part.trim() === "" || part === "-" || part === "/") {
+            return part;
+          }
+
+          if (specialWords[lower]) {
+            return specialWords[lower];
+          }
+
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        })
+        .join("")
+        .replace(/\bST-Line\b/g, "ST-Line")
+        .replace(/\bR-Line\b/g, "R-Line")
+        .replace(/\bS-Line\b/g, "S-Line")
+        .replace(/\bAMG Line\b/g, "AMG Line")
+        .replace(/\bM Sport\b/g, "M Sport");
+    }
+
+    function addSmartFormatting(id) {
+      const input = document.getElementById(id);
+
+      if (!input) {
+        return;
+      }
+
+      input.addEventListener("blur", () => {
+        input.value = smartFormatText(input.value);
+      });
+    }
+
+    [
+      "name",
+      "fuel",
+      "transmission",
+      "engine",
+      "colour"
+    ].forEach(addSmartFormatting);
+
+    function formatNumberWithCommas(value, maxDigits) {
+      const digits = String(value || "").replace(/\D/g, "").slice(0, maxDigits);
+
+      if (!digits) {
+        return "";
+      }
+
+      return Number(digits).toLocaleString("en-GB");
+    }
+
+    function addCommaFormatting(id, maxDigits) {
+      const input = document.getElementById(id);
+
+      if (!input) {
+        return;
+      }
+
+      input.addEventListener("input", () => {
+        input.value = formatNumberWithCommas(input.value, maxDigits);
+      });
+
+      input.addEventListener("blur", () => {
+        input.value = formatNumberWithCommas(input.value, maxDigits);
+      });
+    }
+
+    addCommaFormatting("price", 8);
+    addCommaFormatting("mileage", 7);
+
+    function addPhoneLimit(id) {
+      const input = document.getElementById(id);
+
+      if (!input) {
+        return;
+      }
+
+      input.addEventListener("input", () => {
+        input.value = String(input.value || "")
+          .replace(/\D/g, "")
+          .slice(0, 11);
+      });
+    }
+
+    addPhoneLimit("garagePhone");
+
+    document.querySelectorAll(".quickChips").forEach(group => {
+      const targetId = group.dataset.target;
+      const input = document.getElementById(targetId);
+
+      if (!input) {
+        return;
+      }
+
+      group.querySelectorAll(".quickChip").forEach(button => {
+        button.addEventListener("click", () => {
+          input.value = button.dataset.value || "";
+          input.dispatchEvent(new Event("blur"));
+        });
+      });
+    });
   </script>
 </body>
 

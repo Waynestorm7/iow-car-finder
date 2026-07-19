@@ -225,6 +225,7 @@ function mapDbCar(row) {
     engine: row.engine ?? null,
     owners: row.owners ?? null,
     colour: row.colour ?? null,
+    serviceHistory: row.serviceHistory ?? null,
 
     description: row.description ?? null,
     extras: row.extras ?? null,
@@ -306,6 +307,7 @@ async function dbInsertCar(payload) {
     engine: payload.engine ?? null,
     owners: payload.owners ?? null,
     colour: payload.colour ?? null,
+    serviceHistory: payload.serviceHistory ?? null,
     description: (payload.description && String(payload.description).trim())
       ? String(payload.description).trim()
       : null,
@@ -343,6 +345,7 @@ async function dbUpdateCar(payload) {
     engine: payload.engine ?? null,
     owners: payload.owners ?? null,
     colour: payload.colour ?? null,
+    serviceHistory: payload.serviceHistory ?? null,
     description: payload.description ?? null,
     photos: payload.photos ?? [],
     extras: payload.extras ?? null,
