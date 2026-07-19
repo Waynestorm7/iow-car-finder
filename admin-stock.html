@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="/cookie-consent.js" defer></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Admin Stock Manager | IOW Car Finder</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #fff;
+      --text: #111827;
+      --muted: #6b7280;
+      --brand: #07111d;
+      --accent: #e67e22;
+      --border: 1px solid rgba(17, 24, 39, .10);
+      --shadow: 0 12px 28px rgba(15, 23, 42, .08);
+      --r: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: #07111d;
+      color: #fff;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .top {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -.3px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, .86);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: .95rem;
+    }
+
+    nav a:hover {
+      color: #fff;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 16px 40px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(700px 220px at 0% 0%, rgba(230, 126, 34, .22), transparent 55%),
+        linear-gradient(135deg, #07111d, #102235);
+      color: #fff;
+      border-radius: 26px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1;
+      letter-spacing: -.8px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: rgba(255, 255, 255, .78);
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.25rem;
+      color: #111827;
+    }
+
+    label {
+      display: block;
+      font-size: .82rem;
+      color: #475467;
+      font-weight: 900;
+      margin: 12px 0 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(17, 24, 39, .14);
+      border-radius: 13px;
+      padding: 12px 13px;
+      font-size: 1rem;
+      background: #fff;
+      color: #111827;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(230, 126, 34, .75);
+      box-shadow: 0 0 0 4px rgba(230, 126, 34, .15);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 14px;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn.dark {
+      background: #07111d;
+      color: #fff;
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: #111827;
+      border: 1px solid rgba(17, 24, 39, .14);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid rgba(17, 24, 39, .08);
+      color: #344054;
+      line-height: 1.45;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .notice.good {
+      background: #ecfdf3;
+      border-color: rgba(22, 163, 74, .22);
+      color: #166534;
+    }
+
+    .notice.bad {
+      background: #fef2f2;
+      border-color: rgba(220, 38, 38, .22);
+      color: #991b1b;
+    }
+
+    .garageInfo {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #f8fafc;
+      border: 1px solid rgba(17, 24, 39, .08);
+      color: #344054;
+      line-height: 1.45;
+      font-size: .94rem;
+    }
+
+    .garageInfo strong {
+      color: #111827;
+    }
+
+    .carsHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .countPill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: #07111d;
+      color: #fff;
+      font-weight: 900;
+      font-size: .88rem;
+    }
+
+    .carList {
+      display: grid;
+      gap: 12px;
+    }
+
+    .carItem {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 24, 39, .08);
+      background: #fff;
+    }
+
+    .carItem img {
+      width: 110px;
+      height: 78px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #f3f4f6;
+    }
+
+    .carTitle {
+      font-weight: 950;
+      font-size: 1rem;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .carMeta {
+      color: #667085;
+      font-size: .9rem;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 7px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #166534;
+      font-weight: 900;
+      font-size: .78rem;
+      text-transform: uppercase;
+    }
+
+    .status.reserved {
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .status.sold {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .carActions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 9px;
+    }
+
+    .miniBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid rgba(17, 24, 39, .12);
+      color: #111827;
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .miniBtn.danger {
+      color: #991b1b;
+      border-color: rgba(220, 38, 38, .25);
+      background: #fff5f5;
+    }
+
+    .previewGrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .previewGrid img {
+      width: 74px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid rgba(17, 24, 39, .12);
+      background: #f3f4f6;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .top {
+        padding: 0 12px;
+      }
+
+      nav {
+        gap: 10px;
+      }
+
+      nav a {
+        font-size: .82rem;
+      }
+
+      .brand {
+        font-size: .98rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .row2 {
+        grid-template-columns: 1fr;
+      }
+
+      .carItem {
+        grid-template-columns: 90px 1fr;
+      }
+
+      .carItem img {
+        width: 90px;
+        height: 68px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="top">
+      <a class="brand" href="/admin-dashboard"><span>IOW</span> Admin</a>
+
+      <nav>
+        <a href="/admin-dashboard">Dashboard</a>
+        <a href="/admin-garages">Garages</a>
+        <a href="/garage-applications">Applications</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Admin Stock Manager</h1>
+      <p>
+        Add vehicles for any approved garage without logging in as that garage.
+        This is for launch support and onboarding.
+      </p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Admin access</h2>
+
+        <label for="adminKey">Admin key</label>
+        <input id="adminKey" type="password" placeholder="Enter admin key">
+
+        <button id="saveKeyBtn" class="btn dark" type="button">Save admin key</button>
+
+        <label for="garageSelect">Choose garage</label>
+        <select id="garageSelect">
+          <option value="">Load garages first...</option>
+        </select>
+
+        <button id="loadGaragesBtn" class="btn ghost" type="button">Load garages</button>
+        <button id="loadCarsBtn" class="btn ghost" type="button">Load selected garage stock</button>
+
+        <div id="garageInfo" class="garageInfo" style="display:none;"></div>
+        <div id="sideMessage" class="notice" style="display:none;"></div>
+      </section>
+
+      <section class="card">
+        <h2 id="formTitle">Add vehicle for selected garage</h2>
+
+        <form id="carForm">
+          <div class="row2">
+            <div>
+              <label for="name">Car name</label>
+              <input id="name" required placeholder="Ford Fiesta Zetec">
+            </div>
+
+            <div>
+              <label for="price">Price</label>
+              <input id="price" required placeholder="6750">
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label for="year">Year</label>
+              <input id="year" required placeholder="2019">
+            </div>
+
+            <div>
+              <label for="mileage">Mileage</label>
+              <input id="mileage" placeholder="90140">
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label for="fuel">Fuel</label>
+              <select id="fuel">
+                <option value="">Select fuel</option>
+                <option>Petrol</option>
+                <option>Diesel</option>
+                <option>Hybrid</option>
+                <option>Electric</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="transmission">Transmission</label>
+              <select id="transmission">
+                <option value="">Select transmission</option>
+                <option>Manual</option>
+                <option>Automatic</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label for="engine">Engine</label>
+              <input id="engine" placeholder="1.2">
+            </div>
+
+            <div>
+              <label for="colour">Colour</label>
+              <input id="colour" placeholder="Black">
+            </div>
+          </div>
+
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Short advert description..."></textarea>
+
+          <label for="extras">Key features</label>
+          <textarea id="extras" placeholder="Air conditioning&#10;Bluetooth&#10;Parking sensors"></textarea>
+
+          <label for="photos">Photos</label>
+          <input id="photos" type="file" accept="image/*" multiple>
+
+          <div id="photoPreview" class="previewGrid"></div>
+
+          <div id="existingPhotosNote" class="notice" style="display:none;"></div>
+
+          <button id="addCarBtn" class="btn primary" type="submit">Upload photos and add vehicle</button>
+          <button id="cancelEditBtn" class="btn ghost" type="button" style="display:none;">Cancel edit</button>
+
+          <div id="formMessage" class="notice" style="display:none;"></div>
+        </form>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:18px;">
+      <div class="carsHeader">
+        <h2 style="margin:0;">Selected garage stock</h2>
+        <span id="carCount" class="countPill">0</span>
+      </div>
+
+      <div id="carList" class="carList">
+        <div class="notice">Choose a garage and load stock.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const adminKeyInput = document.getElementById("adminKey");
+    const saveKeyBtn = document.getElementById("saveKeyBtn");
+    const loadGaragesBtn = document.getElementById("loadGaragesBtn");
+    const loadCarsBtn = document.getElementById("loadCarsBtn");
+    const garageSelect = document.getElementById("garageSelect");
+    const garageInfo = document.getElementById("garageInfo");
+    const sideMessage = document.getElementById("sideMessage");
+
+    const carForm = document.getElementById("carForm");
+    const addCarBtn = document.getElementById("addCarBtn");
+    const formMessage = document.getElementById("formMessage");
+    const carList = document.getElementById("carList");
+    const carCount = document.getElementById("carCount");
+    const photoInput = document.getElementById("photos");
+    const photoPreview = document.getElementById("photoPreview");
+    const formTitle = document.getElementById("formTitle");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const existingPhotosNote = document.getElementById("existingPhotosNote");
+
+    let garages = [];
+    let currentGarage = null;
+    let currentCars = [];
+    let editingCarId = null;
+    let editingCar = null;
+
+    const savedKey = localStorage.getItem("iow_admin_key") || "";
+    adminKeyInput.value = savedKey;
+
+    function adminKey() {
+      return String(adminKeyInput.value || "").trim();
+    }
+
+    function money(n) {
+      const num = Number(n);
+      if (!Number.isFinite(num)) return "£0";
+      return "£" + num.toLocaleString("en-GB");
+    }
+
+    function escapeText(value) {
+      return String(value || "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function showMessage(el, text, type) {
+      el.textContent = text;
+      el.className = "notice" + (type ? " " + type : "");
+      el.style.display = "block";
+    }
+
+    function hideMessage(el) {
+      el.textContent = "";
+      el.style.display = "none";
+    }
+
+    saveKeyBtn.addEventListener("click", () => {
+      localStorage.setItem("iow_admin_key", adminKey());
+      showMessage(sideMessage, "Admin key saved on this device.", "good");
+    });
+
+    photoInput.addEventListener("change", () => {
+      photoPreview.innerHTML = "";
+
+      const files = Array.from(photoInput.files || []).slice(0, 12);
+
+      files.forEach(file => {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        photoPreview.appendChild(img);
+      });
+    });
+
+    async function loadGarages() {
+      hideMessage(sideMessage);
+
+      if (!adminKey()) {
+        showMessage(sideMessage, "Enter your admin key first.", "bad");
+        return;
+      }
+
+      garageSelect.innerHTML = `<option value="">Loading garages...</option>`;
+
+      try {
+        const res = await fetch("/admin-garages-data", {
+          headers: {
+            "x-garage-key": adminKey()
+          }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not load garages.");
+        }
+
+        garages = data.garages || [];
+
+        garageSelect.innerHTML = `<option value="">Choose a garage...</option>` + garages.map(g => {
+          const total = g.counts?.total ?? 0;
+          return `<option value="${escapeText(g.id)}">${escapeText(g.name)} (${total} listings)</option>`;
+        }).join("");
+
+        showMessage(sideMessage, "Garages loaded.", "good");
+
+      } catch (err) {
+        console.error(err);
+        garageSelect.innerHTML = `<option value="">Could not load garages</option>`;
+        showMessage(sideMessage, err.message || "Could not load garages.", "bad");
+      }
+    }
+
+    async function loadCars() {
+      hideMessage(sideMessage);
+
+      const garageId = garageSelect.value;
+
+      if (!adminKey()) {
+        showMessage(sideMessage, "Enter your admin key first.", "bad");
+        return;
+      }
+
+      if (!garageId) {
+        showMessage(sideMessage, "Choose a garage first.", "bad");
+        return;
+      }
+
+      carList.innerHTML = `<div class="notice">Loading stock...</div>`;
+
+      try {
+        const res = await fetch("/admin-cars-data?garageId=" + encodeURIComponent(garageId), {
+          headers: {
+            "x-garage-key": adminKey()
+          }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not load garage stock.");
+        }
+
+        currentGarage = data.garage || null;
+        renderGarageInfo(currentGarage);
+        renderCars(data.cars || []);
+
+      } catch (err) {
+        console.error(err);
+        carList.innerHTML = `<div class="notice bad">${escapeText(err.message || "Could not load stock.")}</div>`;
+      }
+    }
+
+    function startEditCar(id) {
+      const car = currentCars.find(c => String(c.id) === String(id));
+
+      if (!car) {
+        showMessage(sideMessage, "Could not find that vehicle.", "bad");
+        return;
+      }
+
+      editingCarId = car.id;
+      editingCar = car;
+
+      formTitle.textContent = "Edit vehicle";
+      addCarBtn.textContent = "Update vehicle";
+      cancelEditBtn.style.display = "inline-flex";
+
+      document.getElementById("name").value = car.name || "";
+      document.getElementById("price").value = car.price || "";
+      document.getElementById("year").value = car.year || "";
+      document.getElementById("mileage").value = car.mileage || "";
+      document.getElementById("fuel").value = car.fuel || "";
+      document.getElementById("transmission").value = car.transmission || "";
+      document.getElementById("engine").value = car.engine || "";
+      document.getElementById("colour").value = car.colour || "";
+      document.getElementById("description").value = car.description || "";
+      document.getElementById("extras").value = car.extras || "";
+
+      photoInput.value = "";
+      photoPreview.innerHTML = "";
+
+      const photoCount = Array.isArray(car.photos) ? car.photos.length : 0;
+
+      existingPhotosNote.style.display = "block";
+      existingPhotosNote.textContent = photoCount
+        ? photoCount + " existing photo(s) will be kept unless you choose new photos."
+        : "This vehicle has no existing photos. Choose new photos before updating.";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+      showMessage(formMessage, "Editing " + (car.name || "vehicle") + ".", "good");
+    }
+
+    function resetEditMode() {
+      editingCarId = null;
+      editingCar = null;
+
+      formTitle.textContent = "Add vehicle for selected garage";
+      addCarBtn.textContent = "Upload photos and add vehicle";
+      cancelEditBtn.style.display = "none";
+      existingPhotosNote.style.display = "none";
+      existingPhotosNote.textContent = "";
+
+      carForm.reset();
+      photoPreview.innerHTML = "";
+      hideMessage(formMessage);
+    }
+
+    cancelEditBtn.addEventListener("click", resetEditMode);
+
+    function renderGarageInfo(garage) {
+      if (!garage) {
+        garageInfo.style.display = "none";
+        garageInfo.innerHTML = "";
+        return;
+      }
+
+      garageInfo.style.display = "block";
+      garageInfo.innerHTML = `
+        <strong>${escapeText(garage.name)}</strong><br>
+        ${garage.address ? escapeText(garage.address) + "<br>" : ""}
+        ${garage.town ? escapeText(garage.town) + "<br>" : ""}
+        ${garage.postcode ? escapeText(garage.postcode) + "<br>" : ""}
+        ${garage.phone ? "<strong>Phone:</strong> " + escapeText(garage.phone) + "<br>" : ""}
+        ${garage.email ? "<strong>Email:</strong> " + escapeText(garage.email) : ""}
+      `;
+    }
+
+    function renderCars(cars) {
+      currentCars = cars || [];
+      carCount.textContent = currentCars.length;
+
+      if (!currentCars.length) {
+        carList.innerHTML = `<div class="notice">No cars found for this garage yet.</div>`;
+        return;
+      }
+
+      carList.innerHTML = currentCars.map(car => {
+        const status = String(car.status || "available").toLowerCase();
+        const statusClass = status === "reserved" ? "reserved" : status === "sold" ? "sold" : "";
+
+        const img = car.photo || (Array.isArray(car.photos) && car.photos[0]) || "/images/hero.png";
+
+        return `
+      <div class="carItem">
+        <img src="${escapeText(img)}" alt="Car photo">
+
+        <div>
+          <div class="carTitle">${escapeText(car.name)}</div>
+          <div class="carMeta">
+            ${car.year ? escapeText(car.year) + " · " : ""}
+            ${money(car.price)}
+            ${car.mileage ? " · " + Number(car.mileage).toLocaleString("en-GB") + " miles" : ""}
+          </div>
+
+          <span class="status ${statusClass}">${escapeText(status)}</span>
+
+          <div class="carActions">
+   <a class="miniBtn" href="/car?id=${encodeURIComponent(car.id)}" target="_blank" rel="noopener">Preview advert</a>
+
+<button class="miniBtn" type="button" onclick="startEditCar('${escapeText(car.id)}')">
+  Edit
+</button>
+
+<button class="miniBtn" type="button" onclick="setAdminStatus('${escapeText(car.id)}', 'available')">
+              Available
+            </button>
+
+            <button class="miniBtn" type="button" onclick="setAdminStatus('${escapeText(car.id)}', 'reserved')">
+              Reserved
+            </button>
+
+            <button class="miniBtn" type="button" onclick="setAdminStatus('${escapeText(car.id)}', 'sold')">
+              Sold
+            </button>
+
+            <button class="miniBtn danger" type="button" onclick="deleteAdminCar('${escapeText(car.id)}')">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+      }).join("");
+    }
+
+    async function setAdminStatus(id, status) {
+      if (!adminKey()) {
+        showMessage(sideMessage, "Enter your admin key first.", "bad");
+        return;
+      }
+
+      if (!id || !status) {
+        showMessage(sideMessage, "Missing car/status.", "bad");
+        return;
+      }
+
+      if (status === "sold") {
+        const ok = confirm("Mark this vehicle as sold?");
+        if (!ok) return;
+      }
+
+      try {
+        const res = await fetch("/admin-cars-status", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-garage-key": adminKey()
+          },
+          body: JSON.stringify({
+            id,
+            status
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not update status.");
+        }
+
+        showMessage(sideMessage, "Vehicle status updated.", "good");
+        await loadCars();
+
+      } catch (err) {
+        console.error(err);
+        showMessage(sideMessage, err.message || "Could not update status.", "bad");
+      }
+    }
+
+    async function deleteAdminCar(id) {
+      if (!adminKey()) {
+        showMessage(sideMessage, "Enter your admin key first.", "bad");
+        return;
+      }
+
+      const car = currentCars.find(c => String(c.id) === String(id));
+      const name = car?.name || "this vehicle";
+
+      const ok = confirm("Delete " + name + "? This cannot be undone.");
+      if (!ok) return;
+
+      try {
+        const res = await fetch("/admin-cars?id=" + encodeURIComponent(id), {
+          method: "DELETE",
+          headers: {
+            "x-garage-key": adminKey()
+          }
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not delete vehicle.");
+        }
+
+        showMessage(sideMessage, "Vehicle deleted.", "good");
+        await loadCars();
+
+      } catch (err) {
+        console.error(err);
+        showMessage(sideMessage, err.message || "Could not delete vehicle.", "bad");
+      }
+    }
+
+    async function uploadPhotos(files) {
+      const formData = new FormData();
+
+      files.forEach(file => {
+        formData.append("photos", file);
+      });
+
+      const res = await fetch("/admin-upload", {
+        method: "POST",
+        headers: {
+          "x-garage-key": adminKey()
+        },
+        body: formData
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Photo upload failed.");
+      }
+
+      return data.urls || [];
+    }
+
+    carForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      hideMessage(formMessage);
+
+      const garageId = garageSelect.value;
+      const files = Array.from(photoInput.files || []).slice(0, 12);
+      const isEditing = Boolean(editingCarId);
+
+      if (!adminKey()) {
+        showMessage(formMessage, "Enter your admin key first.", "bad");
+        return;
+      }
+
+      if (!garageId) {
+        showMessage(formMessage, "Choose a garage first.", "bad");
+        return;
+      }
+
+      if (!isEditing && !files.length) {
+        showMessage(formMessage, "Choose at least one photo.", "bad");
+        return;
+      }
+
+      const existingPhotos = Array.isArray(editingCar?.photos)
+        ? editingCar.photos.filter(Boolean)
+        : [];
+
+      if (isEditing && !files.length && !existingPhotos.length) {
+        showMessage(formMessage, "This vehicle has no existing photos. Choose at least one photo.", "bad");
+        return;
+      }
+
+      addCarBtn.disabled = true;
+      addCarBtn.textContent = files.length ? "Uploading photos..." : "Saving vehicle...";
+
+      try {
+        let urls = existingPhotos;
+
+        if (files.length) {
+          urls = await uploadPhotos(files);
+        }
+
+        addCarBtn.textContent = isEditing ? "Updating vehicle..." : "Saving vehicle...";
+
+        const payload = {
+          id: editingCarId,
+          garageId,
+          garage_id: garageId,
+          name: document.getElementById("name").value,
+          price: document.getElementById("price").value,
+          year: document.getElementById("year").value,
+          mileage: document.getElementById("mileage").value,
+          fuel: document.getElementById("fuel").value,
+          transmission: document.getElementById("transmission").value,
+          engine: document.getElementById("engine").value,
+          colour: document.getElementById("colour").value,
+          description: document.getElementById("description").value,
+          extras: document.getElementById("extras").value,
+          photos: urls
+        };
+
+        const res = await fetch(isEditing ? "/admin-cars" : "/cars", {
+          method: isEditing ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-garage-key": adminKey()
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Could not save vehicle.");
+        }
+
+        const successText = isEditing ? "Vehicle updated successfully." : "Vehicle added successfully.";
+
+        resetEditMode();
+
+        showMessage(formMessage, successText, "good");
+
+        await loadCars();
+
+      } catch (err) {
+        console.error(err);
+        showMessage(formMessage, err.message || "Could not save vehicle.", "bad");
+      } finally {
+        addCarBtn.disabled = false;
+        addCarBtn.textContent = editingCarId ? "Update vehicle" : "Upload photos and add vehicle";
+      }
+    });
+
+    loadGaragesBtn.addEventListener("click", loadGarages);
+    loadCarsBtn.addEventListener("click", loadCars);
+
+    garageSelect.addEventListener("change", () => {
+      currentGarage = garages.find(g => String(g.id) === String(garageSelect.value)) || null;
+      renderGarageInfo(currentGarage);
+      carList.innerHTML = `<div class="notice">Click “Load selected garage stock”.</div>`;
+      carCount.textContent = "0";
+    });
+
+    if (adminKey()) {
+      loadGarages();
+    }
+  </script>
+</body>
+
+</html>

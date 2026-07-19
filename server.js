@@ -560,6 +560,66 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
+  // =============================
+  // Admin: POST /admin-upload
+  // Field name: "photos" (up to 12)
+  // Returns: { success: true, urls: [...] }
+  // =============================
+  if (req.method === "POST" && pathname === "/admin-upload") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    return upload.array("photos", 12)(req, res, async (err) => {
+      if (err) {
+        console.error("admin multer error:", err);
+        return sendJson(res, 400, {
+          success: false,
+          message: "Upload parse failed"
+        });
+      }
+
+      const files = Array.isArray(req.files) ? req.files : [];
+
+      if (!files.length) {
+        return sendJson(res, 400, {
+          success: false,
+          message: "No files uploaded. Field name must be 'photos'."
+        });
+      }
+
+      try {
+        const urls = await Promise.all(
+          files.map((f) =>
+            cloudinary.uploader
+              .upload(f.path, { folder: "cars" })
+              .then((r) => r.secure_url)
+          )
+        );
+
+        files.forEach((f) => fs.unlink(f.path, () => { }));
+
+        return sendJson(res, 200, {
+          success: true,
+          urls
+        });
+
+      } catch (e) {
+        console.error("Admin Cloudinary upload failed:", e);
+
+        files.forEach((f) => fs.unlink(f.path, () => { }));
+
+        return sendJson(res, 500, {
+          success: false,
+          message: "Cloudinary upload failed"
+        });
+      }
+    });
+  }
+
   // -----------------------------
   // STATIC FILES
   // -----------------------------
@@ -1233,6 +1293,265 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Admin: GET /admin-cars-data?garageId=
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/admin-cars-data") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    const garageId = String(urlObj.searchParams.get("garageId") || "").trim();
+
+    if (!garageId) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing garageId"
+      });
+    }
+
+    try {
+      const garage = await dbGetGarageById(garageId);
+
+      if (!garage) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Garage not found"
+        });
+      }
+
+      const cars = await dbListCars();
+
+      const garageCars = cars.filter(
+        car => String(car.garageId) === String(garageId)
+      );
+
+      return sendJson(res, 200, {
+        success: true,
+        garage,
+        cars: garageCars
+      });
+
+    } catch (e) {
+      console.error("GET /admin-cars-data error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load garage cars."
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: POST /admin-cars-status
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/admin-cars-status") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const id = String(data.id || "").trim();
+    const status = String(data.status || "").trim().toLowerCase();
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
+    }
+
+    if (!["available", "reserved", "sold"].includes(status)) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Invalid status"
+      });
+    }
+
+    try {
+      const update = {
+        status,
+        sold: status === "sold",
+        soldDate: status === "sold" ? todayUK() : null,
+        updatedAt: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from("cars")
+        .update(update)
+        .eq("id", id);
+
+      if (error) throw error;
+
+      return sendJson(res, 200, {
+        success: true,
+        status,
+        soldDate: update.soldDate
+      });
+
+    } catch (e) {
+      console.error("POST /admin-cars-status error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not update car status."
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: PUT /admin-cars
+  // -----------------------------
+  if (req.method === "PUT" && pathname === "/admin-cars") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const id = String(data.id || "").trim();
+    const name = String(data.name || "").trim();
+    const year = Number(data.year);
+    const price = Number(String(data.price).replace(/[£,\s.]/g, ""));
+    const photos = Array.isArray(data.photos) ? data.photos.filter(Boolean) : [];
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
+    }
+
+    if (!name) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing name"
+      });
+    }
+
+    if (!Number.isInteger(year)) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Year must be integer"
+      });
+    }
+
+    if (!Number.isFinite(price) || price <= 0) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Price must be > 0"
+      });
+    }
+
+    if (!photos.length) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "At least 1 photo required"
+      });
+    }
+
+    data.id = id;
+    data.name = name;
+    data.year = year;
+    data.price = price;
+    data.photos = photos;
+
+    try {
+      await dbUpdateCar(data);
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("PUT /admin-cars error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not update vehicle."
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: DELETE /admin-cars?id=
+  // -----------------------------
+  if (req.method === "DELETE" && pathname === "/admin-cars") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    const id = String(urlObj.searchParams.get("id") || "").trim();
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
+    }
+
+    try {
+      const { error, count } = await supabase
+        .from("cars")
+        .delete({ count: "exact" })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      if (!count) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("DELETE /admin-cars error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not delete car."
+      });
+    }
+  }
+
+  // -----------------------------
   // Admin: GET /garage-applications-data
   // -----------------------------
   if (req.method === "GET" && pathname === "/garage-applications-data") {
@@ -1452,6 +1771,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/admin-dashboard") return serveFile(res, path.join(__dirname, "admin-dashboard.html"));
   if (req.method === "GET" && pathname === "/admin-garages") return serveFile(res, path.join(__dirname, "admin-garages.html"));
+  if (req.method === "GET" && pathname === "/admin-stock") return serveFile(res, path.join(__dirname, "admin-stock.html"));
   if (req.method === "GET" && pathname === "/login") return serveFile(res, path.join(__dirname, "login.html"));
   if (req.method === "GET" && pathname === "/reset-password") return serveFile(res, path.join(__dirname, "reset-password.html"));
   if (req.method === "GET" && pathname === "/privacy") return serveFile(res, path.join(__dirname, "privacy.html"));
