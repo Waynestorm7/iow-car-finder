@@ -541,6 +541,7 @@
 
             editStatus.textContent = `Editing ${garage.name || "garage"}.`;
             editPanel.style.display = "block";
+            garageList.style.display = "none";
 
             editPanel.scrollIntoView({
                 behavior: "smooth",
@@ -553,6 +554,7 @@
             editGarageId.value = "";
             editStatus.textContent = "Update the garage profile details below.";
             editPanel.style.display = "none";
+            garageList.style.display = "grid";
         }
 
         function renderSummary(garages) {
