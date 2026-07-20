@@ -419,18 +419,19 @@ async function dbListGarages() {
   const { data, error } = await supabase
     .from("garages")
     .select(`
-      id,
-      name,
-      address,
-      town,
-      postcode,
-      phone,
-         email,
-      website,
-      logo_url,
-      banner_url,
-      opening_hours
-    `)
+  id,
+  name,
+  address,
+  town,
+  postcode,
+  phone,
+  email,
+  website,
+  logo_url,
+  banner_url,
+  opening_hours,
+  description
+`)
     .order("name", { ascending: true });
 
   if (error) throw error;
@@ -724,7 +725,10 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, garages);
     } catch (e) {
       console.error("GET /garages-data error:", e);
-      return sendJson(res, 200, readGaragesFile());
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load garages."
+      });
     }
   }
 
