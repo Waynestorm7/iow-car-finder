@@ -477,6 +477,35 @@ async function dbUpdateGarage(id, payload) {
     logo_url: payload.logo_url ? String(payload.logo_url).trim() : null,
     banner_url: payload.banner_url ? String(payload.banner_url).trim() : null,
     address: payload.address ? String(payload.address).trim() : null,
+    town: payload.town ? String(payload.town).trim() : null,
+    postcode: payload.postcode ? String(payload.postcode).trim() : null,
+    opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
+    description: payload.description ? String(payload.description).trim() : null,
+  };
+
+  const { error } = await supabase
+    .from("garages")
+    .update(row)
+    .eq("id", cleanId);
+
+  if (error) throw error;
+}
+
+async function dbAdminUpdateGarage(id, payload) {
+  const cleanId = String(id || "").trim();
+
+  if (!cleanId) {
+    throw new Error("Missing garage id");
+  }
+
+  const row = {
+    name: payload.name ? String(payload.name).trim() : null,
+    phone: payload.phone ? String(payload.phone).trim() : null,
+    email: payload.email ? String(payload.email).trim() : null,
+    website: payload.website ? String(payload.website).trim() : null,
+    address: payload.address ? String(payload.address).trim() : null,
+    town: payload.town ? String(payload.town).trim() : null,
+    postcode: payload.postcode ? String(payload.postcode).trim() : null,
     opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
     description: payload.description ? String(payload.description).trim() : null,
   };
@@ -1224,13 +1253,17 @@ const server = http.createServer(async (req, res) => {
       const { data: garages, error: garageError } = await supabase
         .from("garages")
         .select(`
-          id,
-          name,
-          town,
-          phone,
-          email,
-          website
-        `)
+  id,
+  name,
+  address,
+  town,
+  postcode,
+  phone,
+  email,
+  website,
+  opening_hours,
+  description
+`)
         .order("name", { ascending: true });
 
       if (garageError) throw garageError;
@@ -1291,6 +1324,63 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 500, {
         success: false,
         message: "Could not load garages."
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: PUT /admin-garages
+  // -----------------------------
+  if (req.method === "PUT" && pathname === "/admin-garages") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const id = String(data.id || "").trim();
+    const name = String(data.name || "").trim();
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing garage id"
+      });
+    }
+
+    if (!name) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Garage name is required"
+      });
+    }
+
+    try {
+      await dbAdminUpdateGarage(id, data);
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("PUT /admin-garages error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not update garage."
       });
     }
   }

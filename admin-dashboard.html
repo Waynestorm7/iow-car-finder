@@ -114,7 +114,7 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
         }
 
@@ -126,7 +126,9 @@
             padding: 26px;
             text-decoration: none;
             color: inherit;
-            display: block;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
             transition: transform .18s ease, box-shadow .18s ease;
         }
 
@@ -150,7 +152,9 @@
         }
 
         .card .action {
-            margin-top: 20px;
+
+            margin-top: auto;
+            align-self: flex-start;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -244,19 +248,24 @@
         <section class="grid">
             <a class="card" href="/garage-applications">
                 <h2>Garage applications</h2>
-                <p>Review pending garage applications and approve or reject new garages.</p>
+                <p>Review new garage sign-ups and approve or reject pending applications.</p>
                 <div class="action">Open applications →</div>
+            </a>
+
+            <a class="card" href="/admin-stock">
+                <h2>Car listings</h2>
+                <p>Add cars, edit adverts, update prices, or mark vehicles reserved and sold.</p>
+                <div class="action">Manage listings →</div>
             </a>
 
             <a class="card" href="/admin-garages">
                 <h2>Manage garages</h2>
-                <p>View approved garages, check stock counts and track which garages still need help.</p>
-                <div class="action">Open garages →</div>
+                <p>View approved garage profiles, contact details and stock totals.</p>
+                <div class="action">View garages →</div>
             </a>
-
         </section>
 
-            <div class="note">
+        <div class="note">
             This page is not linked from the public navigation. Keep using the existing admin key flow for sensitive
             admin actions until we replace it with a proper admin login later.
         </div>

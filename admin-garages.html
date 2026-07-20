@@ -128,7 +128,10 @@
             color: var(--dark);
         }
 
-        input {
+
+
+        input,
+        textarea {
             width: 100%;
             padding: 14px;
             border-radius: 13px;
@@ -138,7 +141,13 @@
             outline: none;
         }
 
-        input:focus {
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
             border-color: rgba(230, 126, 34, .6);
             box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
         }
@@ -309,6 +318,31 @@
             line-height: 1.55;
         }
 
+        .editPanel h2 {
+            margin: 0 0 8px;
+            color: var(--dark);
+            font-size: 1.35rem;
+            letter-spacing: -.03em;
+        }
+
+        .editGrid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .editField.full {
+            grid-column: 1 / -1;
+        }
+
+        .editActions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
         @media (max-width: 700px) {
             .top {
                 padding: 0 12px;
@@ -351,6 +385,10 @@
                 margin-top: 14px;
                 text-align: left;
             }
+
+            .editGrid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -384,6 +422,67 @@
 
         <section id="summary" class="summary" style="display:none;"></section>
 
+        <section id="editPanel" class="panel editPanel" style="display:none;">
+            <h2>Edit garage</h2>
+            <div id="editStatus" class="status">Update the garage profile details below.</div>
+
+            <form id="editGarageForm">
+                <input id="editGarageId" type="hidden">
+
+                <div class="editGrid">
+                    <div class="editField">
+                        <label for="editName">Garage name</label>
+                        <input id="editName" type="text" required>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editTown">Town</label>
+                        <input id="editTown" type="text">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editPhone">Phone</label>
+                        <input id="editPhone" type="text">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editEmail">Email</label>
+                        <input id="editEmail" type="email">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editWebsite">Website</label>
+                        <input id="editWebsite" type="text">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editPostcode">Postcode</label>
+                        <input id="editPostcode" type="text">
+                    </div>
+
+                    <div class="editField full">
+                        <label for="editAddress">Address</label>
+                        <input id="editAddress" type="text">
+                    </div>
+
+                    <div class="editField full">
+                        <label for="editOpeningHours">Opening hours</label>
+                        <textarea id="editOpeningHours"></textarea>
+                    </div>
+
+                    <div class="editField full">
+                        <label for="editDescription">Description</label>
+                        <textarea id="editDescription"></textarea>
+                    </div>
+                </div>
+
+                <div class="editActions">
+                    <button type="submit">Save garage</button>
+                    <button id="cancelEditGarage" class="button secondary" type="button">Cancel</button>
+                </div>
+            </form>
+        </section>
+
         <section id="garageList" class="garageList"></section>
     </main>
 
@@ -393,6 +492,23 @@
         const statusEl = document.getElementById("status");
         const summaryEl = document.getElementById("summary");
         const garageList = document.getElementById("garageList");
+        const editPanel = document.getElementById("editPanel");
+        const editGarageForm = document.getElementById("editGarageForm");
+        const editStatus = document.getElementById("editStatus");
+        const cancelEditGarage = document.getElementById("cancelEditGarage");
+
+        const editGarageId = document.getElementById("editGarageId");
+        const editName = document.getElementById("editName");
+        const editTown = document.getElementById("editTown");
+        const editPhone = document.getElementById("editPhone");
+        const editEmail = document.getElementById("editEmail");
+        const editWebsite = document.getElementById("editWebsite");
+        const editPostcode = document.getElementById("editPostcode");
+        const editAddress = document.getElementById("editAddress");
+        const editOpeningHours = document.getElementById("editOpeningHours");
+        const editDescription = document.getElementById("editDescription");
+
+        let loadedGarages = [];
 
         function escapeHtml(value) {
             return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -402,6 +518,41 @@
                 '"': "&quot;",
                 "'": "&#039;"
             }[char]));
+        }
+
+        function openEditGarage(id) {
+            const garage = loadedGarages.find(g => String(g.id) === String(id));
+
+            if (!garage) {
+                editStatus.textContent = "Could not find that garage.";
+                return;
+            }
+
+            editGarageId.value = garage.id || "";
+            editName.value = garage.name || "";
+            editTown.value = garage.town || "";
+            editPhone.value = garage.phone || "";
+            editEmail.value = garage.email || "";
+            editWebsite.value = garage.website || "";
+            editPostcode.value = garage.postcode || "";
+            editAddress.value = garage.address || "";
+            editOpeningHours.value = garage.opening_hours || "";
+            editDescription.value = garage.description || "";
+
+            editStatus.textContent = `Editing ${garage.name || "garage"}.`;
+            editPanel.style.display = "block";
+
+            editPanel.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+        function closeEditGarage() {
+            editGarageForm.reset();
+            editGarageId.value = "";
+            editStatus.textContent = "Update the garage profile details below.";
+            editPanel.style.display = "none";
         }
 
         function renderSummary(garages) {
@@ -489,14 +640,85 @@
               </div>
             </div>
 
-            <div class="actions">
-              <a class="button" href="${publicUrl}" target="_blank" rel="noopener">View public garage →</a>
-              ${garage.website ? `<a class="button secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Garage website</a>` : ""}
-            </div>
+           <div class="actions">
+  <a class="button" href="${publicUrl}" target="_blank" rel="noopener">View public garage →</a>
+
+  <button class="button secondary" type="button" onclick="openEditGarage('${escapeHtml(garage.id)}')">
+    Edit garage
+  </button>
+
+  ${garage.website ? `<a class="button secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">Garage website</a>` : ""}
+</div>
           </article>
         `;
             }).join("");
         }
+
+        cancelEditGarage.addEventListener("click", () => {
+            closeEditGarage();
+        });
+
+        editGarageForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const key = adminKey.value.trim();
+
+            if (!key) {
+                editStatus.textContent = "Enter the admin key first.";
+                return;
+            }
+
+            const payload = {
+                id: editGarageId.value.trim(),
+                name: editName.value.trim(),
+                town: editTown.value.trim(),
+                phone: editPhone.value.trim(),
+                email: editEmail.value.trim(),
+                website: editWebsite.value.trim(),
+                postcode: editPostcode.value.trim(),
+                address: editAddress.value.trim(),
+                opening_hours: editOpeningHours.value.trim(),
+                description: editDescription.value.trim()
+            };
+
+            if (!payload.id) {
+                editStatus.textContent = "Missing garage id.";
+                return;
+            }
+
+            if (!payload.name) {
+                editStatus.textContent = "Garage name is required.";
+                return;
+            }
+
+            editStatus.textContent = "Saving garage...";
+
+            try {
+                const res = await fetch("/admin-garages", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-garage-key": key
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    editStatus.textContent = data.message || "Could not save garage.";
+                    return;
+                }
+
+                statusEl.textContent = "Garage saved. Reloading garages...";
+                closeEditGarage();
+
+                keyForm.dispatchEvent(new Event("submit"));
+
+            } catch (err) {
+                editStatus.textContent = "Could not save garage.";
+            }
+        });
 
         keyForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -529,8 +751,12 @@
 
                 const garages = Array.isArray(data.garages) ? data.garages : [];
 
+                loadedGarages = garages;
+
                 statusEl.textContent = `${garages.length} garage(s) found.`;
+
                 renderSummary(garages);
+
                 renderGarages(garages);
 
             } catch (err) {
