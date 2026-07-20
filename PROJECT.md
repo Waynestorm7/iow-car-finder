@@ -156,7 +156,8 @@ Dashboard Improvements
 
 [x] Reserved vehicle styling
 [x] Sold vehicle styling
-[ ] Disable enquiries on sold/reserved cars
+[x] Disable enquiries on sold cars
+[ ] Keep reserved cars contactable
 [x] Add “View advert” button after editing a car
 
 
