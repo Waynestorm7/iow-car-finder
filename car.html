@@ -791,6 +791,45 @@
         transform: translateY(-50%) scale(.96);
       }
     }
+
+    /* ---------- Smaller fullscreen arrows on phones ---------- */
+    @media (max-width: 600px) {
+      .lbNav {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        background: rgba(7, 17, 29, .82);
+        color: #fff;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .lbNav::before {
+        content: "";
+        width: 11px;
+        height: 11px;
+        border-right: 4px solid #fff;
+        border-bottom: 4px solid #fff;
+      }
+
+      .lbPrev {
+        left: 6px;
+      }
+
+      .lbPrev::before {
+        transform: rotate(135deg);
+        margin-left: 4px;
+      }
+
+      .lbNext {
+        right: 6px;
+      }
+
+      .lbNext::before {
+        transform: rotate(-45deg);
+        margin-right: 4px;
+      }
+    }
   </style>
 </head>
 
