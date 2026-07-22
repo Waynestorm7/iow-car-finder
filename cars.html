@@ -742,6 +742,93 @@
         font-size: .95rem;
       }
     }
+
+    /* ---------- Compact mobile car cards ---------- */
+    @media (max-width: 760px) {
+
+      /* Slightly shorter photo while keeping a premium wide shape */
+      .imgWrap {
+        aspect-ratio: 16 / 9;
+      }
+
+      /* Less empty space between each vehicle */
+      .grid {
+        gap: 10px;
+      }
+
+      /* Tighter card content */
+      .body {
+        padding: 12px 13px 11px;
+      }
+
+      .name {
+        margin-bottom: 4px;
+        font-size: 1.02rem;
+        line-height: 1.2;
+      }
+
+      .price {
+        margin-bottom: 5px;
+        font-size: 1.62rem;
+        line-height: 1;
+      }
+
+      /* Keep listing date visible but subtle */
+      .listedText {
+        margin: 0 0 8px;
+        font-size: .74rem;
+        line-height: 1.15;
+      }
+
+      /* Compact four-spec area */
+      .specGrid {
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .spec {
+        padding: 6px 8px;
+        border-radius: 10px;
+      }
+
+      .specLabel {
+        margin-bottom: 1px;
+        font-size: .66rem;
+        line-height: 1.05;
+      }
+
+      .specValue {
+        font-size: .86rem;
+        line-height: 1.1;
+      }
+
+      /* Shorter approved-garage section */
+      .garageRow {
+        gap: 8px;
+        margin-top: 8px;
+        padding: 8px 9px;
+        border-radius: 12px;
+      }
+
+      .garageText {
+        gap: 1px;
+      }
+
+      .garageLabel {
+        font-size: .61rem;
+        letter-spacing: .07em;
+      }
+
+      .garageValue {
+        font-size: .88rem;
+        line-height: 1.15;
+      }
+
+      .garageLink {
+        padding: 7px 9px;
+        font-size: .72rem;
+      }
+    }
   </style>
 </head>
 
@@ -958,8 +1045,6 @@
         const listedDate =
           car.createdAt ||
           car.created_at ||
-          car.updatedAt ||
-          car.updated_at ||
           "";
         const listedText = listedDate
           ? new Date(listedDate).toLocaleDateString("en-GB", {
