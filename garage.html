@@ -195,21 +195,21 @@
         .garageMeta {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px 18px;
             margin-top: 14px;
         }
 
         .metaPill {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 9px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .10);
-            border: 1px solid rgba(255, 255, 255, .13);
-            color: rgba(255, 255, 255, .9);
-            font-size: .88rem;
-            font-weight: 800;
+            gap: 6px;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            color: rgba(255, 255, 255, .82);
+            font-size: .9rem;
+            font-weight: 700;
         }
 
         .garageActions {
@@ -413,6 +413,11 @@
                 border-radius: 24px;
             }
 
+            .garageMeta {
+                display: grid;
+                gap: 8px;
+            }
+
             .garageActions {
                 display: grid;
                 grid-template-columns: 1fr;
@@ -530,7 +535,7 @@
                 photo = car.photo;
             }
 
-            if (!photo) return "/images/hero.png";
+            if (!photo) return "/images/hero-desktop.webp";
 
             return cloudinaryOptimise(photo, "f_auto,q_auto,c_fill,w_700,h_438");
         }
@@ -659,18 +664,38 @@
 
                 const metaItems = [];
 
-                metaItems.push(`📍 ${escapeHtml(garage.town || "Isle of Wight")}`);
+                const addressText = String(garage.address || "").trim();
+                const townText = String(garage.town || "").trim();
+                const postcodeText = String(garage.postcode || "").trim();
 
-                if (garage.phone) {
-                    metaItems.push(`📞 ${escapeHtml(garage.phone)}`);
+                const locationParts = [];
+
+                if (addressText) {
+                    locationParts.push(addressText);
                 }
 
-                if (garage.email) {
-                    metaItems.push(`✉️ ${escapeHtml(garage.email)}`);
+                if (
+                    townText &&
+                    !locationParts.join(" ").toLowerCase().includes(townText.toLowerCase())
+                ) {
+                    locationParts.push(townText);
                 }
+
+                if (
+                    postcodeText &&
+                    !locationParts.join(" ").toLowerCase().includes(postcodeText.toLowerCase())
+                ) {
+                    locationParts.push(postcodeText);
+                }
+
+                metaItems.push(
+                    `📍 ${escapeHtml(locationParts.join(", ") || "Isle of Wight")}`
+                );
 
                 if (garage.opening_hours || garage.openingHours) {
-                    metaItems.push(`🕒 ${escapeHtml(garage.opening_hours || garage.openingHours)}`);
+                    metaItems.push(
+                        `🕒 ${escapeHtml(garage.opening_hours || garage.openingHours)}`
+                    );
                 }
 
                 garageMeta.innerHTML = metaItems
@@ -683,6 +708,15 @@
                     actions.push(`
     <a class="actionBtn" href="tel:${escapeHtml(garage.phone).replace(/\s+/g, "")}">
       Call garage
+    </a>
+  `);
+                }
+
+                if (garage.email) {
+                    actions.push(`
+    <a class="actionBtn secondary"
+       href="mailto:${escapeHtml(String(garage.email).trim())}?subject=${encodeURIComponent("Enquiry via IOW Car Finder")}">
+      Email garage
     </a>
   `);
                 }
@@ -700,7 +734,7 @@
                 if (garage.website) {
                     actions.push(`
     <a class="actionBtn secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">
-      Website
+     Visit website
     </a>
   `);
                 }

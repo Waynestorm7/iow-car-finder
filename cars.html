@@ -829,6 +829,90 @@
         font-size: .72rem;
       }
     }
+
+    /* ---------- Mobile filter polish ---------- */
+@media (max-width: 760px) {
+
+  /* Search on top, Sort and Filters together underneath */
+  .filtersTop {
+    grid-template-columns: minmax(0, 1.6fr) minmax(105px, 1fr);
+    gap: 8px;
+  }
+
+  #searchBox {
+    grid-column: 1 / -1;
+  }
+
+  #sortBox {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  #toggleFilters {
+    grid-column: 2;
+    width: 100%;
+    font-size: .86rem;
+    white-space: nowrap;
+  }
+
+  /* Keep the main controls matching */
+  #searchBox,
+  #sortBox,
+  #toggleFilters {
+    min-height: 50px;
+  }
+
+  /* Clean panel when filters are opened */
+  .filtersAdvanced {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid rgba(17, 24, 39, .09);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
+  }
+
+  .filtersAdvanced::before {
+    grid-column: 1 / -1;
+    margin: 0 0 2px;
+    font-size: .82rem;
+  }
+
+  /* Fuel and transmission share one row */
+  #fuelBox {
+    grid-column: 1;
+  }
+
+  #gearBox {
+    grid-column: 2;
+  }
+
+  /* Max price remains full width */
+  #maxPriceBox {
+    grid-column: 1 / -1;
+  }
+
+  /* Reset and Apply remain balanced */
+  .btnRow {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .btnRow .btn {
+    width: 100%;
+  }
+
+  .hint {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+    padding-left: 1px;
+    font-size: .82rem;
+  }
+}
   </style>
 </head>
 

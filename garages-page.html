@@ -263,6 +263,15 @@
       color: #111827;
     }
 
+    .garageNameLink {
+      color: #111827;
+      text-decoration: none;
+    }
+
+    .garageNameLink:hover {
+      color: #e67e22;
+    }
+
     .garageInfo p {
       margin: 0 0 10px;
       color: #667085;
@@ -410,6 +419,15 @@
             ? cars.filter(c => String(c.garageId || c.garage_id || "") === String(g.id || ""))
             : [];
 
+          const availableCount = garageCars.filter(car => {
+            const status = String(car.status || "").toLowerCase();
+
+            if (status === "sold" || car.sold === true) return false;
+            if (status === "reserved") return false;
+
+            return true;
+          }).length;
+
           const photos = garageCars
             .map(car => getCarPhoto(car))
             .filter(Boolean)
@@ -451,9 +469,13 @@ ${photos.length
 </div>`
             }
               <div class="garageInfo">
-                <h2>${escapeHtml(g.name)}</h2>
+                <h2>
+  <a class="garageNameLink" href="/garage?id=${encodeURIComponent(g.id)}">
+    ${escapeHtml(g.name)}
+  </a>
+</h2>
                 <p>${escapeHtml(g.town || "Isle of Wight")}</p>
-                <p class="count">${garageCars.length} ${carWord} in stock</p>
+                <p class="count">${availableCount} available now</p>
 
                 <a class="viewBtn" href="/garage?id=${encodeURIComponent(g.id)}">
                   View stock →
