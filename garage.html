@@ -229,6 +229,9 @@
             font-weight: 900;
             background: #e67e22;
             color: #fff;
+            border: 0;
+            cursor: pointer;
+            font: inherit;
         }
 
         .actionBtn.secondary {
@@ -434,6 +437,16 @@
                 border-radius: 14px;
                 font-size: .86rem;
                 white-space: nowrap;
+            }
+
+            #garageShareBtn {
+                grid-column: 1 / -1;
+                min-height: auto;
+                padding: 5px 8px;
+                background: transparent;
+                border: 0;
+                color: rgba(255, 255, 255, .78);
+                font-size: .78rem;
             }
 
             .stockBox {
@@ -757,13 +770,56 @@
 
                 if (garage.website) {
                     actions.push(`
-    <a class="actionBtn secondary" href="${escapeHtml(garage.website)}" target="_blank" rel="noopener">
-     Visit website
+    <a class="actionBtn secondary"
+       href="${escapeHtml(garage.website)}"
+       target="_blank"
+       rel="noopener">
+        Visit website
     </a>
   `);
                 }
 
+                actions.push(`
+    <button id="garageShareBtn"
+            class="actionBtn secondary"
+            type="button">
+        Share garage
+    </button>
+`);
+
                 garageActions.innerHTML = actions.join("");
+
+                const garageShareBtn = document.getElementById("garageShareBtn");
+
+                if (garageShareBtn) {
+                    garageShareBtn.addEventListener("click", async () => {
+                        const shareData = {
+                            title: `${garage.name || "Garage"} | IOW Car Finder`,
+                            text: `View ${garage.name || "this garage"} and its current cars on IOW Car Finder.`,
+                            url: window.location.href
+                        };
+
+                        if (navigator.share) {
+                            try {
+                                await navigator.share(shareData);
+                            } catch (err) {
+                                // The user may simply have cancelled sharing.
+                            }
+                        } else {
+                            try {
+                                await navigator.clipboard.writeText(window.location.href);
+
+                                garageShareBtn.textContent = "Link copied!";
+
+                                setTimeout(() => {
+                                    garageShareBtn.textContent = "Share garage";
+                                }, 1800);
+                            } catch (err) {
+                                alert("Could not copy the link.");
+                            }
+                        }
+                    });
+                }
 
                 if (!garageCars.length) {
                     carsBox.innerHTML = `
