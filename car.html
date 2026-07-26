@@ -1511,6 +1511,8 @@ Thanks`;
         const shareBtn = document.getElementById("shareBtn");
         if (shareBtn) {
           shareBtn.addEventListener("click", async () => {
+            await recordCarAction("share_click", car.id);
+            
             const shareData = {
               title: car.name || "Car on IOW Car Finder",
               text: "Check out this car on IOW Car Finder",
