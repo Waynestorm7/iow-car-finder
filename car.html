@@ -950,6 +950,74 @@
   </div>
 
   <script>
+
+    async function recordCarViewOnce(carId) {
+      const cleanCarId = String(carId || "").trim();
+
+      if (!cleanCarId) return;
+
+      const storageKey = "iowcf_car_view_" + cleanCarId;
+
+      try {
+        if (sessionStorage.getItem(storageKey)) {
+          return;
+        }
+
+        const response = await fetch("/analytics-event", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            eventType: "car_view",
+            carId: cleanCarId
+          }),
+          keepalive: true
+        });
+
+        if (response.ok) {
+          sessionStorage.setItem(storageKey, "recorded");
+        }
+      } catch (error) {
+        console.warn("Car view tracking failed:", error);
+      }
+    }
+
+    function recordCarAction(eventType, carId) {
+      const cleanCarId = String(carId || "").trim();
+
+      if (!cleanCarId) return;
+
+      fetch("/analytics-event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          eventType,
+          carId: cleanCarId
+        }),
+        keepalive: true
+      }).catch(error => {
+        console.warn("Car action tracking failed:", error);
+      });
+    }
+
+    function addSpec(specGrid, label, value) {
+      const v = String(value ?? "").trim();
+
+      if (!v) return;
+
+      const div = document.createElement("div");
+      div.className = "specItem";
+      div.innerHTML = `
+        <div class="specLabel">${escapeText(label)}</div>
+        <div class="specValue">${escapeText(v)}</div>
+      `;
+
+      specGrid.appendChild(div);
+    }
+
     function money(n) {
       try { return "£" + Number(n).toLocaleString("en-GB"); }
       catch { return "£" + (n ?? ""); }
@@ -1001,49 +1069,8 @@
       return text;
     }
 
-    async function recordCarViewOnce(carId) {
-      const cleanCarId = String(carId || "").trim();
 
-      if (!cleanCarId) return;
 
-      const storageKey = "iowcf_car_view_" + cleanCarId;
-
-      try {
-        if (sessionStorage.getItem(storageKey)) {
-          return;
-        }
-
-        const response = await fetch("/analytics-event", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            eventType: "car_view",
-            carId: cleanCarId
-          }),
-          keepalive: true
-        });
-
-        if (response.ok) {
-          sessionStorage.setItem(storageKey, "recorded");
-        }
-      } catch (error) {
-        console.warn("Car view tracking failed:", error);
-      }
-    }
-
-    function addSpec(specGrid, label, value) {
-      const v = String(value ?? "").trim();
-      if (!v) return;
-      const div = document.createElement("div");
-      div.className = "specItem";
-      div.innerHTML = `
-        <div class="specLabel">${escapeText(label)}</div>
-        <div class="specValue">${escapeText(v)}</div>
-      `;
-      specGrid.appendChild(div);
-    }
 
     const lightbox = document.getElementById("lightbox");
     const lbImg = document.getElementById("lbImg");
@@ -1366,6 +1393,11 @@ Thanks`;
         const callBtn = document.getElementById("callBtn");
         const callNote = document.getElementById("callNote");
         if (callBtn) {
+          if (callBtn && phone && !isSold) {
+            callBtn.addEventListener("click", () => {
+              recordCarAction("call_click", car.id);
+            });
+          }
           if (isSold) {
             callBtn.href = "#";
             callBtn.classList.add("disabled", "soldDisabled");
