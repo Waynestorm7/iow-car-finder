@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="/cookie-consent.js" defer></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Garage Analytics | IOW Car Finder</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --card: #ffffff;
+            --text: #101828;
+            --muted: #667085;
+            --dark: #07111d;
+            --accent: #e67e22;
+            --accentDark: #c96513;
+            --border: rgba(16, 24, 40, .10);
+            --shadow: 0 18px 48px rgba(16, 24, 40, .07);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--dark);
+            color: #fff;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .top {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 22px;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .brand {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: -.4px;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .adminTag {
+            color: rgba(255, 255, 255, .68);
+            font-weight: 800;
+            font-size: .9rem;
+        }
+
+        main {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 34px 18px 58px;
+        }
+
+        .hero {
+            padding: 34px;
+            border-radius: 28px;
+            background:
+                radial-gradient(520px 220px at 88% 12%, rgba(230, 126, 34, .20), transparent 62%),
+                linear-gradient(135deg, #07111d 0%, #0d2138 58%, #132f4d 100%);
+            color: #fff;
+            box-shadow: 0 18px 46px rgba(7, 17, 29, .18);
+            border: 1px solid rgba(255, 255, 255, .10);
+            margin-bottom: 18px;
+        }
+
+        .eyebrow {
+            color: #f4a261;
+            font-size: .78rem;
+            font-weight: 950;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1;
+            letter-spacing: -.06em;
+            font-weight: 950;
+        }
+
+        .hero p {
+            margin: 14px 0 0;
+            max-width: 64ch;
+            color: rgba(255, 255, 255, .78);
+            font-size: 1.02rem;
+            line-height: 1.55;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+        label {
+            display: block;
+            font-weight: 900;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border-radius: 13px;
+            border: 1px solid rgba(16, 24, 40, .14);
+            background: #fff;
+            color: var(--text);
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(230, 126, 34, .6);
+            box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
+        }
+
+        button,
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            cursor: pointer;
+            min-height: 46px;
+            padding: 12px 18px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 900;
+            font-size: .92rem;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        button:hover,
+        .button:hover {
+            background: var(--accentDark);
+        }
+
+        .button.secondary {
+            background: #fff;
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .status {
+            margin-top: 12px;
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: .94rem;
+        }
+
+        .reportHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .reportHeader h2 {
+            margin: 0 0 6px;
+            color: var(--dark);
+            font-size: 1.7rem;
+            letter-spacing: -.04em;
+        }
+
+        .reportMeta {
+            color: var(--muted);
+            font-weight: 800;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+        }
+
+        .stat strong {
+            display: block;
+            color: var(--dark);
+            font-size: 2.2rem;
+            line-height: 1;
+            margin-bottom: 7px;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-weight: 850;
+            font-size: .9rem;
+        }
+
+        .breakdown {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .mini {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+        }
+
+        .mini strong {
+            display: block;
+            color: var(--dark);
+            font-size: 1.45rem;
+            margin-bottom: 5px;
+        }
+
+        .mini span {
+            color: var(--muted);
+            font-size: .8rem;
+            font-weight: 850;
+        }
+
+        .tablePanel {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .tablePanel h2 {
+            margin: 0 0 16px;
+            color: var(--dark);
+            font-size: 1.35rem;
+        }
+
+        .tableWrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 820px;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(16, 24, 40, .08);
+        }
+
+        th {
+            color: var(--muted);
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        td {
+            color: var(--text);
+            font-size: .92rem;
+        }
+
+        td.number,
+        th.number {
+            text-align: center;
+        }
+
+        .vehicleName {
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .statusPill {
+            display: inline-flex;
+            padding: 6px 9px;
+            border-radius: 999px;
+            background: #f2f4f7;
+            color: #475467;
+            font-weight: 850;
+            font-size: .76rem;
+            text-transform: capitalize;
+        }
+
+        .note {
+            margin-top: 18px;
+            padding: 18px 20px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: .92rem;
+        }
+
+        .empty {
+            color: var(--muted);
+            text-align: center;
+            padding: 22px;
+        }
+
+        @media (max-width: 800px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .breakdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .reportHeader {
+                display: block;
+            }
+
+            .reportHeader .button {
+                margin-top: 14px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .top {
+                padding: 0 12px;
+                min-height: 58px;
+            }
+
+            .brand {
+                font-size: .95rem;
+            }
+
+            .adminTag {
+                font-size: .78rem;
+            }
+
+            main {
+                padding: 20px 12px 44px;
+            }
+
+            .hero {
+                padding: 22px;
+                border-radius: 22px;
+            }
+
+            .panel,
+            .tablePanel {
+                padding: 18px;
+                border-radius: 22px;
+            }
+        }
+
+        @media print {
+            header,
+            .hero,
+            #loginPanel,
+            #controlsPanel,
+            .printHide,
+            .note {
+                display: none !important;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            main {
+                max-width: none;
+                padding: 0;
+            }
+
+            .stat,
+            .mini,
+            .tablePanel {
+                box-shadow: none;
+            }
+
+            .tablePanel {
+                border: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="top">
+            <a class="brand" href="/admin-dashboard">
+                <span>IOW</span> Car Finder
+            </a>
+
+            <div class="adminTag">Admin analytics</div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="eyebrow">Garage performance reports</div>
+            <h1>Garage Analytics</h1>
+            <p>
+                View garage profile traffic, car advert views and customer action clicks.
+                Reports can be printed or saved as a PDF for garages.
+            </p>
+        </section>
+
+        <section id="loginPanel" class="panel">
+            <form id="keyForm">
+                <label for="adminKey">Private admin key</label>
+                <input id="adminKey" type="password" autocomplete="off" required>
+
+                <button type="submit">Load garages</button>
+
+                <a class="button secondary" href="/admin-dashboard">
+                    Back to dashboard
+                </a>
+            </form>
+
+            <div id="loginStatus" class="status">
+                Enter the admin key to load garage reports.
+            </div>
+        </section>
+
+        <section id="controlsPanel" class="panel" style="display:none;">
+            <form id="reportForm" class="controls">
+                <div>
+                    <label for="garageSelect">Garage</label>
+                    <select id="garageSelect" required>
+                        <option value="">Select a garage</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="rangeSelect">Report period</label>
+                    <select id="rangeSelect">
+                        <option value="7d">Last 7 days</option>
+                        <option value="30d" selected>Last 30 days</option>
+                        <option value="all">All time</option>
+                    </select>
+                </div>
+
+                <button type="submit">Load report</button>
+            </form>
+
+            <div id="reportStatus" class="status">
+                Select a garage and report period.
+            </div>
+        </section>
+
+        <section id="reportArea" style="display:none;">
+            <div class="reportHeader">
+                <div>
+                    <h2 id="reportGarageName">Garage report</h2>
+                    <div id="reportRange" class="reportMeta"></div>
+                </div>
+
+                <button id="printBtn" class="button printHide" type="button">
+                    Print or save PDF
+                </button>
+            </div>
+
+            <section id="summary" class="summary"></section>
+
+            <section id="breakdown" class="breakdown"></section>
+
+            <section class="tablePanel">
+                <h2>Vehicle performance</h2>
+
+                <div class="tableWrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Status</th>
+                                <th class="number">Views</th>
+                                <th class="number">Calls</th>
+                                <th class="number">Emails</th>
+                                <th class="number">Directions</th>
+                                <th class="number">Shares</th>
+                                <th class="number">Total actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="vehicleRows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="note">
+                These figures show page views and button clicks recorded by IOW Car Finder.
+                They do not confirm that a telephone call connected, an email was sent, or a vehicle was sold.
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const keyForm = document.getElementById("keyForm");
+        const adminKey = document.getElementById("adminKey");
+        const loginStatus = document.getElementById("loginStatus");
+
+        const controlsPanel = document.getElementById("controlsPanel");
+        const reportForm = document.getElementById("reportForm");
+        const garageSelect = document.getElementById("garageSelect");
+        const rangeSelect = document.getElementById("rangeSelect");
+        const reportStatus = document.getElementById("reportStatus");
+
+        const reportArea = document.getElementById("reportArea");
+        const reportGarageName = document.getElementById("reportGarageName");
+        const reportRange = document.getElementById("reportRange");
+        const summary = document.getElementById("summary");
+        const breakdown = document.getElementById("breakdown");
+        const vehicleRows = document.getElementById("vehicleRows");
+        const printBtn = document.getElementById("printBtn");
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[char]));
+        }
+
+        function rangeLabel(range) {
+            if (range === "7d") return "Last 7 days";
+            if (range === "30d") return "Last 30 days";
+            return "All time";
+        }
+
+        function renderReport(data) {
+            const totals = data.totals || {};
+            const vehicles = Array.isArray(data.vehicles) ? data.vehicles : [];
+
+            reportGarageName.textContent =
+                data.garage?.name || "Garage report";
+
+            reportRange.textContent = rangeLabel(data.range);
+
+            summary.innerHTML = `
+                <div class="stat">
+                    <strong>${Number(totals.garageViews || 0)}</strong>
+                    <span>Garage profile views</span>
+                </div>
+
+                <div class="stat">
+                    <strong>${Number(totals.carViews || 0)}</strong>
+                    <span>Car advert views</span>
+                </div>
+
+                <div class="stat">
+                    <strong>${Number(totals.contactActions || 0)}</strong>
+                    <span>Total action clicks</span>
+                </div>
+            `;
+
+            breakdown.innerHTML = `
+                <div class="mini">
+                    <strong>${Number(totals.callClicks || 0)}</strong>
+                    <span>Call clicks</span>
+                </div>
+
+                <div class="mini">
+                    <strong>${Number(totals.emailClicks || 0)}</strong>
+                    <span>Email clicks</span>
+                </div>
+
+                <div class="mini">
+                    <strong>${Number(totals.directionsClicks || 0)}</strong>
+                    <span>Directions clicks</span>
+                </div>
+
+                <div class="mini">
+                    <strong>${Number(totals.websiteClicks || 0)}</strong>
+                    <span>Website clicks</span>
+                </div>
+
+                <div class="mini">
+                    <strong>${Number(totals.shareClicks || 0)}</strong>
+                    <span>Share clicks</span>
+                </div>
+            `;
+
+            if (!vehicles.length) {
+                vehicleRows.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty">
+                            No vehicles found for this garage.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                vehicleRows.innerHTML = vehicles.map(vehicle => `
+                    <tr>
+                        <td class="vehicleName">
+                            ${escapeHtml(vehicle.name || "Unnamed vehicle")}
+                        </td>
+
+                        <td>
+                            <span class="statusPill">
+                                ${escapeHtml(vehicle.status || "available")}
+                            </span>
+                        </td>
+
+                        <td class="number">${Number(vehicle.views || 0)}</td>
+                        <td class="number">${Number(vehicle.callClicks || 0)}</td>
+                        <td class="number">${Number(vehicle.emailClicks || 0)}</td>
+                        <td class="number">${Number(vehicle.directionsClicks || 0)}</td>
+                        <td class="number">${Number(vehicle.shareClicks || 0)}</td>
+                        <td class="number">${Number(vehicle.contactActions || 0)}</td>
+                    </tr>
+                `).join("");
+            }
+
+            reportArea.style.display = "block";
+        }
+
+        keyForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const key = adminKey.value.trim();
+
+            if (!key) {
+                loginStatus.textContent = "Enter the admin key.";
+                return;
+            }
+
+            loginStatus.textContent = "Loading garages...";
+            controlsPanel.style.display = "none";
+            reportArea.style.display = "none";
+            garageSelect.innerHTML =
+                `<option value="">Select a garage</option>`;
+
+            try {
+                const response = await fetch("/admin-garages-data", {
+                    headers: {
+                        "x-garage-key": key
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    loginStatus.textContent =
+                        data.message || "Could not load garages.";
+                    return;
+                }
+
+                const garages = Array.isArray(data.garages)
+                    ? data.garages
+                    : [];
+
+                garages.forEach(garage => {
+                    const option = document.createElement("option");
+                    option.value = garage.id;
+                    option.textContent = garage.name || "Unnamed garage";
+                    garageSelect.appendChild(option);
+                });
+
+                loginStatus.textContent =
+                    `${garages.length} garage(s) loaded.`;
+
+                controlsPanel.style.display = "block";
+
+            } catch (error) {
+                loginStatus.textContent = "Could not load garages.";
+            }
+        });
+
+        reportForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const key = adminKey.value.trim();
+            const garageId = garageSelect.value;
+            const range = rangeSelect.value;
+
+            if (!key) {
+                reportStatus.textContent = "Enter the admin key first.";
+                return;
+            }
+
+            if (!garageId) {
+                reportStatus.textContent = "Select a garage.";
+                return;
+            }
+
+            reportStatus.textContent = "Loading report...";
+            reportArea.style.display = "none";
+
+            try {
+                const response = await fetch(
+                    `/admin-analytics?garageId=${encodeURIComponent(garageId)}&range=${encodeURIComponent(range)}`,
+                    {
+                        headers: {
+                            "x-garage-key": key
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    reportStatus.textContent =
+                        data.message || "Could not load report.";
+                    return;
+                }
+
+                reportStatus.textContent = "Report loaded.";
+                renderReport(data);
+
+            } catch (error) {
+                reportStatus.textContent = "Could not load report.";
+            }
+        });
+
+        printBtn.addEventListener("click", () => {
+            window.print();
+        });
+    </script>
+
+</body>
+
+</html>
