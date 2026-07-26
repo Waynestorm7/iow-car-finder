@@ -761,7 +761,7 @@ const server = http.createServer(async (req, res) => {
       data.garageId || data.garage_id || ""
     ).trim();
 
-    if (!["car_view", "garage_view", "call_click"].includes(eventType)) {
+    if (!["car_view", "garage_view", "call_click", "email_click"].includes(eventType)) {
       return sendJson(res, 400, {
         success: false,
         message: "Invalid analytics event"
@@ -775,7 +775,7 @@ const server = http.createServer(async (req, res) => {
         car_id: null
       };
 
-      if (["car_view", "call_click"].includes(eventType)) {
+      if (["car_view", "call_click", "email_click"].includes(eventType)) {
         if (!carId) {
           return sendJson(res, 400, {
             success: false,

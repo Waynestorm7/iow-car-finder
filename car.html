@@ -986,9 +986,11 @@
     function recordCarAction(eventType, carId) {
       const cleanCarId = String(carId || "").trim();
 
-      if (!cleanCarId) return;
+      if (!cleanCarId) {
+        return Promise.resolve(false);
+      }
 
-      fetch("/analytics-event", {
+      return fetch("/analytics-event", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -998,9 +1000,12 @@
           carId: cleanCarId
         }),
         keepalive: true
-      }).catch(error => {
-        console.warn("Car action tracking failed:", error);
-      });
+      })
+        .then(response => response.ok)
+        .catch(error => {
+          console.warn("Car action tracking failed:", error);
+          return false;
+        });
     }
 
     function addSpec(specGrid, label, value) {
@@ -1385,6 +1390,17 @@ Thanks`;
               "&body=" + encodeURIComponent(body);
 
             emailBtn.style.display = "inline-flex";
+
+            emailBtn.addEventListener("click", async (event) => {
+              event.preventDefault();
+
+              const emailLink = emailBtn.href;
+
+              await recordCarAction("email_click", car.id);
+
+              window.location.href = emailLink;
+            });
+
           } else {
             emailBtn.style.display = "none";
           }
