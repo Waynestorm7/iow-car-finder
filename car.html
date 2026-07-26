@@ -1433,8 +1433,10 @@ Thanks`;
 
         const mapBtn = document.getElementById("mapBtn");
         const mapNote = document.getElementById("mapNote");
+
         if (mapBtn) {
           const mapQuery = postcode || address || town || "";
+
           const mapsLink = mapQuery
             ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapQuery)
             : "";
@@ -1442,10 +1444,17 @@ Thanks`;
           if (mapsLink) {
             mapBtn.href = mapsLink;
             mapBtn.classList.remove("disabled");
+
             if (mapNote) mapNote.textContent = "";
+
+            mapBtn.addEventListener("click", () => {
+              recordCarAction("directions_click", car.id);
+            });
+
           } else {
             mapBtn.href = "#";
             mapBtn.classList.add("disabled");
+
             if (mapNote) mapNote.textContent = "Location not provided.";
           }
         }
