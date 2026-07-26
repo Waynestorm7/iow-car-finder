@@ -609,6 +609,31 @@
             }
         }
 
+        function recordGarageAction(eventType, garageId) {
+            const cleanGarageId = String(garageId || "").trim();
+
+            if (!cleanGarageId) {
+                return Promise.resolve(false);
+            }
+
+            return fetch("/analytics-event", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    eventType,
+                    garageId: cleanGarageId
+                }),
+                keepalive: true
+            })
+                .then(response => response.ok)
+                .catch(error => {
+                    console.warn("Garage action tracking failed:", error);
+                    return false;
+                });
+        }
+
         async function loadGarage() {
             const params = new URLSearchParams(window.location.search);
             const garageId = params.get("id");
@@ -777,7 +802,9 @@
 
                 if (garage.phone) {
                     actions.push(`
-    <a class="actionBtn" href="tel:${escapeHtml(garage.phone).replace(/\s+/g, "")}">
+    <a id="garageCallBtn"
+       class="actionBtn"
+       href="tel:${escapeHtml(garage.phone).replace(/\s+/g, "")}">
       Call garage
     </a>
   `);
@@ -785,7 +812,8 @@
 
                 if (garage.email) {
                     actions.push(`
-    <a class="actionBtn secondary"
+    <a id="garageEmailBtn"
+       class="actionBtn secondary"
        href="mailto:${escapeHtml(String(garage.email).trim())}?subject=${encodeURIComponent("Enquiry via IOW Car Finder")}">
       Email garage
     </a>
@@ -796,7 +824,11 @@
 
                 if (mapQuery) {
                     actions.push(`
-    <a class="actionBtn secondary" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}" target="_blank" rel="noopener">
+    <a id="garageDirectionsBtn"
+       class="actionBtn secondary"
+       href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}"
+       target="_blank"
+       rel="noopener">
       Directions
     </a>
   `);
@@ -804,7 +836,8 @@
 
                 if (garage.website) {
                     actions.push(`
-    <a class="actionBtn secondary"
+    <a id="garageWebsiteBtn"
+       class="actionBtn secondary"
        href="${escapeHtml(garage.website)}"
        target="_blank"
        rel="noopener">
@@ -823,10 +856,46 @@
 
                 garageActions.innerHTML = actions.join("");
 
+                const garageCallBtn = document.getElementById("garageCallBtn");
+                const garageEmailBtn = document.getElementById("garageEmailBtn");
+                const garageDirectionsBtn = document.getElementById("garageDirectionsBtn");
+                const garageWebsiteBtn = document.getElementById("garageWebsiteBtn");
                 const garageShareBtn = document.getElementById("garageShareBtn");
+
+                if (garageWebsiteBtn) {
+                    garageWebsiteBtn.addEventListener("click", () => {
+                        recordGarageAction("website_click", garage.id);
+                    });
+                }
+
+                if (garageCallBtn) {
+                    garageCallBtn.addEventListener("click", () => {
+                        recordGarageAction("call_click", garage.id);
+                    });
+                }
+
+                if (garageDirectionsBtn) {
+                    garageDirectionsBtn.addEventListener("click", () => {
+                        recordGarageAction("directions_click", garage.id);
+                    });
+                }
+
+                if (garageEmailBtn) {
+                    garageEmailBtn.addEventListener("click", async (event) => {
+                        event.preventDefault();
+
+                        const emailLink = garageEmailBtn.href;
+
+                        await recordGarageAction("email_click", garage.id);
+
+                        window.location.href = emailLink;
+                    });
+                }
 
                 if (garageShareBtn) {
                     garageShareBtn.addEventListener("click", async () => {
+                        await recordGarageAction("share_click", garageId);
+
                         const shareData = {
                             title: `${garage.name || "Garage"} | IOW Car Finder`,
                             text: `View ${garage.name || "this garage"} and its current cars on IOW Car Finder.`,

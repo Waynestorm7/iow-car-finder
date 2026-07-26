@@ -761,7 +761,15 @@ const server = http.createServer(async (req, res) => {
       data.garageId || data.garage_id || ""
     ).trim();
 
-    if (!["car_view", "garage_view", "call_click", "email_click", "directions_click", "share_click"].includes(eventType)) {
+    if (![
+      "car_view",
+      "garage_view",
+      "call_click",
+      "email_click",
+      "directions_click",
+      "website_click",
+      "share_click"
+    ].includes(eventType)) {
       return sendJson(res, 400, {
         success: false,
         message: "Invalid analytics event"
@@ -775,7 +783,18 @@ const server = http.createServer(async (req, res) => {
         car_id: null
       };
 
-      if (["car_view", "call_click", "email_click", "directions_click", "share_click"].includes(eventType)) {
+      const actionEvents = [
+        "call_click",
+        "email_click",
+        "directions_click",
+        "website_click",
+        "share_click"
+      ];
+
+      if (
+        eventType === "car_view" ||
+        (actionEvents.includes(eventType) && carId)
+      ) {
         if (!carId) {
           return sendJson(res, 400, {
             success: false,
@@ -800,9 +819,11 @@ const server = http.createServer(async (req, res) => {
 
         analyticsRow.car_id = car.id;
         analyticsRow.garage_id = car.garage_id || null;
-      }
 
-      if (eventType === "garage_view") {
+      } else if (
+        eventType === "garage_view" ||
+        (actionEvents.includes(eventType) && garageId)
+      ) {
         if (!garageId) {
           return sendJson(res, 400, {
             success: false,
@@ -826,6 +847,12 @@ const server = http.createServer(async (req, res) => {
         }
 
         analyticsRow.garage_id = garage.id;
+
+      } else {
+        return sendJson(res, 400, {
+          success: false,
+          message: "Missing car or garage id"
+        });
       }
 
       const { error: insertError } = await supabase
