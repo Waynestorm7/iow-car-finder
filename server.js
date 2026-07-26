@@ -733,6 +733,122 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Analytics: POST /analytics-event
+  // Stage 1: car views and garage views
+  // -----------------------------
+  if (req.method === "POST" && pathname === "/analytics-event") {
+    let data;
+
+    try {
+      const raw = await readBody(req);
+      data = JSON.parse(raw || "{}");
+    } catch {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
+    }
+
+    const eventType = String(
+      data.eventType || data.event_type || ""
+    ).trim().toLowerCase();
+
+    const carId = String(
+      data.carId || data.car_id || ""
+    ).trim();
+
+    const garageId = String(
+      data.garageId || data.garage_id || ""
+    ).trim();
+
+    if (!["car_view", "garage_view"].includes(eventType)) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Invalid analytics event"
+      });
+    }
+
+    try {
+      const analyticsRow = {
+        event_type: eventType,
+        garage_id: null,
+        car_id: null
+      };
+
+      if (eventType === "car_view") {
+        if (!carId) {
+          return sendJson(res, 400, {
+            success: false,
+            message: "Missing car id"
+          });
+        }
+
+        const { data: car, error: carError } = await supabase
+          .from("cars")
+          .select("id, garage_id")
+          .eq("id", carId)
+          .maybeSingle();
+
+        if (carError) throw carError;
+
+        if (!car) {
+          return sendJson(res, 404, {
+            success: false,
+            message: "Car not found"
+          });
+        }
+
+        analyticsRow.car_id = car.id;
+        analyticsRow.garage_id = car.garage_id || null;
+      }
+
+      if (eventType === "garage_view") {
+        if (!garageId) {
+          return sendJson(res, 400, {
+            success: false,
+            message: "Missing garage id"
+          });
+        }
+
+        const { data: garage, error: garageError } = await supabase
+          .from("garages")
+          .select("id")
+          .eq("id", garageId)
+          .maybeSingle();
+
+        if (garageError) throw garageError;
+
+        if (!garage) {
+          return sendJson(res, 404, {
+            success: false,
+            message: "Garage not found"
+          });
+        }
+
+        analyticsRow.garage_id = garage.id;
+      }
+
+      const { error: insertError } = await supabase
+        .from("analytics_events")
+        .insert(analyticsRow);
+
+      if (insertError) throw insertError;
+
+      return sendJson(res, 200, {
+        success: true
+      });
+
+    } catch (e) {
+      console.error("POST /analytics-event error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not record analytics event"
+      });
+    }
+  }
+
+  // -----------------------------
   // Auth: GET /my-garage
   // -----------------------------
   if (req.method === "GET" && pathname === "/my-garage") {

@@ -1001,6 +1001,38 @@
       return text;
     }
 
+    async function recordCarViewOnce(carId) {
+      const cleanCarId = String(carId || "").trim();
+
+      if (!cleanCarId) return;
+
+      const storageKey = "iowcf_car_view_" + cleanCarId;
+
+      try {
+        if (sessionStorage.getItem(storageKey)) {
+          return;
+        }
+
+        const response = await fetch("/analytics-event", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            eventType: "car_view",
+            carId: cleanCarId
+          }),
+          keepalive: true
+        });
+
+        if (response.ok) {
+          sessionStorage.setItem(storageKey, "recorded");
+        }
+      } catch (error) {
+        console.warn("Car view tracking failed:", error);
+      }
+    }
+
     function addSpec(specGrid, label, value) {
       const v = String(value ?? "").trim();
       if (!v) return;
@@ -1087,6 +1119,8 @@
 
         const car = json.car;
         const garage = json.garage;
+
+        recordCarViewOnce(car.id);
 
         const carStatus = String(car.status || "").toLowerCase();
         const isReserved = carStatus === "reserved";

@@ -577,6 +577,38 @@
             return cloudinaryOptimise(photo, "f_auto,q_auto,c_fill,w_700,h_438");
         }
 
+        async function recordGarageViewOnce(garageId) {
+            const cleanGarageId = String(garageId || "").trim();
+
+            if (!cleanGarageId) return;
+
+            const storageKey = "iowcf_garage_view_" + cleanGarageId;
+
+            try {
+                if (sessionStorage.getItem(storageKey)) {
+                    return;
+                }
+
+                const response = await fetch("/analytics-event", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        eventType: "garage_view",
+                        garageId: cleanGarageId
+                    }),
+                    keepalive: true
+                });
+
+                if (response.ok) {
+                    sessionStorage.setItem(storageKey, "recorded");
+                }
+            } catch (error) {
+                console.warn("Garage view tracking failed:", error);
+            }
+        }
+
         async function loadGarage() {
             const params = new URLSearchParams(window.location.search);
             const garageId = params.get("id");
@@ -610,6 +642,8 @@
                     carsBox.innerHTML = "";
                     return;
                 }
+
+                recordGarageViewOnce(garage.id);
 
                 const garageCars = cars.filter(car =>
                     String(car.garageId || car.garage_id || "") === String(garageId)
