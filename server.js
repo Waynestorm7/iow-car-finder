@@ -914,6 +914,227 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
+  // Admin: GET /admin-analytics
+  // Example:
+  // /admin-analytics?garageId=GARAGE_ID&range=30d
+  // Ranges: 7d, 30d, all
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/admin-analytics") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    const garageId = String(
+      urlObj.searchParams.get("garageId") || ""
+    ).trim();
+
+    const range = String(
+      urlObj.searchParams.get("range") || "30d"
+    ).trim().toLowerCase();
+
+    if (!garageId) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing garageId"
+      });
+    }
+
+    if (!["7d", "30d", "all"].includes(range)) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Invalid range"
+      });
+    }
+
+    let sinceIso = null;
+
+    if (range === "7d") {
+      sinceIso = new Date(
+        Date.now() - (7 * 24 * 60 * 60 * 1000)
+      ).toISOString();
+    }
+
+    if (range === "30d") {
+      sinceIso = new Date(
+        Date.now() - (30 * 24 * 60 * 60 * 1000)
+      ).toISOString();
+    }
+
+    try {
+      const garage = await dbGetGarageById(garageId);
+
+      if (!garage) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Garage not found"
+        });
+      }
+
+      /*
+        Load every analytics row in batches.
+        This avoids silently stopping at Supabase's normal row limit.
+      */
+      const events = [];
+      const pageSize = 1000;
+      let from = 0;
+
+      while (true) {
+        let eventsQuery = supabase
+          .from("analytics_events")
+          .select("event_type, car_id, created_at")
+          .eq("garage_id", garageId)
+          .order("id", { ascending: true })
+          .range(from, from + pageSize - 1);
+
+        if (sinceIso) {
+          eventsQuery = eventsQuery.gte("created_at", sinceIso);
+        }
+
+        const {
+          data: eventBatch,
+          error: eventsError
+        } = await eventsQuery;
+
+        if (eventsError) throw eventsError;
+
+        const batch = eventBatch || [];
+        events.push(...batch);
+
+        if (batch.length < pageSize) {
+          break;
+        }
+
+        from += pageSize;
+      }
+
+      const { data: cars, error: carsError } = await supabase
+        .from("cars")
+        .select("id, name, status, sold")
+        .eq("garage_id", garageId);
+
+      if (carsError) throw carsError;
+
+      const eventTotals = {
+        garage_view: 0,
+        car_view: 0,
+        call_click: 0,
+        email_click: 0,
+        directions_click: 0,
+        website_click: 0,
+        share_click: 0
+      };
+
+      const vehicleMap = new Map(
+        (cars || []).map(car => [
+          String(car.id),
+          {
+            carId: car.id,
+            name: car.name || "Unnamed vehicle",
+            status: car.status || "available",
+            views: 0,
+            callClicks: 0,
+            emailClicks: 0,
+            directionsClicks: 0,
+            websiteClicks: 0,
+            shareClicks: 0
+          }
+        ])
+      );
+
+      events.forEach(event => {
+        const eventType = String(event.event_type || "");
+
+        if (Object.prototype.hasOwnProperty.call(eventTotals, eventType)) {
+          eventTotals[eventType] += 1;
+        }
+
+        if (!event.car_id) return;
+
+        const vehicle = vehicleMap.get(String(event.car_id));
+        if (!vehicle) return;
+
+        if (eventType === "car_view") {
+          vehicle.views += 1;
+        }
+
+        if (eventType === "call_click") {
+          vehicle.callClicks += 1;
+        }
+
+        if (eventType === "email_click") {
+          vehicle.emailClicks += 1;
+        }
+
+        if (eventType === "directions_click") {
+          vehicle.directionsClicks += 1;
+        }
+
+        if (eventType === "website_click") {
+          vehicle.websiteClicks += 1;
+        }
+
+        if (eventType === "share_click") {
+          vehicle.shareClicks += 1;
+        }
+      });
+
+      const contactActions =
+        eventTotals.call_click +
+        eventTotals.email_click +
+        eventTotals.directions_click +
+        eventTotals.website_click +
+        eventTotals.share_click;
+
+      const vehicles = [...vehicleMap.values()]
+        .map(vehicle => ({
+          ...vehicle,
+          contactActions:
+            vehicle.callClicks +
+            vehicle.emailClicks +
+            vehicle.directionsClicks +
+            vehicle.websiteClicks +
+            vehicle.shareClicks
+        }))
+        .sort((a, b) =>
+          b.views - a.views ||
+          b.contactActions - a.contactActions ||
+          a.name.localeCompare(b.name)
+        );
+
+      return sendJson(res, 200, {
+        success: true,
+        range,
+        garage: {
+          id: garage.id,
+          name: garage.name
+        },
+        totals: {
+          garageViews: eventTotals.garage_view,
+          carViews: eventTotals.car_view,
+          contactActions,
+          callClicks: eventTotals.call_click,
+          emailClicks: eventTotals.email_click,
+          directionsClicks: eventTotals.directions_click,
+          websiteClicks: eventTotals.website_click,
+          shareClicks: eventTotals.share_click
+        },
+        vehicles
+      });
+
+    } catch (error) {
+      console.error("GET /admin-analytics error:", error);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load analytics"
+      });
+    }
+  }
+
+  // -----------------------------
   // Auth: PUT /my-garage
   // -----------------------------
   if (req.method === "PUT" && pathname === "/my-garage") {
