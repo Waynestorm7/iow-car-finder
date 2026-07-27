@@ -131,11 +131,15 @@
 
 
         input,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 14px;
+            min-height: 50px;
             border-radius: 13px;
             border: 1px solid rgba(16, 24, 40, .14);
+            background: #fff;
+            color: var(--text);
             font-size: 16px;
             font-family: inherit;
             outline: none;
@@ -147,7 +151,8 @@
         }
 
         input:focus,
-        textarea:focus {
+        textarea:focus,
+        select:focus {
             border-color: rgba(230, 126, 34, .6);
             box-shadow: 0 0 0 4px rgba(230, 126, 34, .12);
         }
@@ -253,6 +258,40 @@
             color: var(--muted);
             font-size: .92rem;
             line-height: 1.55;
+        }
+
+        .accountSummary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .accountBadge {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #f2f4f7;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            font-size: .78rem;
+            font-weight: 900;
+        }
+
+        .accountBadge.live {
+            background: #ecfdf3;
+            color: #027a48;
+        }
+
+        .accountBadge.warning {
+            background: #fff4e5;
+            color: #b54708;
+        }
+
+        .accountBadge.paused {
+            background: #fef3f2;
+            color: #b42318;
         }
 
         .countPill {
@@ -474,6 +513,85 @@
                         <label for="editDescription">Description</label>
                         <textarea id="editDescription"></textarea>
                     </div>
+
+                    <div class="editField full">
+                        <h3 style="margin:18px 0 4px;">Account & billing</h3>
+                        <p style="margin:0; color:#667085;">
+                            Private settings for managing this garage.
+                        </p>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editAccountStatus">Account status</label>
+                        <select id="editAccountStatus">
+                            <option value="active">Active</option>
+                            <option value="paused">Paused</option>
+                        </select>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editPublicStatus">Public visibility</label>
+                        <select id="editPublicStatus">
+                            <option value="live">Live</option>
+                            <option value="hidden">Hidden</option>
+                        </select>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editBillingStatus">Billing status</label>
+                        <select id="editBillingStatus">
+                            <option value="free_trial">Free trial</option>
+                            <option value="free_permanent">Free permanently</option>
+                            <option value="paying">Paying</option>
+                        </select>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editServiceType">Service type</label>
+                        <select id="editServiceType">
+                            <option value="self_service">Self-service</option>
+                            <option value="managed">Managed</option>
+                        </select>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editFoundingGarage">Founding garage</label>
+                        <select id="editFoundingGarage">
+                            <option value="false">No</option>
+                            <option value="true">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="editField">
+                        <label for="editPackageName">Package name</label>
+                        <input id="editPackageName" type="text" placeholder="Standard">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editMonthlyPrice">Monthly price (£)</label>
+                        <input id="editMonthlyPrice" type="number" min="0" step="0.01">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editTrialStart">Trial start</label>
+                        <input id="editTrialStart" type="date">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editTrialEnd">Trial end</label>
+                        <input id="editTrialEnd" type="date">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editNextReviewDate">Next review date</label>
+                        <input id="editNextReviewDate" type="date">
+                    </div>
+
+                    <div class="editField full">
+                        <label for="editInternalNotes">Private admin notes</label>
+                        <textarea id="editInternalNotes"
+                            placeholder="Agreement details, follow-up notes or special arrangements."></textarea>
+                    </div>
                 </div>
 
                 <div class="editActions">
@@ -507,6 +625,17 @@
         const editAddress = document.getElementById("editAddress");
         const editOpeningHours = document.getElementById("editOpeningHours");
         const editDescription = document.getElementById("editDescription");
+        const editAccountStatus = document.getElementById("editAccountStatus");
+        const editPublicStatus = document.getElementById("editPublicStatus");
+        const editBillingStatus = document.getElementById("editBillingStatus");
+        const editServiceType = document.getElementById("editServiceType");
+        const editFoundingGarage = document.getElementById("editFoundingGarage");
+        const editPackageName = document.getElementById("editPackageName");
+        const editMonthlyPrice = document.getElementById("editMonthlyPrice");
+        const editTrialStart = document.getElementById("editTrialStart");
+        const editTrialEnd = document.getElementById("editTrialEnd");
+        const editNextReviewDate = document.getElementById("editNextReviewDate");
+        const editInternalNotes = document.getElementById("editInternalNotes");
 
         let loadedGarages = [];
 
@@ -538,6 +667,17 @@
             editAddress.value = garage.address || "";
             editOpeningHours.value = garage.opening_hours || "";
             editDescription.value = garage.description || "";
+            editAccountStatus.value = garage.account_status || "active";
+            editPublicStatus.value = garage.public_status || "live";
+            editBillingStatus.value = garage.billing_status || "free_trial";
+            editServiceType.value = garage.service_type || "self_service";
+            editFoundingGarage.value = garage.founding_garage ? "true" : "false";
+            editPackageName.value = garage.package_name || "Standard";
+            editMonthlyPrice.value = garage.monthly_price ?? 50;
+            editTrialStart.value = garage.trial_start || "";
+            editTrialEnd.value = garage.trial_end || "";
+            editNextReviewDate.value = garage.next_review_date || "";
+            editInternalNotes.value = garage.internal_notes || "";
 
             editStatus.textContent = `Editing ${garage.name || "garage"}.`;
             editPanel.style.display = "block";
@@ -605,6 +745,57 @@
                 const counts = garage.counts || {};
                 const publicUrl = `/garage?id=${encodeURIComponent(garage.id)}`;
 
+                const accountStatus =
+                    garage.account_status === "paused"
+                        ? "Paused"
+                        : "Active";
+
+                const accountClass =
+                    garage.account_status === "paused"
+                        ? "paused"
+                        : "live";
+
+                const publicStatus =
+                    garage.public_status === "hidden"
+                        ? "Hidden"
+                        : "Live";
+
+                const publicClass =
+                    garage.public_status === "hidden"
+                        ? "warning"
+                        : "live";
+
+                const billingLabels = {
+                    free_trial: "Free trial",
+                    free_permanent: "Free permanently",
+                    paying: "Paying"
+                };
+
+                const billingLabel =
+                    billingLabels[garage.billing_status] || "Not set";
+
+                const billingClass =
+                    garage.billing_status === "free_trial"
+                        ? "warning"
+                        : garage.billing_status === "paying"
+                            ? "live"
+                            : "";
+
+                const serviceLabels = {
+                    self_service: "Self-service",
+                    managed: "Managed"
+                };
+
+                const serviceLabel =
+                    serviceLabels[garage.service_type] || "Not set";
+
+                const monthlyPrice = Number(garage.monthly_price ?? 0);
+
+                const priceLabel =
+                    monthlyPrice === 0
+                        ? "£0/month"
+                        : `£${monthlyPrice.toFixed(2).replace(/\.00$/, "")}/month`;
+
                 return `
           <article class="garageCard">
             <div class="garageTop">
@@ -615,6 +806,37 @@
                   ${escapeHtml(garage.email || "Email not set")}<br>
                   ${escapeHtml(garage.phone || "Phone not set")}
                 </div>
+
+<div class="accountSummary">
+  <span class="accountBadge ${accountClass}">
+    ${accountStatus}
+  </span>
+
+  <span class="accountBadge ${publicClass}">
+    ${publicStatus}
+  </span>
+
+  <span class="accountBadge ${billingClass}">
+    ${billingLabel}
+  </span>
+
+  <span class="accountBadge">
+    ${serviceLabel}
+  </span>
+
+  <span class="accountBadge">
+    ${escapeHtml(garage.package_name || "Standard")}
+  </span>
+
+  <span class="accountBadge">
+    ${priceLabel}
+  </span>
+
+  ${garage.founding_garage
+                        ? `<span class="accountBadge">Founding garage</span>`
+                        : ""}
+</div>
+
               </div>
 
 <div class="countPill">
@@ -680,7 +902,20 @@
                 postcode: editPostcode.value.trim(),
                 address: editAddress.value.trim(),
                 opening_hours: editOpeningHours.value.trim(),
-                description: editDescription.value.trim()
+                description: editDescription.value.trim(),
+                account_status: editAccountStatus.value,
+                public_status: editPublicStatus.value,
+                billing_status: editBillingStatus.value,
+                service_type: editServiceType.value,
+                founding_garage: editFoundingGarage.value === "true",
+                package_name: editPackageName.value.trim() || "Standard",
+                monthly_price: editMonthlyPrice.value === ""
+                    ? 0
+                    : Number(editMonthlyPrice.value),
+                trial_start: editTrialStart.value || null,
+                trial_end: editTrialEnd.value || null,
+                next_review_date: editNextReviewDate.value || null,
+                internal_notes: editInternalNotes.value.trim()
             };
 
             if (!payload.id) {

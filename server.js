@@ -470,6 +470,8 @@ async function dbListGarages() {
   opening_hours,
   description
 `)
+    .eq("account_status", "active")
+    .eq("public_status", "live")
     .order("name", { ascending: true });
 
   if (error) throw error;
@@ -493,7 +495,10 @@ async function dbGetGarageById(id) {
 website,
 logo_url,
 banner_url,
-opening_hours    `)
+opening_hours,
+account_status,
+public_status
+`)
     .eq("id", cleanId)
     .single();
 
@@ -545,9 +550,87 @@ async function dbAdminUpdateGarage(id, payload) {
     address: payload.address ? String(payload.address).trim() : null,
     town: payload.town ? String(payload.town).trim() : null,
     postcode: payload.postcode ? String(payload.postcode).trim() : null,
-    opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
-    description: payload.description ? String(payload.description).trim() : null,
+    opening_hours: payload.opening_hours
+      ? String(payload.opening_hours).trim()
+      : null,
+    description: payload.description
+      ? String(payload.description).trim()
+      : null
   };
+
+  const accountStatus = String(
+    payload.account_status || ""
+  ).trim().toLowerCase();
+
+  if (["active", "paused"].includes(accountStatus)) {
+    row.account_status = accountStatus;
+  }
+
+  const publicStatus = String(
+    payload.public_status || ""
+  ).trim().toLowerCase();
+
+  if (["live", "hidden"].includes(publicStatus)) {
+    row.public_status = publicStatus;
+  }
+
+  const billingStatus = String(
+    payload.billing_status || ""
+  ).trim().toLowerCase();
+
+  if (
+    ["free_permanent", "free_trial", "paying"].includes(
+      billingStatus
+    )
+  ) {
+    row.billing_status = billingStatus;
+  }
+
+  const serviceType = String(
+    payload.service_type || ""
+  ).trim().toLowerCase();
+
+  if (["self_service", "managed"].includes(serviceType)) {
+    row.service_type = serviceType;
+  }
+
+  if (payload.founding_garage !== undefined) {
+    row.founding_garage =
+      payload.founding_garage === true ||
+      String(payload.founding_garage).toLowerCase() === "true";
+  }
+
+  if (payload.trial_start !== undefined) {
+    row.trial_start = payload.trial_start || null;
+  }
+
+  if (payload.trial_end !== undefined) {
+    row.trial_end = payload.trial_end || null;
+  }
+
+  if (payload.package_name !== undefined) {
+    row.package_name =
+      String(payload.package_name || "").trim() || "Standard";
+  }
+
+  if (payload.monthly_price !== undefined) {
+    const monthlyPrice = Number(payload.monthly_price);
+
+    if (!Number.isFinite(monthlyPrice) || monthlyPrice < 0) {
+      throw new Error("Invalid monthly price");
+    }
+
+    row.monthly_price = monthlyPrice;
+  }
+
+  if (payload.next_review_date !== undefined) {
+    row.next_review_date = payload.next_review_date || null;
+  }
+
+  if (payload.internal_notes !== undefined) {
+    row.internal_notes =
+      String(payload.internal_notes || "").trim() || null;
+  }
 
   const { error } = await supabase
     .from("garages")
@@ -563,7 +646,7 @@ async function dbGetGaragesByIds(ids) {
 
   const { data, error } = await supabase
     .from("garages")
-    .select("id, name")
+    .select("id, name, account_status, public_status")
     .in("id", clean);
 
   if (error) throw error;
@@ -768,12 +851,32 @@ const server = http.createServer(async (req, res) => {
       const garageIds = carsRaw.map(c => c.garageId).filter(Boolean);
       const garages = await dbGetGaragesByIds(garageIds);
 
-      const garageMap = new Map(garages.map(g => [g.id, g.name]));
+      const visibleGarages = garages.filter(
+        garage =>
+          garage.account_status === "active" &&
+          garage.public_status === "live"
+      );
 
-      const cars = carsRaw.map(c => ({
-        ...c,
-        garageName: garageMap.get(c.garageId) || null,
-      }));
+      const visibleGarageIds = new Set(
+        visibleGarages.map(garage => String(garage.id))
+      );
+
+      const garageMap = new Map(
+        visibleGarages.map(garage => [
+          String(garage.id),
+          garage.name
+        ])
+      );
+
+      const cars = carsRaw
+        .filter(car =>
+          visibleGarageIds.has(String(car.garageId))
+        )
+        .map(car => ({
+          ...car,
+          garageName:
+            garageMap.get(String(car.garageId)) || null
+        }));
 
       return sendJson(res, 200, cars);
     } catch (e) {
@@ -794,9 +897,31 @@ const server = http.createServer(async (req, res) => {
       }
 
       // If you have garageName already on car, you may not even need this:
-      const garage = car.garageId ? await dbGetGarageById(car.garageId) : null;
+      const garage = car.garageId
+        ? await dbGetGarageById(car.garageId)
+        : null;
 
-      return sendJson(res, 200, { car, garage });
+      if (
+        !garage ||
+        garage.account_status !== "active" ||
+        garage.public_status !== "live"
+      ) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
+
+      const {
+        account_status,
+        public_status,
+        ...publicGarage
+      } = garage;
+
+      return sendJson(res, 200, {
+        car,
+        garage: publicGarage
+      });
     } catch (e) {
       console.error("GET /car-data error:", e);
       return sendJson(res, 500, { success: false, message: "Database error" });
@@ -1735,7 +1860,18 @@ const server = http.createServer(async (req, res) => {
   email,
   website,
   opening_hours,
-  description
+  description,
+  account_status,
+  public_status,
+  billing_status,
+  service_type,
+  founding_garage,
+  trial_start,
+  trial_end,
+  package_name,
+  monthly_price,
+  next_review_date,
+  internal_notes
 `)
         .order("name", { ascending: true });
 
