@@ -1863,7 +1863,7 @@ ${car.mileage || car.colour ? `
                   },
 
                   body: JSON.stringify({
-                    name: car.name,
+                    id: car.id,
                     status: newStatus
                   })
                 });
@@ -1930,7 +1930,7 @@ ${car.mileage || car.colour ? `
             try {
               const { data } = await supabaseClient.auth.getSession();
 
-              const resp = await fetch("/my-cars?name=" + encodeURIComponent(car.name || ""), {
+              const resp = await fetch("/my-cars?id=" + encodeURIComponent(car.id || ""), {
                 method: "DELETE",
                 headers: {
                   Authorization: `Bearer ${data.session.access_token}`

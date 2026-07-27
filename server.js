@@ -1557,7 +1557,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -----------------------------
-  // Auth: DELETE /my-cars?name=
+  // Auth: DELETE /my-cars?id=
   // -----------------------------
   if (req.method === "DELETE" && pathname === "/my-cars") {
     const auth = await getGarageFromAuth(req);
@@ -1569,30 +1569,22 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    const name = String(urlObj.searchParams.get("name") || "").trim();
-    if (!name) return sendJson(res, 400, { success: false, message: "Missing name" });
+    const id = String(
+      urlObj.searchParams.get("id") || ""
+    ).trim();
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
+    }
 
     try {
-      const car = await dbGetCarByName(name);
-
-      if (!car) {
-        return sendJson(res, 404, {
-          success: false,
-          message: "Car not found"
-        });
-      }
-
-      if (String(car.garageId) !== String(auth.garageId)) {
-        return sendJson(res, 403, {
-          success: false,
-          message: "Forbidden"
-        });
-      }
-
       const { error, count } = await supabase
         .from("cars")
         .delete({ count: "exact" })
-        .eq("name", name)
+        .eq("id", id)
         .eq("garage_id", auth.garageId);
 
       if (error) throw error;
@@ -1600,14 +1592,17 @@ const server = http.createServer(async (req, res) => {
       if (!count) {
         return sendJson(res, 404, {
           success: false,
-          message: "Not found"
+          message: "Car not found"
         });
       }
 
-      return sendJson(res, 200, { success: true });
+      return sendJson(res, 200, {
+        success: true
+      });
 
     } catch (e) {
       console.error("DELETE /my-cars error:", e);
+
       return sendJson(res, 500, {
         success: false,
         message: "Database delete failed"
@@ -1647,41 +1642,35 @@ const server = http.createServer(async (req, res) => {
     }
 
     let data;
+
     try {
       const raw = await readBody(req);
       data = JSON.parse(raw || "{}");
     } catch {
-      return sendJson(res, 400, { success: false, message: "Bad JSON" });
+      return sendJson(res, 400, {
+        success: false,
+        message: "Bad JSON"
+      });
     }
 
-    const name = String(data.name || "").trim();
+    const id = String(data.id || "").trim();
     const status = String(data.status || "").trim().toLowerCase();
 
-    if (!name) {
-      return sendJson(res, 400, { success: false, message: "Missing name" });
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
     }
 
     if (!["available", "reserved", "sold"].includes(status)) {
-      return sendJson(res, 400, { success: false, message: "Invalid status" });
+      return sendJson(res, 400, {
+        success: false,
+        message: "Invalid status"
+      });
     }
 
     try {
-      const car = await dbGetCarByName(name);
-
-      if (!car) {
-        return sendJson(res, 404, {
-          success: false,
-          message: "Car not found"
-        });
-      }
-
-      if (String(car.garageId) !== String(auth.garageId)) {
-        return sendJson(res, 403, {
-          success: false,
-          message: "Forbidden"
-        });
-      }
-
       const update = {
         status,
         sold: status === "sold",
@@ -1689,13 +1678,22 @@ const server = http.createServer(async (req, res) => {
         updatedAt: new Date().toISOString()
       };
 
-      const { error } = await supabase
+      const { data: updatedCar, error } = await supabase
         .from("cars")
         .update(update)
-        .eq("name", name)
-        .eq("garage_id", auth.garageId);
+        .eq("id", id)
+        .eq("garage_id", auth.garageId)
+        .select("id")
+        .maybeSingle();
 
       if (error) throw error;
+
+      if (!updatedCar) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
 
       return sendJson(res, 200, {
         success: true,
@@ -1705,6 +1703,7 @@ const server = http.createServer(async (req, res) => {
 
     } catch (e) {
       console.error("POST /cars-status error:", e);
+
       return sendJson(res, 500, {
         success: false,
         message: "Database update failed"
