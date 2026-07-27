@@ -673,11 +673,60 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET") {
     if (pathname.startsWith("/images/")) {
-      return serveFile(res, path.join(__dirname, pathname));
+      const imagesRoot = path.resolve(__dirname, "images");
+
+      const imagePath = path.resolve(
+        imagesRoot,
+        "." + pathname.slice("/images".length)
+      );
+
+      const isInsideImages =
+        imagePath === imagesRoot ||
+        imagePath.startsWith(imagesRoot + path.sep);
+
+      if (!isInsideImages) {
+        return send(
+          res,
+          404,
+          { "Content-Type": "text/plain; charset=utf-8" },
+          "Not found"
+        );
+      }
+
+      return serveFile(res, imagePath);
     }
 
-    const possible = path.join(__dirname, pathname);
-    if (pathname !== "/" && fs.existsSync(possible) && fs.statSync(possible).isFile()) {
+    const allowedStaticExtensions = new Set([
+      ".html",
+      ".css",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".webp",
+      ".svg",
+      ".ico"
+    ]);
+
+    const extension = path.extname(pathname).toLowerCase();
+    const projectRoot = path.resolve(__dirname);
+    const possible = path.resolve(projectRoot, "." + pathname);
+
+    const isInsideProject =
+      possible === projectRoot ||
+      possible.startsWith(projectRoot + path.sep);
+
+    const isHiddenFile = path
+      .basename(possible)
+      .startsWith(".");
+
+    if (
+      pathname !== "/" &&
+      isInsideProject &&
+      !isHiddenFile &&
+      allowedStaticExtensions.has(extension) &&
+      fs.existsSync(possible) &&
+      fs.statSync(possible).isFile()
+    ) {
       return serveFile(res, possible);
     }
   }
