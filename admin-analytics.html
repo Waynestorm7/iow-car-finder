@@ -240,30 +240,92 @@
             font-size: .9rem;
         }
 
+        .reportStory {
+            margin: 0 0 16px;
+            padding: 14px 16px;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 16px 16px 0;
+            background: #fff7ed;
+            color: #475467;
+            font-weight: 750;
+            line-height: 1.5;
+        }
+
+        .summary .stat.primary {
+            background:
+                radial-gradient(circle at top right, rgba(230, 126, 34, .22), transparent 42%),
+                linear-gradient(135deg, #07111d, #12304d);
+            border-color: transparent;
+        }
+
+        .summary .stat.primary strong,
+        .summary .stat.primary span {
+            color: #fff;
+        }
+
+        .summary .stat.accent {
+            background: #fff7ed;
+            border-color: rgba(230, 126, 34, .28);
+        }
+
+        .summary .stat.accent strong {
+            color: var(--accentDark);
+        }
+
         .breakdown {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
+            grid-template-columns: .85fr 1.7fr;
+            gap: 14px;
             margin-bottom: 18px;
         }
 
-        .mini {
+        .detailCard {
             background: #fff;
             border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px;
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 20px;
         }
 
-        .mini strong {
-            display: block;
+        .detailTitle {
+            margin-bottom: 12px;
             color: var(--dark);
-            font-size: 1.45rem;
-            margin-bottom: 5px;
+            font-size: .92rem;
+            font-weight: 950;
+            letter-spacing: -.01em;
         }
 
-        .mini span {
+        .detailMetrics {
+            display: grid;
+            gap: 10px;
+        }
+
+        .detailMetrics.views {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .detailMetrics.actions {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .detailMetric {
+            padding: 13px;
+            border: 1px solid rgba(16, 24, 40, .08);
+            border-radius: 15px;
+            background: #f8fafc;
+        }
+
+        .detailMetric strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--dark);
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .detailMetric span {
             color: var(--muted);
-            font-size: .8rem;
+            font-size: .76rem;
             font-weight: 850;
         }
 
@@ -279,7 +341,11 @@
         .tablePanel h2 {
             margin: 0 0 16px;
             color: var(--dark);
+            font-family: Arial, sans-serif;
             font-size: 1.35rem;
+            font-style: normal;
+            font-weight: 800;
+            letter-spacing: 0;
         }
 
         .tableWrap {
@@ -359,7 +425,11 @@
             }
 
             .breakdown {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+            }
+
+            .detailMetrics.actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .reportHeader {
@@ -401,13 +471,22 @@
             }
         }
 
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        .printReportHeader {
+            display: none;
+        }
+
         @media print {
+
             header,
             .hero,
             #loginPanel,
             #controlsPanel,
-            .printHide,
-            .note {
+            .printHide {
                 display: none !important;
             }
 
@@ -417,7 +496,7 @@
 
             main {
                 max-width: none;
-                padding: 0;
+                padding: 12mm;
             }
 
             .stat,
@@ -426,9 +505,168 @@
                 box-shadow: none;
             }
 
+            .summary .stat.primary {
+                background: #07111d !important;
+                border-color: #07111d !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .summary .stat.primary strong,
+            .summary .stat.primary span {
+                color: #ffffff !important;
+            }
+
+            .summary .stat.accent {
+                background: #fff7ed !important;
+                border-color: rgba(230, 126, 34, .35) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
             .tablePanel {
                 border: 0;
-                padding: 0;
+                padding: 0 0 0 4px;
+                overflow: visible;
+            }
+
+            .printReportHeader {
+                display: flex !important;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                background: #07111d !important;
+                color: #ffffff !important;
+                padding: 17px 20px;
+                margin-bottom: 18px;
+                border-radius: 10px;
+                border-bottom: 4px solid #e67e22;
+
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .printBrand {
+                flex: 1;
+                font-size: 1.5rem;
+                line-height: 1.05;
+                font-weight: 950;
+                color: #ffffff !important;
+            }
+
+            .printBrand span {
+                color: #e67e22 !important;
+            }
+
+            .printBrand small {
+                display: block;
+                margin-top: 6px;
+                color: rgba(255, 255, 255, .76) !important;
+                font-size: .82rem;
+                line-height: 1;
+                font-weight: 750;
+                letter-spacing: .01em;
+            }
+
+            .printTitle {
+                flex: 0 0 auto;
+                color: rgba(255, 255, 255, .92) !important;
+                font-size: 1.05rem;
+                font-weight: 850;
+                text-align: right;
+            }
+
+            .printTitle small {
+                display: block;
+                margin-top: 6px;
+                color: rgba(255, 255, 255, .68) !important;
+                font-size: .72rem;
+                font-weight: 700;
+            }
+
+            .summary {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                margin-bottom: 12px !important;
+            }
+
+            .breakdown {
+                grid-template-columns: .85fr 1.7fr !important;
+                gap: 10px !important;
+                margin-bottom: 12px !important;
+            }
+
+            .reportStory {
+                margin-bottom: 10px !important;
+                padding: 8px 10px !important;
+                font-size: .76rem !important;
+            }
+
+            .detailCard {
+                padding: 12px !important;
+                border-radius: 14px !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+
+            .detailTitle {
+                margin-bottom: 8px !important;
+                font-size: .82rem !important;
+            }
+
+            .detailMetrics.views {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+
+            .detailMetrics.actions {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            }
+
+            .detailMetric {
+                padding: 8px 9px !important;
+                border-radius: 10px !important;
+            }
+
+            .detailMetric strong {
+                font-size: 1rem !important;
+            }
+
+            .detailMetric span {
+                font-size: .68rem !important;
+            }
+
+            .reportHeader {
+                display: flex !important;
+                margin-bottom: 12px !important;
+            }
+
+            .stat {
+                padding: 15px !important;
+                border-radius: 16px !important;
+            }
+
+            .mini {
+                padding: 11px !important;
+                border-radius: 13px !important;
+            }
+
+            .tablePanel h2 {
+                margin-bottom: 10px !important;
+            }
+
+            table {
+                min-width: 0 !important;
+            }
+
+            th,
+            td {
+                padding: 8px 10px !important;
+            }
+
+            .note {
+                margin-top: 10px !important;
+                padding: 10px 12px !important;
+                font-size: .78rem !important;
             }
         }
     </style>
@@ -500,6 +738,19 @@
         </section>
 
         <section id="reportArea" style="display:none;">
+
+            <div class="printReportHeader">
+                <div class="printBrand">
+                    <span>IOW</span> Car Finder
+                    <small>www.iowcarfinder.co.uk</small>
+                </div>
+
+                <div class="printTitle">
+                    Garage Performance Report
+                    <small id="printGeneratedDate"></small>
+                </div>
+            </div>
+
             <div class="reportHeader">
                 <div>
                     <h2 id="reportGarageName">Garage report</h2>
@@ -563,6 +814,8 @@
         const breakdown = document.getElementById("breakdown");
         const vehicleRows = document.getElementById("vehicleRows");
         const printBtn = document.getElementById("printBtn");
+        const printGeneratedDate =
+            document.getElementById("printGeneratedDate");
 
         function escapeHtml(value) {
             return String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -589,49 +842,87 @@
 
             reportRange.textContent = rangeLabel(data.range);
 
+            printGeneratedDate.textContent =
+                `Generated ${new Date().toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                })}`;
+
+            const garageViews = Number(totals.garageViews || 0);
+            const carViews = Number(totals.carViews || 0);
+            const totalPageViews = garageViews + carViews;
+            const totalActions = Number(totals.contactActions || 0);
+            const vehicleCount = vehicles.length;
+
+
             summary.innerHTML = `
-                <div class="stat">
-                    <strong>${Number(totals.garageViews || 0)}</strong>
-                    <span>Garage profile views</span>
-                </div>
+    <div class="stat primary">
+        <strong>${totalPageViews}</strong>
+        <span>Total page views</span>
+    </div>
 
-                <div class="stat">
-                    <strong>${Number(totals.carViews || 0)}</strong>
-                    <span>Car advert views</span>
-                </div>
+    <div class="stat accent">
+        <strong>${totalActions}</strong>
+        <span>Total action clicks</span>
+    </div>
 
-                <div class="stat">
-                    <strong>${Number(totals.contactActions || 0)}</strong>
-                    <span>Total action clicks</span>
-                </div>
-            `;
+    <div class="stat">
+        <strong>${vehicleCount}</strong>
+        <span>Vehicles listed</span>
+    </div>
+`;
 
             breakdown.innerHTML = `
-                <div class="mini">
-                    <strong>${Number(totals.callClicks || 0)}</strong>
-                    <span>Call clicks</span>
-                </div>
+    <article class="detailCard">
+        <div class="detailTitle">Page-view breakdown</div>
 
-                <div class="mini">
-                    <strong>${Number(totals.emailClicks || 0)}</strong>
-                    <span>Email clicks</span>
-                </div>
+        <div class="detailMetrics views">
+            <div class="detailMetric">
+                <strong>${garageViews}</strong>
+                <span>Garage profile</span>
+            </div>
 
-                <div class="mini">
-                    <strong>${Number(totals.directionsClicks || 0)}</strong>
-                    <span>Directions clicks</span>
-                </div>
+            <div class="detailMetric">
+                <strong>${carViews}</strong>
+                <span>Car adverts</span>
+            </div>
+        </div>
+    </article>
 
-                <div class="mini">
-                    <strong>${Number(totals.websiteClicks || 0)}</strong>
-                    <span>Website clicks</span>
-                </div>
+    <article class="detailCard">
+        <div class="detailTitle">Customer actions</div>
 
-                <div class="mini">
-                    <strong>${Number(totals.shareClicks || 0)}</strong>
-                    <span>Share clicks</span>
-                </div>
-            `;
+        <div class="detailMetrics actions">
+            <div class="detailMetric">
+                <strong>${Number(totals.callClicks || 0)}</strong>
+                <span>Calls</span>
+            </div>
+
+            <div class="detailMetric">
+                <strong>${Number(totals.emailClicks || 0)}</strong>
+                <span>Emails</span>
+            </div>
+
+            <div class="detailMetric">
+                <strong>${Number(totals.directionsClicks || 0)}</strong>
+                <span>Directions</span>
+            </div>
+
+            <div class="detailMetric">
+                <strong>${Number(totals.websiteClicks || 0)}</strong>
+                <span>Website</span>
+            </div>
+
+            <div class="detailMetric">
+                <strong>${Number(totals.shareClicks || 0)}</strong>
+                <span>Shares</span>
+            </div>
+        </div>
+    </article>
+`;
 
             if (!vehicles.length) {
                 vehicleRows.innerHTML = `
