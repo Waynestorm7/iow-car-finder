@@ -37,7 +37,34 @@ cloudinary.config({
 });
 
 // Multer (disk temp)
-const upload = multer({ dest: UPLOAD_DIR });
+const allowedImageTypes = new Set([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+  "image/avif"
+]);
+
+const upload = multer({
+  dest: UPLOAD_DIR,
+
+  limits: {
+    fileSize: 15 * 1024 * 1024,
+    files: 12
+  },
+
+  fileFilter: (req, file, callback) => {
+    if (!allowedImageTypes.has(file.mimetype)) {
+      return callback(
+        new Error("Only recognised image files are allowed.")
+      );
+    }
+
+    callback(null, true);
+  }
+});
 
 // Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_SECRET, {
