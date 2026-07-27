@@ -331,15 +331,16 @@ async function dbInsertCar(payload) {
   if (error) throw error;
 }
 
-async function dbUpdateCar(payload) {
-
+async function dbUpdateCar(payload, garageId = null) {
   const row = {
     name: payload.name,
     year: Number(payload.year),
     price: Number(payload.price),
+
     mileage: payload.mileage
       ? Number(String(payload.mileage).replace(/[,\s.]/g, ""))
       : null,
+
     fuel: payload.fuel ?? null,
     transmission: payload.transmission ?? null,
     engine: payload.engine ?? null,
@@ -352,12 +353,22 @@ async function dbUpdateCar(payload) {
     updatedAt: new Date().toISOString()
   };
 
-  const { error } = await supabase
+  let query = supabase
     .from("cars")
     .update(row)
     .eq("id", payload.id);
 
+  if (garageId) {
+    query = query.eq("garage_id", garageId);
+  }
+
+  const { data, error } = await query
+    .select("id")
+    .maybeSingle();
+
   if (error) throw error;
+
+  return data || null;
 }
 
 async function dbDeleteCarByName(name) {
@@ -1375,7 +1386,6 @@ const server = http.createServer(async (req, res) => {
   // Auth: PUT /my-cars
   // -----------------------------
   if (req.method === "PUT" && pathname === "/my-cars") {
-
     const auth = await getGarageFromAuth(req);
 
     if (!auth) {
@@ -1397,8 +1407,29 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    const carId = String(data.id || "").trim();
+
+    if (!carId) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing car id"
+      });
+    }
+
+    data.id = carId;
+
     try {
-      await dbUpdateCar(data);
+      const updatedCar = await dbUpdateCar(
+        data,
+        auth.garageId
+      );
+
+      if (!updatedCar) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Car not found"
+        });
+      }
 
       return sendJson(res, 200, {
         success: true
@@ -1412,7 +1443,6 @@ const server = http.createServer(async (req, res) => {
         message: "Database update failed"
       });
     }
-
   }
 
   // -----------------------------
