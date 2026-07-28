@@ -1847,7 +1847,11 @@ ${car.mileage || car.colour ? `
 
               if (!newStatus) return;
 
-              if (!confirm(`Change "${car.name}" to ${newStatus.toUpperCase()}?`)) return;
+              if (!confirm(`Change "${car.name}" to ${newStatus.toUpperCase()}?`)) {
+                return;
+              }
+
+              const originalButtonText = btn.textContent;
 
               btn.disabled = true;
               btn.textContent = "Saving…";
@@ -1871,19 +1875,27 @@ ${car.mileage || car.colour ? `
                 const result = await resp.json().catch(() => null);
 
                 if (!resp.ok || !result || !result.success) {
-                  showMsg("error", result?.message || "Could not update status.");
+                  alert(
+                    result?.message || "Could not update status."
+                  );
+
                   btn.disabled = false;
-                  btn.textContent = newStatus;
+                  btn.textContent = originalButtonText;
                   return;
                 }
 
-                showMsg("success", `Status updated to ${newStatus}.`);
+                showMsg(
+                  "success",
+                  `Status updated to ${newStatus}.`
+                );
+
                 renderCars();
 
               } catch {
                 showMsg("error", "Network error.");
+
                 btn.disabled = false;
-                btn.textContent = newStatus;
+                btn.textContent = originalButtonText;
               }
             });
           });

@@ -172,17 +172,28 @@ function isAdmin(req) {
 }
 
 async function getGarageFromAuth(req) {
-  const authHeader = String(req.headers.authorization || "").trim();
+  const authHeader = String(
+    req.headers.authorization || ""
+  ).trim();
 
   if (!authHeader.startsWith("Bearer ")) {
     return null;
   }
 
-  const token = authHeader.replace("Bearer ", "").trim();
+  const token = authHeader
+    .replace("Bearer ", "")
+    .trim();
 
-  const { data: userData, error: userError } = await supabase.auth.getUser(token);
+  const {
+    data: userData,
+    error: userError
+  } = await supabase.auth.getUser(token);
 
-  if (userError || !userData || !userData.user) {
+  if (
+    userError ||
+    !userData ||
+    !userData.user
+  ) {
     return null;
   }
 
@@ -199,12 +210,40 @@ async function getGarageFromAuth(req) {
     return null;
   }
 
+  const {
+    data: garage,
+    error: garageError
+  } = await supabase
+    .from("garages")
+    .select("account_status")
+    .eq("id", data.garage_id)
+    .maybeSingle();
+
+  if (garageError || !garage) {
+    return null;
+  }
+
   return {
     userId,
     garageId: data.garage_id,
     role: data.role,
-    status: data.status
+    status: data.status,
+    accountStatus:
+      garage.account_status || "active"
   };
+}
+
+function rejectPausedGarage(auth, res) {
+  if (auth.accountStatus === "active") {
+    return false;
+  }
+
+  sendJson(res, 403, {
+    success: false,
+    message: "Garage account is paused. Changes are disabled."
+  });
+
+  return true;
 }
 
 function readBody(req) {
@@ -669,7 +708,6 @@ const server = http.createServer(async (req, res) => {
   // Returns: { success: true, urls: [...] }
   // =============================
   if (req.method === "POST" && pathname === "/upload") {
-
     const auth = await getGarageFromAuth(req);
 
     if (!auth) {
@@ -679,37 +717,66 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (rejectPausedGarage(auth, res)) {
+      return;
+    }
+
     return upload.array("photos", 12)(req, res, async (err) => {
       if (err) {
         console.error("multer error:", err);
-        return sendJson(res, 400, { success: false, message: "Upload parse failed" });
+
+        return sendJson(res, 400, {
+          success: false,
+          message: "Upload parse failed"
+        });
       }
 
-      const files = Array.isArray(req.files) ? req.files : [];
+      const files = Array.isArray(req.files)
+        ? req.files
+        : [];
+
       if (!files.length) {
-        return sendJson(res, 400, { success: false, message: "No files uploaded. Field name must be 'photos'." });
+        return sendJson(res, 400, {
+          success: false,
+          message:
+            "No files uploaded. Field name must be 'photos'."
+        });
       }
 
       try {
         const urls = await Promise.all(
-          files.map((f) =>
+          files.map(file =>
             cloudinary.uploader
-              .upload(f.path, { folder: "cars" })
-              .then((r) => r.secure_url)
+              .upload(file.path, {
+                folder: "cars"
+              })
+              .then(result => result.secure_url)
           )
         );
 
-        // cleanup temp files
-        files.forEach((f) => fs.unlink(f.path, () => { }));
+        files.forEach(file => {
+          fs.unlink(file.path, () => { });
+        });
 
-        return sendJson(res, 200, { success: true, urls });
-      } catch (e) {
-        console.error("Cloudinary upload failed:", e);
+        return sendJson(res, 200, {
+          success: true,
+          urls
+        });
 
-        // cleanup temp files
-        files.forEach((f) => fs.unlink(f.path, () => { }));
+      } catch (error) {
+        console.error(
+          "Cloudinary upload failed:",
+          error
+        );
 
-        return sendJson(res, 500, { success: false, message: "Cloudinary upload failed" });
+        files.forEach(file => {
+          fs.unlink(file.path, () => { });
+        });
+
+        return sendJson(res, 500, {
+          success: false,
+          message: "Cloudinary upload failed"
+        });
       }
     });
   }
@@ -1359,6 +1426,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (rejectPausedGarage(auth, res)) {
+      return;
+    }
+
     let data;
 
     try {
@@ -1543,6 +1614,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (rejectPausedGarage(auth, res)) {
+      return;
+    }
+
     let data;
 
     try {
@@ -1594,6 +1669,10 @@ const server = http.createServer(async (req, res) => {
         success: false,
         message: "Unauthorized"
       });
+    }
+
+    if (rejectPausedGarage(auth, res)) {
+      return;
     }
 
     let data;
@@ -1694,6 +1773,10 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
+    if (rejectPausedGarage(auth, res)) {
+      return;
+    }
+
     const id = String(
       urlObj.searchParams.get("id") || ""
     ).trim();
@@ -1764,6 +1847,10 @@ const server = http.createServer(async (req, res) => {
         success: false,
         message: "Unauthorized"
       });
+    }
+
+    if (rejectPausedGarage(auth, res)) {
+      return;
     }
 
     let data;
