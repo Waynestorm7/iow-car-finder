@@ -372,6 +372,16 @@
       box-shadow: 0 0 0 3px rgba(230, 126, 34, .14);
     }
 
+    input:disabled,
+    textarea:disabled,
+    select:disabled {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+      color: #6b7280;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
     textarea {
       min-height: 85px;
       resize: vertical;
@@ -607,9 +617,21 @@
       border-color: #10263d;
     }
 
-    .btnSold:disabled {
-      opacity: .6;
-      cursor: not-allowed
+    .dashboard-menu button:disabled,
+    .welcome-actions button:disabled,
+    .btnStatus:disabled,
+    .btnSold:disabled,
+    .danger:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btnStatus:disabled {
+      background: #e5e7eb;
+      border-color: #e5e7eb;
+      color: #6b7280;
     }
 
     .twoColMot {
@@ -1131,7 +1153,7 @@
     <div id="pausedAccountNotice" class="paused-account-notice">
       <strong>Account paused — dashboard is read-only</strong>
       <span>
-        You can view your stock and adverts, but changes are currently disabled.
+        You can view your stock and garage profile, but changes and advert previews are currently disabled.
       </span>
     </div>
 
@@ -1931,6 +1953,26 @@ ${car.mileage || car.colour ? `
 
           const delBtn = row.querySelector(".danger");
           const editBtn = row.querySelector(".btnEdit");
+          const previewLink = row.querySelector('a[href^="/car?id="]');
+
+          if (isGaragePaused) {
+            statusBtns.forEach(btn => {
+              btn.disabled = true;
+            });
+
+            editBtn.disabled = true;
+            delBtn.disabled = true;
+
+            if (previewLink) {
+              previewLink.removeAttribute("href");
+              previewLink.removeAttribute("target");
+              previewLink.setAttribute("aria-disabled", "true");
+              previewLink.style.opacity = ".6";
+              previewLink.style.cursor = "not-allowed";
+              previewLink.style.pointerEvents = "none";
+              previewLink.textContent = "Preview unavailable";
+            }
+          }
 
           editBtn.addEventListener("click", () => {
             setActiveDashboardButton(showAddCarBtn);
@@ -2199,6 +2241,8 @@ ${car.mileage || car.colour ? `
         pausedAccountNotice.style.display =
           isGaragePaused ? "block" : "none";
 
+        applyPausedDashboardState();
+
       } catch (error) {
         console.error(
           "Could not load garage account status:",
@@ -2209,6 +2253,26 @@ ${car.mileage || car.colour ? `
 
     const welcomeAddBtn = document.getElementById("welcomeAddBtn");
     const welcomeCarsBtn = document.getElementById("welcomeCarsBtn");
+
+    function applyPausedDashboardState() {
+      showAddCarBtn.disabled = isGaragePaused;
+      welcomeAddBtn.disabled = isGaragePaused;
+      saveGarageBtn.disabled = isGaragePaused;
+      garageLogoFileInput.disabled = isGaragePaused;
+      garageBannerFileInput.disabled = isGaragePaused;
+
+      [
+        garageNameInput,
+        garagePhoneInput,
+        garageEmailInput,
+        garageWebsiteInput,
+        garageAddressInput,
+        garageOpeningHoursInput,
+        garageDescriptionInput
+      ].forEach(field => {
+        field.disabled = isGaragePaused;
+      });
+    }
 
     function setActiveDashboardButton(activeButton) {
       [showAddCarBtn, showMyCarsBtn, showGarageProfileBtn].forEach(btn => {
