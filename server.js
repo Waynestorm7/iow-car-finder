@@ -476,7 +476,7 @@ async function dbGetCarById(id) {
       )
     `)
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
   if (!data) return null;
