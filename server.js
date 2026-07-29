@@ -2429,7 +2429,15 @@ const server = http.createServer(async (req, res) => {
           phone: application.phone || null,
           email: application.email || null,
           website: application.website || null,
-          description: application.message || null
+          description: application.message || null,
+
+          account_status: "active",
+          public_status: "hidden",
+          billing_status: "free_trial",
+          service_type: "self_service",
+          founding_garage: false,
+          package_name: "Standard",
+          monthly_price: 50
         })
         .select("id")
         .single();
