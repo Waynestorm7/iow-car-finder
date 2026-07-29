@@ -757,6 +757,27 @@
       line-height: 1.45;
     }
 
+    .paused-account-notice {
+      display: none;
+      margin: 16px 0 0;
+      padding: 14px 16px;
+      border: 1px solid #f59e0b;
+      border-radius: 14px;
+      background: #fff7ed;
+      color: #92400e;
+      line-height: 1.45;
+    }
+
+    .paused-account-notice strong,
+    .paused-account-notice span {
+      display: block;
+    }
+
+    .paused-account-notice span {
+      margin-top: 4px;
+      font-size: .92rem;
+    }
+
     .dashboard-menu {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1106,6 +1127,13 @@
     <p class="dashboard-subtitle">
       Manage listings, stock status and your public garage profile.
     </p>
+
+    <div id="pausedAccountNotice" class="paused-account-notice">
+      <strong>Account paused — dashboard is read-only</strong>
+      <span>
+        You can view your stock and adverts, but changes are currently disabled.
+      </span>
+    </div>
 
     <div class="dashboard-menu">
       <button id="show-add-car">Add vehicle</button>
@@ -1483,6 +1511,7 @@
     let uploadedPhotoUrls = [];
     let currentGarageId = null;
     let editingCar = null;
+    let isGaragePaused = false;
 
     function showMsg(type, text) {
       msgBox.className = "msg " + type;
@@ -2140,6 +2169,44 @@ ${car.mileage || car.colour ? `
     const garageProfileSection = document.getElementById("garageProfileSection");
     const logoutBtn = document.getElementById("logout");
     const dashboardWelcome = document.getElementById("dashboardWelcome");
+    const pausedAccountNotice =
+      document.getElementById("pausedAccountNotice");
+
+    async function loadGarageAccountStatus() {
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+
+        const res = await fetch("/my-garage", {
+          headers: {
+            Authorization: `Bearer ${data.session.access_token}`
+          }
+        });
+
+        const result = await res.json().catch(() => null);
+
+        if (
+          !res.ok ||
+          !result ||
+          !result.success ||
+          !result.garage
+        ) {
+          return;
+        }
+
+        isGaragePaused =
+          result.garage.account_status === "paused";
+
+        pausedAccountNotice.style.display =
+          isGaragePaused ? "block" : "none";
+
+      } catch (error) {
+        console.error(
+          "Could not load garage account status:",
+          error
+        );
+      }
+    }
+
     const welcomeAddBtn = document.getElementById("welcomeAddBtn");
     const welcomeCarsBtn = document.getElementById("welcomeCarsBtn");
 
@@ -2348,6 +2415,8 @@ ${car.mileage || car.colour ? `
       console.log("Garage ID:", garageAccount.garage_id);
 
       currentGarageId = garageAccount.garage_id;
+
+      await loadGarageAccountStatus();
 
       document.getElementById("dashboardMain").style.display = "block";
 
