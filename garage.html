@@ -201,7 +201,7 @@
 
         .metaPill {
             display: inline-flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 6px;
             padding: 0;
             border: 0;
@@ -419,7 +419,7 @@
 
             .garageMeta {
                 display: grid;
-                gap: 8px;
+                gap: 11px;
             }
 
             .garageActions {
@@ -487,6 +487,85 @@
                 height: 220px;
             }
         }
+
+        .garageIntroToggle {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .garageHero {
+                padding: 20px 16px;
+                gap: 14px;
+            }
+
+            .garageHero::before {
+                opacity: .18;
+            }
+
+            .garageLogoBox {
+                width: 145px;
+                height: 84px;
+                margin-bottom: 14px;
+                border-radius: 16px;
+                padding: 7px;
+            }
+
+            .garageHero h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .garageIntro {
+                font-size: .92rem;
+                line-height: 1.45;
+                margin-bottom: 12px;
+
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 5;
+                line-clamp: 5;
+                overflow: hidden;
+            }
+
+            .garageIntro.expanded {
+                display: block;
+                -webkit-line-clamp: unset;
+                line-clamp: unset;
+                overflow: visible;
+            }
+
+            .garageIntroToggle {
+                display: inline-flex;
+                background: none;
+                border: 0;
+                padding: 0;
+                margin: -3px 0 10px;
+                color: #fff;
+                font-weight: 800;
+                font-size: .84rem;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+
+            .garageActions {
+                gap: 7px;
+                margin-top: 18px;
+            }
+
+            .actionBtn {
+                min-height: 40px;
+                padding: 8px 7px;
+                font-size: .82rem;
+            }
+
+            .stockBox {
+                padding: 11px 14px;
+            }
+
+            .stockCount {
+                font-size: 2.1rem;
+            }
+        }
     </style>
 </head>
 
@@ -512,6 +591,9 @@
                 <div id="garageLogoBox" class="garageLogoBox" style="display:none;"></div>
                 <h1 id="garageName">Loading garage...</h1>
                 <p id="garageIntro" class="garageIntro"></p>
+                <button id="garageIntroToggle" class="garageIntroToggle" type="button">
+                    Read more
+                </button>
 
                 <div id="garageMeta" class="garageMeta"></div>
 
@@ -647,6 +729,7 @@
             const garageName = document.getElementById("garageName");
             const garageLogoBox = document.getElementById("garageLogoBox");
             const garageIntro = document.getElementById("garageIntro");
+            const garageIntroToggle = document.getElementById("garageIntroToggle");
             const garageMeta = document.getElementById("garageMeta");
             const garageActions = document.getElementById("garageActions");
             const stockCount = document.getElementById("stockCount");
@@ -799,10 +882,27 @@
 
                 if (garage.description && garage.description.trim()) {
                     garageIntro.textContent = garage.description;
-                    garageIntro.style.display = "block";
+                    garageIntro.style.removeProperty("display");
+                    garageIntro.classList.remove("expanded");
+
+                    if (garageIntroToggle) {
+                        garageIntroToggle.textContent = "Read more";
+
+                        garageIntroToggle.addEventListener("click", () => {
+                            const expanded =
+                                garageIntro.classList.toggle("expanded");
+
+                            garageIntroToggle.textContent =
+                                expanded ? "Show less" : "Read more";
+                        });
+                    }
                 } else {
                     garageIntro.textContent = "";
                     garageIntro.style.display = "none";
+
+                    if (garageIntroToggle) {
+                        garageIntroToggle.style.display = "none";
+                    }
                 }
 
                 stockCount.textContent = availableCount;
@@ -838,8 +938,14 @@
                 );
 
                 if (garage.opening_hours || garage.openingHours) {
+                    const openingHours = escapeHtml(
+                        garage.opening_hours || garage.openingHours
+                    )
+                        .replace(/\s+Saturday:/i, "<br>Saturday:")
+                        .replace(/\s+Sunday:/i, "<br>Sunday:");
+
                     metaItems.push(
-                        `🕒 ${escapeHtml(garage.opening_hours || garage.openingHours)}`
+                        `🕒 <span>${openingHours}</span>`
                     );
                 }
 
