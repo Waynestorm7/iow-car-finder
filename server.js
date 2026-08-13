@@ -535,6 +535,7 @@ website,
 logo_url,
 banner_url,
 opening_hours,
+description,
 account_status,
 public_status
 `)
@@ -1919,6 +1920,63 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 500, {
         success: false,
         message: "Database update failed"
+      });
+    }
+  }
+
+  // -----------------------------
+  // Admin: GET /admin-garage-preview-data?id=
+  // Allows admins to preview hidden garages safely
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/admin-garage-preview-data") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    const id = String(
+      urlObj.searchParams.get("id") || ""
+    ).trim();
+
+    if (!id) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Missing garage id"
+      });
+    }
+
+    try {
+      const garage = await dbGetGarageById(id);
+
+      if (!garage) {
+        return sendJson(res, 404, {
+          success: false,
+          message: "Garage not found"
+        });
+      }
+
+      const allCars = await dbListCars();
+
+      const cars = allCars.filter(
+        car =>
+          String(car.garageId) === String(id) &&
+          !soldTooOld(car)
+      );
+
+      return sendJson(res, 200, {
+        success: true,
+        garage,
+        cars
+      });
+
+    } catch (e) {
+      console.error("GET /admin-garage-preview-data error:", e);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load garage preview"
       });
     }
   }

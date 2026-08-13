@@ -649,6 +649,51 @@
             }[char]));
         }
 
+        async function openGaragePreview(id) {
+            const key = adminKey.value.trim();
+
+            if (!key) {
+                statusEl.textContent = "Enter the admin key first.";
+                return;
+            }
+
+            statusEl.textContent = "Loading private garage preview...";
+
+            try {
+                const res = await fetch(
+                    `/admin-garage-preview-data?id=${encodeURIComponent(id)}`,
+                    {
+                        headers: {
+                            "x-garage-key": key
+                        },
+                        cache: "no-store"
+                    }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    statusEl.textContent =
+                        data.message || "Could not load garage preview.";
+                    return;
+                }
+
+                sessionStorage.setItem(
+                    "adminGaragePreview",
+                    JSON.stringify({
+                        garage: data.garage,
+                        cars: Array.isArray(data.cars) ? data.cars : []
+                    })
+                );
+
+                window.location.href =
+                    `/garage?id=${encodeURIComponent(id)}&preview=1`;
+
+            } catch (err) {
+                statusEl.textContent = "Could not load garage preview.";
+            }
+        }
+
         function openEditGarage(id) {
             const garage = loadedGarages.find(g => String(g.id) === String(id));
 
@@ -865,7 +910,14 @@
             </div>
 
            <div class="actions">
-  <a class="button" href="${publicUrl}" target="_blank" rel="noopener">View public garage →</a>
+${garage.public_status === "hidden"
+                        ? `<button class="button" type="button" onclick="openGaragePreview('${escapeHtml(garage.id)}')">
+         Preview hidden garage →
+       </button>`
+                        : `<a class="button" href="${publicUrl}" target="_blank" rel="noopener">
+         View public garage →
+       </a>`
+                    }
 
   <button class="button secondary" type="button" onclick="openEditGarage('${escapeHtml(garage.id)}')">
     Edit garage

@@ -152,11 +152,11 @@
         }
 
         .garageLogoBox {
-            width: 104px;
-            height: 104px;
+            width: 190px;
+            height: 110px;
             margin-bottom: 18px;
             border-radius: 22px;
-            background: #fff;
+            background: #000;
             border: 1px solid rgba(255, 255, 255, .22);
             box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
             padding: 10px;
@@ -510,7 +510,6 @@
         <section class="garageHero">
             <div>
                 <div id="garageLogoBox" class="garageLogoBox" style="display:none;"></div>
-                <div class="eyebrow">Island garage</div>
                 <h1 id="garageName">Loading garage...</h1>
                 <p id="garageIntro" class="garageIntro"></p>
 
@@ -610,6 +609,13 @@
         }
 
         function recordGarageAction(eventType, garageId) {
+            const isAdminPreview =
+                new URLSearchParams(window.location.search).get("preview") === "1";
+
+            if (isAdminPreview) {
+                return Promise.resolve(false);
+            }
+
             const cleanGarageId = String(garageId || "").trim();
 
             if (!cleanGarageId) {
@@ -652,14 +658,55 @@
             }
 
             try {
-                const garagesRes = await fetch("/garages-data", { cache: "no-store" });
-                const carsRes = await fetch("/cars", { cache: "no-store" });
+                let garage = null;
+                let cars = [];
 
-                const garages = await garagesRes.json();
-                const carsData = await carsRes.json();
-                const cars = Array.isArray(carsData) ? carsData : carsData.cars || [];
+                const isAdminPreview =
+                    new URLSearchParams(window.location.search).get("preview") === "1";
 
-                const garage = garages.find(g => String(g.id) === String(garageId));
+                if (isAdminPreview) {
+                    try {
+                        const savedPreview = sessionStorage.getItem("adminGaragePreview");
+
+                        if (savedPreview) {
+                            const preview = JSON.parse(savedPreview);
+
+                            if (
+                                preview.garage &&
+                                String(preview.garage.id) === String(garageId)
+                            ) {
+                                garage = preview.garage;
+                                cars = Array.isArray(preview.cars)
+                                    ? preview.cars
+                                    : [];
+                            }
+                        }
+                    } catch {
+                        garage = null;
+                        cars = [];
+                    }
+                }
+
+                if (!garage) {
+                    const garagesRes = await fetch("/garages-data", {
+                        cache: "no-store"
+                    });
+
+                    const carsRes = await fetch("/cars", {
+                        cache: "no-store"
+                    });
+
+                    const garages = await garagesRes.json();
+                    const carsData = await carsRes.json();
+
+                    cars = Array.isArray(carsData)
+                        ? carsData
+                        : carsData.cars || [];
+
+                    garage = garages.find(
+                        g => String(g.id) === String(garageId)
+                    );
+                }
 
                 if (!garage) {
                     garageName.textContent = "Garage not found";
@@ -668,7 +715,9 @@
                     return;
                 }
 
-                recordGarageViewOnce(garage.id);
+                if (!isAdminPreview) {
+                    recordGarageViewOnce(garage.id);
+                }
 
                 const garageCars = cars.filter(car =>
                     String(car.garageId || car.garage_id || "") === String(garageId)
@@ -950,7 +999,7 @@
       <h3>${escapeHtml(car.name)}</h3>
       <p class="price">${money(car.price)}</p>
       <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
-      <a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}">View car →</a>
+<a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}">View car →</a>
     </div>
   </div>
 `;

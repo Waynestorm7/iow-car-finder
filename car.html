@@ -984,6 +984,13 @@
     }
 
     function recordCarAction(eventType, carId) {
+      const isAdminPreview =
+        new URLSearchParams(window.location.search).get("preview") === "1";
+
+      if (isAdminPreview) {
+        return Promise.resolve(false);
+      }
+
       const cleanCarId = String(carId || "").trim();
 
       if (!cleanCarId) {
@@ -1136,23 +1143,71 @@
         const params = new URLSearchParams(window.location.search);
         const id = params.get("id");
 
+        const isAdminPreview =
+          params.get("preview") === "1";
+
         if (!id) {
           window.location.href = "/cars-page";
           return;
         }
 
-        const res = await fetch("/car-data?id=" + encodeURIComponent(id), { cache: "no-store" });
-        const json = await res.json().catch(() => ({}));
+        let car = null;
+        let garage = null;
 
-        if (!res.ok || !json.car) {
-          if (loading) loading.textContent = json.message || "Car not found.";
-          return;
+        if (isAdminPreview) {
+          try {
+            const savedPreview =
+              sessionStorage.getItem("adminGaragePreview");
+
+            if (savedPreview) {
+              const preview = JSON.parse(savedPreview);
+
+              const previewCars =
+                Array.isArray(preview.cars)
+                  ? preview.cars
+                  : [];
+
+              const previewCar = previewCars.find(
+                c =>
+                  String(c.id || c.name) ===
+                  String(id)
+              );
+
+              if (previewCar && preview.garage) {
+                car = previewCar;
+                garage = preview.garage;
+              }
+            }
+          } catch {
+            car = null;
+            garage = null;
+          }
         }
 
-        const car = json.car;
-        const garage = json.garage;
+        if (!car) {
+          const res = await fetch(
+            "/car-data?id=" + encodeURIComponent(id),
+            { cache: "no-store" }
+          );
 
-        recordCarViewOnce(car.id);
+          const json =
+            await res.json().catch(() => ({}));
+
+          if (!res.ok || !json.car) {
+            if (loading) {
+              loading.textContent =
+                json.message || "Car not found.";
+            }
+            return;
+          }
+
+          car = json.car;
+          garage = json.garage;
+        }
+
+        if (!isAdminPreview) {
+          recordCarViewOnce(car.id);
+        }
 
         const carStatus = String(car.status || "").toLowerCase();
         const isReserved = carStatus === "reserved";
@@ -1462,7 +1517,11 @@ Thanks`;
         const moreBtn = document.getElementById("moreBtn");
         if (moreBtn) {
           if (car.garageId) {
-            moreBtn.href = "/garage?id=" + encodeURIComponent(car.garageId);
+            moreBtn.href =
+              "/garage?id=" +
+              encodeURIComponent(car.garageId) +
+              (isAdminPreview ? "&preview=1" : "");
+
             moreBtn.style.display = "inline-flex";
           } else {
             moreBtn.style.display = "none";
@@ -1512,7 +1571,7 @@ Thanks`;
         if (shareBtn) {
           shareBtn.addEventListener("click", async () => {
             await recordCarAction("share_click", car.id);
-            
+
             const shareData = {
               title: car.name || "Car on IOW Car Finder",
               text: "Check out this car on IOW Car Finder",
