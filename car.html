@@ -542,17 +542,34 @@
       line-height: 1.55;
       font-size: 15px;
       color: #334155;
-      white-space: pre-line
+      white-space: pre-line;
+    }
+
+    #garageBox {
+      white-space: normal;
+    }
+
+    #extrasWrap .descBox {
+      padding: 10px 12px;
     }
 
     .extrasList {
       margin: 0;
       padding-left: 18px;
-      line-height: 1.7
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 18px;
+      line-height: 1.45;
     }
 
     .extrasList li {
-      margin: 4px 0
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .extrasList {
+        grid-template-columns: 1fr;
+      }
     }
 
     .btnRow {
@@ -920,7 +937,7 @@
 
         <div class="card" style="margin-top:12px;">
           <div class="info" style="padding:14px;">
-            <div class="sectionTitle" style="margin-top:0;">Contact garage</div>
+            <div class="sectionTitle" style="margin-top:0;">Sold by</div>
             <div id="garageBox" class="descBox"></div>
           </div>
         </div>
@@ -1411,15 +1428,43 @@
         const openingHours = garage?.opening_hours || garage?.openingHours || "";
 
         const garageBox = document.getElementById("garageBox");
+
         if (garageBox) {
-          let html = `<div><strong>${escapeText(garageName)}</strong></div>`;
-          if (address) html += `<div>${escapeText(address)}</div>`;
-          if (town) html += `<div>${escapeText(town)}</div>`;
-          if (postcode) html += `<div>${escapeText(postcode)}</div>`;
-          html += `<div><strong>Phone:</strong> ${phone ? escapeText(phone) : "Not provided"}</div>`;
-          if (email) html += `<div><strong>Email:</strong> ${escapeText(email)}</div>`;
-          if (website) html += `<div><strong>Website:</strong> <a href="${escapeText(website)}" target="_blank" rel="noopener">Visit site</a></div>`;
-          if (openingHours) html += `<div><strong>Opening hours:</strong><br>${escapeText(openingHours)}</div>`;
+          let displayAddress = String(address || "").trim();
+
+          if (garageName === "RJC Autos") {
+            displayAddress = displayAddress
+              .replace(/^Sandown Car Centre,\s*/i, "");
+          }
+
+          const garageProfileUrl = car.garageId
+            ? "/garage?id=" +
+            encodeURIComponent(car.garageId) +
+            (isAdminPreview ? "&preview=1" : "")
+            : "";
+
+          let html = `
+    <div style="font-size:1.05rem;font-weight:900;margin-bottom:6px;">
+        ${garageProfileUrl
+              ? `<a href="${garageProfileUrl}" style="color:#e67e22;;text-decoration:underline;text-underline-offset:3px;font-weight:900;">${escapeText(garageName)}</a>`
+              : escapeText(garageName)}
+    </div>
+`;
+
+          if (town) {
+            html += `<div>${escapeText(town)}, Isle of Wight</div>`;
+          }
+
+          if (displayAddress || postcode) {
+            html += `
+            <div style="margin-top:6px;">
+                📍 ${escapeText(
+              [displayAddress, postcode].filter(Boolean).join(", ")
+            )}
+            </div>
+        `;
+          }
+
           garageBox.innerHTML = html;
         }
 
