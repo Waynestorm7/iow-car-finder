@@ -1111,6 +1111,18 @@
     let photos = [];
     let currentIndex = 0;
 
+    function preloadNearbyPhotos(index) {
+      if (photos.length <= 1) return;
+
+      [1, 2, -1].forEach(offset => {
+        const preloadIndex =
+          (index + offset + photos.length) % photos.length;
+
+        const img = new Image();
+        img.src = photos[preloadIndex];
+      });
+    }
+
     function openLightbox(index) {
       currentIndex = index;
       lbImg.src = photos[currentIndex];
@@ -1328,6 +1340,8 @@
           currentIndex = (index + photos.length) % photos.length;
 
           if (mainImg) mainImg.src = photos[currentIndex];
+
+          preloadNearbyPhotos(currentIndex);
 
           if (thumbs) {
             [...thumbs.querySelectorAll("img")].forEach((el, i) => {
