@@ -11,9 +11,9 @@
 
   <meta name="description"
     content="View used car details, photos, key specs and garage contact information on IOW Car Finder.">
-  <meta name="robots" content="noindex, nofollow">
+  <meta id="robotsMeta" name="robots" content="index, follow">
 
-  <link rel="canonical" href="https://www.iowcarfinder.co.uk/car">
+  <link id="canonicalLink" rel="canonical">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Car Details | IOW Car Finder">
@@ -1175,9 +1175,23 @@
         const isAdminPreview =
           params.get("preview") === "1";
 
+        const robotsMeta = document.getElementById("robotsMeta");
+
+        if (isAdminPreview && robotsMeta) {
+          robotsMeta.setAttribute("content", "noindex, nofollow");
+        }
+
         if (!id) {
           window.location.href = "/cars-page";
           return;
+        }
+
+        const canonicalLink = document.getElementById("canonicalLink");
+
+        if (canonicalLink && !isAdminPreview) {
+          canonicalLink.href =
+            "https://www.iowcarfinder.co.uk/car?id=" +
+            encodeURIComponent(id);
         }
 
         let car = null;
@@ -1223,6 +1237,10 @@
             await res.json().catch(() => ({}));
 
           if (!res.ok || !json.car) {
+            if (robotsMeta) {
+              robotsMeta.setAttribute("content", "noindex, nofollow");
+            }
+
             if (loading) {
               loading.textContent =
                 json.message || "Car not found.";
@@ -1232,6 +1250,15 @@
 
           car = json.car;
           garage = json.garage;
+        }
+
+        if (!isAdminPreview) {
+          const town = String(garage?.town || "").trim();
+
+          document.title =
+            (car.name || "Used car") +
+            (town ? " for sale in " + town : " for sale") +
+            " | IOW Car Finder";
         }
 
         if (!isAdminPreview) {

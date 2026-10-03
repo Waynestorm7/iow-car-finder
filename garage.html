@@ -11,9 +11,9 @@
 
     <meta name="description"
         content="View an approved Isle of Wight garage profile, contact details and current used car listings on IOW Car Finder.">
-    <meta name="robots" content="noindex, nofollow">
+    <meta id="robotsMeta" name="robots" content="index, follow">
 
-    <link rel="canonical" href="https://www.iowcarfinder.co.uk/garage">
+    <link id="canonicalLink" rel="canonical">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Garage Profile | IOW Car Finder">
@@ -694,6 +694,7 @@
             const isAdminPreview =
                 new URLSearchParams(window.location.search).get("preview") === "1";
 
+
             if (isAdminPreview) {
                 return Promise.resolve(false);
             }
@@ -747,6 +748,12 @@
                 const isAdminPreview =
                     new URLSearchParams(window.location.search).get("preview") === "1";
 
+                const robotsMeta = document.getElementById("robotsMeta");
+
+                if (isAdminPreview && robotsMeta) {
+                    robotsMeta.setAttribute("content", "noindex, nofollow");
+                }
+
                 if (isAdminPreview) {
                     try {
                         const savedPreview = sessionStorage.getItem("adminGaragePreview");
@@ -792,10 +799,33 @@
                 }
 
                 if (!garage) {
+                    if (robotsMeta) {
+                        robotsMeta.setAttribute("content", "noindex, nofollow");
+                    }
+
                     garageName.textContent = "Garage not found";
                     garageIntro.textContent = "We could not find this garage.";
                     carsBox.innerHTML = "";
                     return;
+                }
+
+                if (!isAdminPreview) {
+                    const canonicalLink = document.getElementById("canonicalLink");
+
+                    if (canonicalLink) {
+                        canonicalLink.href =
+                            "https://www.iowcarfinder.co.uk/garage?id=" +
+                            encodeURIComponent(garage.id);
+                    }
+                }
+
+                if (!isAdminPreview) {
+                    const town = String(garage.town || "").trim();
+
+                    document.title =
+                        (garage.name || "Garage") +
+                        (town ? " used cars in " + town : " used cars") +
+                        " | IOW Car Finder";
                 }
 
                 if (!isAdminPreview) {
