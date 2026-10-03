@@ -122,6 +122,15 @@ function sendJson(res, status, obj) {
   send(res, status, { "Content-Type": "application/json; charset=utf-8" }, JSON.stringify(obj));
 }
 
+function sendXml(res, status, xml) {
+  send(
+    res,
+    status,
+    { "Content-Type": "application/xml; charset=utf-8" },
+    xml
+  );
+}
+
 function getMime(filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const types = {
@@ -847,6 +856,67 @@ const server = http.createServer(async (req, res) => {
   // -----------------------------
   if (req.method === "GET" && pathname === "/favicon.ico") {
     return serveFile(res, path.join(__dirname, "favicon.ico"));
+  }
+
+  // -----------------------------
+  // SITEMAP
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/sitemap.xml") {
+    try {
+      const baseUrl = "https://www.iowcarfinder.co.uk";
+
+      const visibleGarages = await dbListGarages();
+
+      const visibleGarageIds = new Set(
+        visibleGarages.map(garage => String(garage.id))
+      );
+
+      const cars = (await dbListCars())
+        .filter(car => !soldTooOld(car))
+        .filter(car =>
+          car.id &&
+          visibleGarageIds.has(String(car.garageId))
+        );
+
+      const urls = [
+        `${baseUrl}/`,
+        `${baseUrl}/cars-page`,
+        `${baseUrl}/garages`,
+        `${baseUrl}/for-garages`,
+
+        ...visibleGarages
+          .filter(garage => garage.id)
+          .map(garage =>
+            `${baseUrl}/garage?id=${encodeURIComponent(garage.id)}`
+          ),
+
+        ...cars.map(car =>
+          `${baseUrl}/car?id=${encodeURIComponent(car.id)}`
+        )
+      ];
+
+      const xml =
+        `<?xml version="1.0" encoding="UTF-8"?>\n` +
+        `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+        urls.map(url =>
+          `  <url>\n` +
+          `    <loc>${url.replace(/&/g, "&amp;")}</loc>\n` +
+          `  </url>`
+        ).join("\n") +
+        `\n</urlset>`;
+
+      return sendXml(res, 200, xml);
+
+    } catch (error) {
+      console.error("GET /sitemap.xml error:", error);
+
+      return send(
+        res,
+        500,
+        { "Content-Type": "text/plain; charset=utf-8" },
+        "Could not generate sitemap"
+      );
+    }
   }
 
   if (req.method === "GET") {
