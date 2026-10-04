@@ -1109,6 +1109,7 @@
     const lbCount = document.getElementById("lbCount");
 
     let photos = [];
+    let lightboxPhotos = [];
     let currentIndex = 0;
 
     function preloadNearbyPhotos(index) {
@@ -1125,7 +1126,7 @@
 
     function openLightbox(index) {
       currentIndex = index;
-      lbImg.src = photos[currentIndex];
+      lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
@@ -1141,14 +1142,14 @@
     function nextPhoto() {
       if (!photos.length) return;
       currentIndex = (currentIndex + 1) % photos.length;
-      lbImg.src = photos[currentIndex];
+      lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
     function prevPhoto() {
       if (!photos.length) return;
       currentIndex = (currentIndex - 1 + photos.length) % photos.length;
-      lbImg.src = photos[currentIndex];
+      lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
@@ -1351,7 +1352,12 @@
           rawPhotos = ["/images/hero-desktop.webp"];
         }
 
-        photos = rawPhotos.map(p => cloudinaryOptimise(p, 1400));
+        const mobileMainWidth = 800;
+        const desktopMainWidth = 1400;
+        const mainWidth = window.innerWidth <= 600 ? mobileMainWidth : desktopMainWidth;
+
+        photos = rawPhotos.map(p => cloudinaryOptimise(p, mainWidth));
+        lightboxPhotos = rawPhotos.map(p => cloudinaryOptimise(p, 1600));
         const thumbPhotos = rawPhotos.map(p => cloudinaryOptimise(p, 260));
 
         const mainImg = document.getElementById("mainImg");
