@@ -1124,9 +1124,22 @@
       });
     }
 
+    function preloadLightboxPhotos(index) {
+      if (lightboxPhotos.length <= 1) return;
+
+      [1, 2, -1].forEach(offset => {
+        const preloadIndex =
+          (index + offset + lightboxPhotos.length) % lightboxPhotos.length;
+
+        const img = new Image();
+        img.src = lightboxPhotos[preloadIndex];
+      });
+    }
+
     function openLightbox(index) {
       currentIndex = index;
       lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
+      preloadLightboxPhotos(currentIndex);
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
@@ -1143,6 +1156,7 @@
       if (!photos.length) return;
       currentIndex = (currentIndex + 1) % photos.length;
       lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
+      preloadLightboxPhotos(currentIndex);
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
@@ -1150,6 +1164,7 @@
       if (!photos.length) return;
       currentIndex = (currentIndex - 1 + photos.length) % photos.length;
       lbImg.src = lightboxPhotos[currentIndex] || photos[currentIndex];
+      preloadLightboxPhotos(currentIndex);
       lbCount.textContent = `${currentIndex + 1} / ${photos.length}`;
     }
 
