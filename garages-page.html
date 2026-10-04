@@ -245,7 +245,8 @@
 
     .photoGrid a img {
       width: 100%;
-      height: 105px;
+      aspect-ratio: 16 / 9;
+      height: 165px;
       object-fit: cover;
       display: block;
       border-radius: 8px;
@@ -299,6 +300,43 @@
       border-radius: 14px;
       color: #667085;
       border: 1px solid rgba(0, 0, 0, .08);
+    }
+
+    @media (min-width: 651px) {
+      .garageIdentity {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+
+        grid-template-areas:
+          "name count button"
+          "town count button";
+        align-items: start;
+        gap: 4px 20px;
+      }
+
+      .garageIdentity h2 {
+        grid-area: name;
+        margin: 0;
+      }
+
+      .garageIdentity>p:not(.count) {
+        grid-area: town;
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #475569;
+      }
+
+      .garageIdentity .count {
+        grid-area: count;
+        margin: 0;
+        text-align: right;
+      }
+
+      .garageIdentity .viewBtn {
+        grid-area: button;
+        justify-self: end;
+      }
     }
 
     @media (max-width: 650px) {
@@ -445,6 +483,25 @@
 
           return `
             <div class="garageCard">
+
+ <div class="garageInfo garageIdentity">
+
+  <h2>
+    <a class="garageNameLink" href="/garage?id=${encodeURIComponent(g.id)}">
+      ${escapeHtml(g.name)}
+    </a>
+  </h2>
+
+  <p>${escapeHtml(g.town || "Isle of Wight")}</p>
+
+  <p class="count">${availableCount} cars available</p>
+
+  <a class="viewBtn" href="/garage?id=${encodeURIComponent(g.id)}">
+    View stock →
+  </a>
+
+</div>
+
 ${photos.length
               ? `
       <div class="photoGrid">
@@ -467,19 +524,6 @@ ${photos.length
     <img src="/images/garage-placeholder.webp" alt="Garage">
 </div>`
             }
-              <div class="garageInfo">
-                <h2>
-  <a class="garageNameLink" href="/garage?id=${encodeURIComponent(g.id)}">
-    ${escapeHtml(g.name)}
-  </a>
-</h2>
-                <p>${escapeHtml(g.town || "Isle of Wight")}</p>
-                <p class="count">${availableCount} available now</p>
-
-                <a class="viewBtn" href="/garage?id=${encodeURIComponent(g.id)}">
-                  View stock →
-                </a>
-              </div>
             </div>
           `;
         }).join("");
