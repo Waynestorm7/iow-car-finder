@@ -465,7 +465,39 @@
             return true;
           }).length;
 
-          const photos = garageCars
+          let photoCars = garageCars.filter(car => {
+            const status = String(car.status || "").toLowerCase();
+            return status !== "sold" && status !== "reserved" && car.sold !== true;
+          });
+
+          if (String(g.name || "").trim().toLowerCase() === "rjc autos") {
+            const preferredNames = [
+              "v220",
+              "c300",
+              "peugeot 208",
+              "fiesta titanium turbo"
+            ];
+
+            const preferredCars = preferredNames
+              .map(name =>
+                photoCars.find(car =>
+                  String(car.name || "").trim().toLowerCase().includes(name.toLowerCase())
+                )
+              )
+              .filter(Boolean);
+
+            const preferredIds = new Set(
+              preferredCars.map(car => car.id || car.name)
+            );
+
+            const fallbackCars = photoCars.filter(
+              car => !preferredIds.has(car.id || car.name)
+            );
+
+            photoCars = [...preferredCars, ...fallbackCars];
+          }
+
+          const photos = photoCars
             .map(car => getCarPhoto(car))
             .filter(Boolean)
             .slice(0, 4);
@@ -505,7 +537,7 @@
 ${photos.length
               ? `
       <div class="photoGrid">
-        ${garageCars.slice(0, 4).map(car => `
+        ${photoCars.slice(0, 4).map(car => `
           <a href="/car?id=${encodeURIComponent(car.id)}">
        <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name || g.name)}" loading="lazy" decoding="async">
           </a>
