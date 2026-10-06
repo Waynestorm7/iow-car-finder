@@ -146,8 +146,8 @@
       margin-bottom: 18px;
 
       display: grid;
-      grid-template-columns: 1.5fr .8fr;
-      gap: 34px;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 28px;
       align-items: center;
     }
 
@@ -540,6 +540,70 @@
       font-size: 1rem;
       margin-bottom: 4px;
     }
+
+    /* ---------- Garage access ---------- */
+
+    .garageAccess {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .garageAccess .eyebrow {
+      margin-bottom: 9px;
+    }
+
+    .garageAccess h2 {
+      margin-bottom: 7px;
+    }
+
+    .garageAccess p {
+      margin-bottom: 16px;
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+
+    .garageAccessBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #07111d;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: .9rem;
+    }
+
+    .garageAccessBtn:hover {
+      background: #10263d;
+    }
+
+    .garageJoin {
+      margin-top: 13px;
+      text-align: center;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .garageJoin a {
+      color: var(--accentDark);
+      text-decoration: none;
+      font-weight: 900;
+    }
+
+    .garageJoin a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 760px) {
+      .garageAccess {
+        padding: 19px;
+      }
+    }
   </style>
 </head>
 
@@ -568,16 +632,26 @@
 
         <div class="heroActions">
           <a class="heroBtn primary" href="#contact">Apply to get listed</a>
-          <a class="heroBtn secondary" href="/login">Garage dashboard login</a>
         </div>
       </div>
 
-      <div class="island-box">
-        <img src="/images/iow-outline-glow.svg" alt="Isle of Wight outline">
-        <p>Supporting <strong>local garages</strong><br>across the Isle of Wight.</p>
+      <div class="garageAccess">
+        <div class="eyebrow">Garage access</div>
+
+        <h2>Already approved?</h2>
+
+        <p>Sign in to manage your vehicles and garage profile.</p>
+
+        <a class="garageAccessBtn" href="/login">
+          Garage login →
+        </a>
+
+        <div class="garageJoin">
+          Not listed yet?
+          <a href="#contact">Apply to join →</a>
+        </div>
       </div>
     </section>
-
     <section class="note">
       <strong>What approved garages get</strong>
       <p>

@@ -302,11 +302,22 @@
         }
 
         .carCard {
+            display: block;
             background: #fff;
             border-radius: 18px;
             overflow: hidden;
             box-shadow: 0 10px 26px rgba(15, 23, 42, .08);
             border: 1px solid rgba(17, 24, 39, .08);
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
+        }
+
+        .carCard:hover {
+            transform: translateY(-3px);
+            border-color: rgba(230, 126, 34, .28);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, .13);
         }
 
         .carImgWrap {
@@ -1123,8 +1134,11 @@
                     const isSold = status === "sold" || car.sold === true;
                     const isReserved = status === "reserved";
 
+                    const carHref =
+                        `/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}`;
+
                     return `
-  <div class="carCard ${isSold ? "sold" : ""}">
+  <a class="carCard ${isSold ? "sold" : ""}" href="${carHref}">
     <div class="carImgWrap">
       <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
       ${isSold ? `<span class="stockBadge sold">SOLD</span>` : ""}
@@ -1135,9 +1149,10 @@
       <h3>${escapeHtml(car.name)}</h3>
       <p class="price">${money(car.price)}</p>
       <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
-<a class="viewBtn" href="/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}">View car →</a>
+
+      <span class="viewBtn">View car →</span>
     </div>
-  </div>
+  </a>
 `;
                 }).join("");
 
