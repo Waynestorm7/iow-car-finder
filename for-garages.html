@@ -541,6 +541,50 @@
       margin-bottom: 4px;
     }
 
+    /* ---------- Garage benefits ---------- */
+
+    .benefitsTitle {
+      margin-bottom: 16px;
+    }
+
+    .benefitsGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .benefitItem {
+      background: #f8fafc;
+      border: 1px solid var(--softBorder);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .benefitItem strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dark);
+      font-size: .92rem;
+    }
+
+    .benefitItem span {
+      display: block;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 760px) {
+      .benefitsGrid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .benefitItem {
+        padding: 15px 16px;
+      }
+    }
+
     /* ---------- Garage access ---------- */
 
     .garageAccess {
@@ -604,6 +648,87 @@
         padding: 19px;
       }
     }
+
+    .mobileApply {
+      display: none;
+    }
+
+    /* ---------- Premium garage access hero ---------- */
+
+    @media (min-width: 761px) {
+      .hero-copy h1 {
+        font-size: 2.7rem;
+        line-height: 1.04;
+        letter-spacing: -1.5px;
+      }
+    }
+
+    .hero-split {
+      grid-template-columns: .9fr 1.1fr;
+    }
+
+    .garageAccess {
+      background:
+        radial-gradient(420px 220px at 100% 0%, rgba(230, 126, 34, .16), transparent 60%),
+        #07111d;
+      border: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 20px 48px rgba(7, 17, 29, .18);
+      color: #fff;
+      padding: 30px;
+    }
+
+    .garageAccess .eyebrow {
+      color: #f2a45f;
+    }
+
+    .garageAccess h2 {
+      color: #fff;
+      font-size: 1.55rem;
+    }
+
+    .garageAccess p {
+      color: rgba(255, 255, 255, .72);
+      font-size: .95rem;
+    }
+
+    .garageAccessBtn {
+      min-height: 52px;
+      background: var(--accent);
+      color: #fff;
+      font-size: .95rem;
+      box-shadow: 0 12px 28px rgba(230, 126, 34, .22);
+    }
+
+    .garageAccessBtn:hover {
+      background: var(--accentDark);
+    }
+
+    .garageJoin {
+      color: rgba(255, 255, 255, .62);
+    }
+
+    .garageJoin a {
+      color: #f2a45f;
+    }
+
+    @media (max-width: 760px) {
+      .hero-split {
+        grid-template-columns: 1fr;
+      }
+
+      .garageAccess {
+        padding: 24px;
+      }
+
+      .heroActions {
+        display: none;
+      }
+
+      .mobileApply {
+        display: block;
+        margin-top: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -624,14 +749,14 @@
       <div class="hero-copy">
         <div class="eyebrow">For Isle of Wight garages</div>
 
-        <h1>List your vehicles on IOW Car Finder</h1>
+        <h1>Manage your stock with IOW Car Finder</h1>
 
         <p class="lead">
-          Reach more local buyers and showcase your stock to car shoppers across the Island.
+          Add vehicles, update prices, upload photos and keep your stock status up to date.
         </p>
 
         <div class="heroActions">
-          <a class="heroBtn primary" href="#contact">Apply to get listed</a>
+          <a class="heroBtn secondary" href="#contact">Not listed yet? Apply to join →</a>
         </div>
       </div>
 
@@ -646,19 +771,30 @@
           Garage login →
         </a>
 
-        <div class="garageJoin">
-          Not listed yet?
-          <a href="#contact">Apply to join →</a>
-        </div>
+      </div>
+      <div class="mobileApply">
+        <a class="heroBtn secondary" href="#contact">Not listed yet? Apply to join →</a>
       </div>
     </section>
-    <section class="note">
-      <strong>What approved garages get</strong>
-      <p>
-        Approved garages get their own dashboard to add and edit vehicles,
-        upload photos, mark cars as reserved or sold, and keep their public
-        garage profile up to date.
-      </p>
+    <section class="note benefits">
+      <strong class="benefitsTitle">What approved garages get</strong>
+
+      <div class="benefitsGrid">
+        <div class="benefitItem">
+          <strong>Manage stock</strong>
+          <span>Add and edit your vehicles</span>
+        </div>
+
+        <div class="benefitItem">
+          <strong>Update status</strong>
+          <span>Available, Reserved or Sold</span>
+        </div>
+
+        <div class="benefitItem">
+          <strong>Garage profile</strong>
+          <span>Keep your public page up to date</span>
+        </div>
+      </div>
     </section>
 
     <section class="panel" id="contact">
