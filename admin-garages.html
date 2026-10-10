@@ -495,6 +495,16 @@
                     </div>
 
                     <div class="editField">
+                        <label for="editLogo">Garage logo</label>
+                        <input id="editLogo" type="file" accept="image/*">
+                    </div>
+
+                    <div class="editField">
+                        <label for="editBanner">Garage banner</label>
+                        <input id="editBanner" type="file" accept="image/*">
+                    </div>
+
+                    <div class="editField">
                         <label for="editPostcode">Postcode</label>
                         <input id="editPostcode" type="text">
                     </div>
@@ -621,6 +631,8 @@
         const editPhone = document.getElementById("editPhone");
         const editEmail = document.getElementById("editEmail");
         const editWebsite = document.getElementById("editWebsite");
+        const editLogo = document.getElementById("editLogo");
+        const editBanner = document.getElementById("editBanner");
         const editPostcode = document.getElementById("editPostcode");
         const editAddress = document.getElementById("editAddress");
         const editOpeningHours = document.getElementById("editOpeningHours");
@@ -647,6 +659,27 @@
                 '"': "&quot;",
                 "'": "&#039;"
             }[char]));
+        }
+
+        async function uploadAdminImage(file, key) {
+            const formData = new FormData();
+            formData.append("photos", file);
+
+            const res = await fetch("/admin-upload", {
+                method: "POST",
+                headers: {
+                    "x-garage-key": key
+                },
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success || !Array.isArray(data.urls) || !data.urls[0]) {
+                throw new Error(data.message || "Image upload failed.");
+            }
+
+            return data.urls[0];
         }
 
         async function openGaragePreview(id) {
@@ -708,6 +741,8 @@
             editPhone.value = garage.phone || "";
             editEmail.value = garage.email || "";
             editWebsite.value = garage.website || "";
+            editLogo.value = "";
+            editBanner.value = "";
             editPostcode.value = garage.postcode || "";
             editAddress.value = garage.address || "";
             editOpeningHours.value = garage.opening_hours || "";
@@ -944,6 +979,9 @@ ${garage.public_status === "hidden"
                 return;
             }
 
+            const logoFile = editLogo.files[0] || null;
+            const bannerFile = editBanner.files[0] || null;
+
             const payload = {
                 id: editGarageId.value.trim(),
                 name: editName.value.trim(),
@@ -980,9 +1018,19 @@ ${garage.public_status === "hidden"
                 return;
             }
 
-            editStatus.textContent = "Saving garage...";
-
             try {
+                if (logoFile) {
+                    editStatus.textContent = "Uploading logo...";
+                    payload.logo_url = await uploadAdminImage(logoFile, key);
+                }
+
+                if (bannerFile) {
+                    editStatus.textContent = "Uploading banner...";
+                    payload.banner_url = await uploadAdminImage(bannerFile, key);
+                }
+
+                editStatus.textContent = "Saving garage...";
+
                 const res = await fetch("/admin-garages", {
                     method: "PUT",
                     headers: {

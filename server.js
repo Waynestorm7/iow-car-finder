@@ -567,14 +567,24 @@ async function dbUpdateGarage(id, payload) {
     phone: payload.phone ? String(payload.phone).trim() : null,
     email: payload.email ? String(payload.email).trim() : null,
     website: payload.website ? String(payload.website).trim() : null,
-    logo_url: payload.logo_url ? String(payload.logo_url).trim() : null,
-    banner_url: payload.banner_url ? String(payload.banner_url).trim() : null,
     address: payload.address ? String(payload.address).trim() : null,
     town: payload.town ? String(payload.town).trim() : null,
     postcode: payload.postcode ? String(payload.postcode).trim() : null,
     opening_hours: payload.opening_hours ? String(payload.opening_hours).trim() : null,
     description: payload.description ? String(payload.description).trim() : null,
   };
+
+  if (payload.logo_url !== undefined) {
+    row.logo_url = payload.logo_url
+      ? String(payload.logo_url).trim()
+      : null;
+  }
+
+  if (payload.banner_url !== undefined) {
+    row.banner_url = payload.banner_url
+      ? String(payload.banner_url).trim()
+      : null;
+  }
 
   const { error } = await supabase
     .from("garages")
@@ -606,6 +616,18 @@ async function dbAdminUpdateGarage(id, payload) {
       ? String(payload.description).trim()
       : null
   };
+
+  if (payload.logo_url !== undefined) {
+    row.logo_url = payload.logo_url
+      ? String(payload.logo_url).trim()
+      : null;
+  }
+
+  if (payload.banner_url !== undefined) {
+    row.banner_url = payload.banner_url
+      ? String(payload.banner_url).trim()
+      : null;
+  }
 
   const accountStatus = String(
     payload.account_status || ""
@@ -2074,6 +2096,8 @@ const server = http.createServer(async (req, res) => {
   phone,
   email,
   website,
+  logo_url,
+  banner_url,
   opening_hours,
   description,
   account_status,
