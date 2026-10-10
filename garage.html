@@ -169,6 +169,11 @@
             display: block;
         }
 
+        .garageLogoBox.lmcLogo {
+            background: #fff;
+            padding: 3px;
+        }
+
         .eyebrow {
             color: rgba(255, 255, 255, .68);
             font-weight: 900;
@@ -912,6 +917,8 @@
                 const logoUrl = cloudinaryOptimise(rawLogoUrl, "f_auto,q_auto,c_limit,w_300");
 
                 if (garageLogoBox) {
+                    garageLogoBox.classList.toggle("lmcLogo", String(garage.name || "").trim().toLowerCase() === "lmc motors");
+
                     if (logoUrl) {
                         garageLogoBox.style.display = "block";
                         garageLogoBox.innerHTML = `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(garage.name || "Garage")} logo">`;
