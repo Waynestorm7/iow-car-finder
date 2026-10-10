@@ -52,7 +52,7 @@ const upload = multer({
 
   limits: {
     fileSize: 15 * 1024 * 1024,
-    files: 12
+    files: 20
   },
 
   fileFilter: (req, file, callback) => {
@@ -753,7 +753,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    return upload.array("photos", 12)(req, res, async (err) => {
+    return upload.array("photos", 20)(req, res, async (err) => {
       if (err) {
         console.error("multer error:", err);
 
@@ -826,7 +826,7 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    return upload.array("photos", 12)(req, res, async (err) => {
+    return upload.array("photos", 20)(req, res, async (err) => {
       if (err) {
         console.error("admin multer error:", err);
         return sendJson(res, 400, {
