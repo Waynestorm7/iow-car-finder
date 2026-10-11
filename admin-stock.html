@@ -620,7 +620,7 @@
     photoInput.addEventListener("change", () => {
       photoPreview.innerHTML = "";
 
-      const files = Array.from(photoInput.files || []).slice(0, 12);
+      const files = Array.from(photoInput.files || []).slice(0, 20);
 
       files.forEach(file => {
         const img = document.createElement("img");
@@ -955,7 +955,7 @@
       hideMessage(formMessage);
 
       const garageId = garageSelect.value;
-      const files = Array.from(photoInput.files || []).slice(0, 12);
+      const files = Array.from(photoInput.files || []).slice(0, 20);
       const isEditing = Boolean(editingCarId);
 
       if (!adminKey()) {
