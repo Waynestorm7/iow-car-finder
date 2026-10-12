@@ -174,18 +174,80 @@ function readGaragesFile() {
   return safeReadJsonArray("garages.json");
 }
 
+// =============================
+// ADMIN SECURITY - RATE LIMITING
+// =============================
+
+const adminFailedAttempts = new Map();
+
+const ADMIN_FAILURE_LIMIT = 10;
+const ADMIN_FAILURE_WINDOW_MS = 15 * 60 * 1000;
+
+function getAdminClientIp(req) {
+  const { isIP } = require("net");
+
+  const clientIp = String(
+    req.headers["cf-connecting-ip"] || ""
+  ).trim();
+
+  if (isIP(clientIp)) {
+    return clientIp;
+  }
+
+  // Local development or missing proxy header
+  return String(req.socket.remoteAddress || "unknown");
+}
+
 function isAdmin(req) {
-  if (typeof ADMIN_KEY !== "string" || ADMIN_KEY.length < 32) {
+  const ip = getAdminClientIp(req);
+  const now = Date.now();
+
+  let attempts = adminFailedAttempts.get(ip);
+
+  // Reset expired lockouts
+  if (attempts && now >= attempts.resetAt) {
+    adminFailedAttempts.delete(ip);
+    attempts = null;
+  }
+
+  // Block after too many failed attempts
+  if (attempts && attempts.count >= ADMIN_FAILURE_LIMIT) {
     return false;
   }
 
-  const key = String(req.headers["x-garage-key"] || "").trim();
+  const key = String(
+    req.headers["x-garage-key"] || ""
+  ).trim();
 
-  if (!key) {
-    return false;
+  const validKey =
+    typeof ADMIN_KEY === "string" &&
+    ADMIN_KEY.length >= 32 &&
+    key.length > 0 &&
+    key === ADMIN_KEY;
+
+  // Successful authentication clears previous failures
+  if (validKey) {
+    adminFailedAttempts.delete(ip);
+    return true;
   }
 
-  return key === ADMIN_KEY;
+  // Record failed authentication
+  if (attempts) {
+    attempts.count += 1;
+  } else {
+    // Bound memory usage on this server instance
+    if (adminFailedAttempts.size >= 5000) {
+      const oldestIp = adminFailedAttempts.keys().next().value;
+      adminFailedAttempts.delete(oldestIp);
+    }
+
+    adminFailedAttempts.set(ip, {
+      count: 1,
+      resetAt: now + ADMIN_FAILURE_WINDOW_MS
+    });
+  }
+
+  return false;
 }
 
 async function getGarageFromAuth(req) {
