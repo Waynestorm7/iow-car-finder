@@ -645,6 +645,19 @@
     }
 
     loadGarages();
+
+    // Refresh garage data when returning to the browser
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) {
+        loadGarages();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        loadGarages();
+      }
+    });
   </script>
 
 </body>
