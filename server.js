@@ -175,8 +175,16 @@ function readGaragesFile() {
 }
 
 function isAdmin(req) {
-  // Node lowercases headers
+  if (typeof ADMIN_KEY !== "string" || ADMIN_KEY.length < 32) {
+    return false;
+  }
+
   const key = String(req.headers["x-garage-key"] || "").trim();
+
+  if (!key) {
+    return false;
+  }
+
   return key === ADMIN_KEY;
 }
 
