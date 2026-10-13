@@ -354,6 +354,8 @@ function mapDbCar(row) {
     name: row.name ?? null,
     year: row.year ?? null,
     price: row.price ?? null,
+    previousPrice: row.previous_price ?? null,
+    priceReducedAt: row.price_reduced_at ?? null,
 
     // supports both column styles
     garageId: row.garage_id ?? null,
@@ -497,6 +499,37 @@ async function dbUpdateCar(payload, garageId = null) {
     extras: payload.extras ?? null,
     updatedAt: new Date().toISOString()
   };
+
+  let existingQuery = supabase
+    .from("cars")
+    .select("price, created_at, previous_price, price_reduced_at")
+    .eq("id", payload.id);
+
+  if (garageId) {
+    existingQuery = existingQuery.eq("garage_id", garageId);
+  }
+
+  const { data: existingCar, error: existingError } =
+    await existingQuery.maybeSingle();
+
+  if (existingError) throw existingError;
+  if (!existingCar) return null;
+
+  const oldPrice = Number(existingCar.price);
+  const newPrice = Number(payload.price);
+  const listedAt = Date.parse(existingCar.created_at || "");
+
+  const listedLongEnough =
+    Number.isFinite(listedAt) &&
+    Date.now() - listedAt >= 14 * 24 * 60 * 60 * 1000;
+
+  if (newPrice < oldPrice && listedLongEnough) {
+    row.previous_price = oldPrice;
+    row.price_reduced_at = new Date().toISOString();
+  } else if (newPrice !== oldPrice) {
+    row.previous_price = null;
+    row.price_reduced_at = null;
+  }
 
   let query = supabase
     .from("cars")

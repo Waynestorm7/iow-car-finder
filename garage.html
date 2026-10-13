@@ -364,6 +364,11 @@
             background: rgba(230, 126, 34, .96);
         }
 
+        .stockBadge.reduced {
+            background: #e67e22;
+            border: 1px solid rgba(255, 255, 255, .25);
+        }
+
         .carInfo {
             padding: 15px;
         }
@@ -376,10 +381,21 @@
         }
 
         .price {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px;
             font-weight: 950;
             font-size: 1.45rem;
             margin: 0 0 8px;
             color: #07111d;
+        }
+
+        .oldPrice {
+            color: #667085;
+            font-size: .68em;
+            font-weight: 700;
+            text-decoration: line-through;
         }
 
         .small {
@@ -1141,6 +1157,23 @@
                     const isSold = status === "sold" || car.sold === true;
                     const isReserved = status === "reserved";
 
+                    const previousPrice = Number(car.previousPrice);
+                    const currentPrice = Number(car.price);
+                    const reducedAt = Date.parse(car.priceReducedAt || "");
+                    const listedAt = Date.parse(car.createdAt || "");
+                    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+
+                    const isPriceReduced =
+                        !isSold &&
+                        !isReserved &&
+                        previousPrice > currentPrice &&
+                        currentPrice > 0 &&
+                        Number.isFinite(reducedAt) &&
+                        Number.isFinite(listedAt) &&
+                        reducedAt - listedAt >= fourteenDays &&
+                        reducedAt <= Date.now() &&
+                        Date.now() - reducedAt < fourteenDays;
+
                     const carHref =
                         `/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}`;
 
@@ -1150,11 +1183,15 @@
       <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
       ${isSold ? `<span class="stockBadge sold">SOLD</span>` : ""}
       ${isReserved ? `<span class="stockBadge reserved">RESERVED</span>` : ""}
+      ${isPriceReduced ? `<span class="stockBadge reduced">PRICE REDUCED</span>` : ""}
     </div>
 
     <div class="carInfo">
       <h3>${escapeHtml(car.name)}</h3>
-      <p class="price">${money(car.price)}</p>
+     <p class="price">
+    ${isPriceReduced ? `<span class="oldPrice">${escapeHtml(money(previousPrice))}</span>` : ""}
+    <span>${escapeHtml(money(car.price))}</span>
+</p>
       <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
 
       <span class="viewBtn">View car →</span>

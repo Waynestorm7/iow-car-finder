@@ -445,6 +445,21 @@
       box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
     }
 
+    .priceReducedBadge {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: #e67e22;
+      color: #ffffff;
+      font-weight: 950;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      border: 1px solid rgba(255, 255, 255, .25);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
     .soldImg {
       filter: grayscale(100%);
     }
@@ -463,12 +478,24 @@
     }
 
     .price {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
       margin: 0 0 8px;
       font-size: 1.75rem;
       font-weight: 950;
       color: #071025;
       letter-spacing: -.04em;
       line-height: 1.05;
+    }
+
+    .oldPrice {
+      color: #667085;
+      font-size: .63em;
+      font-weight: 700;
+      text-decoration: line-through;
+      letter-spacing: 0;
     }
 
     .listedText {
@@ -830,88 +857,88 @@
     }
 
     /* ---------- Mobile filter polish ---------- */
-@media (max-width: 760px) {
+    @media (max-width: 760px) {
 
-  /* Search on top, Sort and Filters together underneath */
-  .filtersTop {
-    grid-template-columns: minmax(0, 1.6fr) minmax(105px, 1fr);
-    gap: 8px;
-  }
+      /* Search on top, Sort and Filters together underneath */
+      .filtersTop {
+        grid-template-columns: minmax(0, 1.6fr) minmax(105px, 1fr);
+        gap: 8px;
+      }
 
-  #searchBox {
-    grid-column: 1 / -1;
-  }
+      #searchBox {
+        grid-column: 1 / -1;
+      }
 
-  #sortBox {
-    grid-column: 1;
-    min-width: 0;
-  }
+      #sortBox {
+        grid-column: 1;
+        min-width: 0;
+      }
 
-  #toggleFilters {
-    grid-column: 2;
-    width: 100%;
-    font-size: .86rem;
-    white-space: nowrap;
-  }
+      #toggleFilters {
+        grid-column: 2;
+        width: 100%;
+        font-size: .86rem;
+        white-space: nowrap;
+      }
 
-  /* Keep the main controls matching */
-  #searchBox,
-  #sortBox,
-  #toggleFilters {
-    min-height: 50px;
-  }
+      /* Keep the main controls matching */
+      #searchBox,
+      #sortBox,
+      #toggleFilters {
+        min-height: 50px;
+      }
 
-  /* Clean panel when filters are opened */
-  .filtersAdvanced {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 16px;
-    background: #fff;
-    border: 1px solid rgba(17, 24, 39, .09);
-    box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
-  }
+      /* Clean panel when filters are opened */
+      .filtersAdvanced {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid rgba(17, 24, 39, .09);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, .07);
+      }
 
-  .filtersAdvanced::before {
-    grid-column: 1 / -1;
-    margin: 0 0 2px;
-    font-size: .82rem;
-  }
+      .filtersAdvanced::before {
+        grid-column: 1 / -1;
+        margin: 0 0 2px;
+        font-size: .82rem;
+      }
 
-  /* Fuel and transmission share one row */
-  #fuelBox {
-    grid-column: 1;
-  }
+      /* Fuel and transmission share one row */
+      #fuelBox {
+        grid-column: 1;
+      }
 
-  #gearBox {
-    grid-column: 2;
-  }
+      #gearBox {
+        grid-column: 2;
+      }
 
-  /* Max price remains full width */
-  #maxPriceBox {
-    grid-column: 1 / -1;
-  }
+      /* Max price remains full width */
+      #maxPriceBox {
+        grid-column: 1 / -1;
+      }
 
-  /* Reset and Apply remain balanced */
-  .btnRow {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
+      /* Reset and Apply remain balanced */
+      .btnRow {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
 
-  .btnRow .btn {
-    width: 100%;
-  }
+      .btnRow .btn {
+        width: 100%;
+      }
 
-  .hint {
-    grid-column: 1 / -1;
-    margin-top: 2px;
-    padding-left: 1px;
-    font-size: .82rem;
-  }
-}
+      .hint {
+        grid-column: 1 / -1;
+        margin-top: 2px;
+        padding-left: 1px;
+        font-size: .82rem;
+      }
+    }
   </style>
 </head>
 
@@ -1116,6 +1143,22 @@
         const status = String(car.status || "").toLowerCase();
         const isReserved = status === "reserved";
         const isSold = status === "sold" || car.sold === true;
+        const previousPrice = Number(car.previousPrice);
+        const currentPrice = Number(car.price);
+        const reducedAt = Date.parse(car.priceReducedAt || "");
+        const listedAt = Date.parse(car.createdAt || "");
+        const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+
+        const isPriceReduced =
+          !isSold &&
+          !isReserved &&
+          previousPrice > currentPrice &&
+          currentPrice > 0 &&
+          Number.isFinite(reducedAt) &&
+          Number.isFinite(listedAt) &&
+          reducedAt - listedAt >= fourteenDays &&
+          reducedAt <= Date.now() &&
+          Date.now() - reducedAt < fourteenDays;
 
         const card = document.createElement("a");
         card.className = "carCard" + (isSold ? " sold" : "");
@@ -1142,11 +1185,15 @@
 <img class="carImg ${isSold ? "soldImg" : ""}" src="${escapeAttr(pickPhoto(car))}" alt="${escapeHtml(name)}" loading="lazy" decoding="async" onerror="this.src='/images/hero.png'">
 ${isReserved ? `<div class="reservedBadge">RESERVED</div>` : ""}
 ${isSold ? `<div class="soldBadge">SOLD</div>` : ""}
+${isPriceReduced ? `<div class="priceReducedBadge">PRICE REDUCED</div>` : ""}
       </div>
 
       <div class="body">
         <h3 class="name">${escapeHtml(name)}</h3>
-        <div class="price">${escapeHtml(money(car.price))}</div>
+     <div class="price">
+  ${isPriceReduced ? `<span class="oldPrice">${escapeHtml(money(previousPrice))}</span>` : ""}
+  <span>${escapeHtml(money(car.price))}</span>
+</div>
 
 ${listedText ? `
 <div class="listedText">

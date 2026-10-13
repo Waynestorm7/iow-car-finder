@@ -237,6 +237,11 @@
       background: rgba(230, 126, 34, .96);
     }
 
+    .mainStatusBadge.reduced {
+      background: #e67e22;
+      border: 1px solid rgba(255, 255, 255, .25);
+    }
+
     .mainPhotoNav {
       position: absolute;
       top: 50%;
@@ -461,10 +466,21 @@
     }
 
     .price {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
       margin: 4px 0 6px;
       font-size: 1.25rem;
       font-weight: 900;
-      color: #0f172a
+      color: #0f172a;
+    }
+
+    .oldPrice {
+      color: #6b7280;
+      font-size: .72em;
+      font-weight: 700;
+      text-decoration: line-through;
     }
 
     .listedDate {
@@ -1284,6 +1300,22 @@
         const carStatus = String(car.status || "").toLowerCase();
         const isReserved = carStatus === "reserved";
         const isSold = carStatus === "sold" || car.sold === true;
+        const previousPrice = Number(car.previousPrice);
+        const currentPrice = Number(car.price);
+        const reducedAt = Date.parse(car.priceReducedAt || "");
+        const listedAt = Date.parse(car.createdAt || "");
+        const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+
+        const isPriceReduced =
+          !isSold &&
+          !isReserved &&
+          previousPrice > currentPrice &&
+          currentPrice > 0 &&
+          Number.isFinite(reducedAt) &&
+          Number.isFinite(listedAt) &&
+          reducedAt - listedAt >= fourteenDays &&
+          reducedAt <= Date.now() &&
+          Date.now() - reducedAt < fourteenDays;
 
         if (loading) loading.style.display = "none";
         if (content) content.style.display = "grid";
@@ -1293,7 +1325,16 @@
         const listedDate = document.getElementById("listedDate");
 
         if (carTitle) carTitle.textContent = car.name || "Car";
-        if (carPrice) carPrice.textContent = money(car.price);
+        if (carPrice) {
+          if (isPriceReduced) {
+            carPrice.innerHTML = `
+      <span class="oldPrice">${escapeText(money(previousPrice))}</span>
+      <span>${escapeText(money(car.price))}</span>
+    `;
+          } else {
+            carPrice.textContent = money(car.price);
+          }
+        }
 
         const dateText = formatDateShort(
           car.createdAt || car.created_at || car.updatedAt || car.updated_at
@@ -1320,6 +1361,10 @@
           } else if (isReserved) {
             mainStatusBadge.classList.add("reserved");
             mainStatusBadge.textContent = "RESERVED";
+            mainStatusBadge.style.display = "block";
+          } else if (isPriceReduced) {
+            mainStatusBadge.classList.add("reduced");
+            mainStatusBadge.textContent = "PRICE REDUCED";
             mainStatusBadge.style.display = "block";
           }
         }
