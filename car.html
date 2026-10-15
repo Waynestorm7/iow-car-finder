@@ -569,13 +569,69 @@
       padding: 10px 12px;
     }
 
+    #extrasWrap .descBox>button {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      border-color: #e67e22;
+      color: #e67e22;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #extrasWrap .descBox>button[aria-expanded="false"]::after {
+      content: " ↓";
+      margin-left: 6px;
+    }
+
+    #extrasWrap .descBox>button[aria-expanded="true"]::after {
+      content: " ↑";
+      margin-left: 6px;
+    }
+
     .extrasList {
       margin: 0;
-      padding-left: 18px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 4px 18px;
-      line-height: 1.45;
+      padding: 0;
+      list-style: none;
+      columns: 2;
+      column-gap: 18px;
+      line-height: 1.5;
+    }
+
+    .extrasList li {
+      position: relative;
+      padding-left: 20px;
+      margin: 0 0 9px;
+      break-inside: avoid;
+    }
+
+    .extrasList li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #e67e22;
+      font-weight: 900;
+    }
+
+    @media (max-width: 600px) {
+      .extrasList {
+        columns: 1;
+      }
+    }
+
+    .extrasList li {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .extrasList li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #e67e22;
+      font-weight: 900;
     }
 
     .extrasList li {
@@ -1711,12 +1767,57 @@ Thanks`;
 
         const extrasWrap = document.getElementById("extrasWrap");
         const extrasList = document.getElementById("extrasList");
-        if (car.extras) {
-          const lines = String(car.extras).split(/\n/).map(s => s.trim()).filter(Boolean);
-          if (extrasList) extrasList.innerHTML = lines.map(l => `<li>${escapeText(l)}</li>`).join("");
-          if (extrasWrap) extrasWrap.style.display = "block";
-        } else {
-          if (extrasWrap) extrasWrap.style.display = "none";
+
+        const featureLines = String(car.extras || "")
+          .split(/\n/)
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        if (extrasWrap) {
+          extrasWrap.style.display = featureLines.length ? "block" : "none";
+        }
+
+        if (extrasList) {
+          function showFeatures(showAll) {
+            const visible = showAll
+              ? featureLines
+              : featureLines.slice(0, 10);
+
+            extrasList.innerHTML = visible
+              .map(feature => `<li>${escapeText(feature)}</li>`)
+              .join("");
+          }
+
+          showFeatures(false);
+
+          if (featureLines.length > 10) {
+            const toggleBtn = document.createElement("button");
+
+            toggleBtn.type = "button";
+            toggleBtn.className = "btn ghost";
+            toggleBtn.textContent = "Show all features";
+            toggleBtn.style.marginTop = "12px";
+            toggleBtn.setAttribute("aria-controls", "extrasList");
+            toggleBtn.setAttribute("aria-expanded", "false");
+
+            toggleBtn.addEventListener("click", () => {
+              const expanded =
+                toggleBtn.getAttribute("aria-expanded") === "true";
+
+              showFeatures(!expanded);
+
+              toggleBtn.setAttribute(
+                "aria-expanded",
+                String(!expanded)
+              );
+
+              toggleBtn.textContent = expanded
+                ? "Show all features"
+                : "Show less";
+            });
+
+            extrasList.insertAdjacentElement("afterend", toggleBtn);
+          }
         }
 
         const shareBtn = document.getElementById("shareBtn");
