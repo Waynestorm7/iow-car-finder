@@ -156,6 +156,16 @@ function serveFile(res, filePath) {
   return send(res, 200, { "Content-Type": getMime(filePath) }, data);
 }
 
+function escapeHtmlForSeo(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
 function safeReadJsonArray(filename) {
   const filePath = path.join(__dirname, filename);
   if (!fs.existsSync(filePath)) return [];
@@ -2816,7 +2826,96 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/") return serveFile(res, path.join(__dirname, "index.html"));
   if (req.method === "GET" && pathname === "/cars-page") return serveFile(res, path.join(__dirname, "cars.html"));
   if (req.method === "GET" && pathname === "/garages") return serveFile(res, path.join(__dirname, "garages-page.html"));
-  if (req.method === "GET" && pathname === "/car") return serveFile(res, path.join(__dirname, "car.html"));
+  if (req.method === "GET" && pathname === "/car") {
+    const carId = String(urlObj.searchParams.get("id") || "").trim();
+    const htmlPath = path.join(__dirname, "car.html");
+
+    if (urlObj.searchParams.get("preview") === "1") {
+      const html = fs.readFileSync(htmlPath, "utf8")
+        .replace('content="index, follow"', 'content="noindex, nofollow"');
+      return send(res, 200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow"
+      }, html);
+    }
+
+    if (!carId) return send(res, 302, { Location: "/cars-page" }, "");
+
+    try {
+      const car = await dbGetCarById(carId);
+      const garage = car?.garageId ? await dbGetGarageById(car.garageId) : null;
+
+      if (!car || soldTooOld(car) || !garage ||
+        garage.account_status !== "active" ||
+        garage.public_status !== "live") {
+        return send(res, 404, {
+          "Content-Type": "text/plain; charset=utf-8",
+          "X-Robots-Tag": "noindex"
+        }, "Car not found");
+      }
+
+      const name = String(car.name || "Used car").trim();
+      const town = String(garage.town || "").trim();
+      const garageName = String(garage.name || "Island garage").trim();
+      const price = Number(car.price);
+      const priceText = Number.isFinite(price) && price > 0
+        ? `£${price.toLocaleString("en-GB")}` : "";
+
+      const title = `${name}${town ? ` for sale in ${town}` : " for sale"} | IOW Car Finder`;
+      const description = `${name} for sale${town ? ` in ${town}, Isle of Wight` : " on the Isle of Wight"}${priceText ? ` for ${priceText}` : ""}. View photos and details from ${garageName}.`;
+      const canonical = `https://www.iowcarfinder.co.uk/car?id=${encodeURIComponent(car.id)}`;
+
+      const photo = String(car.photo || "");
+      const image = /^https:\/\/[^\s"<>]+$/i.test(photo)
+        ? photo : "https://www.iowcarfinder.co.uk/images/hero-desktop.webp";
+
+      let html = fs.readFileSync(htmlPath, "utf8");
+
+      html = html.replace(/<title>[^<]*<\/title>/i,
+        `<title>${escapeHtmlForSeo(title)}</title>`);
+
+      html = html.replace(/<link id="canonicalLink" rel="canonical">/i,
+        `<link id="canonicalLink" rel="canonical" href="${escapeHtmlForSeo(canonical)}">`);
+
+      const setMeta = (type, key, value) => {
+        const pattern = new RegExp(
+          `(<meta\\s+${type}="${key}"\\s+content=")[^"]*(")`, "i"
+        );
+        html = html.replace(pattern,
+          (_, start, end) => start + escapeHtmlForSeo(value) + end);
+      };
+
+      setMeta("name", "description", description);
+      setMeta("property", "og:title", title);
+      setMeta("property", "og:description", description);
+      setMeta("property", "og:url", canonical);
+      setMeta("property", "og:image", image);
+      setMeta("name", "twitter:title", title);
+      setMeta("name", "twitter:description", description);
+      setMeta("name", "twitter:image", image);
+
+      const summary = `<h1>${escapeHtmlForSeo(name)}</h1>` +
+        (priceText ? `<p><strong>${escapeHtmlForSeo(priceText)}</strong></p>` : "") +
+        `<p>Sold by ${escapeHtmlForSeo(garageName)}${town ? ` in ${escapeHtmlForSeo(town)}` : ""}.</p>` +
+        (car.description ? `<p style="white-space:pre-line">${escapeHtmlForSeo(car.description)}</p>` : "");
+
+      html = html.replace(
+        '<div id="loading" class="status">Loading car…</div>',
+        `<div id="loading" class="status">${summary}</div>`
+      );
+
+      return send(res, 200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store"
+      }, html);
+
+    } catch (error) {
+      console.error("GET /car SEO error:", error);
+      return send(res, 500, {
+        "Content-Type": "text/plain; charset=utf-8"
+      }, "Could not load car");
+    }
+  }
   if (req.method === "GET" && pathname === "/garages-page") return serveFile(res, path.join(__dirname, "garages-page.html"));
   if (req.method === "GET" && pathname === "/garage") return serveFile(res, path.join(__dirname, "garage.html"));
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
