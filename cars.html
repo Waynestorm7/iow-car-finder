@@ -1156,7 +1156,7 @@
           currentPrice > 0 &&
           Number.isFinite(reducedAt) &&
           Number.isFinite(listedAt) &&
-          reducedAt - listedAt >= fourteenDays &&
+          reducedAt - listedAt >= 7 * 24 * 60 * 60 * 1000 &&
           reducedAt <= Date.now() &&
           Date.now() - reducedAt < fourteenDays;
 

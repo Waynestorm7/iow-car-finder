@@ -531,7 +531,7 @@ async function dbUpdateCar(payload, garageId = null) {
 
   const listedLongEnough =
     Number.isFinite(listedAt) &&
-    Date.now() - listedAt >= 14 * 24 * 60 * 60 * 1000;
+    Date.now() - listedAt >= 7 * 24 * 60 * 60 * 1000;
 
   if (newPrice < oldPrice && listedLongEnough) {
     row.previous_price = oldPrice;
