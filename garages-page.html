@@ -548,33 +548,6 @@
             return status !== "sold" && status !== "reserved" && car.sold !== true;
           });
 
-          if (String(g.name || "").trim().toLowerCase() === "rjc autos") {
-            const preferredNames = [
-              "v220",
-              "c300",
-              "peugeot 208",
-              "fiesta titanium turbo"
-            ];
-
-            const preferredCars = preferredNames
-              .map(name =>
-                photoCars.find(car =>
-                  String(car.name || "").trim().toLowerCase().includes(name.toLowerCase())
-                )
-              )
-              .filter(Boolean);
-
-            const preferredIds = new Set(
-              preferredCars.map(car => car.id || car.name)
-            );
-
-            const fallbackCars = photoCars.filter(
-              car => !preferredIds.has(car.id || car.name)
-            );
-
-            photoCars = [...preferredCars, ...fallbackCars];
-          }
-
           const photos = photoCars
             .map(car => getCarPhoto(car))
             .filter(Boolean)
