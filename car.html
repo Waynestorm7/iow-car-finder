@@ -3,6 +3,10 @@
 
 <head>
 
+  <script>
+    document.documentElement.classList.add("js-enabled");
+  </script>
+
   <script src="/cookie-consent.js" defer></script>
 
   <meta charset="UTF-8">
@@ -155,6 +159,16 @@
       border-radius: var(--r);
       box-shadow: var(--shadow);
       padding: 14px
+    }
+
+    /* Hide SEO fallback while JavaScript loads the car */
+    html.js-enabled #loading>h1,
+    html.js-enabled #loading>p {
+      display: none;
+    }
+
+    html.js-enabled #loading:has(> h1)::before {
+      content: "Loading car…";
     }
 
     .layout {
