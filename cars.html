@@ -1132,7 +1132,7 @@
 
       for (const car of cars) {
         const name = safeText(car.name) || "Car";
-        const href = "/car.html?id=" + encodeURIComponent(car.id || "");
+        const href = "/car?id=" + encodeURIComponent(car.id || "");
         const year = safeText(car.year);
         const mi = miles(car.mileage);
         const fuel = safeText(car.fuel);
