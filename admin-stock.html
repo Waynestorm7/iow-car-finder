@@ -461,6 +461,29 @@
         <h2 id="formTitle">Add vehicle for selected garage</h2>
 
         <form id="carForm">
+
+
+          <div
+            style="padding:16px; margin-bottom:18px; border:1px solid #e67e22; border-radius:14px; background:#fffaf5;">
+
+            <h2>Automatic Listing Assistant</h2>
+
+            <label for="sourceAdvert">Paste prepared vehicle listing</label>
+
+            <textarea id="sourceAdvert" rows="8" placeholder="Paste your prepared vehicle listing here..."></textarea>
+
+            <button id="fillFromAdvertBtn" class="btn dark" type="button" disabled>
+              Fill vehicle details (next step)
+            </button>
+
+            <div class="notice">
+              Review all vehicle details before uploading.
+              Nothing will be published automatically.
+            </div>
+
+          </div>
+
+
           <div class="row2">
             <div>
               <label for="name">Car name</label>
@@ -717,6 +740,12 @@
         return;
       }
 
+      // Clear any previous prepared listing before editing
+      document.getElementById("sourceAdvert").value = "";
+      document.getElementById("fillFromAdvertBtn").disabled = true;
+      delete carForm.dataset.preparedGarageId;
+      delete carForm.dataset.preparedAdvert;
+
       editingCarId = car.id;
       editingCar = car;
 
@@ -763,7 +792,10 @@
       existingPhotosNote.style.display = "none";
       existingPhotosNote.textContent = "";
 
+
       carForm.reset();
+      delete carForm.dataset.preparedGarageId;
+      delete carForm.dataset.preparedAdvert;
       photoPreview.innerHTML = "";
       hideMessage(formMessage);
     }
@@ -958,6 +990,49 @@
       const files = Array.from(photoInput.files || []).slice(0, 20);
       const isEditing = Boolean(editingCarId);
 
+
+      // Prevent updating a vehicle while the wrong garage is selected
+      if (
+        isEditing &&
+        String(editingCar?.garageId || "") !== String(garageId)
+      ) {
+        showMessage(
+          formMessage,
+          "Wrong garage selected. Return to the original garage or cancel editing.",
+          "bad"
+        );
+        return;
+      }
+
+      // Prevent prepared listings being uploaded to the wrong garage
+      const preparedGarageId = carForm.dataset.preparedGarageId;
+
+      if (!isEditing && preparedGarageId && preparedGarageId !== garageId) {
+        showMessage(
+          formMessage,
+          "Wrong garage selected. This vehicle was prepared for a different garage. Please select the correct garage before uploading.",
+          "bad"
+        );
+        return;
+      }
+
+
+      // Check the prepared advert has not changed
+      const preparedAdvert = carForm.dataset.preparedAdvert;
+
+      if (
+        !isEditing &&
+        preparedAdvert !== undefined &&
+        preparedAdvert !== sourceAdvert.value.trim()
+      ) {
+        showMessage(
+          formMessage,
+          "The prepared advert has changed. Click Fill vehicle details again before uploading.",
+          "bad"
+        );
+        return;
+      }
+
       if (!adminKey()) {
         showMessage(formMessage, "Enter your admin key first.", "bad");
         return;
@@ -1051,6 +1126,114 @@
       renderGarageInfo(currentGarage);
       carList.innerHTML = `<div class="notice">Click “Load selected garage stock”.</div>`;
       carCount.textContent = "0";
+    });
+
+
+    // AUTOMATIC LISTING ASSISTANT
+    const fillFromAdvertBtn = document.getElementById("fillFromAdvertBtn");
+
+
+    const sourceAdvert = document.getElementById("sourceAdvert");
+
+    function updateFillButton() {
+      fillFromAdvertBtn.disabled = sourceAdvert.value.trim() === "";
+    }
+
+    sourceAdvert.addEventListener("input", updateFillButton);
+
+    carForm.addEventListener("reset", () => {
+      fillFromAdvertBtn.disabled = true;
+    });
+
+    updateFillButton();
+
+
+    fillFromAdvertBtn.addEventListener("click", () => {
+      if (editingCarId) {
+        showMessage(formMessage, "Cancel editing the current vehicle first.", "bad");
+        return;
+      }
+
+      let listing;
+
+      try {
+        const text = document.getElementById("sourceAdvert").value.trim();
+        listing = JSON.parse(text);
+      } catch {
+        showMessage(formMessage, "Paste a valid prepared vehicle listing first.", "bad");
+        return;
+      }
+
+      if (!listing || typeof listing !== "object" || Array.isArray(listing)) {
+        showMessage(formMessage, "Invalid listing format.", "bad");
+        return;
+      }
+
+
+      // Check that the listing belongs to the selected garage
+      const expectedGarage = String(listing.garage || "").trim();
+
+      const selectedGarage = garages.find(g =>
+        String(g.id) === String(garageSelect.value)
+      );
+
+      if (!expectedGarage) {
+        showMessage(formMessage, "Prepared listing is missing the garage name.", "bad");
+        return;
+      }
+
+      if (!selectedGarage ||
+        selectedGarage.name.trim().toLowerCase() !== expectedGarage.toLowerCase()) {
+        showMessage(formMessage, "Garage mismatch. Select the correct garage first.", "bad");
+        return;
+      }
+
+      const year = Number(listing.year);
+      const price = Number(String(listing.price ?? "").replace(/[£,\s]/g, ""));
+
+      if (!String(listing.name || "").trim() ||
+        !Number.isInteger(year) ||
+        year < 1900 ||
+        year > new Date().getFullYear() + 1 ||
+        !Number.isFinite(price) ||
+        price <= 0) {
+        showMessage(formMessage, "Check the vehicle name, year and price.", "bad");
+        return;
+      }
+
+      if (!["", "Petrol", "Diesel", "Hybrid", "Electric"].includes(listing.fuel || "") ||
+        !["", "Manual", "Automatic"].includes(listing.transmission || "")) {
+        showMessage(formMessage, "Check the fuel and transmission values.", "bad");
+        return;
+      }
+
+      const fields = [
+        "name", "price", "year", "mileage",
+        "fuel", "transmission", "engine", "colour",
+        "description", "extras"
+      ];
+
+      fields.forEach(field => {
+        let value = listing[field];
+
+        if (field === "extras" && Array.isArray(value)) {
+          value = value.join("\n");
+        }
+
+        document.getElementById(field).value =
+          value == null ? "" : String(value);
+      });
+
+
+      // Remember which garage this prepared listing belongs to
+      carForm.dataset.preparedGarageId = String(selectedGarage.id);
+      carForm.dataset.preparedAdvert = sourceAdvert.value.trim();
+
+      showMessage(
+        formMessage,
+        "Vehicle details filled. Check everything and add photographs before uploading.",
+        "good"
+      );
     });
 
     if (adminKey()) {
