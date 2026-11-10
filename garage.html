@@ -404,6 +404,35 @@
             line-height: 1.45;
         }
 
+
+        .carSpecs {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin: 12px 0 15px;
+        }
+
+        .carSpec {
+            background: #f4f6f8;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 9px 10px;
+        }
+
+        .carSpecLabel {
+            display: block;
+            color: #667085;
+            font-size: 0.75rem;
+            margin-bottom: 3px;
+        }
+
+        .carSpecValue {
+            display: block;
+            color: #111827;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
         .viewBtn {
             display: inline-flex;
             align-items: center;
@@ -1192,7 +1221,29 @@
     ${isPriceReduced ? `<span class="oldPrice">${escapeHtml(money(previousPrice))}</span>` : ""}
     <span>${escapeHtml(money(car.price))}</span>
 </p>
-      <p class="small">${escapeHtml(car.year || "")} · ${escapeHtml(car.fuel || "")} · ${escapeHtml(car.transmission || "")}</p>
+      
+<div class="carSpecs">
+    <div class="carSpec">
+        <span class="carSpecLabel">Year</span>
+        <span class="carSpecValue">${escapeHtml(car.year || "—")}</span>
+    </div>
+
+    <div class="carSpec">
+        <span class="carSpecLabel">Mileage</span>
+        <span class="carSpecValue">${car.mileage != null && car.mileage !== "" ? escapeHtml(Number(car.mileage).toLocaleString("en-GB") + " miles") : "—"}</span>
+    </div>
+
+    <div class="carSpec">
+        <span class="carSpecLabel">Fuel</span>
+        <span class="carSpecValue">${escapeHtml(car.fuel || "—")}</span>
+    </div>
+
+    <div class="carSpec">
+        <span class="carSpecLabel">Transmission</span>
+        <span class="carSpecValue">${escapeHtml(car.transmission || "—")}</span>
+    </div>
+</div>
+
 
       <span class="viewBtn">View car →</span>
     </div>
