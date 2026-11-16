@@ -957,8 +957,9 @@
       }
     }
 
-    async function uploadPhotos(files) {
+    async function uploadPhotos(files, garageId) {
       const formData = new FormData();
+      formData.append("garageId", garageId);
 
       files.forEach(file => {
         formData.append("photos", file);
@@ -1064,7 +1065,7 @@
         let urls = existingPhotos;
 
         if (files.length) {
-          urls = await uploadPhotos(files);
+          urls = await uploadPhotos(files, garageId);
         }
 
         addCarBtn.textContent = isEditing ? "Updating vehicle..." : "Saving vehicle...";

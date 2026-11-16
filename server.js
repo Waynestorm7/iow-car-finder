@@ -893,7 +893,11 @@ const server = http.createServer(async (req, res) => {
           files.map(file =>
             cloudinary.uploader
               .upload(file.path, {
-                folder: "cars"
+                folder: "cars",
+                tags: [
+                  "iowcarfinder-managed-car-photo",
+                  `iowcarfinder-garage-${auth.garageId}`
+                ]
               })
               .then(result => result.secure_url)
           )
@@ -958,10 +962,33 @@ const server = http.createServer(async (req, res) => {
       }
 
       try {
+        const garageId = String(req.body?.garageId || "").trim();
+
+        const { data: garage, error: garageError } = await supabase
+          .from("garages")
+          .select("id")
+          .eq("id", garageId)
+          .maybeSingle();
+
+        if (garageError || !garage) {
+          files.forEach(f => fs.unlink(f.path, () => { }));
+
+          return sendJson(res, 400, {
+            success: false,
+            message: "Invalid garage selected."
+          });
+        }
+
         const urls = await Promise.all(
           files.map((f) =>
             cloudinary.uploader
-              .upload(f.path, { folder: "cars" })
+              .upload(f.path, {
+                folder: "cars",
+                tags: [
+                  "iowcarfinder-managed-car-photo",
+                  `iowcarfinder-garage-${garage.id}`
+                ]
+              })
               .then((r) => r.secure_url)
           )
         );
