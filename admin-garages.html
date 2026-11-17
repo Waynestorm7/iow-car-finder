@@ -664,6 +664,7 @@
         async function uploadAdminImage(file, key) {
             const formData = new FormData();
             formData.append("photos", file);
+            formData.append("garageId", editGarageId.value.trim());
 
             const res = await fetch("/admin-upload", {
                 method: "POST",
@@ -1052,8 +1053,10 @@ ${garage.public_status === "hidden"
 
                 keyForm.dispatchEvent(new Event("submit"));
 
+
             } catch (err) {
-                editStatus.textContent = "Could not save garage.";
+                console.error("Garage save error:", err);
+                editStatus.textContent = "Could not save garage: " + (err?.message || "Unknown error");
             }
         });
 
