@@ -339,6 +339,17 @@
             background: #e5e7eb;
         }
 
+
+
+        .carsGrid.selectAutos .carImgWrap {
+            aspect-ratio: 16 / 10;
+        }
+
+        .carsGrid.selectAutos .carImgWrap img {
+            height: 100%;
+            object-fit: cover;
+        }
+
         .carCard.sold .carImgWrap img {
             filter: grayscale(100%);
             opacity: .72;
@@ -405,6 +416,9 @@
             line-height: 1.45;
         }
 
+        .carsGrid .carInfo .small {
+            font-size: 13px;
+        }
 
         .carSpecs {
             display: grid;
@@ -717,11 +731,24 @@
 
             if (!photo) return "/images/hero-desktop.webp";
 
-            return cloudinaryOptimise(photo, "f_auto,q_auto,c_fill,w_700,h_438");
+
+            const isSelectAutos =
+                String(car.garageName || "").trim().toLowerCase() === "select autos newport";
+
+            return cloudinaryOptimise(
+                photo,
+                isSelectAutos
+                    ? "f_auto,q_auto,c_limit,w_700"
+                    : "f_auto,q_auto,c_fill,w_700,h_438"
+            );
         }
 
         async function recordGarageViewOnce(garageId) {
             const cleanGarageId = String(garageId || "").trim();
+
+
+            if (window.location.hostname === "localhost") return;
+
 
             if (!cleanGarageId) return;
 
@@ -950,6 +977,11 @@
                 */
 
                 garageName.textContent = garage.name || "Garage";
+
+                carsBox.classList.toggle(
+                    "selectAutos",
+                    String(garage.name || "").trim().toLowerCase() === "select autos newport"
+                );
 
                 const rawBannerUrl = garage.banner_url || garage.bannerUrl || "";
                 const bannerUrl = cloudinaryOptimise(rawBannerUrl, "f_auto,q_auto,c_fill,w_1400,h_420");
@@ -1223,6 +1255,10 @@
     <span>${escapeHtml(money(car.price))}</span>
 </p>
       
+${car.createdAt && !Number.isNaN(Date.parse(car.createdAt))
+                            ? `<p class="small">Listed: ${escapeHtml(new Date(car.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))}</p>`
+                            : ""}
+
 <div class="carSpecs">
     <div class="carSpec">
         <span class="carSpecLabel">Year</span>
