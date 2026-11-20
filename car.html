@@ -1467,7 +1467,7 @@
             encodeURIComponent("Report listing: " + (car.name || "Unknown car"));
         }
 
-        const MAX_PHOTOS = 20;
+        const MAX_PHOTOS = 30;
 
         let rawPhotos = (Array.isArray(car.photos) ? car.photos : [])
           .map(p => String(p || "").trim())

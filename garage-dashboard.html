@@ -1241,9 +1241,10 @@
 
           <div id="currentPhotos" class="photoGrid"></div>
 
-          <div class="small">Select up to 12 photos.</div>
+          <div class="small">Select up to 30 photos.</div>
 
         </div>
+
 
         <div class="formSection">
           <div class="sectionHeader">
@@ -1687,52 +1688,103 @@
       }
     })();
 
-    async function uploadPhotos(files) {
-      const list = Array.from(files || []).slice(0, 12);
-      if (!list.length) return [];
 
-      const fd = new FormData();
-      list.forEach(f => fd.append("photos", f));
+    async function uploadPhotos(files, onBatchUploaded) {
+      const list = Array.from(files || []);
+
+      if (!list.length) return [];
 
       const { data } = await supabaseClient.auth.getSession();
 
-      const res = await fetch("/upload", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${data.session.access_token}`
-        },
-        body: fd
-      });
-
-      const result = await res.json().catch(() => null);
-
-      if (!res.ok || !result || !result.success) {
-        throw new Error(result?.message || "Photo upload failed");
+      if (!data.session?.access_token) {
+        throw new Error("Please sign in again.");
       }
 
-      return Array.isArray(result.urls) ? result.urls : [];
+      const allUrls = [];
+      const batchSize = 15;
+
+      for (let i = 0; i < list.length; i += batchSize) {
+        const batch = list.slice(i, i + batchSize);
+        const fd = new FormData();
+
+        batch.forEach(file => {
+          fd.append("photos", file);
+        });
+
+        const res = await fetch("/upload", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${data.session.access_token}`
+          },
+          body: fd
+        });
+
+        const result = await res.json().catch(() => null);
+
+        if (!res.ok || !result || !result.success) {
+          throw new Error(
+            result?.message || "Photo upload failed."
+          );
+        }
+
+        const urls = Array.isArray(result.urls)
+          ? result.urls
+          : [];
+
+        if (urls.length !== batch.length) {
+          throw new Error("Some photos did not upload.");
+        }
+
+        allUrls.push(...urls);
+
+        if (typeof onBatchUploaded === "function") {
+          onBatchUploaded(urls);
+        }
+      }
+
+      return allUrls;
     }
+
 
     photoFilesInput.addEventListener("change", async () => {
       clearMsg();
 
       if (!photoFilesInput.files || !photoFilesInput.files.length) return;
 
+      photoFilesInput.disabled = true;
       addBtn.disabled = true;
       addBtn.textContent = "Uploading…";
 
+
       try {
-        showMsg("success", "Uploading photos…");
-        const urls = await uploadPhotos(photoFilesInput.files);
-        uploadedPhotoUrls = [...uploadedPhotoUrls, ...urls].slice(0, 12);
+        const files = Array.from(photoFilesInput.files);
+        const remaining = 30 - uploadedPhotoUrls.length;
 
-        renderEditablePhotos();
+        if (files.length > remaining) {
+          showMsg("error", `You can add ${remaining} more photo(s). Maximum 30 per vehicle.`);
+          return;
+        }
 
-        showMsg("success", `${urls.length} photo(s) uploaded. ${uploadedPhotoUrls.length} photo(s) on this advert.`);
+        let uploadedThisTime = 0;
+        showMsg("success", `Uploading photos… 0/${files.length}`);
+
+        await uploadPhotos(files, (batchUrls) => {
+          uploadedPhotoUrls.push(...batchUrls);
+          uploadedThisTime += batchUrls.length;
+
+          renderEditablePhotos();
+
+          showMsg("success", `Uploading photos… ${uploadedThisTime}/${files.length}`);
+        });
+
+        showMsg("success", `${uploadedThisTime} photo(s) uploaded. ${uploadedPhotoUrls.length} photo(s) on this advert.`);
+
 
       } catch (e) {
         showMsg("error", e.message || "Upload failed.");
       } finally {
+        photoFilesInput.value = "";
+        photoFilesInput.disabled = false;
         addBtn.disabled = false;
         setVehicleFormMode(editingCar ? "edit" : "add", editingCar ? editingCar.name : "");
       }

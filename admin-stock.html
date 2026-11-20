@@ -643,7 +643,7 @@
     photoInput.addEventListener("change", () => {
       photoPreview.innerHTML = "";
 
-      const files = Array.from(photoInput.files || []).slice(0, 20);
+      const files = Array.from(photoInput.files || []).slice(0, 30);
 
       files.forEach(file => {
         const img = document.createElement("img");
@@ -957,29 +957,49 @@
       }
     }
 
+
     async function uploadPhotos(files, garageId) {
-      const formData = new FormData();
-      formData.append("garageId", garageId);
+      const list = Array.from(files || []);
+      const allUrls = [];
+      const batchSize = 15;
 
-      files.forEach(file => {
-        formData.append("photos", file);
-      });
+      for (let i = 0; i < list.length; i += batchSize) {
+        const batch = list.slice(i, i + batchSize);
+        const formData = new FormData();
 
-      const res = await fetch("/admin-upload", {
-        method: "POST",
-        headers: {
-          "x-garage-key": adminKey()
-        },
-        body: formData
-      });
+        formData.append("garageId", garageId);
 
-      const data = await res.json().catch(() => ({}));
+        batch.forEach(file => {
+          formData.append("photos", file);
+        });
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Photo upload failed.");
+        const res = await fetch("/admin-upload", {
+          method: "POST",
+          headers: {
+            "x-garage-key": adminKey()
+          },
+          body: formData
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || "Photo upload failed.");
+        }
+
+        const urls = Array.isArray(data.urls) ? data.urls : [];
+
+        if (urls.length !== batch.length) {
+          throw new Error("Some photographs did not upload.");
+        }
+
+        allUrls.push(...urls);
+
+        addCarBtn.textContent =
+          `Uploading photos... ${allUrls.length}/${list.length}`;
       }
 
-      return data.urls || [];
+      return allUrls;
     }
 
     carForm.addEventListener("submit", async (e) => {
@@ -988,9 +1008,17 @@
       hideMessage(formMessage);
 
       const garageId = garageSelect.value;
-      const files = Array.from(photoInput.files || []).slice(0, 20);
+      const files = Array.from(photoInput.files || []).slice(0, 30);
       const isEditing = Boolean(editingCarId);
 
+      if (photoInput.files.length > 30) {
+        showMessage(
+          formMessage,
+          "Please select no more than 30 photos.",
+          "bad"
+        );
+        return;
+      }
 
       // Prevent updating a vehicle while the wrong garage is selected
       if (
