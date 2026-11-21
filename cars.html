@@ -460,6 +460,31 @@
       box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
     }
 
+    /* ---------- Vehicle highlight pill ---------- */
+    .highlightBadge {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      max-width: calc(100% - 24px);
+      padding: 8px 12px;
+
+      background: #0d2138;
+      color: #ffffff;
+      border-left: 4px solid #e67e22;
+      border-radius: 10px;
+
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .03em;
+      line-height: 1.2;
+      text-transform: uppercase;
+
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
+      overflow-wrap: anywhere;
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .soldImg {
       filter: grayscale(100%);
     }
@@ -1143,6 +1168,7 @@
         const status = String(car.status || "").toLowerCase();
         const isReserved = status === "reserved";
         const isSold = status === "sold" || car.sold === true;
+        const highlight = typeof car.highlight === "string" ? car.highlight.trim().slice(0, 20) : "";
         const previousPrice = Number(car.previousPrice);
         const currentPrice = Number(car.price);
         const reducedAt = Date.parse(car.priceReducedAt || "");
@@ -1186,6 +1212,7 @@
 ${isReserved ? `<div class="reservedBadge">RESERVED</div>` : ""}
 ${isSold ? `<div class="soldBadge">SOLD</div>` : ""}
 ${isPriceReduced ? `<div class="priceReducedBadge">PRICE REDUCED</div>` : ""}
+${!isSold && !isReserved && highlight ? `<div class="highlightBadge">${escapeHtml(highlight)}</div>` : ""}
       </div>
 
       <div class="body">

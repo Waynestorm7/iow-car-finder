@@ -1353,6 +1353,17 @@
             placeholder="One feature per line&#10;Heated seats&#10;Apple CarPlay&#10;Cruise control"></textarea>
 
           <div class="small">Add one feature per line.</div>
+
+
+
+          <label for="highlight">Highlight on photo (optional)</label>
+          <input id="highlight" type="text" maxlength="20" placeholder="e.g. AUTOMATIC" autocomplete="off">
+          <div class="small">
+            Add one selling point (max 20 characters).
+            Shown on the vehicle photo.
+          </div>
+
+
         </div>
 
         <div class="formActions">
@@ -1501,6 +1512,7 @@
     const currentPhotos = document.getElementById("currentPhotos");
     const descriptionInput = document.getElementById("description");
     const extrasInput = document.getElementById("extras");
+    const highlightInput = document.getElementById("highlight");
 
     const garageNameInput = document.getElementById("garageName");
     const garagePhoneInput = document.getElementById("garagePhone");
@@ -2047,6 +2059,7 @@ ${car.mileage || car.colour ? `
             serviceHistoryInput.value = cleanServiceHistory(car.serviceHistory || car.service_history || "");
             descriptionInput.value = car.description || "";
             extrasInput.value = car.extras || "";
+            highlightInput.value = car.highlight || "";
 
             uploadedPhotoUrls = Array.isArray(car.photos) ? [...car.photos] : [];
             renderEditablePhotos();
@@ -2145,7 +2158,8 @@ ${car.mileage || car.colour ? `
         price: Number(price),
         garageId,
         photos,
-        photo: photos[0]
+        photo: photos[0],
+        highlight: highlightInput.value.trim()
       };
 
       if (editingCar) {
@@ -2224,6 +2238,7 @@ ${car.mileage || car.colour ? `
         currentPhotos.innerHTML = "";
         descriptionInput.value = "";
         extrasInput.value = "";
+        highlightInput.value = "";
 
         mileageInput.value = "";
         ownersInput.value = "";
@@ -2347,6 +2362,7 @@ ${car.mileage || car.colour ? `
       setActiveDashboardButton(showAddCarBtn);
 
       editingCar = null;
+      highlightInput.value = "";
 
       nameInput.value = "";
       yearInput.value = "";
@@ -2382,6 +2398,7 @@ ${car.mileage || car.colour ? `
 
     cancelEditBtn.addEventListener("click", () => {
       editingCar = null;
+      highlightInput.value = "";
 
       nameInput.value = "";
       yearInput.value = "";

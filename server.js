@@ -25,7 +25,18 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET = process.env.SUPABASE_SECRET;
 const PORT = process.env.PORT || 3000;
 
-// ... your ENV checks stay the same ...
+if (
+  typeof ADMIN_KEY !== "string" ||
+  ADMIN_KEY.length < 32 ||
+  !SUPABASE_URL ||
+  !SUPABASE_SECRET ||
+  !process.env.CLOUDINARY_CLOUD_NAME ||
+  !process.env.CLOUDINARY_API_KEY ||
+  !process.env.CLOUDINARY_API_SECRET
+) {
+  console.error("Missing or invalid required environment settings.");
+  process.exit(1);
+}
 
 // =============================
 // Cloudinary Config
@@ -386,6 +397,7 @@ function mapDbCar(row) {
 
     description: row.description ?? null,
     extras: row.extras ?? null,
+    highlight: row.highlight ?? null,
 
     createdAt: row.created_at ?? null,
     updatedAt: row.updatedAt ?? null,
@@ -445,6 +457,26 @@ async function dbGetCarByName(name) {
   return mapped;
 }
 
+function normaliseVehicleHighlight(value) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value !== "string") {
+    throw new Error("Vehicle highlight must be text.");
+  }
+
+  const highlight = value.trim().replace(/\s+/g, " ");
+
+  if (highlight.length > 20) {
+    throw new Error(
+      "Vehicle highlight must be 20 characters or fewer."
+    );
+  }
+
+  return highlight || null;
+}
+
 async function dbInsertCar(payload) {
   const name = String(payload.name || "").trim();
 
@@ -474,6 +506,8 @@ async function dbInsertCar(payload) {
     extras: (payload.extras && String(payload.extras).trim())
       ? String(payload.extras).trim()
       : null,
+
+    highlight: normaliseVehicleHighlight(payload.highlight),
 
     status: "available",
     sold: false,
@@ -509,6 +543,10 @@ async function dbUpdateCar(payload, garageId = null) {
     extras: payload.extras ?? null,
     updatedAt: new Date().toISOString()
   };
+
+  if (Object.prototype.hasOwnProperty.call(payload, "highlight")) {
+    row.highlight = normaliseVehicleHighlight(payload.highlight);
+  }
 
   let existingQuery = supabase
     .from("cars")
@@ -1485,10 +1523,11 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      /*
+            /*
         Load every analytics row in batches.
         This avoids silently stopping at Supabase's normal row limit.
       */
+
       const events = [];
       const pageSize = 1000;
       let from = 0;
