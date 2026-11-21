@@ -134,6 +134,13 @@
       color: #111827;
     }
 
+    .small {
+      font-size: .86rem;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
     label {
       display: block;
       font-size: .82rem;
@@ -548,6 +555,14 @@
           <label for="extras">Key features</label>
           <textarea id="extras" placeholder="Air conditioning&#10;Bluetooth&#10;Parking sensors"></textarea>
 
+          <label for="highlight">Highlight on photo (optional)</label>
+          <input id="highlight" type="text" maxlength="20" placeholder="e.g. AUTOMATIC" autocomplete="off">
+          <div class="small">
+            Add one selling point (max 20 characters).
+            Shown on the vehicle photo.
+          </div>
+
+
           <label for="photos">Photos</label>
           <input id="photos" type="file" accept="image/*" multiple>
 
@@ -763,6 +778,7 @@
       document.getElementById("colour").value = car.colour || "";
       document.getElementById("description").value = car.description || "";
       document.getElementById("extras").value = car.extras || "";
+      document.getElementById("highlight").value = car.highlight || "";
 
       photoInput.value = "";
       photoPreview.innerHTML = "";
@@ -1102,6 +1118,7 @@
           id: editingCarId,
           garageId,
           garage_id: garageId,
+          highlight: document.getElementById("highlight").value.trim(),
           name: document.getElementById("name").value,
           price: document.getElementById("price").value,
           year: document.getElementById("year").value,
