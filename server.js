@@ -468,9 +468,9 @@ function normaliseVehicleHighlight(value) {
 
   const highlight = value.trim().replace(/\s+/g, " ");
 
-  if (highlight.length > 20) {
+  if (highlight.length > 25) {
     throw new Error(
-      "Vehicle highlight must be 20 characters or fewer."
+      "Vehicle highlight must be 25 characters or fewer."
     );
   }
 
