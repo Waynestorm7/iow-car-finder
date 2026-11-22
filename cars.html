@@ -1168,7 +1168,7 @@
         const status = String(car.status || "").toLowerCase();
         const isReserved = status === "reserved";
         const isSold = status === "sold" || car.sold === true;
-        const highlight = typeof car.highlight === "string" ? car.highlight.trim().slice(0, 20) : "";
+        const highlight = typeof car.highlight === "string" ? car.highlight.trim().slice(0, 25) : "";
         const previousPrice = Number(car.previousPrice);
         const currentPrice = Number(car.price);
         const reducedAt = Date.parse(car.priceReducedAt || "");
