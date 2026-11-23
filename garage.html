@@ -282,6 +282,99 @@
             padding: 24px;
         }
 
+        /* Garage stock search */
+        #garageSearch {
+            display: block;
+            width: 100%;
+            margin: 0 0 16px;
+            padding: 13px 14px;
+            border: 1px solid rgba(17, 24, 39, .12);
+            border-radius: 14px;
+            background: #fff;
+            color: #111827;
+            font: inherit;
+            font-size: 16px;
+        }
+
+        #garageSearch:focus {
+            outline: none;
+            border-color: #e67e22;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, .12);
+        }
+
+        /* Garage stock sorting and filters */
+        .garageFilterBar {
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+            gap: 10px;
+            margin: 0 0 16px;
+        }
+
+        .garageFilterBar select,
+        .garageFilterBar button {
+            width: 100%;
+            min-width: 0;
+            min-height: 46px;
+            padding: 10px 9px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: #fff;
+            color: #111827;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .garageFilterBar select {
+            text-overflow: ellipsis;
+        }
+
+        .garageFilterBar select:focus-visible,
+        .garageFilterBar button:focus-visible {
+            outline: 2px solid #e67e22;
+            outline-offset: 2px;
+        }
+
+        /* Expandable garage filters */
+        #garageFiltersPanel {
+            margin: 0 0 16px;
+            padding: 14px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+        }
+
+        #garageFiltersPanel[hidden] {
+            display: none;
+        }
+
+        #garageFiltersPanel label {
+            display: block;
+            margin-bottom: 6px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        #garageFiltersPanel select {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+            color: #111827;
+            font: inherit;
+            font-size: 16px;
+        }
+
+        #garageFiltersPanel select:last-child {
+            margin-bottom: 0;
+        }
+
         .sectionHead {
             display: flex;
             align-items: end;
@@ -714,6 +807,50 @@
                     <div class="eyebrow">Garage listings</div>
                     <h2>Cars from this garage</h2>
                 </div>
+            </div>
+
+            <input id="garageSearch" type="search" placeholder="Search this garage's cars..."
+                aria-label="Search this garage's cars" autocomplete="off">
+
+            <div class="garageFilterBar">
+                <select id="garageSort" aria-label="Sort garage cars">
+                    <option value="recent">Recently updated</option>
+                    <option value="priceLow">Price: Low to High</option>
+                    <option value="priceHigh">Price: High to Low</option>
+                </select>
+
+                <button id="garageFiltersToggle" type="button" aria-expanded="false">
+                    Filters
+                </button>
+            </div>
+
+            <div id="garageFiltersPanel" hidden>
+                <label for="garageMaxPrice">Maximum price</label>
+                <select id="garageMaxPrice">
+                    <option value="">Any price</option>
+                    <option value="3000">Up to £3,000</option>
+                    <option value="5000">Up to £5,000</option>
+                    <option value="7500">Up to £7,500</option>
+                    <option value="10000">Up to £10,000</option>
+                    <option value="15000">Up to £15,000</option>
+                    <option value="20000">Up to £20,000</option>
+                </select>
+
+                <label for="garageFuel">Fuel</label>
+                <select id="garageFuel">
+                    <option value="">Any fuel</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Hybrid">Hybrid</option>
+                    <option value="Electric">Electric</option>
+                </select>
+
+                <label for="garageTransmission">Transmission</label>
+                <select id="garageTransmission">
+                    <option value="">Any transmission</option>
+                    <option value="Manual">Manual</option>
+                    <option value="Automatic">Automatic</option>
+                </select>
             </div>
 
             <div id="carsBox" class="carsGrid">Loading cars...</div>
@@ -1239,32 +1376,33 @@
                     return;
                 }
 
-                carsBox.innerHTML = sortedGarageCars.map(car => {
-                    const status = String(car.status || "").toLowerCase();
-                    const isSold = status === "sold" || car.sold === true;
-                    const isReserved = status === "reserved";
-                    const highlight = typeof car.highlight === "string" ? car.highlight.trim().slice(0, 25) : "";
-                    const previousPrice = Number(car.previousPrice);
-                    const currentPrice = Number(car.price);
-                    const reducedAt = Date.parse(car.priceReducedAt || "");
-                    const listedAt = Date.parse(car.createdAt || "");
-                    const fourteenDays = 14 * 24 * 60 * 60 * 1000;
+                function renderGarageCars(carsToDisplay) {
+                    carsBox.innerHTML = carsToDisplay.map(car => {
+                        const status = String(car.status || "").toLowerCase();
+                        const isSold = status === "sold" || car.sold === true;
+                        const isReserved = status === "reserved";
+                        const highlight = typeof car.highlight === "string" ? car.highlight.trim().slice(0, 25) : "";
+                        const previousPrice = Number(car.previousPrice);
+                        const currentPrice = Number(car.price);
+                        const reducedAt = Date.parse(car.priceReducedAt || "");
+                        const listedAt = Date.parse(car.createdAt || "");
+                        const fourteenDays = 14 * 24 * 60 * 60 * 1000;
 
-                    const isPriceReduced =
-                        !isSold &&
-                        !isReserved &&
-                        previousPrice > currentPrice &&
-                        currentPrice > 0 &&
-                        Number.isFinite(reducedAt) &&
-                        Number.isFinite(listedAt) &&
-                        reducedAt - listedAt >= fourteenDays &&
-                        reducedAt <= Date.now() &&
-                        Date.now() - reducedAt < fourteenDays;
+                        const isPriceReduced =
+                            !isSold &&
+                            !isReserved &&
+                            previousPrice > currentPrice &&
+                            currentPrice > 0 &&
+                            Number.isFinite(reducedAt) &&
+                            Number.isFinite(listedAt) &&
+                            reducedAt - listedAt >= fourteenDays &&
+                            reducedAt <= Date.now() &&
+                            Date.now() - reducedAt < fourteenDays;
 
-                    const carHref =
-                        `/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}`;
+                        const carHref =
+                            `/car?id=${encodeURIComponent(car.id || car.name)}${isAdminPreview ? "&preview=1" : ""}`;
 
-                    return `
+                        return `
   <a class="carCard ${isSold ? "sold" : ""}" href="${carHref}">
     <div class="carImgWrap">
       <img src="${escapeHtml(getCarPhoto(car))}" alt="${escapeHtml(car.name)}" loading="lazy" decoding="async">
@@ -1282,8 +1420,8 @@
 </p>
       
 ${car.createdAt && !Number.isNaN(Date.parse(car.createdAt))
-                            ? `<p class="small">Listed: ${escapeHtml(new Date(car.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))}</p>`
-                            : ""}
+                                ? `<p class="small">Listed: ${escapeHtml(new Date(car.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))}</p>`
+                                : ""}
 
 <div class="carSpecs">
     <div class="carSpec">
@@ -1312,7 +1450,92 @@ ${car.createdAt && !Number.isNaN(Date.parse(car.createdAt))
     </div>
   </a>
 `;
-                }).join("");
+                    }).join("");
+                }
+
+                renderGarageCars(sortedGarageCars);
+
+                const garageSearch = document.getElementById("garageSearch");
+                const garageMaxPrice = document.getElementById("garageMaxPrice");
+                const garageFuel = document.getElementById("garageFuel");
+                const garageTransmission = document.getElementById("garageTransmission");
+
+                function applyGarageFilters() {
+                    const searchText = garageSearch.value.trim().toLowerCase();
+                    const maxPrice = garageMaxPrice.value
+                        ? Number(garageMaxPrice.value)
+                        : null;
+                    const selectedFuel = garageFuel.value.toLowerCase();
+                    const selectedTransmission = garageTransmission.value.toLowerCase();
+
+                    const matchingCars = sortedGarageCars.filter(car => {
+                        const name = String(car.name || "").toLowerCase();
+                        const price = Number(car.price);
+                        const fuel = String(car.fuel || "").trim().toLowerCase();
+                        const transmission = String(car.transmission || "").trim().toLowerCase();
+
+                        return (
+                            name.includes(searchText) &&
+                            (maxPrice === null || (Number.isFinite(price) && price <= maxPrice)) &&
+                            (!selectedFuel || fuel === selectedFuel) &&
+                            (!selectedTransmission || transmission === selectedTransmission)
+                        );
+                    });
+
+                    const sortMode = document.getElementById("garageSort").value;
+
+                    if (sortMode === "priceLow" || sortMode === "priceHigh") {
+                        function getStatusRank(car) {
+                            const status = String(car.status || "").toLowerCase();
+
+                            if (status === "sold" || car.sold === true) return 2;
+                            if (status === "reserved") return 1;
+
+                            return 0;
+                        }
+
+                        matchingCars.sort((a, b) => {
+                            const rankDiff = getStatusRank(a) - getStatusRank(b);
+
+                            if (rankDiff !== 0) return rankDiff;
+
+                            return sortMode === "priceLow"
+                                ? Number(a.price) - Number(b.price)
+                                : Number(b.price) - Number(a.price);
+                        });
+                    }
+
+                    if (matchingCars.length === 0) {
+                        carsBox.innerHTML = `
+            <div class="emptyState">
+                No cars match your search or filters.
+            </div>
+        `;
+                    } else {
+                        renderGarageCars(matchingCars);
+                    }
+                }
+
+                garageSearch.addEventListener("input", applyGarageFilters);
+                garageMaxPrice.addEventListener("change", applyGarageFilters);
+                garageFuel.addEventListener("change", applyGarageFilters);
+                garageTransmission.addEventListener("change", applyGarageFilters);
+                document.getElementById("garageSort")
+                    .addEventListener("change", applyGarageFilters);
+
+                const garageFiltersToggle = document.getElementById("garageFiltersToggle");
+                const garageFiltersPanel = document.getElementById("garageFiltersPanel");
+
+                garageFiltersToggle.addEventListener("click", () => {
+                    const isOpening = garageFiltersPanel.hidden;
+
+                    garageFiltersPanel.hidden = !isOpening;
+
+                    garageFiltersToggle.setAttribute(
+                        "aria-expanded",
+                        String(isOpening)
+                    );
+                });
 
             } catch (e) {
                 console.error(e);
