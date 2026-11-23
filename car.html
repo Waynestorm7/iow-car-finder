@@ -1367,6 +1367,29 @@
           recordCarViewOnce(car.id);
         }
 
+        // Return visitors to the garage they came from
+        const backLink = document.querySelector(".backLink");
+
+        if (backLink && !isAdminPreview) {
+          try {
+            const previousPage = new URL(document.referrer);
+            const garageId = String(car.garageId || "");
+
+            if (
+              previousPage.origin === window.location.origin &&
+              previousPage.pathname.replace(/\/$/, "") === "/garage" &&
+              garageId &&
+              previousPage.searchParams.get("id") === garageId
+            ) {
+              backLink.href = "/garage?id=" + encodeURIComponent(garageId);
+              backLink.textContent =
+                "← Back to " + (garage?.name || "garage");
+            }
+          } catch (error) {
+            // Keep the normal Back to cars link
+          }
+        }
+
         const carStatus = String(car.status || "").toLowerCase();
         const isReserved = carStatus === "reserved";
         const isSold = carStatus === "sold" || car.sold === true;
