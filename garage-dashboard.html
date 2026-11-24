@@ -1886,13 +1886,25 @@
           return;
         }
 
+
         const cars = allCars.sort((a, b) => {
-          if (a.sold && !b.sold) return 1;
-          if (!a.sold && b.sold) return -1;
+          const statusOrder = {
+            available: 0,
+            reserved: 1,
+            sold: 2
+          };
+
+          const aStatus = String(a.status || "available").toLowerCase();
+          const bStatus = String(b.status || "available").toLowerCase();
+
+          const statusDifference =
+            (statusOrder[aStatus] ?? 0) - (statusOrder[bStatus] ?? 0);
+
+          if (statusDifference !== 0) return statusDifference;
 
           return (
-            (new Date(b.updatedAt || b.updated_at || 0).getTime() || 0) -
-            (new Date(a.updatedAt || a.updated_at || 0).getTime() || 0)
+            (new Date(b.createdAt || b.created_at || 0).getTime() || 0) -
+            (new Date(a.createdAt || a.created_at || 0).getTime() || 0)
           );
         });
 
