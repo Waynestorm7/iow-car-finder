@@ -814,6 +814,22 @@
     </div>
   </footer>
 
+
+  <script>
+    fetch("/analytics-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        eventType: "homepage_view"
+      })
+    }).catch(() => {
+      // Tracking failure must not affect the homepage.
+    });
+  </script>
+
+
 </body>
 
 </html>

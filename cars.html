@@ -1428,6 +1428,21 @@ ${listedText ? `
     })();
   </script>
 
+
+  <script>
+    fetch("/analytics-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        eventType: "browse_cars_view"
+      })
+    }).catch(() => {
+      // Tracking failure must not affect Browse Cars.
+    });
+  </script>
+
 </body>
 
 </html>

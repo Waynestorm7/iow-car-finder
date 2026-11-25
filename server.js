@@ -1318,7 +1318,9 @@ const server = http.createServer(async (req, res) => {
       "email_click",
       "directions_click",
       "website_click",
-      "share_click"
+      "share_click",
+      "homepage_view",
+      "browse_cars_view"
     ].includes(eventType)) {
       return sendJson(res, 400, {
         success: false,
@@ -1340,6 +1342,21 @@ const server = http.createServer(async (req, res) => {
         "website_click",
         "share_click"
       ];
+
+      if (
+        eventType === "homepage_view" ||
+        eventType === "browse_cars_view"
+      ) {
+        const { error } = await supabase
+          .from("analytics_events")
+          .insert(analyticsRow);
+
+        if (error) throw error;
+
+        return sendJson(res, 200, {
+          success: true
+        });
+      }
 
       if (
         eventType === "car_view" ||
@@ -1463,6 +1480,78 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+
+  // -----------------------------
+  // Admin: GET /admin-site-analytics
+  // Homepage and Browse Cars views
+  // -----------------------------
+  if (req.method === "GET" && pathname === "/admin-site-analytics") {
+    if (!isAdmin(req)) {
+      return sendJson(res, 403, {
+        success: false,
+        message: "Forbidden"
+      });
+    }
+
+    const range = String(
+      urlObj.searchParams.get("range") || "30d"
+    ).trim().toLowerCase();
+
+    if (!["7d", "30d", "all"].includes(range)) {
+      return sendJson(res, 400, {
+        success: false,
+        message: "Invalid range"
+      });
+    }
+
+    const days = range === "7d" ? 7 : range === "30d" ? 30 : null;
+
+    const sinceIso = days
+      ? new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+      : null;
+
+    try {
+      async function countPageViews(eventType) {
+        let query = supabase
+          .from("analytics_events")
+          .select("id", { count: "exact", head: true })
+          .eq("event_type", eventType);
+
+        if (sinceIso) {
+          query = query.gte("created_at", sinceIso);
+        }
+
+        const { count, error } = await query;
+
+        if (error) throw error;
+
+        return count || 0;
+      }
+
+      const [homepageViews, browseCarsViews] = await Promise.all([
+        countPageViews("homepage_view"),
+        countPageViews("browse_cars_view")
+      ]);
+
+      return sendJson(res, 200, {
+        success: true,
+        range,
+        totals: {
+          homepageViews,
+          browseCarsViews
+        }
+      });
+
+    } catch (error) {
+      console.error("GET /admin-site-analytics error:", error);
+
+      return sendJson(res, 500, {
+        success: false,
+        message: "Could not load website analytics"
+      });
+    }
+  }
+
   // -----------------------------
   // Admin: GET /admin-analytics
   // Example:
@@ -1523,10 +1612,10 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-            /*
-        Load every analytics row in batches.
-        This avoids silently stopping at Supabase's normal row limit.
-      */
+      /*
+  Load every analytics row in batches.
+  This avoids silently stopping at Supabase's normal row limit.
+*/
 
       const events = [];
       const pageSize = 1000;
@@ -2987,6 +3076,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/for-garages") return serveFile(res, path.join(__dirname, "for-garages.html"));
   if (req.method === "GET" && pathname === "/garage-dashboard") return serveFile(res, path.join(__dirname, "garage-dashboard.html"));
   if (req.method === "GET" && pathname === "/admin-dashboard") return serveFile(res, path.join(__dirname, "admin-dashboard.html"));
+  if (req.method === "GET" && pathname === "/admin-site-analytics-page") return serveFile(res, path.join(__dirname, "admin-site-analytics.html"));
   if (req.method === "GET" && pathname === "/admin-analytics-page") return serveFile(res, path.join(__dirname, "admin-analytics.html"));
   if (req.method === "GET" && pathname === "/admin-garages") return serveFile(res, path.join(__dirname, "admin-garages.html"));
   if (req.method === "GET" && pathname === "/admin-stock") return serveFile(res, path.join(__dirname, "admin-stock.html"));
